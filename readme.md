@@ -37,13 +37,13 @@
 </p>
 
 <p align="center">
-  An <em>opinionated</em> Gatsby v2 starter with React Context, styled-components, page transitions, scroll events with <code>IntersectionObserver</code> and a focus on accessibility and SEO. Made for state-of-the-art marketing sites.
+  <strong>
+    You can access this blog online at <a href="https://igorstar.com">www.igorstar.com</a>.
+  </strong>
 </p>
 
 <p align="center">
-  <strong>
-    You can access a demo of this starter online at <a href="https://gatsby-universal.netlify.com">gatsby-universal.netlify.com</a>.
-  </strong>
+  Based on an <em>opinionated</em> Gatsby v2 starter with React Context, styled-components, page transitions, scroll events with <code>IntersectionObserver</code> and a focus on accessibility and SEO. Made for state-of-the-art marketing sites.
 </p>
 
 ***
@@ -161,4 +161,4 @@ module.exports = {
 
 ## Author
 
-* Fabian Schultz ([@fschultz_](https://twitter.com/fschultz_)) - [Stink Studios](https://stinkstudios.com)
+* Igor Starostenko ([@IgorStarostenko](https://twitter.com/IgorStarostenko))
