@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-universal",
+  "name": "igorstar",
   "license": "MIT",
-  "author": "Fabian Schultz <desk@fabianschultz.com>",
+  "author": "Igor Starostenko <contact@igorstar.com>",
   "scripts": {
     "develop": "gatsby develop",
     "serve": "gatsby serve",
