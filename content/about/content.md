@@ -1,21 +1,14 @@
-Find the repository [on GitHub](https://github.com/fabe/gatsby-universal).
+---
+path: "/about"
+title: "About"
+---
+####Hi there 👋,
+My name is Igor Starostenko. I am a family man who loves mechanical keyboards, landscape photography and travel. Also a software engineer @ [AutoGravity](www.autogravity.com).
 
-```
-# Installation
-gatsby new my-site https://github.com/fabe/gatsby-universal
+You can find my Open Source work [on GitHub](https://github.com/igor-starostenko).
 
-# To develop
-yarn develop
+My portrait photography [on 500px](https://500px.com/igorstar).
 
-# To build
-yarn build
+Travel and landscape photography [on Flickr](https://www.flickr.com/photos/igor_star).
 
-# To test SSR (for Lighthouse etc.)
-yarn ssr
-
-# To format JS (precommit)
-yarn format
-
-# To generate favicons (included in `build`)
-yarn build:favicons
-```
+And random thoughts [on Twitter](https://twitter.com/IgorStarostenko).
