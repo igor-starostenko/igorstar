@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  siteTitle: 'Igor Star Blog',
+  siteTitle: 'Igor Starostenko — Blog',
   siteTitleShort: 'IgorStar',
   siteDescription: 'Travel, photography, data and software.',
   siteUrl: 'https://igorstar.com',
