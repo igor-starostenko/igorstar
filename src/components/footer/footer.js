@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
-import { Container, Navigation, Social, Copyright } from './footer.css';
+import { Container, Navigation, Right, Social, Copyright } from './footer.css';
 import {
   FivehundredpxIcon,
   FlickrIcon,
@@ -25,35 +25,37 @@ SocialLink.propTypes = {
 
 const Footer = ({ author, social }) => (
   <Container>
-    <Social>
-      <SocialLink href={`https://github.com/${social.github}`}>
-        <GithubIcon />
-      </SocialLink>
-      <SocialLink href={`https://www.linkedin.com/in/${social.linkedin}`}>
-        <LinkedinIcon />
-      </SocialLink>
-      <SocialLink href={`https://twitter.com/${social.twitter}`}>
-        <TwitterIcon />
-      </SocialLink>
-      <SocialLink
-        href={`https://www.youtube.com/channel/${social.youtube}/videos`}
-      >
-        <YoutubeIcon />
-      </SocialLink>
-      <SocialLink href={`https://www.instagram.com/${social.instagram}`}>
-        <InstagramIcon />
-      </SocialLink>
-      <SocialLink href={`https://www.flickr.com/photos/${social.flickr}`}>
-        <FlickrIcon />
-      </SocialLink>
-      <SocialLink href={`https://500px.com/${social.fivehundredpx}`}>
-        <FivehundredpxIcon />
-      </SocialLink>
-    </Social>
     <Navigation />
-    <Copyright>
-      <Link to="/">{author}</Link> © 2019
-    </Copyright>
+    <Right>
+      <Social>
+        <SocialLink href={`https://github.com/${social.github}`}>
+          <GithubIcon />
+        </SocialLink>
+        <SocialLink href={`https://www.linkedin.com/in/${social.linkedin}`}>
+          <LinkedinIcon />
+        </SocialLink>
+        <SocialLink href={`https://twitter.com/${social.twitter}`}>
+          <TwitterIcon />
+        </SocialLink>
+        <SocialLink
+          href={`https://www.youtube.com/channel/${social.youtube}/videos`}
+        >
+          <YoutubeIcon />
+        </SocialLink>
+        <SocialLink href={`https://www.instagram.com/${social.instagram}`}>
+          <InstagramIcon />
+        </SocialLink>
+        <SocialLink href={`https://www.flickr.com/photos/${social.flickr}`}>
+          <FlickrIcon />
+        </SocialLink>
+        <SocialLink href={`https://500px.com/${social.fivehundredpx}`}>
+          <FivehundredpxIcon />
+        </SocialLink>
+      </Social>
+      <Copyright>
+        <Link to="/">{author}</Link> © 2019
+      </Copyright>
+    </Right>
   </Container>
 );
 
