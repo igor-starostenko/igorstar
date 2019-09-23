@@ -29,27 +29,27 @@ const Footer = ({ author, social }) => (
     <Right>
       <Social>
         <SocialLink href={`https://github.com/${social.github}`}>
-          <GithubIcon />
+          <GithubIcon width="19" />
         </SocialLink>
         <SocialLink href={`https://linkedin.com/in/${social.linkedin}`}>
-          <LinkedinIcon />
+          <LinkedinIcon width="19" />
         </SocialLink>
         <SocialLink href={`https://twitter.com/${social.twitter}`}>
-          <TwitterIcon />
+          <TwitterIcon width="19" />
         </SocialLink>
         <SocialLink
           href={`https://youtube.com/channel/${social.youtube}/videos`}
         >
-          <YoutubeIcon />
+          <YoutubeIcon width="19" />
         </SocialLink>
         <SocialLink href={`https://instagram.com/${social.instagram}`}>
-          <InstagramIcon />
+          <InstagramIcon width="19" />
         </SocialLink>
         <SocialLink href={`https://flickr.com/photos/${social.flickr}`}>
-          <FlickrIcon />
+          <FlickrIcon width="19" />
         </SocialLink>
         <SocialLink href={`https://500px.com/${social.fivehundredpx}`}>
-          <FivehundredpxIcon />
+          <FivehundredpxIcon width="19" />
         </SocialLink>
       </Social>
       <Copyright>
