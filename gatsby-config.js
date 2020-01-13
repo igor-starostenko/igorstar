@@ -18,6 +18,13 @@ module.exports = {
         path: `${__dirname}/content`,
       },
     },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'photo',
+        path: `${__dirname}/content/photo`,
+      },
+    },
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
     'gatsby-plugin-webpack-size',
