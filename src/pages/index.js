@@ -54,6 +54,24 @@ Index.propTypes = {
 
 export default Index;
 
+// const imageQuery = graphql`
+//   query GalleryQuery {
+//     homeJson {
+//       gallery {
+//         title
+//         copy
+//         image {
+//           childImageSharp {
+//             fluid(maxHeight: 500, quality: 90) {
+//               ...GatsbyImageSharpFluid_withWebp
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
+
 export const query = graphql`
   query HomepageQuery {
     homeJson {
@@ -62,17 +80,6 @@ export const query = graphql`
         childMarkdownRemark {
           html
           rawMarkdownBody
-        }
-      }
-      gallery {
-        title
-        copy
-        image {
-          childImageSharp {
-            fluid(maxHeight: 500, quality: 90) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
-          }
         }
       }
     }
