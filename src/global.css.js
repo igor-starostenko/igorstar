@@ -26,9 +26,11 @@ export default createGlobalStyle`
 
   html {
     font-size: 62.5%;
+    height: 100%;
   }
 
   body {
+    height: 100%;
     margin: 0;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
     line-height: 1;
@@ -42,6 +44,14 @@ export default createGlobalStyle`
     -webkit-font-feature-settings: "pnum";
     font-feature-settings: "pnum";
     font-variant-numeric: proportional-nums;
+  }
+
+  #___gatsby {
+    height: 100%;
+
+    > div {
+       height: 100%; 
+    }
   }
 
   ol, ul {
