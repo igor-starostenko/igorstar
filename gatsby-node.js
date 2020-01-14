@@ -36,7 +36,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     createNodeField({
       node,
       name: 'slug',
-      value: `/content${relativeFilePath}`,
+      value: relativeFilePath,
     });
   }
 };
@@ -45,7 +45,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   const result = await graphql(`
     query {
-      allMarkdownRemark {
+      allMarkdownRemark(filter: { frontmatter: { layout: { eq: "post" } } }) {
         edges {
           node {
             fields {
