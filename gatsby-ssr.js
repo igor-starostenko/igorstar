@@ -15,7 +15,7 @@ export const replaceRenderer = ({
 
   // Add styled-components in SSR/build
   const sheet = new ServerStyleSheet();
-  const bodyHTML = renderToString(sheet.collectStyles(<ConnectedBody />));
+  const bodyHTML = renderToString(sheet.collectStyles(<ConnectedBody />)); // eslint-disable-line no-unused-vars
   const styleElement = sheet.getStyleElement();
   setHeadComponents(styleElement);
 };

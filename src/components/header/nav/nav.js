@@ -8,9 +8,6 @@ const Nav = () => (
       <li>
         <Link to="/about">About</Link>
       </li>
-      <li>
-        <a href="https://github.com/igor-starostenko">GitHub</a>
-      </li>
     </ul>
   </Container>
 );

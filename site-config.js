@@ -1,7 +1,8 @@
 const path = require('path');
 
 module.exports = {
-  siteTitle: 'Igor Star Blog',
+  author: 'Igor Starostenko',
+  siteTitle: 'IgorStar — Blog',
   siteTitleShort: 'IgorStar',
   siteDescription: 'Travel, photography, data and software.',
   siteUrl: 'https://igorstar.com',
@@ -10,6 +11,12 @@ module.exports = {
   pathPrefix: null,
   logo: path.resolve(__dirname, 'src/images/icon.png'),
   social: {
+    github: 'igor-starostenko',
+    instagram: 'igorstar',
+    fivehundredpx: 'igorstar',
+    flickr: 'igor_star',
+    linkedin: 'igorstarostenko',
     twitter: 'IgorStarostenko',
+    youtube: 'UCo68YrHvGcKqNWrMb0kV-QA',
   },
 };
