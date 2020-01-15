@@ -5,9 +5,9 @@ layout: post
 draft: false
 category: random
 tags:
-  - Introduction
-  - Photo
-  - Travel
+  - introduction
+  - photo
+  - travel
 ---
 
 This is the original introduction I wrote long time ago for the v1 of my blog. Decided to keep it just to mark the epoch :)

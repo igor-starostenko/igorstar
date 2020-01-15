@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, graphql } from 'gatsby';
-import { css } from 'styled-components';
+import { graphql } from 'gatsby';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Title from 'components/title';
+import Card from 'components/card';
 // import Gallery from 'components/gallery';
 
 const Index = ({ data }) => (
@@ -18,31 +18,13 @@ const Index = ({ data }) => (
       */}
       <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
       {data.allMarkdownRemark.edges.map(({ node }) => (
-        <div key={node.id}>
-          <Link
-            to={node.fields.slug}
-            css={css`
-              text-decoration: none;
-              color: inherit;
-            `}
-          >
-            <h3
-              css={css`
-                margin-bottom: 1rem;
-              `}
-            >
-              {node.frontmatter.title}{' '}
-              <span
-                css={css`
-                  color: #bbb;
-                `}
-              >
-                — {node.frontmatter.date}
-              </span>
-            </h3>
-            <p>{node.excerpt}</p>
-          </Link>
-        </div>
+        <Card
+          key={node.id}
+          slug={node.fields.slug}
+          title={node.frontmatter.title}
+          date={node.frontmatter.date}
+          tags={node.frontmatter.tags}
+        />
       ))}
     </Box>
   </Layout>
@@ -94,11 +76,11 @@ export const query = graphql`
           frontmatter {
             title
             date(formatString: "DD MMMM, YYYY")
+            tags
           }
           fields {
             slug
           }
-          excerpt
         }
       }
     }
