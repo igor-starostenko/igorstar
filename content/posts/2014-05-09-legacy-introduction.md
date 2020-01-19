@@ -1,6 +1,6 @@
 ---
 title: Legacy Introduction
-date: "2014-05-09T23:46:37.121Z"
+date: 2014-05-09T23:46:37
 layout: post
 draft: false
 category: random
