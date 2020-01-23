@@ -1,31 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
+import get from 'lodash/get';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Title from 'components/title';
-import Card from 'components/card';
+import Article from 'components/article';
 // import Gallery from 'components/gallery';
 
 const Index = ({ data }) => (
   <Layout>
     <Box>
-      <Title as="h2" size="large">
-        {data.homeJson.content.childMarkdownRemark.rawMarkdownBody}
-      </Title>
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'baseline',
+          justifyItems: 'space-between',
+          width: '100%',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Title as="h2" size="large">
+          {data.homeJson.content.childMarkdownRemark.rawMarkdownBody}
+        </Title>
+        <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
+      </div>
       {/* Hide gallery for now
         <Gallery items={data.homeJson.gallery} />
-      */}
-      <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
-      {data.allMarkdownRemark.edges.map(({ node }) => (
-        <Card
-          key={node.id}
-          slug={node.fields.slug}
-          title={node.frontmatter.title}
-          date={node.frontmatter.date}
-          tags={node.frontmatter.tags}
-        />
-      ))}
+        */}
+      <div>
+        {data.allMarkdownRemark.edges.map(({ node }) => (
+          <Article
+            key={node.id}
+            image={get(
+              data.images.edges.find(edge =>
+                `/${edge.node.Key}`.includes(node.fields.slug)
+              ),
+              'node.image'
+            )}
+            slug={node.fields.slug}
+            title={node.frontmatter.title}
+            date={node.frontmatter.date}
+            tags={node.frontmatter.tags}
+          />
+        ))}
+      </div>
     </Box>
   </Layout>
 );
@@ -62,6 +81,27 @@ export const query = graphql`
         childMarkdownRemark {
           html
           rawMarkdownBody
+        }
+      }
+    }
+    images: allS3ImageAsset(
+      sort: { fields: Key }
+      filter: { Key: { regex: "^posts/.*-thumb.*/" } }
+    ) {
+      edges {
+        node {
+          Key
+          EXIF {
+            DateCreatedISO
+            ExposureTime
+            FNumber
+            ShutterSpeedValue
+          }
+          image: childImageSharp {
+            fluid(maxHeight: 480, quality: 90) {
+              ...GatsbyImageSharpFluid_withWebp
+            }
+          }
         }
       }
     }

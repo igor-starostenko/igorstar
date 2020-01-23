@@ -1,4 +1,5 @@
 import { Link } from 'gatsby';
+import Img from 'gatsby-image';
 import styled from 'styled-components';
 import { colors } from 'constants/theme';
 
@@ -6,10 +7,19 @@ export const SLink = styled(Link)`
   text-decoration: none;
 `;
 
+export const Row = styled.div`
+  display: inline-flex;
+  align-items: baseline;
+  width: 100%;
+  justify-content: space-between;
+`;
+
 export const Title = styled.h3`
   margin-bottom: 1rem;
   color: ${colors.black};
 `;
+
+export const SImg = styled(Img)``;
 
 export const Date = styled.span`
   margin-bottom: 1rem;
