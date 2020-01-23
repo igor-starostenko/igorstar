@@ -21,7 +21,7 @@ Card.propTypes = {
   slug: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   image: PropTypes.shape({
-    childImageSharp: PropTypes.object,
+    fluid: PropTypes.object,
   }),
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),
