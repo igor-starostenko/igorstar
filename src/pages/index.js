@@ -41,6 +41,7 @@ const Index = ({ data }) => (
             slug={node.fields.slug}
             title={node.frontmatter.title}
             date={node.frontmatter.date}
+            description={node.frontmatter.description}
             tags={node.frontmatter.tags}
           />
         ))}
@@ -116,6 +117,7 @@ export const query = graphql`
           frontmatter {
             title
             date(formatString: "DD MMMM, YYYY")
+            description
             tags
           }
           fields {

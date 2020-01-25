@@ -8,6 +8,7 @@ tags:
   - photo
   - travel
   - city
+description: A short story about my first photography experience in Los Angeles. Like the first love — will never forget.
 ---
 
 As soon as I arrived to Los Angeles, I set my eyes on this place in business area of the city, from which you can shoot rush hour traffic with skyscrapers in the background. Though I lived not far from that place for some time, I could not make myself go out for photo shoot in DT. My indecision eventually was supplemented with rumors about the dangers of the area in the evening hours. Business center in a daytime becomes a criminal center after sunset. Instead of guys in suits walking the streets there appear different sorts of psychos. But the place is so cool…

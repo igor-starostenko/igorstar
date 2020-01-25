@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { SLink, SImg, Row, Title, Tags, Tag, Date } from './card.css.js';
+import { Link } from 'gatsby';
+import {
+  SLink,
+  SImg,
+  Row,
+  Title,
+  Description,
+  Tags,
+  Tag,
+  Date,
+} from './card.css.js';
 
-const Card = ({ slug, title, image, date, tags }) => (
-  <SLink to={slug}>
-    {image && <SImg fluid={image.fluid} alt={title} />}
+const Card = ({ slug, title, image, date, description, tags }) => (
+  <Fragment>
+    {image && (
+      <SLink to={slug}>
+        <SImg fluid={image.fluid} alt={title} />
+      </SLink>
+    )}
     <Row>
-      <Title>{title}</Title>
+      <SLink to={slug}>
+        <Title>{title}</Title>
+      </SLink>
       <Date>— {date}</Date>
     </Row>
     <Tags>
@@ -14,12 +30,19 @@ const Card = ({ slug, title, image, date, tags }) => (
         <Tag key={tag}>#{tag}</Tag>
       ))}
     </Tags>
-  </SLink>
+    <Description>
+      {description}{' '}
+      <Link as="span" to={slug}>
+        Read more
+      </Link>
+    </Description>
+  </Fragment>
 );
 
 Card.propTypes = {
   slug: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
   image: PropTypes.shape({
     fluid: PropTypes.object,
   }),

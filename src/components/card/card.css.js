@@ -19,6 +19,11 @@ export const Title = styled.h3`
   color: ${colors.black};
 `;
 
+export const Description = styled.p`
+  text-decoration: none;
+  color: ${colors.black};
+`;
+
 export const SImg = styled(Img)``;
 
 export const Date = styled.span`
