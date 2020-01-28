@@ -44,6 +44,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.0",
+    "react-images": "^1.1.0-beta.3",
+    "react-photo-gallery": "^8.0.0",
     "react-pose": "^4.0.5",
     "styled-components": "^4.1.3"
   },
