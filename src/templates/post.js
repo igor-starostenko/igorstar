@@ -13,7 +13,14 @@ const Post = ({ data, pageContext }) => {
   return (
     <Layout>
       <Box>
-        {images.length && <Gallery photos={images} targetRowHeight={250} />}
+        <div style={{ margin: '0 -4rem' }}>
+          {images.length && (
+            <Gallery
+              photos={images}
+              targetRowHeight={window.innerWidth >= 450 ? 250 : 200}
+            />
+          )}
+        </div>
         <h1>{post.frontmatter.title}</h1>
         <div dangerouslySetInnerHTML={{ __html: post.html }} />
       </Box>
