@@ -1,22 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
-import {
-  SLink,
-  SImg,
-  Row,
-  Title,
-  Description,
-  Tags,
-  Tag,
-  Date,
-} from './card.css.js';
+import { SLink, Row, Title, Description, Tags, Tag, Date } from './card.css.js';
+import Image from 'components/image';
 
 const Card = ({ slug, title, image, date, description, tags }) => (
   <Fragment>
     {image && (
       <SLink to={slug}>
-        <SImg fluid={image.fluid} alt={title} />
+        <Image style={{ maxWidth: 700 }} fluid={image.fluid} alt={title} />
       </SLink>
     )}
     <Row>

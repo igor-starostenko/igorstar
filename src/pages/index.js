@@ -6,7 +6,6 @@ import Layout from 'components/layout';
 import Box from 'components/box';
 import Title from 'components/title';
 import Article from 'components/article';
-// import Gallery from 'components/gallery';
 
 const Index = ({ data }) => (
   <Layout>
@@ -25,9 +24,6 @@ const Index = ({ data }) => (
         </Title>
         <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
       </div>
-      {/* Hide gallery for now
-        <Gallery items={data.homeJson.gallery} />
-        */}
       <div>
         {data.allMarkdownRemark.edges.map(({ node }) => (
           <Article
@@ -55,24 +51,6 @@ Index.propTypes = {
 };
 
 export default Index;
-
-// const imageQuery = graphql`
-//   query GalleryQuery {
-//     homeJson {
-//       gallery {
-//         title
-//         copy
-//         image {
-//           childImageSharp {
-//             fluid(maxHeight: 500, quality: 90) {
-//               ...GatsbyImageSharpFluid_withWebp
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
 
 export const query = graphql`
   query HomepageQuery {

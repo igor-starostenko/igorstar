@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { default as PhotoGallery } from 'react-photo-gallery';
-import Img from 'gatsby-image';
 import Carousel, { Modal, ModalGateway } from 'react-images';
-import { ImageWrapper } from './gallery.css';
+import Image from 'components/image';
 
 const titleFromPath = path => {
   const dirs = path.split('/');
@@ -14,21 +13,17 @@ const titleFromPath = path => {
  * https://github.com/bushblade/bushblade-knives-website/blob/master/src/components/Gallery.js
  */
 
-const GatsbyImage = ({ index, onClick, photo, margin }) => (
-  <ImageWrapper
+const GalleryImage = ({ index, onClick, photo, margin }) => (
+  <Image
     style={{ margin, height: photo.height, width: photo.width }}
     onClick={e => onClick(e, { index, photo })}
     key={photo.key}
-  >
-    <Img
-      fixed={typeof window === 'undefined' ? { src: {} } : undefined}
-      fluid={photo.fluid}
-      alt={photo.key}
-    />
-  </ImageWrapper>
+    fluid={photo.fluid}
+    alt={photo.key}
+  />
 );
 
-GatsbyImage.propTypes = {
+GalleryImage.propTypes = {
   index: PropTypes.number.isRequired,
   onClick: PropTypes.func,
   photo: PropTypes.shape({
@@ -76,7 +71,7 @@ const Gallery = ({ photos, ...rest }) => {
         <PhotoGallery
           photos={images}
           onClick={imageClick}
-          renderImage={GatsbyImage}
+          renderImage={GalleryImage}
           targetRowHeight={250}
           margin={5}
           {...rest}

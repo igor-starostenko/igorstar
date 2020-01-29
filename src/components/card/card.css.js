@@ -1,5 +1,4 @@
 import { Link } from 'gatsby';
-import Img from 'gatsby-image';
 import styled from 'styled-components';
 import { colors } from 'constants/theme';
 
@@ -23,8 +22,6 @@ export const Description = styled.p`
   text-decoration: none;
   color: ${colors.black};
 `;
-
-export const SImg = styled(Img)``;
 
 export const Date = styled.span`
   margin-bottom: 1rem;
