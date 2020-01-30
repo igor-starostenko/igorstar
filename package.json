@@ -22,7 +22,6 @@
     "@reach/dialog": "^0.2.0",
     "@reach/router": "^1.2.1",
     "@reach/visually-hidden": "^0.1.1",
-    "aws-sdk": "^2.606.0",
     "babel-plugin-styled-components": "^1.10.0",
     "dotenv": "^8.2.0",
     "gatsby": "2.18.21",
