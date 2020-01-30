@@ -1,20 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { graphql } from 'gatsby';
+import get from 'lodash/get';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Title from 'components/title';
-import Gallery from 'components/gallery';
-import { graphql } from 'gatsby';
+import Article from 'components/article';
 
 const Index = ({ data }) => (
   <Layout>
     <Box>
-      <Title as="h2" size="large">
-        {data.homeJson.content.childMarkdownRemark.rawMarkdownBody}
-      </Title>
+      <div
+        style={{
+          display: 'inline-flex',
+          alignItems: 'baseline',
+          justifyItems: 'space-between',
+          width: '100%',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Title as="h2" size="large">
+          {data.homeJson.content.childMarkdownRemark.rawMarkdownBody}
+        </Title>
+        <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
+      </div>
+      <div>
+        {data.allMarkdownRemark.edges.map(({ node }) => (
+          <Article
+            key={node.id}
+            image={get(
+              data.images.edges.find(edge =>
+                `/${edge.node.Key}`.includes(node.fields.slug)
+              ),
+              'node.image'
+            )}
+            slug={node.fields.slug}
+            title={node.frontmatter.title}
+            date={node.frontmatter.date}
+            description={node.frontmatter.description}
+            tags={node.frontmatter.tags}
+          />
+        ))}
+      </div>
     </Box>
-    <Gallery items={data.homeJson.gallery} />
-    <div style={{ height: '50vh' }} />
   </Layout>
 );
 
@@ -34,14 +62,44 @@ export const query = graphql`
           rawMarkdownBody
         }
       }
-      gallery {
-        title
-        copy
-        image {
-          childImageSharp {
-            fluid(maxHeight: 500, quality: 90) {
+    }
+    images: allS3ImageAsset(
+      sort: { fields: Key }
+      filter: { Key: { regex: "^posts/.*-thumb.*/" } }
+    ) {
+      edges {
+        node {
+          Key
+          EXIF {
+            DateCreatedISO
+            ExposureTime
+            FNumber
+            ShutterSpeedValue
+          }
+          image: childImageSharp {
+            fluid(maxHeight: 480, quality: 90) {
               ...GatsbyImageSharpFluid_withWebp
             }
+          }
+        }
+      }
+    }
+    allMarkdownRemark(
+      sort: { fields: [frontmatter___date], order: DESC }
+      filter: { frontmatter: { draft: { eq: false } } }
+    ) {
+      totalCount
+      edges {
+        node {
+          id
+          frontmatter {
+            title
+            date(formatString: "DD MMMM, YYYY")
+            description
+            tags
+          }
+          fields {
+            slug
           }
         }
       }

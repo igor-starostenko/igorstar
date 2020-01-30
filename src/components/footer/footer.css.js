@@ -32,7 +32,7 @@ export const Social = styled.div`
   margin-bottom: 1rem !important;
 
   a {
-    margin-right: 0.2rem;
+    margin: 0 0.3rem;
   }
 `;
 
