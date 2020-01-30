@@ -17,7 +17,13 @@ const Post = ({ data, pageContext }) => {
           {images.length && (
             <Gallery
               photos={images}
-              targetRowHeight={window.innerWidth >= 450 ? 250 : 200}
+              targetRowHeight={
+                typeof window !== 'undefined'
+                  ? window.innerWidth >= 450
+                    ? 250
+                    : 200
+                  : 450
+              }
             />
           )}
         </div>
