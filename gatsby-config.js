@@ -1,11 +1,5 @@
 require('dotenv').config();
-const AWS = require('aws-sdk');
 const siteConfig = require('./site-config');
-
-AWS.config.update({
-  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-});
 
 module.exports = {
   siteMetadata: {
@@ -28,8 +22,10 @@ module.exports = {
     {
       resolve: 'gatsby-source-s3-image',
       options: {
-        bucketName: 'igorstar',
-        region: 'us-west-2',
+        accessKeyId: process.env.S3_ACCESS_KEY_ID,
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        bucketName: process.env.S3_BUCKET_NAME,
+        region: process.env.S3_REGION,
       },
     },
     'gatsby-plugin-sharp',
