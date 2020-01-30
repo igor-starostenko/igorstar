@@ -14,7 +14,7 @@ const Post = ({ data, pageContext }) => {
     <Layout>
       <Box>
         <div style={{ margin: '0 -4rem' }}>
-          {images.length && (
+          {images.length > 0 && (
             <Gallery
               photos={images}
               targetRowHeight={
