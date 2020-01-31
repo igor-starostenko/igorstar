@@ -73,7 +73,7 @@ const Gallery = ({ photos, ...rest }) => {
           onClick={imageClick}
           renderImage={GalleryImage}
           targetRowHeight={250}
-          margin={5}
+          margin={1}
           {...rest}
         />
       )}

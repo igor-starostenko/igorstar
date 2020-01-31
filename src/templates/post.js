@@ -5,6 +5,15 @@ import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
 
+const calculateRowHeight = imageCount => {
+  let multiplier = 3;
+  if (typeof window !== 'undefined') {
+    multiplier = window.innerWidth > 450 ? 2 : 5;
+  }
+  const height = 300 * (1 - (multiplier * imageCount) / 100);
+  return height > 100 ? height : 100;
+};
+
 const Post = ({ data, pageContext }) => {
   const post = data.markdownRemark;
   const images = data.images.edges.filter(({ image }) =>
@@ -17,13 +26,7 @@ const Post = ({ data, pageContext }) => {
           {images.length > 0 && (
             <Gallery
               photos={images}
-              targetRowHeight={
-                typeof window !== 'undefined'
-                  ? window.innerWidth >= 450
-                    ? 250
-                    : 200
-                  : 450
-              }
+              targetRowHeight={calculateRowHeight(images.length)}
             />
           )}
         </div>
