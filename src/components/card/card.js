@@ -8,7 +8,11 @@ const Card = ({ slug, title, image, date, description, tags }) => (
   <Fragment>
     {image && (
       <SLink to={slug}>
-        <Image style={{ maxWidth: 700 }} fluid={image.fluid} alt={title} />
+        <Image
+          style={{ maxWidth: 780, margin: '0 -4rem' }}
+          fluid={image.fluid}
+          alt={title}
+        />
       </SLink>
     )}
     <Row>
