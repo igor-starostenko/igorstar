@@ -9,7 +9,7 @@ const Card = ({ slug, title, image, date, description, tags }) => (
     {image && (
       <SLink to={slug}>
         <Image
-          style={{ maxWidth: 780, margin: '0 -4rem' }}
+          style={{ maxWidth: 780, margin: '5.5rem -4rem 0px' }}
           fluid={image.fluid}
           alt={title}
         />
