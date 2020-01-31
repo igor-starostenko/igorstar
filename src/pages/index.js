@@ -25,9 +25,10 @@ const Index = ({ data }) => (
         <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
       </div>
       <div>
-        {data.allMarkdownRemark.edges.map(({ node }) => (
+        {data.allMarkdownRemark.edges.map(({ node }, index) => (
           <Article
             key={node.id}
+            index={index}
             image={get(
               data.images.edges.find(edge =>
                 `/${edge.node.Key}`.includes(node.fields.slug)
