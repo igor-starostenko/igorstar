@@ -1,6 +1,6 @@
 ---
 title: Legacy Introduction
-date: 2014-05-09T23:46:37
+date: 2014-05-09T10:00:00
 layout: post
 draft: false
 category: random
