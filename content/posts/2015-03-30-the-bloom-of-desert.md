@@ -1,6 +1,6 @@
 ---
 title: The Bloom of Desert
-date: 2015-05-30T08:25:00
+date: 2015-03-30T08:25:00
 layout: post
 draft: false
 category: travel
@@ -24,7 +24,7 @@ There was less and less time remaining till the sunset. After passing through al
 The sun was rapidly approaching the tops of the mountains, so as soon as we arrived to the place we immediately went deep into the basin and I managed to memorialize the last rays of the sun over the valley in a 10-second timelapse.
 
 <div class="youtube-container">
-<iframe class="youtube-video" src="https://www.youtube.com/embed/rxYW3qyfy8s" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe class="youtube-video" src="https://www.youtube-nocookie.com/embed/rxYW3qyfy8s" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
 Most of the tourists who were at that moment in Badwater already headed back to their cars so I could enjoy an absolute silence for about half an hour, which was only occasionally interrupted from time to time by the sound of shutter release of my camera. I was one on one with nature. It is so an unusual feeling for a resident of Los Angeles.
