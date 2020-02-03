@@ -1,13 +1,14 @@
 ---
 title: Legacy Introduction
-date: "2014-05-09T23:46:37.121Z"
+date: 2014-05-09T10:00:00
 layout: post
 draft: false
 category: random
 tags:
-  - Introduction
-  - Photo
-  - Travel
+  - introduction
+  - photo
+  - travel
+description: Very first blog post that I've written for one of the previous revisions of my website. Not fun. Don't open.
 ---
 
 This is the original introduction I wrote long time ago for the v1 of my blog. Decided to keep it just to mark the epoch :)

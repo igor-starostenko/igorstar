@@ -53,7 +53,7 @@ const Footer = ({ author, social }) => (
         </SocialLink>
       </Social>
       <Copyright>
-        <Link to="/">{author}</Link> © 2019
+        <Link to="/">{author}</Link> © {new Date().getFullYear()}
       </Copyright>
     </Right>
   </Container>
@@ -63,6 +63,7 @@ Footer.propTypes = {
   author: PropTypes.string.isRequired,
   social: PropTypes.shape({
     github: PropTypes.string.isRequired,
+    instagram: PropTypes.string.isRequired,
     linkedin: PropTypes.string.isRequired,
     twitter: PropTypes.string.isRequired,
     youtube: PropTypes.string.isRequired,
