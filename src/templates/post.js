@@ -8,7 +8,7 @@ import Box from 'components/box';
 const calculateRowHeight = imageCount => {
   let multiplier = 3;
   if (typeof window !== 'undefined') {
-    multiplier = window.innerWidth > 450 ? 2 : 5;
+    multiplier = window.innerWidth > 450 ? 4 : 8;
   }
   const height = 300 * (1 - (multiplier * imageCount) / 100);
   return height > 100 ? height : 100;
