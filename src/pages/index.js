@@ -20,7 +20,7 @@ const Index = ({ data }) => (
         }}
       >
         <Title as="h2" size="large">
-          {data.homeJson.content.childMarkdownRemark.rawMarkdownBody}
+          {data.homeJson.title}
         </Title>
         <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
       </div>
@@ -54,15 +54,9 @@ Index.propTypes = {
 export default Index;
 
 export const query = graphql`
-  query HomepageQuery {
+  query HomeQuery {
     homeJson {
       title
-      content {
-        childMarkdownRemark {
-          html
-          rawMarkdownBody
-        }
-      }
     }
     images: allS3ImageAsset(
       sort: { fields: Key }

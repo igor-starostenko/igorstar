@@ -1,7 +1,16 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
-import { SLink, Row, Title, Description, Tags, Tag, Date } from './card.css.js';
+import {
+  SLink,
+  Row,
+  Title,
+  Description,
+  Tags,
+  Tag,
+  Date,
+  MobileDate,
+} from './card.css.js';
 import Image from 'components/image';
 
 const Card = ({ index, slug, title, image, date, description, tags }) => (
@@ -32,6 +41,7 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
         Read more
       </Link>
     </Description>
+    <MobileDate>{date}</MobileDate>
   </Fragment>
 );
 
