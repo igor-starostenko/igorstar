@@ -30,3 +30,9 @@ When using Amplify you pay only for the underlying AWS services you use. There a
 ## S3
 
 Because my website is image heavy, it was critical to optimize the storage of my photos in [AWS S3](https://aws.amazon.com/s3/) rather than keeping the assets in source. Luckily Gatsby has a plugin [gatsby-source-s3-image](https://www.gatsbyjs.org/packages/gatsby-source-s3-image/) that pulls all images from S3 on build time and makes them available through Gatsby's GraphQL layer <b>including *EXIF* metadata!</b>. Caching the images on build time allows to benefit from [gatsby-plugin-sharp](https://www.gatsbyjs.org/packages/gatsby-plugin-sharp) image processing and optimize for mobile devices. Also it helps avoid unexpected S3 bills, just make sure you don't go beyond the free tier (Currently 5GB).
+
+Talking about photos, don't forget to check out my [gallery](/gallery)
+
+If you are curious to see the codes for this project, it's open source on [my GitHub](https://github.com/igor-starostenko/igorstar).
+
+Thanks!

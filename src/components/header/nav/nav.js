@@ -6,7 +6,10 @@ const Nav = () => (
   <Container>
     <ul>
       <li>
-        <Link to="/about">About</Link>
+        <Link to="/gallery">Gallery</Link>
+        <Link to="/about" style={{ marginLeft: '3rem' }}>
+          About
+        </Link>
       </li>
     </ul>
   </Container>
