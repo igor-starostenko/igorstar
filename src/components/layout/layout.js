@@ -8,13 +8,13 @@ import Footer from 'components/footer';
 import GlobalStyle from 'global.css.js';
 
 const Layout = ({ data, children }) => {
-  const { siteTitle, author, social } = data.site.siteMetadata;
+  const { siteTitleShort, author, social } = data.site.siteMetadata;
 
   return (
     <div style={{ height: '100%' }}>
       <GlobalStyle />
       <Head />
-      <Header title={siteTitle} />
+      <Header title={siteTitleShort} />
       <Content>{children}</Content>
       <Footer author={author} social={social} />
     </div>
@@ -33,7 +33,7 @@ const LayoutWithQuery = props => (
         site {
           siteMetadata {
             author
-            siteTitle
+            siteTitleShort
             social {
               fivehundredpx
               flickr

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
+import Head from 'components/head';
 
 const calculateRowHeight = imageCount => {
   let multiplier = 3;
@@ -21,6 +22,7 @@ const Post = ({ data, pageContext }) => {
   );
   return (
     <Layout>
+      <Head pageTitle={post.frontmatter.title} />
       <Box>
         <div style={{ margin: '0 -4rem' }}>
           {images.length > 0 && (

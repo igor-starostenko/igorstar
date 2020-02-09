@@ -110,6 +110,7 @@ export default createGlobalStyle`
   }
 
   p {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
   }
 `;

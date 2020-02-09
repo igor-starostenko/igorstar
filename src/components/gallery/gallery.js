@@ -67,7 +67,7 @@ const Gallery = ({ photos, ...rest }) => {
 
   return (
     <div>
-      {photos.length > 1 && (
+      {photos.length > 0 && (
         <PhotoGallery
           photos={images}
           onClick={imageClick}
