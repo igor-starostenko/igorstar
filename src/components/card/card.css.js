@@ -1,21 +1,20 @@
 import { Link } from 'gatsby';
 import styled from 'styled-components';
 import { colors } from 'constants/theme';
+import MEDIA from 'helpers/mediaTemplates';
 
 export const SLink = styled(Link)`
   text-decoration: none;
 `;
 
 export const Row = styled.div`
-  display: inline-flex;
-  align-items: baseline;
   width: 100%;
-  justify-content: space-between;
 `;
 
 export const Title = styled.h3`
   margin-bottom: 1rem;
   color: ${colors.black};
+  display: inline-block;
 `;
 
 export const Description = styled.p`
@@ -25,7 +24,21 @@ export const Description = styled.p`
 
 export const Date = styled.span`
   margin-bottom: 1rem;
+  margin-top: 2rem;
   color: ${colors.grey};
+  float: right;
+  ${MEDIA.PHONE`
+    display: none;
+  `};
+`;
+
+export const MobileDate = styled.span`
+  display: none;
+  color: ${colors.grey};
+  float: right;
+  ${MEDIA.PHONE`
+    display: block;
+  `};
 `;
 
 export const Tags = styled.div`
