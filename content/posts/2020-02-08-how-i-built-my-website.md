@@ -9,7 +9,7 @@ tags:
   - tech
   - web
   - AWS
-description: Dev stack I use in 2020 (Gatsby + Amplify + S3)
+description: Web dev stack I use in 2020 (Gatsby + Amplify + S3)
 ---
 I have owned igorstar.com domain since 2012 and my website went through multiple revisions (at least 3). And here in 2020 I would like to introduce my 4th version of my website, 100% setup by myself. That was a fun experience and some of you may find it helpful.
 
