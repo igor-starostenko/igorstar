@@ -3,10 +3,7 @@ import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
 
 export const Container = styled.footer`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 4rem;
+  padding: 4rem 0;
   border-top: 1px solid ${colors.lightGrey};
 
   ${MEDIA.TABLET`
@@ -14,29 +11,19 @@ export const Container = styled.footer`
   `}
 `;
 
-export const Navigation = styled.div`
-  width: max-content;
-  margin: auto;
-`;
-
-export const Right = styled.div`
-  ${MEDIA.TABLET`
-      > div {
-        width: max-content;
-        margin: auto;
-      }
-  `}
-`;
-
 export const Social = styled.div`
   margin-bottom: 1rem !important;
+  margin: auto;
+  width: fit-content;
 
   a {
-    margin: 0 0.3rem;
+    padding: 1.5rem;
   }
 `;
 
 export const Copyright = styled.div`
+  width: fit-content;
+  margin: auto;
   a {
     color: ${colors.grey};
     transition: color 0.2s ease;

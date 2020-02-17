@@ -1,4 +1,21 @@
-<p align="center">
+# igorstar.com
+
+<p>
+  <a href="https://github.com/prettier/prettier">
+    <img
+      src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg"
+      alt="styled with prettier"
+    />
+  </a>
+</p>
+
+<p>
+  <strong>
+    You can access this blog online at <a href="https://igorstar.com">www.igorstar.com</a>.
+  </strong>
+</p>
+
+<p>
   <a href="https://github.com/fabe/gatsby-universal">
     <img
       src="https://i.imgur.com/MFWrZSx.png"
@@ -9,40 +26,7 @@
   </a>
 </p>
 
-<p align="center">
-  <a href="https://circleci.com/gh/fabe/gatsby-universal">
-    <img
-      src="https://circleci.com/gh/fabe/gatsby-universal.svg?style=svg"
-      alt="CircleCI"
-    />
-  </a>
-  <a href="https://greenkeeper.io/">
-    <img
-      src="https://badges.greenkeeper.io/fabe/gatsby-universal.svg"
-      alt="Greenkeeper badge"
-    />
-  </a>
-  <a href="https://github.com/prettier/prettier">
-    <img
-      src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg"
-      alt="styled with prettier"
-    />
-  </a>
-  <a href="https://app.netlify.com/sites/gatsby-universal/deploys">
-    <img
-      src="https://api.netlify.com/api/v1/badges/3e49bb6e-c385-4807-a7e8-70eea491cfdf/deploy-status"
-      alt="Netlify Status"
-    />
-  </a>
-</p>
-
-<p align="center">
-  <strong>
-    You can access this blog online at <a href="https://igorstar.com">www.igorstar.com</a>.
-  </strong>
-</p>
-
-<p align="center">
+<p>
   Based on an <em>opinionated</em> Gatsby v2 starter with React Context, styled-components, page transitions, scroll events with <code>IntersectionObserver</code> and a focus on accessibility and SEO. Made for state-of-the-art marketing sites.
 </p>
 
@@ -65,29 +49,18 @@
 - [X] 🗺 Sitemap support
 - [X] 📱 Generated media queries for easy use
 - [X] 😎 [Prettier](https://prettier.io/) for code style
-- [X] 👷‍♂️ [CircleCI](https://circleci.com/) support
-- [X] 🐙 Schema JSONLD
-- [X] 🔎 [`size-plugin`](https://github.com/GoogleChromeLabs/size-plugin) to keep an eye on your bundle sizes
 - [X] 👨‍🏫 ESLint (based on [`eslint-plugin-react`](./.eslintrc))
+- [X] 🌅 Responsive gallery with [`react-photo-gallery`](https://www.npmjs.com/package/react-photo-gallery)
+- [X] 🎞 Loading images from s3 using [`gatsby-source-s3-image`](https://www.gatsbyjs.org/packages/gatsby-source-s3-image/)
 
-Do you have suggestions or feedback? [Open an issue](https://github.com/fabe/gatsby-universal/issues/new)!
-
-## Lighthouse scores (on [Netlify](https://netlify.com))
-
-[![Lighthouse scores (on Netlify)](https://lighthouse.now.sh/?perf=100&pwa=100&a11y=100&bp=100&seo=100)](https://circleci.com/gh/fabe/gatsby-universal)
+Do you have suggestions or feedback? [Open an issue](https://github.com/igor-starostenko/igorstar/issues)!
 
 ## Usage
 
-[![Edit on CodeSandbox](https://cdn.rawgit.com/fabe/1dd805eed0153b47aba2b50cea2469ec/raw/64b0ea90c2a425d3847da908053f5f337128259b/edit-on-codesandbox-32px.svg)](https://codesandbox.io/s/github/fabe/gatsby-universal)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/fabe/gatsby-universal)
-
 ```bash
-# Installation with `gatsby-cli`
-gatsby new my-site https://github.com/fabe/gatsby-universal
-
-# Installation with `git clone`
-git clone git@github.com:fabe/gatsby-universal.git my-site
-cd my-site
+# Clone repo
+git clone https://github.com/igor-starostenko/igorstar.git
+cd igorstar
 yarn install
 
 # To develop
@@ -104,36 +77,6 @@ yarn format
 
 # To generate favicons (included in `build`)
 yarn build:favicons
-```
-
-## Folder structure
-```bash
-├── gatsby-browser.js # Specify how Gatsby renders pages in the browser
-├── gatsby-config.js # Gatsby config, mostly taken from `site-config.js`
-├── gatsby-node.js # Modify webpack config
-├── gatsby-ssr.js # Specify how Gatsby builds pages
-├── site-config.js # Global settings for the whole site, used by multiple scripts
-├── content # Content & data, in both json and markdown
-├── src
-│   ├── components
-│   │   ├── head # All meta tags etc.
-│   │   ├── io # Intersection Observer component, uses render props
-│   │   ├── layout # Layout component
-│   │   │   ├── layout.css.js # .css.js for component's `styled-components`
-│   │   │   └── layout.js
-│   │   └── transition # Page Transition component, used by Gatsby APIs
-│   ├── constants # Site-wide constants (breakpoints, colors, etc.)
-│   ├── containers # Container components if store is needed
-│   ├── helpers
-│   │   ├── schemaGenerator.js # Generates JSON-LD schema.org snippets
-│   │   └── mediaTemplates.js # Creates media queries for styled-components
-│   ├── images # Images needed by the site/theme (not content)
-│   ├── pages
-│   ├── store # Store and provider of a React.createContext instance
-│   └── global.css.js # Global CSS
-└── scripts
-    ├── lighthouse.test.js # Tests the site specified inside `site-config.js` with Google Lighthouse (WIP)
-    └── favicons.js # Generates favicons and manifest using one png only.
 ```
 
 ## Author
