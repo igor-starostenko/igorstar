@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
-import { Container, Navigation, Right, Social, Copyright } from './footer.css';
+import { Container, Social, Copyright } from './footer.css';
 import {
   FivehundredpxIcon,
   FlickrIcon,
@@ -25,37 +25,53 @@ SocialLink.propTypes = {
 
 const Footer = ({ author, social }) => (
   <Container>
-    <Navigation />
-    <Right>
-      <Social>
-        <SocialLink href={`https://github.com/${social.github}`}>
-          <GithubIcon width="19" />
-        </SocialLink>
-        <SocialLink href={`https://linkedin.com/in/${social.linkedin}`}>
-          <LinkedinIcon width="19" />
-        </SocialLink>
-        <SocialLink href={`https://twitter.com/${social.twitter}`}>
-          <TwitterIcon width="19" />
-        </SocialLink>
-        <SocialLink
-          href={`https://youtube.com/channel/${social.youtube}/videos`}
-        >
-          <YoutubeIcon width="19" />
-        </SocialLink>
-        <SocialLink href={`https://instagram.com/${social.instagram}`}>
-          <InstagramIcon width="19" />
-        </SocialLink>
-        <SocialLink href={`https://flickr.com/photos/${social.flickr}`}>
-          <FlickrIcon width="19" />
-        </SocialLink>
-        <SocialLink href={`https://500px.com/${social.fivehundredpx}`}>
-          <FivehundredpxIcon width="19" />
-        </SocialLink>
-      </Social>
-      <Copyright>
-        <Link to="/">{author}</Link> © {new Date().getFullYear()}
-      </Copyright>
-    </Right>
+    <Social>
+      <SocialLink
+        href={`https://github.com/${social.github}`}
+        arialabel="Twitter"
+      >
+        <GithubIcon width="19" />
+      </SocialLink>
+      <SocialLink
+        href={`https://linkedin.com/in/${social.linkedin}`}
+        arialabel="LinkedIn"
+      >
+        <LinkedinIcon width="19" />
+      </SocialLink>
+      <SocialLink
+        href={`https://twitter.com/${social.twitter}`}
+        arialabel="Twitter"
+      >
+        <TwitterIcon width="19" />
+      </SocialLink>
+      <SocialLink
+        href={`https://youtube.com/channel/${social.youtube}/videos`}
+        arialabel="YouTube"
+      >
+        <YoutubeIcon width="19" />
+      </SocialLink>
+      <SocialLink
+        href={`https://instagram.com/${social.instagram}`}
+        arialabel="Instagram"
+      >
+        <InstagramIcon width="19" />
+      </SocialLink>
+      <SocialLink
+        href={`https://flickr.com/photos/${social.flickr}`}
+        arialabel="Flickr"
+      >
+        <FlickrIcon width="19" />
+      </SocialLink>
+      <SocialLink
+        href={`https://500px.com/${social.fivehundredpx}`}
+        arialabel="500px"
+      >
+        <FivehundredpxIcon width="19" />
+      </SocialLink>
+    </Social>
+    <Copyright>
+      <Link to="/">{author}</Link> © {new Date().getFullYear()}
+    </Copyright>
   </Container>
 );
 
