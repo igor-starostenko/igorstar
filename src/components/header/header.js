@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'gatsby';
 import posed from 'react-pose';
 import { Container } from './header.css';
-import Logo from 'images/logo.svg';
+import Logo from 'components/logo';
 import Nav from 'components/header/nav';
 
 // Example of a component-specific page transition
