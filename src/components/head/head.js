@@ -5,6 +5,12 @@ import { StaticQuery, graphql } from 'gatsby';
 import { Location } from '@reach/router';
 import schemaGenerator from 'helpers/schemaGenerator';
 
+const appendSiteUrl = (siteUrl, imageUrl) => {
+  const origin =
+    typeof window === 'undefined' ? siteUrl : window.location.origin;
+  return imageUrl.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
+};
+
 const Head = ({
   siteTitle,
   siteTitleShort,
@@ -54,15 +60,18 @@ const Head = ({
     <meta content={canonical} name="twitter:url" />
     <link rel="canonical" href={canonical} />
 
-    <meta content={imageUrl || `${siteUrl}/social.png`} property="og:image" />
+    <meta
+      content={appendSiteUrl(siteUrl, imageUrl || '/social.png')}
+      property="og:image"
+    />
     <meta content="1024" property="og:image:width" />
     <meta content="512" property="og:image:height" />
-    <meta content={imageUrl || `${siteUrl}/social.png`} name="twitter:image" />
+    <meta
+      content={appendSiteUrl(siteUrl, imageUrl || '/social.png')}
+      name="twitter:image"
+    />
     <meta content="1024" name="twitter:image:width" />
     <meta content="512" name="twitter:image:height" />
-    <meta content={imageUrl || `${siteUrl}/social.png`} property="og:image" />
-    <meta content="1024" property="og:image:width" />
-    <meta content="512" property="og:image:height" />
 
     <meta content={themeColor} name="msapplication-TileColor" />
     <meta content="/icons/mstile-70x70.png" name="msapplication-square70x70" />

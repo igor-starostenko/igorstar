@@ -28,43 +28,43 @@ const Footer = ({ author, social }) => (
     <Social>
       <SocialLink
         href={`https://github.com/${social.github}`}
-        arialabel="Twitter"
+        {...{ 'aria-label': 'GitHub' }}
       >
         <GithubIcon width="19" />
       </SocialLink>
       <SocialLink
         href={`https://linkedin.com/in/${social.linkedin}`}
-        arialabel="LinkedIn"
+        {...{ 'aria-label': 'LinkedIn' }}
       >
         <LinkedinIcon width="19" />
       </SocialLink>
       <SocialLink
         href={`https://twitter.com/${social.twitter}`}
-        arialabel="Twitter"
+        {...{ 'aria-label': 'Twitter' }}
       >
         <TwitterIcon width="19" />
       </SocialLink>
       <SocialLink
         href={`https://youtube.com/channel/${social.youtube}/videos`}
-        arialabel="YouTube"
+        {...{ 'aria-label': 'YouTube' }}
       >
         <YoutubeIcon width="19" />
       </SocialLink>
       <SocialLink
         href={`https://instagram.com/${social.instagram}`}
-        arialabel="Instagram"
+        {...{ 'aria-label': 'Instagram' }}
       >
         <InstagramIcon width="19" />
       </SocialLink>
       <SocialLink
         href={`https://flickr.com/photos/${social.flickr}`}
-        arialabel="Flickr"
+        {...{ 'aria-label': 'Flickr' }}
       >
         <FlickrIcon width="19" />
       </SocialLink>
       <SocialLink
         href={`https://500px.com/${social.fivehundredpx}`}
-        arialabel="500px"
+        {...{ 'aria-label': '500px' }}
       >
         <FivehundredpxIcon width="19" />
       </SocialLink>
