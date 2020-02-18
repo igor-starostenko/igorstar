@@ -8,7 +8,7 @@ import schemaGenerator from 'helpers/schemaGenerator';
 const appendSiteUrl = (siteUrl, imageUrl) => {
   const origin =
     typeof window === 'undefined' ? siteUrl : window.location.origin;
-  return imageUrl.startsWith('http') ? imageUrl : `${origin}/${imageUrl}`;
+  return imageUrl.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
 };
 
 const Head = ({
@@ -61,13 +61,13 @@ const Head = ({
     <link rel="canonical" href={canonical} />
 
     <meta
-      content={appendSiteUrl(siteUrl, imageUrl || 'social.png')}
+      content={appendSiteUrl(siteUrl, imageUrl || '/social.png')}
       property="og:image"
     />
     <meta content="1024" property="og:image:width" />
     <meta content="512" property="og:image:height" />
     <meta
-      content={appendSiteUrl(siteUrl, imageUrl || 'social.png')}
+      content={appendSiteUrl(siteUrl, imageUrl || '/social.png')}
       name="twitter:image"
     />
     <meta content="1024" name="twitter:image:width" />
