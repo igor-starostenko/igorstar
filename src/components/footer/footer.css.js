@@ -18,6 +18,10 @@ export const Social = styled.div`
 
   a {
     padding: 1.5rem;
+
+    @media (max-width: 357px) {
+      padding: 1.3rem;
+    }
   }
 `;
 
