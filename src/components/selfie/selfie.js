@@ -4,7 +4,7 @@ import Box from 'components/box';
 import Image from 'components/image';
 
 const Selfie = ({ fluid, ...rest }) => (
-  <Box style={{ padding: '2rem 0 0 0' }} {...rest}>
+  <Box style={{ padding: '2rem 4rem 0rem 4rem' }} {...rest}>
     <Image
       style={{
         cursor: 'initial',
