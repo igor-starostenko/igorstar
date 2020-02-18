@@ -49,8 +49,7 @@ export const Tag = styled.span`
   margin-right: 10px;
   padding: 3px;
   border-radius: 7px;
-  color: ${colors.black};
-  background: ${colors.primary};
-  opacity: 50%;
+  color: ${colors.darkGrey};
+  background: ${colors.lightestGrey};
   font-size: 1.4rem;
 `;

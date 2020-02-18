@@ -55,6 +55,10 @@
 
 Do you have suggestions or feedback? [Open an issue](https://github.com/igor-starostenko/igorstar/issues)!
 
+## Lighthouse scores
+
+<img src="./static/lighthouse_score.png" alt="Lighthouse Score"/>
+
 ## Usage
 
 ```bash
