@@ -65,12 +65,6 @@ export const query = graphql`
       edges {
         node {
           Key
-          EXIF {
-            DateCreatedISO
-            ExposureTime
-            FNumber
-            ShutterSpeedValue
-          }
           image: childImageSharp {
             fluid(maxHeight: 480, quality: 90) {
               ...GatsbyImageSharpFluid_withWebp
