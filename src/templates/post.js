@@ -1,6 +1,7 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
+import get from 'lodash/get';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
@@ -25,7 +26,7 @@ const Post = ({ data, pageContext }) => {
     <Layout>
       <Head
         pageTitle={post.frontmatter.title}
-        imageUrl={thumb.image.childImageSharp.fluid.src}
+        imageUrl={get(thumb, 'image.childImageSharp.fluid.src')}
       />
       <Box>
         <div style={{ margin: '0 -4rem' }}>
