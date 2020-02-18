@@ -13,6 +13,9 @@ description: Web dev stack I use in 2020 (Gatsby + Amplify + S3)
 ---
 I have owned igorstar.com domain since 2012 and my website went through multiple revisions (at least 3). And here in 2020 I would like to introduce my 4th version of my website, 100% setup by myself. That was a fun experience and some of you may find it helpful.
 
+Performance report results using [Lighthouse](https://developers.google.com/web/tools/lighthouse/#psi):
+<img width="100%" src="/lighthouse_score.png" alt="Lighthouse Score" />
+
 ## GatsbyJS
 
 Is an open source framework for building static web sites while keeping React features. This makes it super fast, lightweight, SEO friendly and best development experience.

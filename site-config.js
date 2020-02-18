@@ -4,7 +4,7 @@ module.exports = {
   author: 'Igor Starostenko',
   siteTitle: 'IgorStar: Blog',
   siteTitleShort: 'IgorStar',
-  siteDescription: 'Travel, photography, data and software.',
+  siteDescription: 'Travel, photography, data and software. Personal blog.',
   siteUrl: 'https://igorstar.com',
   themeColor: '#000',
   backgroundColor: '#fff',
