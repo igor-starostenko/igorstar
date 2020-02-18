@@ -15,14 +15,18 @@ const calculateRowHeight = imageCount => {
   return height > 100 ? height : 100;
 };
 
+const imageWithSlug = slug => ({ image }) => `/${image.key}`.includes(slug);
+
 const Post = ({ data, pageContext }) => {
   const post = data.markdownRemark;
-  const images = data.images.edges.filter(({ image }) =>
-    `/${image.key}`.includes(pageContext.slug)
-  );
+  const images = data.images.edges.filter(imageWithSlug(pageContext.slug));
+  const thumb = data.thumbs.edges.find(imageWithSlug(pageContext.slug));
   return (
     <Layout>
-      <Head pageTitle={post.frontmatter.title} />
+      <Head
+        pageTitle={post.frontmatter.title}
+        imageUrl={thumb.image.childImageSharp.fluid.src}
+      />
       <Box>
         <div style={{ margin: '0 -4rem' }}>
           {images.length > 0 && (
@@ -52,6 +56,21 @@ export const query = graphql`
       html
       frontmatter {
         title
+      }
+    }
+    thumbs: allS3ImageAsset(
+      sort: { fields: Key }
+      filter: { Key: { regex: "^posts/.*-thumb.*/" } }
+    ) {
+      edges {
+        image: node {
+          key: Key
+          childImageSharp {
+            fluid(maxHeight: 480, quality: 90) {
+              ...GatsbyImageSharpFluid_withWebp
+            }
+          }
+        }
       }
     }
     images: allS3ImageAsset(
