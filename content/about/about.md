@@ -3,7 +3,7 @@ path: "/about"
 title: "About"
 ---
 ####Hi there 👋,
-My name is Igor Starostenko. I am a family man who loves mechanical keyboards, landscape photography and travel. Also a software engineer @ [AutoGravity](www.autogravity.com).
+My name is Igor Starostenko. I am a family man who loves mechanical keyboards, landscape photography and travel. Also a data engineer @ [PriceSpider](https://www.pricespider.com/).
 
 Value internet privacy. Prefer faster, anonymous browsing over user tracking.
 
