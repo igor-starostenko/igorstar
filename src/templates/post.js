@@ -33,6 +33,7 @@ const Post = ({ data, pageContext }) => {
           {images.length > 0 && (
             <Gallery
               photos={images}
+              captions={post.frontmatter.captions}
               targetRowHeight={calculateRowHeight(images.length)}
             />
           )}
@@ -57,6 +58,12 @@ export const query = graphql`
       html
       frontmatter {
         title
+        captions {
+          name
+          desc
+          location
+          date
+        }
       }
     }
     thumbs: allS3ImageAsset(

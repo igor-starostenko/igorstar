@@ -35,7 +35,15 @@ GalleryImage.propTypes = {
   margin: PropTypes.number,
 };
 
-const getImages = imageArray => {
+const matchCaption = (imageKey, captionArray) => {
+  const { desc, location, date } =
+    captionArray.find(({ name }) => imageKey.includes(name)) || {};
+  return `${desc}${desc && location ? ' - ' : ''}${location}${
+    (desc || location) && date ? ', ' : ''
+  }${date}`;
+};
+
+const getImages = (imageArray, captionArray) => {
   return [...imageArray].map(
     ({
       image: {
@@ -47,6 +55,7 @@ const getImages = imageArray => {
       width: original.width,
       src: fluid.src,
       srcSet: fluid.srcSet,
+      caption: matchCaption(key, captionArray),
       fluid,
       key: titleFromPath(key),
     })
@@ -55,10 +64,10 @@ const getImages = imageArray => {
 
 const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
 
-const Gallery = ({ photos, ...rest }) => {
+const Gallery = ({ photos, captions, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
-  const images = getImages(photos);
+  const images = getImages(photos, captions);
 
   const imageClick = (e, obj) => {
     setCurrent(obj.index);
@@ -97,6 +106,7 @@ const Gallery = ({ photos, ...rest }) => {
 
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  captions: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Gallery;
