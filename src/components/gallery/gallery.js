@@ -106,7 +106,7 @@ const Gallery = ({ photos, captions, ...rest }) => {
 
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  captions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  captions: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default Gallery;
