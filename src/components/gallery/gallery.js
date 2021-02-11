@@ -43,6 +43,15 @@ const matchCaption = (imageKey, captionArray) => {
   }${date}`;
 };
 
+const orderArray = (array, order) => {
+  const direction = String(order).toLowerCase();
+  if (!['desc', 'asc'].includes(direction)) {
+    return array;
+  }
+  array.sort();
+  return direction === 'desc' ? array.reverse() : array;
+};
+
 const getImages = (imageArray, captionArray) => {
   return [...imageArray].map(
     ({
@@ -64,10 +73,10 @@ const getImages = (imageArray, captionArray) => {
 
 const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
 
-const Gallery = ({ photos, captions, ...rest }) => {
+const Gallery = ({ photos, order, captions, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
-  const images = getImages(photos, captions);
+  const images = getImages(orderArray(photos, order), captions);
 
   const imageClick = (e, obj) => {
     setCurrent(obj.index);
@@ -106,6 +115,7 @@ const Gallery = ({ photos, captions, ...rest }) => {
 
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  order: PropTypes.string,
   captions: PropTypes.arrayOf(PropTypes.object),
 };
 

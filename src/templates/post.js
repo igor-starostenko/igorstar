@@ -33,6 +33,7 @@ const Post = ({ data, pageContext }) => {
           {images.length > 0 && (
             <Gallery
               photos={images}
+              order={post.frontmatter.order}
               captions={post.frontmatter.captions}
               targetRowHeight={calculateRowHeight(images.length)}
             />
@@ -58,6 +59,7 @@ export const query = graphql`
       html
       frontmatter {
         title
+        order
         captions {
           name
           desc
