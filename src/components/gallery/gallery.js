@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { default as PhotoGallery } from 'react-photo-gallery';
 import Carousel, { Modal, ModalGateway } from 'react-images';
@@ -76,7 +76,11 @@ const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
 const Gallery = ({ photos, order, captions, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
-  const images = getImages(orderArray(photos, order), captions);
+
+  const images = useMemo(
+    () => getImages(orderArray(photos, order), captions),
+    []
+  );
 
   const imageClick = (e, obj) => {
     setCurrent(obj.index);
