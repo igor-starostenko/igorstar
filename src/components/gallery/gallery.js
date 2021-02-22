@@ -36,8 +36,14 @@ GalleryImage.propTypes = {
 };
 
 const matchCaption = (imageKey, captionArray) => {
-  const { desc, location, date } =
-    (captionArray || []).find(({ name }) => imageKey.includes(name)) || {};
+  const caption = (captionArray || []).find(({ name }) =>
+    imageKey.includes(name)
+  );
+  if (!caption) {
+    return null;
+  }
+
+  const { desc, location, date } = caption;
   return `${desc}${desc && location ? ' - ' : ''}${location}${
     (desc || location) && date ? ', ' : ''
   }${date}`;
