@@ -6,7 +6,6 @@ import {
   FivehundredpxIcon,
   FlickrIcon,
   GithubIcon,
-  InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
   YoutubeIcon,
@@ -49,12 +48,6 @@ const Footer = ({ author, social }) => (
         {...{ 'aria-label': 'YouTube' }}
       >
         <YoutubeIcon width="19" />
-      </SocialLink>
-      <SocialLink
-        href={`https://instagram.com/${social.instagram}`}
-        {...{ 'aria-label': 'Instagram' }}
-      >
-        <InstagramIcon width="19" />
       </SocialLink>
       <SocialLink
         href={`https://flickr.com/photos/${social.flickr}`}
