@@ -409,15 +409,15 @@ captions:
     location: Broadway and 7th
     date: 2015-04-13
   - name: feed-100
-    desc: 1 #geometry
+    desc: "1 #geometry"
     location: Walt Disney Concert Hall
     date: 2015-04-03
   - name: feed-101
-    desc: 2 #geometry
+    desc: "2 #geometry"
     location: Walt Disney Concert Hall
     date: 2015-04-03
   - name: feed-102
-    desc: 3 #geometry
+    desc: "3 #geometry"
     location: Walt Disney Concert Hall
     date: 2015-04-03
   - name: feed-103
@@ -494,7 +494,7 @@ captions:
     date: 2015-09-15
   - name: feed-121
     desc: Hans Christian Andersen
-    location: Solvang: Danish Town
+    location: "Solvang: Danish Town"
     date: 2015-09-07
   - name: feed-122
     desc: 9/11 memorial #pepperdine #malibu
@@ -690,7 +690,7 @@ captions:
     date: 2017-10-09
   - name: feed-170
     desc: Finally had some great sushi today. Love this place
-    location: SUGARFISH: Marina del Rey
+    location: "SUGARFISH: Marina del Rey"
     date: 2017-11-03
   - name: feed-171
     desc: Travelling south
