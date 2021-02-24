@@ -38,7 +38,6 @@ const LayoutWithQuery = props => (
               fivehundredpx
               flickr
               github
-              instagram
               linkedin
               twitter
               youtube

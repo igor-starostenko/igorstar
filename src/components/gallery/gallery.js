@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { default as PhotoGallery } from 'react-photo-gallery';
 import Carousel, { Modal, ModalGateway } from 'react-images';
@@ -35,7 +35,31 @@ GalleryImage.propTypes = {
   margin: PropTypes.number,
 };
 
-const getImages = imageArray => {
+const matchCaption = (imageKey, captionArray) => {
+  const caption = (captionArray || []).find(({ name }) =>
+    imageKey.includes(name)
+  );
+  if (!caption) {
+    return null;
+  }
+
+  const { desc, location, date } = caption;
+  const day = date ? new Date(date).toDateString() : null;
+  return `${desc}${desc && location ? ' - ' : ''}${location}${
+    (desc || location) && day ? ', ' : ''
+  }${day}`;
+};
+
+const orderArray = (array, order) => {
+  const direction = String(order).toLowerCase();
+  if (!['desc', 'asc'].includes(direction)) {
+    return array;
+  }
+  array.sort();
+  return direction === 'desc' ? array.reverse() : array;
+};
+
+const getImages = (imageArray, captionArray) => {
   return [...imageArray].map(
     ({
       image: {
@@ -47,6 +71,7 @@ const getImages = imageArray => {
       width: original.width,
       src: fluid.src,
       srcSet: fluid.srcSet,
+      caption: matchCaption(key, captionArray),
       fluid,
       key: titleFromPath(key),
     })
@@ -55,10 +80,14 @@ const getImages = imageArray => {
 
 const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
 
-const Gallery = ({ photos, ...rest }) => {
+const Gallery = ({ photos, order, captions, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
-  const images = getImages(photos);
+
+  const images = useMemo(
+    () => getImages(orderArray(photos, order), captions),
+    []
+  );
 
   const imageClick = (e, obj) => {
     setCurrent(obj.index);
@@ -97,6 +126,8 @@ const Gallery = ({ photos, ...rest }) => {
 
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  order: PropTypes.string,
+  captions: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default Gallery;
