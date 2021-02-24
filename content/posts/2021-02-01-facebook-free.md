@@ -939,3 +939,9 @@ captions:
 description: My final breakup with Facebook
 ---
 "Free cheese is in a mousetrap" - this is what people often say in the place where I was born.
+
+<div style="margin: auto; width: fit-content;">
+  <a href="https://m.signalvnoise.com/become-a-facebook-free-business/">
+    <img src="https://basecamp.com/nofu/fb-free-badge.png" alt="Facebook-Free-Badge" height="180px"/>
+  </a>
+</div>
