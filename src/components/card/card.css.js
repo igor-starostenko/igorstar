@@ -42,11 +42,12 @@ export const MobileDate = styled.span`
 `;
 
 export const Tags = styled.div`
-  margin: 0.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 export const Tag = styled.span`
-  margin-right: 10px;
+  margin: 0.5rem 10px 0.5rem 0px;
   padding: 3px;
   border-radius: 7px;
   color: ${colors.darkGrey};
