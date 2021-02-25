@@ -31,7 +31,7 @@ GalleryPage.propTypes = {
     images: PropTypes.shape({
       edges: PropTypes.arrayOf(
         PropTypes.shape({
-          node: PropTypes.object.isRequired,
+          image: PropTypes.object,
         })
       ).isRequired,
     }).isRequired,

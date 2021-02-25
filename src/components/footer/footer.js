@@ -72,7 +72,7 @@ Footer.propTypes = {
   author: PropTypes.string.isRequired,
   social: PropTypes.shape({
     github: PropTypes.string.isRequired,
-    instagram: PropTypes.string.isRequired,
+    instagram: PropTypes.string,
     linkedin: PropTypes.string.isRequired,
     twitter: PropTypes.string.isRequired,
     youtube: PropTypes.string.isRequired,

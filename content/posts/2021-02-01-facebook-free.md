@@ -10,7 +10,6 @@ tags:
   - tech
   - tracking
   - spyware
-order: desc
 captions:
   - name: feed-001
     desc: Me
