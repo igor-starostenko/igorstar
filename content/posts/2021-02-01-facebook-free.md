@@ -30,7 +30,7 @@ There are alternatives to Facebook Messanger and Whatsapp like Signal, that is m
 
 I have been using instagram since it has become available for the general public (Android users) in first half of 2012. Remember it as a platform where people could openly express their creativity with mobile photography taking advantage of the cute retro filters that were quite novel those days. Year over year it was gaining new users and although the overall image quality has been increasing, the content quality has been surprisingly decreasing.
 
-In early 2020 I decided to reshape my habits and abandoned my instagram account. Almost a year after, I finally exported all my history and photos and now going to store the best of them on my website and will keep updating my feed.
+In early 2020 I decided to reshape my habits and abandoned my instagram account. Almost a year after, I finally exported all my history and photos and now going to store the best of them in the [feed section of my website](/feed) and will keep updating my feed.
 
 If you want your business to take part in the movement - click on the badge below to learn more.
 
