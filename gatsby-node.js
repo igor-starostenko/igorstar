@@ -68,3 +68,22 @@ exports.createPages = async ({ graphql, actions }) => {
     });
   });
 };
+
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions;
+  const typeDefs = `
+    type Caption implements Node {
+      name: String
+      desc: String
+      location: String
+      date: Date
+    }
+
+    type MarkdownRemarkFrontmatter implements Node {
+      order: String
+      captions: [Caption]
+    }
+  `;
+
+  createTypes(typeDefs);
+};

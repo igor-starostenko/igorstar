@@ -12,7 +12,6 @@ module.exports = {
   logo: path.resolve(__dirname, 'src/images/icon.png'),
   social: {
     github: 'igor-starostenko',
-    instagram: 'igorstar',
     fivehundredpx: 'igorstar',
     flickr: 'igor_star',
     linkedin: 'igorstarostenko',

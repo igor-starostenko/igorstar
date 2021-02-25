@@ -6,7 +6,6 @@ import {
   FivehundredpxIcon,
   FlickrIcon,
   GithubIcon,
-  InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
   YoutubeIcon,
@@ -51,12 +50,6 @@ const Footer = ({ author, social }) => (
         <YoutubeIcon width="19" />
       </SocialLink>
       <SocialLink
-        href={`https://instagram.com/${social.instagram}`}
-        {...{ 'aria-label': 'Instagram' }}
-      >
-        <InstagramIcon width="19" />
-      </SocialLink>
-      <SocialLink
         href={`https://flickr.com/photos/${social.flickr}`}
         {...{ 'aria-label': 'Flickr' }}
       >
@@ -79,7 +72,7 @@ Footer.propTypes = {
   author: PropTypes.string.isRequired,
   social: PropTypes.shape({
     github: PropTypes.string.isRequired,
-    instagram: PropTypes.string.isRequired,
+    instagram: PropTypes.string,
     linkedin: PropTypes.string.isRequired,
     twitter: PropTypes.string.isRequired,
     youtube: PropTypes.string.isRequired,
