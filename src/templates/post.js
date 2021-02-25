@@ -22,6 +22,7 @@ const Post = ({ data, pageContext }) => {
   const post = data.markdownRemark;
   const images = data.images.edges.filter(imageWithSlug(pageContext.slug));
   const thumb = data.thumbs.edges.find(imageWithSlug(pageContext.slug));
+
   return (
     <Layout>
       <Head

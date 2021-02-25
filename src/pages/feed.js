@@ -16,7 +16,11 @@ const FeedPage = ({ data }) => (
       </Title>
       <div style={{ margin: '0 -4rem' }}>
         {data.images.edges.length > 0 && (
-          <Gallery photos={data.images.edges} targetRowHeight={250} />
+          <Gallery
+            photos={data.images.edges}
+            captions={data.feedJson.captions}
+            targetRowHeight={250}
+          />
         )}
       </div>
     </Box>
@@ -27,6 +31,14 @@ FeedPage.propTypes = {
   data: PropTypes.shape({
     feedJson: PropTypes.shape({
       title: PropTypes.string.isRequired,
+      captions: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          desc: PropTypes.string,
+          location: PropTypes.string,
+          date: PropTypes.date,
+        })
+      ),
     }).isRequired,
     images: PropTypes.shape({
       edges: PropTypes.arrayOf(
@@ -44,6 +56,12 @@ export const query = graphql`
   query FeedQuery {
     feedJson {
       title
+      captions {
+        name
+        desc
+        location
+        date
+      }
     }
     images: allS3ImageAsset(
       sort: { fields: Key, order: DESC }
