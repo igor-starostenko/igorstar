@@ -80,6 +80,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     }
 
     type MarkdownRemarkFrontmatter implements Node {
+      order: String
       captions: [Caption]
     }
   `;
