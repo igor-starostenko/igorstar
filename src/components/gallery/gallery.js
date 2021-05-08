@@ -44,7 +44,7 @@ const matchCaption = (imageKey, captionArray) => {
   }
 
   const { desc, location, date } = caption;
-  const day = date ? new Date(date).toDateString() : null;
+  const day = date ? new Date(date.replace(/-/g, '/')).toDateString() : null;
   return `${desc}${desc && location ? ' - ' : ''}${location}${
     (desc || location) && day ? ', ' : ''
   }${day}`;
