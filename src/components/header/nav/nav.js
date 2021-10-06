@@ -1,17 +1,19 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { Link } from 'next/link';
 import { Container } from './nav.css';
 
 const Nav = () => (
   <Container>
     <ul>
       <li>
-        <Link to="/feed">Feed</Link>
-        <Link to="/gallery" style={{ marginLeft: '3rem' }}>
-          Gallery
+        <Link href="/feed">
+          <a>Feed</a>
         </Link>
-        <Link to="/about" style={{ marginLeft: '3rem' }}>
-          About
+        <Link href="/gallery" style={{ marginLeft: '3rem' }}>
+          <a>Gallery</a>
+        </Link>
+        <Link href="/about" style={{ marginLeft: '3rem' }}>
+          <a>About</a>
         </Link>
       </li>
     </ul>

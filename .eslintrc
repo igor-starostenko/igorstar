@@ -5,6 +5,7 @@
     "node": true
   },
   "rules": {
+    "jsx-a11y/anchor-is-valid": 0,
     "strict": 0,
     "no-console": "warn",
     "quotes": [

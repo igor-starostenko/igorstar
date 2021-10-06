@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'gatsby';
+import { Link } from 'next/link';
 import {
   SLink,
   Row,
@@ -16,17 +16,21 @@ import Image from 'components/image';
 const Card = ({ index, slug, title, image, date, description, tags }) => (
   <Fragment>
     {image && (
-      <SLink to={slug}>
-        <Image
-          style={{ margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem` }}
-          fluid={image.fluid}
-          alt={title}
-        />
+      <SLink href={slug}>
+        <a>
+          <Image
+            style={{ margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem` }}
+            fluid={image.fluid}
+            alt={title}
+          />
+        </a>
       </SLink>
     )}
     <Row>
-      <SLink to={slug}>
-        <Title>{title}</Title>
+      <SLink href={slug}>
+        <a>
+          <Title>{title}</Title>
+        </a>
       </SLink>
       <Date>— {date}</Date>
     </Row>
@@ -37,8 +41,8 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
     </Tags>
     <Description>
       {description}{' '}
-      <Link as="span" to={slug}>
-        Read more
+      <Link as="span" href={slug}>
+        <a>Read more</a>
       </Link>
     </Description>
     <MobileDate>{date}</MobileDate>

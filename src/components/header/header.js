@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { Link } from 'next/link';
 import posed from 'react-pose';
 import { Container } from './header.css';
 import Logo from 'components/logo';
@@ -24,8 +24,10 @@ const AnimatedContainer = posed.div({
 const Header = () => (
   <AnimatedContainer>
     <Container>
-      <Link to="/">
-        <Logo />
+      <Link href="/">
+        <a>
+          <Logo />
+        </a>
       </Link>
 
       <Nav />
