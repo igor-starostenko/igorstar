@@ -3,18 +3,16 @@
   "license": "MIT",
   "author": "Igor Starostenko <contact@igorstar.com>",
   "scripts": {
-    "develop": "gatsby develop",
-    "serve": "gatsby serve",
-    "ssr": "npm run build && npm run serve",
+    "dev": "next dev",
+    "start": "next start",
+    "ssr": "npm run build && npm run start",
     "format": "prettier --config ./.prettierrc --write src/**/*.js",
     "build:dir": "mkdirp ./public/icons/",
     "build:favicons": "node scripts/favicons",
-    "build": "npm run build:dir && npm run build:favicons && gatsby build",
-    "test": "ava **/*.test.js --verbose"
+    "build": "npm run build:dir && npm run build:favicons && next build"
   },
   "greenkeeper": {
     "ignore": [
-      "ava",
       "core-js"
     ]
   },
@@ -24,8 +22,8 @@
     "@reach/visually-hidden": "^0.1.1",
     "babel-plugin-styled-components": "^1.10.0",
     "dotenv": "^8.2.0",
-    "gatsby-plugin-webpack-size": "^0.0.3",
     "intersection-observer": "^0.5.1",
+    "next": "^11.1.2",
     "prop-types": "^15.6.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
