@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'next/link';
+import Link from 'next/link';
 import { Container, Social, Copyright } from './footer.css';
 import {
   FivehundredpxIcon,
@@ -64,9 +64,7 @@ const Footer = ({ author, social }) => (
     </Social>
     <Copyright>
       <Link href="/">
-        <a target="_blank" rel="noopener noreferrer">
-          {author}
-        </a>
+        <a>{author}</a>
       </Link>{' '}
       © {new Date().getFullYear()}
     </Copyright>

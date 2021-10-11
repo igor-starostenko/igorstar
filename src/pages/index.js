@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'gatsby';
-import get from 'lodash/get';
+// import { graphql } from 'gatsby';
+// import get from 'lodash/get';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Title from 'components/title';
-import Article from 'components/article';
+// import Article from 'components/article';
 
-const Index = ({ data }) => (
+const Index = () => (
   <Layout>
     <Box>
       <div
@@ -20,12 +20,18 @@ const Index = ({ data }) => (
         }}
       >
         <Title as="h2" size="large">
+          Test Title
+          {/*
           {data.homeJson.title}
+          */}
         </Title>
+        <h4>0 Posts</h4>
+        {/*
         <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
+          */}
       </div>
       <div>
-        {data.allMarkdownRemark.edges.map(({ node }, index) => (
+        {/* {data.allMarkdownRemark.edges.map(({ node }, index) => (
           <Article
             key={node.id}
             index={index}
@@ -43,6 +49,7 @@ const Index = ({ data }) => (
             captions={node.frontmatter.captions}
           />
         ))}
+        */}
       </div>
     </Box>
   </Layout>
@@ -54,51 +61,51 @@ Index.propTypes = {
 
 export default Index;
 
-export const query = graphql`
-  query HomeQuery {
-    homeJson {
-      title
-    }
-    images: allS3ImageAsset(
-      sort: { fields: Key }
-      filter: { Key: { regex: "^posts/.*-thumb.*/" } }
-    ) {
-      edges {
-        node {
-          Key
-          image: childImageSharp {
-            fluid(maxHeight: 480, quality: 90) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
-          }
-        }
-      }
-    }
-    allMarkdownRemark(
-      sort: { fields: [frontmatter___date], order: DESC }
-      filter: { frontmatter: { draft: { eq: false } } }
-    ) {
-      totalCount
-      edges {
-        node {
-          id
-          frontmatter {
-            title
-            date(formatString: "DD MMMM, YYYY")
-            description
-            tags
-            captions {
-              name
-              desc
-              location
-              date
-            }
-          }
-          fields {
-            slug
-          }
-        }
-      }
-    }
-  }
-`;
+// export const query = graphql`
+//   query HomeQuery {
+//     homeJson {
+//       title
+//     }
+//     images: allS3ImageAsset(
+//       sort: { fields: Key }
+//       filter: { Key: { regex: "^posts/.*-thumb.*/" } }
+//     ) {
+//       edges {
+//         node {
+//           Key
+//           image: childImageSharp {
+//             fluid(maxHeight: 480, quality: 90) {
+//               ...GatsbyImageSharpFluid_withWebp
+//             }
+//           }
+//         }
+//       }
+//     }
+//     allMarkdownRemark(
+//       sort: { fields: [frontmatter___date], order: DESC }
+//       filter: { frontmatter: { draft: { eq: false } } }
+//     ) {
+//       totalCount
+//       edges {
+//         node {
+//           id
+//           frontmatter {
+//             title
+//             date(formatString: "DD MMMM, YYYY")
+//             description
+//             tags
+//             captions {
+//               name
+//               desc
+//               location
+//               date
+//             }
+//           }
+//           fields {
+//             slug
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;

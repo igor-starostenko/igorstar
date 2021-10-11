@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'next/link';
+import Link from 'next/link';
 import posed from 'react-pose';
-import { Container } from './header.css';
 import Logo from 'components/logo';
 import Nav from 'components/header/nav';
+import { Container } from './header.css';
 
 // Example of a component-specific page transition
 const AnimatedContainer = posed.div({

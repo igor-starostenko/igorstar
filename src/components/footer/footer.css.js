@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { colors } from 'constants/theme';
-import MEDIA from 'helpers/mediaTemplates';
+import { colors } from '../../constants/theme';
+import MEDIA from '../../helpers/mediaTemplates';
 
 export const Container = styled.footer`
   padding: 4rem 0;

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'next/link';
+import Link from 'next/link';
+import Image from 'components/image';
 import {
   SLink,
   Row,
@@ -11,7 +12,6 @@ import {
   Date,
   MobileDate,
 } from './card.css.js';
-import Image from 'components/image';
 
 const Card = ({ index, slug, title, image, date, description, tags }) => (
   <Fragment>

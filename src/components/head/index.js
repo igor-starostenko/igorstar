@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
-import { StaticQuery, graphql } from 'gatsby';
+import Head from 'next/head';
 import { Location } from '@reach/router';
 import schemaGenerator from 'helpers/schemaGenerator';
+import config from '../../../site-config';
 
 const appendSiteUrl = (siteUrl, imageUrl) => {
   const origin =
@@ -11,7 +11,7 @@ const appendSiteUrl = (siteUrl, imageUrl) => {
   return imageUrl.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
 };
 
-const Head = ({
+const SEO = ({
   siteTitle,
   siteTitleShort,
   siteDescription,
@@ -24,7 +24,7 @@ const Head = ({
   location,
   canonical = siteUrl + (location.pathname || ''),
 }) => (
-  <Helmet>
+  <Head>
     <html lang="en" />
 
     <meta content="IE=edge" httpEquiv="X-UA-Compatible" />
@@ -171,10 +171,10 @@ const Head = ({
         })
       )}
     </script>
-  </Helmet>
+  </Head>
 );
 
-Head.propTypes = {
+SEO.propTypes = {
   siteTitle: PropTypes.string,
   siteTitleShort: PropTypes.string,
   siteDescription: PropTypes.string,
@@ -188,32 +188,10 @@ Head.propTypes = {
   location: PropTypes.object.isRequired,
 };
 
-const HeadWithQuery = props => (
-  <StaticQuery
-    query={graphql`
-      query {
-        site {
-          siteMetadata {
-            siteTitle
-            siteTitleShort
-            siteDescription
-            siteUrl
-            themeColor
-            social {
-              twitter
-            }
-          }
-        }
-      }
-    `}
-    render={data => (
-      <Location>
-        {({ location }) => (
-          <Head {...data.site.siteMetadata} {...props} location={location} />
-        )}
-      </Location>
-    )}
-  />
+const HeadWithLocation = props => (
+  <Location>
+    {({ location }) => <SEO {...config} {...props} location={location} />}
+  </Location>
 );
 
-export default HeadWithQuery;
+export default HeadWithLocation;

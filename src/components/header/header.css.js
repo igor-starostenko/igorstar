@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import MEDIA from 'helpers/mediaTemplates';
+import LogoSvg from 'components/logo';
 
 export const Container = styled.header`
   display: flex;
@@ -15,4 +17,13 @@ export const Container = styled.header`
       color: inherit;
     }
   }
+`;
+
+export const Logo = styled(LogoSvg)`
+  ${MEDIA.TABLET`
+    width: 95px;
+  `}
+  ${MEDIA.PHONE`
+    width: 80px;
+  `}
 `;
