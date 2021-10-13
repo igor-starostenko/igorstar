@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-const contentful = require('contentful');
-// import { graphql } from 'gatsby';
-// import get from 'lodash/get';
+import { getEntries } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Title from 'components/title';
 import Article from 'components/article';
 
-const Index = ({ posts }) => (
+const Index = ({ page, posts }) => (
   <Layout>
     <Box>
       <div
@@ -21,10 +19,7 @@ const Index = ({ posts }) => (
         }}
       >
         <Title as="h2" size="large">
-          Test Title
-          {/*
-          {data.homeJson.title}
-          */}
+          {page.title}
         </Title>
         <h4>{posts.total} Posts</h4>
       </div>
@@ -47,6 +42,12 @@ const Index = ({ posts }) => (
 );
 
 Index.propTypes = {
+  page: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    createdAt: PropTypes.string,
+    updatedAt: PropTypes.string,
+    title: PropTypes.string.isRequired,
+  }).isRequired,
   posts: PropTypes.shape({
     limit: PropTypes.number.isRequired,
     skip: PropTypes.number.isRequired,
@@ -72,76 +73,16 @@ Index.propTypes = {
 export default Index;
 
 export const getStaticProps = async () => {
-  const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
-  const client = contentful.createClient({
-    space: process.env.CONTENTFUL_SPACE,
-    accessToken: process.env.CONTENTFUL_TOKEN,
+  const pages = await getEntries({
+    content_type: 'page',
+    'fields.title': 'Blog',
   });
-
-  const response = await client.getEntries({ content_type: 'post', limit });
+  const posts = await getEntries({ content_type: 'post' });
 
   return {
     props: {
-      posts: {
-        limit: response.limit,
-        skip: response.skip,
-        total: response.total,
-        items: response.items.map(({ sys, fields }) => ({
-          id: sys.id,
-          createdAt: sys.createdAt,
-          updatedAt: sys.updatedAt,
-          ...fields,
-        })),
-      },
+      posts,
+      page: pages.items[0],
     },
   };
 };
-
-// export const query = graphql`
-//   query HomeQuery {
-//     homeJson {
-//       title
-//     }
-//     images: allS3ImageAsset(
-//       sort: { fields: Key }
-//       filter: { Key: { regex: "^posts/.*-thumb.*/" } }
-//     ) {
-//       edges {
-//         node {
-//           Key
-//           image: childImageSharp {
-//             fluid(maxHeight: 480, quality: 90) {
-//               ...GatsbyImageSharpFluid_withWebp
-//             }
-//           }
-//         }
-//       }
-//     }
-//     allMarkdownRemark(
-//       sort: { fields: [frontmatter___date], order: DESC }
-//       filter: { frontmatter: { draft: { eq: false } } }
-//     ) {
-//       totalCount
-//       edges {
-//         node {
-//           id
-//           frontmatter {
-//             title
-//             date(formatString: "DD MMMM, YYYY")
-//             description
-//             tags
-//             captions {
-//               name
-//               desc
-//               location
-//               date
-//             }
-//           }
-//           fields {
-//             slug
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
