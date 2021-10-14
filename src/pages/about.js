@@ -1,57 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'gatsby';
-import get from 'lodash/get';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { getEntries } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
 import Selfie from 'components/selfie';
 
-const About = ({ data }) => (
+const About = ({ page }) => (
   <Layout>
-    <Head pageTitle={data.aboutJson.title} />
-    <Selfie fluid={get(data, 'images.edges[0].node.fluid')} />
+    <Head pageTitle={page.title} />
+    <Selfie src="/selfie.jpg" />
     <Box style={{ paddingTop: '1rem' }}>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: data.aboutJson.content.childMarkdownRemark.html,
-        }}
-      />
+      {documentToReactComponents(page.content)}
     </Box>
   </Layout>
 );
 
 About.propTypes = {
-  data: PropTypes.object.isRequired,
+  page: PropTypes.object.isRequired,
 };
 
 export default About;
 
-export const query = graphql`
-  query AboutQuery {
-    aboutJson {
-      title
-      content {
-        childMarkdownRemark {
-          html
-        }
-      }
-    }
-    images: allImageSharp(
-      filter: { fluid: { originalName: { eq: "selfie.jpg" } } }
-      limit: 1
-    ) {
-      edges {
-        node {
-          fluid(cropFocus: CENTER) {
-            originalName
-            srcSet
-            src
-            sizes
-            aspectRatio
-          }
-        }
-      }
-    }
-  }
-`;
+export const getStaticProps = async () => {
+  const pages = await getEntries({
+    content_type: 'page',
+    'fields.title': 'About',
+  });
+
+  return {
+    props: {
+      page: pages.items[0],
+    },
+  };
+};

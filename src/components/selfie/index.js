@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Box from 'components/box';
-import Image from 'components/image';
+import Image from 'next/image';
+// import Image from 'components/image';
 
-const Selfie = ({ fluid, ...rest }) => (
+const Selfie = ({ src, ...rest }) => (
   <Box style={{ padding: '2rem 4rem 0rem 4rem' }} {...rest}>
     <Image
       style={{
@@ -13,14 +14,16 @@ const Selfie = ({ fluid, ...rest }) => (
         height: '100px',
         width: '100px',
       }}
-      fluid={fluid}
+      height={100}
+      width={100}
+      src={src}
       alt="Selfie"
     />
   </Box>
 );
 
 Selfie.propTypes = {
-  fluid: PropTypes.object.isRequired,
+  src: PropTypes.object.isRequired,
 };
 
 export default Selfie;
