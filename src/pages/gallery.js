@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'gatsby';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Gallery from 'components/gallery';
@@ -39,30 +38,3 @@ GalleryPage.propTypes = {
 };
 
 export default GalleryPage;
-
-export const query = graphql`
-  query GalleryQuery {
-    galleryJson {
-      title
-    }
-    images: allS3ImageAsset(
-      sort: { fields: Key, order: DESC }
-      filter: { Key: { regex: "/^gallery/.*$/" } }
-    ) {
-      edges {
-        image: node {
-          key: Key
-          childImageSharp {
-            original {
-              height
-              width
-            }
-            fluid(maxHeight: 1280, quality: 90) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
-          }
-        }
-      }
-    }
-  }
-`;
