@@ -19,9 +19,6 @@
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.4.0",
-    "@reach/dialog": "^0.2.0",
-    "@reach/router": "^1.2.1",
-    "@reach/visually-hidden": "^0.1.1",
     "babel-plugin-styled-components": "^1.13.2",
     "contentful": "^9.0.3",
     "contentful-cli": "^1.9.20",

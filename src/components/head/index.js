@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { Location } from '@reach/router';
+import { withRouter } from 'next/router';
 import schemaGenerator from 'helpers/schemaGenerator';
 import config from '../../../site-config';
 
@@ -21,8 +21,8 @@ const SEO = ({
   themeColor,
   social,
   imageUrl,
-  location,
-  canonical = siteUrl + (location.pathname || ''),
+  router,
+  canonical = siteUrl + (router.pathname || ''),
 }) => (
   <Head>
     <html lang="en" />
@@ -162,8 +162,8 @@ const SEO = ({
     <script type="application/ld+json">
       {JSON.stringify(
         schemaGenerator({
-          location,
-          canonical,
+          location: router,
+          // canonical,
           siteUrl,
           pageTitle,
           siteTitle,
@@ -185,13 +185,9 @@ SEO.propTypes = {
   canonical: PropTypes.string,
   pageTitle: PropTypes.string,
   pageTitleFull: PropTypes.string,
-  location: PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
-const HeadWithLocation = props => (
-  <Location>
-    {({ location }) => <SEO {...config} {...props} location={location} />}
-  </Location>
-);
+const HeadConfig = props => <SEO {...config} {...props} />;
 
-export default HeadWithLocation;
+export default withRouter(HeadConfig);
