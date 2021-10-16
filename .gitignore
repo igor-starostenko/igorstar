@@ -14,3 +14,7 @@ contentful*.json
 
 build
 .next
+
+public/browserconfig.xml
+public/icons/
+public/manifest.json
