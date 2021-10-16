@@ -163,7 +163,7 @@ const SEO = ({
       {JSON.stringify(
         schemaGenerator({
           location: router,
-          // canonical,
+          canonical,
           siteUrl,
           pageTitle,
           siteTitle,
