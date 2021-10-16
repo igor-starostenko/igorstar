@@ -16,7 +16,7 @@ import {
 const Card = ({ index, slug, title, image, date, description, tags }) => (
   <Fragment>
     {image && (
-      <SLink href={slug}>
+      <SLink href={`/${slug}`}>
         <a>
           <Image
             style={{ margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem` }}
@@ -27,7 +27,7 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
       </SLink>
     )}
     <Row>
-      <SLink href={slug}>
+      <SLink href={`/${slug}`}>
         <a>
           <Title>{title}</Title>
         </a>
@@ -41,7 +41,7 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
     </Tags>
     <Description>
       {description}{' '}
-      <Link as="span" href={slug}>
+      <Link href={`/${slug}`}>
         <a>Read more</a>
       </Link>
     </Description>
