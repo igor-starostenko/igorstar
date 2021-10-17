@@ -1,37 +1,18 @@
 import React from 'react';
 import Link from 'next/link';
-import posed from 'react-pose';
 import Nav from 'components/header/nav';
 import { Container, Logo } from './header.css';
 
-// Example of a component-specific page transition
-const AnimatedContainer = posed.div({
-  enter: {
-    y: 0,
-    transition: {
-      ease: 'easeInOut',
-    },
-  },
-  exit: {
-    y: '-100%',
-    transition: {
-      ease: 'easeInOut',
-    },
-  },
-});
-
 const Header = () => (
-  <AnimatedContainer>
-    <Container>
-      <Link href="/">
-        <a>
-          <Logo />
-        </a>
-      </Link>
+  <Container>
+    <Link href="/">
+      <a>
+        <Logo />
+      </a>
+    </Link>
 
-      <Nav />
-    </Container>
-  </AnimatedContainer>
+    <Nav />
+  </Container>
 );
 
 export default Header;
