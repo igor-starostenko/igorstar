@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { getEntries } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
+import Head from 'components/head';
 import Title from 'components/title';
 import Article from 'components/article';
 
 const Index = ({ page, posts }) => (
   <Layout>
+    <Head pageTitle={page.title} />
     <Box>
       <div
         style={{
