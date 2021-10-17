@@ -2,6 +2,9 @@ const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
 const next_config = {
+  images: {
+    domains: ['images.ctfassets.net'],
+  },
   webpack: config => {
     config.plugins = config.plugins || [];
 

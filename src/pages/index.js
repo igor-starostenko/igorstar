@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getEntries } from 'contentClient';
+import { getEntries, parseFields } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
@@ -30,7 +30,7 @@ const Index = ({ page, posts }) => (
           <Article
             key={post.id}
             index={index}
-            image={null}
+            image={post.thumbnail}
             slug={post.id}
             title={post.title}
             date={post.date}
@@ -83,7 +83,14 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      posts,
+      posts: {
+        ...posts,
+        /* eslint-disable no-unused-vars */
+        items: posts.items.map(({ thumbnail, images, ...fields }) => ({
+          thumbnail: parseFields(thumbnail),
+          ...fields,
+        })),
+      },
       page: pages.items[0],
     },
   };

@@ -28,9 +28,13 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
       <SLink href={`/${slug}`}>
         <a>
           <Image
-            style={{ margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem` }}
-            fluid={image.fluid}
+            style={{
+              margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem`,
+              display: 'flex',
+            }}
+            src={`https:${image.file.url}`}
             alt={title}
+            {...image.file.details.image}
           />
         </a>
       </SLink>
@@ -64,7 +68,15 @@ Card.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   image: PropTypes.shape({
-    fluid: PropTypes.object,
+    file: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      details: PropTypes.shape({
+        image: PropTypes.shape({
+          width: PropTypes.number.isRequired,
+          height: PropTypes.number.isRequired,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
   }),
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),

@@ -9,6 +9,20 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_TOKEN,
 });
 
+export const parseFields = item => {
+  if (!item || !item.sys) {
+    return null;
+  }
+
+  const { sys, fields } = item;
+  return {
+    id: sys.id,
+    createdAt: sys.createdAt,
+    updatedAt: sys.updatedAt,
+    ...fields,
+  };
+};
+
 export const getEntries = async options => {
   const response = await client.getEntries({
     limit,
@@ -18,11 +32,6 @@ export const getEntries = async options => {
     limit: response.limit,
     skip: response.skip,
     total: response.total,
-    items: response.items.map(({ sys, fields }) => ({
-      id: sys.id,
-      createdAt: sys.createdAt,
-      updatedAt: sys.updatedAt,
-      ...fields,
-    })),
+    items: response.items.map(parseFields),
   };
 };
