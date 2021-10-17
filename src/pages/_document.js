@@ -28,10 +28,6 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta content="IE=edge" httpEquiv="X-UA-Compatible" />
-          <meta
-            content="width=device-width,initial-scale=1.0,user-scalable=yes"
-            name="viewport"
-          />
 
           <meta content={siteTitle} name="apple-mobile-web-app-title" />
           <meta content={siteDescription} name="description" />

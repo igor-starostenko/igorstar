@@ -20,12 +20,16 @@ const SEO = ({
 
   return (
     <Head>
+      <meta
+        content="width=device-width,initial-scale=1.0,user-scalable=yes"
+        name="viewport"
+      />
       <meta content={pageTitleFull} property="og:title" />
       <meta content={pageTitleFull} name="twitter:title" />
       <title>{pageTitleFull}</title>
 
       <meta content={pageTitleFull} name="twitter:text:title" />
-      <meta content={fullUrl} PROPERTY="OG:URL" />
+      <meta content={fullUrl} property="OG:URL" />
       <meta content={fullUrl} name="twitter:url" />
       <link rel="canonical" href={fullUrl} />
 
