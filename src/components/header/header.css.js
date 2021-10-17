@@ -5,7 +5,7 @@ import LogoSvg from 'components/logo';
 export const Container = styled.header`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   padding: 2rem 4rem;
 
   a {
