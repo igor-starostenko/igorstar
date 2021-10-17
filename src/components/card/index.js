@@ -9,9 +9,18 @@ import {
   Description,
   Tags,
   Tag,
-  Date,
+  Date as DateText,
   MobileDate,
 } from './card.css.js';
+
+const formatDate = dateString => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-us', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+};
 
 const Card = ({ index, slug, title, image, date, description, tags }) => (
   <Fragment>
@@ -32,7 +41,7 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
           <Title>{title}</Title>
         </a>
       </SLink>
-      <Date>— {date}</Date>
+      <DateText>— {formatDate(date)}</DateText>
     </Row>
     <Tags>
       {tags.map(tag => (
