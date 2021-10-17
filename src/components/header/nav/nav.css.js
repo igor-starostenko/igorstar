@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 export const Container = styled.nav`
-  ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
+  padding: 0;
 
-    li {
-      text-transform: uppercase;
-      font-size: 1.3rem;
-    }
+  a:not(:first-child) {
+    margin-left: 3rem;
+  }
+
+  a {
+    text-transform: uppercase;
+    font-size: 1.3rem;
   }
 `;
