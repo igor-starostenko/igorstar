@@ -22,10 +22,10 @@ const formatDate = dateString => {
   });
 };
 
-const Card = ({ index, slug, title, image, date, description, tags }) => (
+const Card = ({ index, path, title, image, date, description, tags }) => (
   <Fragment>
     {image && (
-      <SLink href={`/${slug}`}>
+      <SLink href={`/${path}`}>
         <a>
           <Image
             style={{
@@ -40,7 +40,7 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
       </SLink>
     )}
     <Row>
-      <SLink href={`/${slug}`}>
+      <SLink href={`/${path}`}>
         <a>
           <Title>{title}</Title>
         </a>
@@ -54,7 +54,7 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
     </Tags>
     <Description>
       {description}{' '}
-      <Link href={`/${slug}`}>
+      <Link href={`/${path}`}>
         <a>Read more</a>
       </Link>
     </Description>
@@ -64,7 +64,7 @@ const Card = ({ index, slug, title, image, date, description, tags }) => (
 
 Card.propTypes = {
   index: PropTypes.number.isRequired,
-  slug: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   image: PropTypes.shape({

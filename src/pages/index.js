@@ -31,7 +31,7 @@ const Index = ({ page, posts }) => (
             key={post.id}
             index={index}
             image={post.thumbnail}
-            slug={post.id}
+            path={post.path}
             title={post.title}
             date={post.date}
             description={post.description}
@@ -66,7 +66,6 @@ Index.propTypes = {
         category: PropTypes.string.isRequired,
         tags: PropTypes.arrayOf(PropTypes.string),
         description: PropTypes.string.isRequired,
-        content: PropTypes.object.isRequired,
       }).isRequired
     ),
   }).isRequired,
