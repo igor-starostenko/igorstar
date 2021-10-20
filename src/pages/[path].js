@@ -18,10 +18,11 @@ const calculateRowHeight = imageCount => {
 
 const Post = ({ post }) => {
   const { images, thumbnail } = post;
+  const imageUrl = thumbnail ? `https:${thumbnail.file.url}` : null;
 
   return (
     <Layout>
-      <Head pageTitle={post.title} imageUrl={`https:${thumbnail.file.url}`} />
+      <Head pageTitle={post.title} imageUrl={imageUrl} />
       <Box>
         <div style={{ margin: '0 -4rem' }}>
           {images.length > 0 && (
@@ -69,7 +70,7 @@ export const getStaticProps = async ({ params }) => {
     props: {
       post: {
         ...post,
-        thumbnail: post.thumbnail ? parseFields(post.thumbnail) : { file: {} },
+        thumbnail: post.thumbnail ? parseFields(post.thumbnail) : null,
         images: post.images ? post.images.map(parseFields) : [],
       },
     },

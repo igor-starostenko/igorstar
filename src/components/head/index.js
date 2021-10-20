@@ -5,6 +5,12 @@ import schemaGenerator from 'helpers/schemaGenerator';
 import { useRouter } from 'next/router';
 import config from '../../../site-config';
 
+const appendSiteUrl = (siteUrl, imageUrl) => {
+  const origin =
+    typeof window === 'undefined' ? siteUrl : window.location.origin;
+  return imageUrl.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
+};
+
 // Extends Head with addition page specific tags
 const SEO = ({
   siteTitle,
@@ -12,6 +18,7 @@ const SEO = ({
   siteUrl,
   pageTitle,
   pageTitleFull = pageTitle ? `${siteTitleShort}: ${pageTitle}` : siteTitle,
+  imageUrl,
   canonical,
 }) => {
   const router = useRouter();
@@ -32,6 +39,19 @@ const SEO = ({
       <meta content={fullUrl} property="OG:URL" />
       <meta content={fullUrl} name="twitter:url" />
       <link rel="canonical" href={fullUrl} />
+
+      <meta
+        content={appendSiteUrl(siteUrl, imageUrl || '/social.png')}
+        property="og:image"
+      />
+      <meta content="1024" property="og:image:width" />
+      <meta content="512" property="og:image:height" />
+      <meta
+        content={appendSiteUrl(siteUrl, imageUrl || '/social.png')}
+        name="twitter:image"
+      />
+      <meta content="1024" name="twitter:image:width" />
+      <meta content="512" name="twitter:image:height" />
 
       <script type="application/ld+json">
         {JSON.stringify(
@@ -56,6 +76,7 @@ SEO.propTypes = {
   canonical: PropTypes.string,
   pageTitle: PropTypes.string,
   pageTitleFull: PropTypes.string,
+  imageUrl: PropTypes.string,
 };
 
 const ConfigSEO = props => <SEO {...config} {...props} />;

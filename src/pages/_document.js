@@ -2,20 +2,7 @@ import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import config from '../../site-config';
 
-const {
-  siteTitle,
-  siteDescription,
-  themeColor,
-  social,
-  siteUrl,
-  imageUrl,
-} = config;
-
-const appendSiteUrl = (siteUrl, imageUrl) => {
-  const origin =
-    typeof window === 'undefined' ? siteUrl : window.location.origin;
-  return imageUrl.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
-};
+const { siteTitle, siteDescription, themeColor, social, siteUrl } = config;
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -47,19 +34,6 @@ class MyDocument extends Document {
           <meta content="summary_large_image" name="twitter:card" />
           <meta content={`@${social.twitter}`} name="twitter:site" />
           <meta content={`@${social.twitter}`} name="twitter:creator" />
-
-          <meta
-            content={appendSiteUrl(siteUrl, imageUrl || '/social.png')}
-            property="og:image"
-          />
-          <meta content="1024" property="og:image:width" />
-          <meta content="512" property="og:image:height" />
-          <meta
-            content={appendSiteUrl(siteUrl, imageUrl || '/social.png')}
-            name="twitter:image"
-          />
-          <meta content="1024" name="twitter:image:width" />
-          <meta content="512" name="twitter:image:height" />
 
           <meta content={themeColor} name="msapplication-TileColor" />
           <meta
