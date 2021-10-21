@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { getEntries, parseFields } from 'contentClient';
+import { getEntries, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
@@ -18,7 +18,7 @@ const calculateRowHeight = imageCount => {
 
 const Post = ({ post }) => {
   const { images, thumbnail, targetRowHeight } = post;
-  const imageUrl = thumbnail ? `https:${thumbnail.file.url}` : null;
+  const imageUrl = thumbnail ? thumbnail.src : null;
 
   return (
     <Layout>
@@ -54,7 +54,7 @@ Post.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.string.isRequired,
     content: PropTypes.object.isRequired,
-    thumbnail: PropTypes.object.isRequired,
+    thumbnail: PropTypes.object,
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
     targetRowHeight: PropTypes.number.isRequired,
   }).isRequired,
@@ -74,19 +74,8 @@ export const getStaticProps = async ({ params }) => {
     props: {
       post: {
         ...post,
-        thumbnail: post.thumbnail ? parseFields(post.thumbnail) : null,
-        images: post.images
-          ? post.images.map(data => {
-              const { file, ...fields } = parseFields(data);
-              const { width, height } = file.details.image;
-              return {
-                ...fields,
-                src: `https:${file.url}`,
-                width,
-                height,
-              };
-            })
-          : [],
+        thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
+        images: post.images ? post.images.map(parseItem) : [],
         targetRowHeight,
       },
     },

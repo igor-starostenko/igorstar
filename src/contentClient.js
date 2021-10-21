@@ -23,6 +23,20 @@ export const parseFields = item => {
   };
 };
 
+export const parseImage = file => {
+  const { width, height } = file.details.image;
+  return {
+    src: `https:${file.url}`,
+    width,
+    height,
+  };
+};
+
+export const parseItem = data => {
+  const { file, ...fields } = parseFields(data);
+  return { ...fields, ...parseImage(file) };
+};
+
 export const getEntries = async options => {
   const response = await client.getEntries({
     limit,
