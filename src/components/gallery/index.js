@@ -44,7 +44,7 @@ const orderArray = (array, order) => {
 
 const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
 
-const Gallery = ({ photos, order, captions, ...rest }) => {
+const Gallery = ({ photos, order, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
@@ -88,7 +88,6 @@ const Gallery = ({ photos, order, captions, ...rest }) => {
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
   order: PropTypes.string,
-  captions: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default Gallery;
