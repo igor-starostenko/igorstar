@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { default as PhotoGallery } from 'react-photo-gallery';
-// import Carousel, { Modal, ModalGateway } from 'react-images';
+import Carousel, { Modal, ModalGateway } from 'react-images';
 import Image from 'components/image';
 
 /* Inspired with bushblade-knives-website
@@ -33,25 +33,22 @@ GalleryImage.propTypes = {
   margin: PropTypes.number,
 };
 
-// const orderArray = (array, order) => {
-//   const direction = String(order).toLowerCase();
-//   if (!['desc', 'asc'].includes(direction)) {
-//     return array;
-//   }
-//   array.sort();
-//   return direction === 'desc' ? array.reverse() : array;
-// };
+const orderArray = (array, order) => {
+  const direction = String(order).toLowerCase();
+  if (!['desc', 'asc'].includes(direction)) {
+    return array;
+  }
+  array.sort();
+  return direction === 'desc' ? array.reverse() : array;
+};
 
-// const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
+const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
 
 const Gallery = ({ photos, order, captions, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
-  // const images = useMemo(
-  //   () => getImages(orderArray(photos, order), captions),
-  //   []
-  // );
+  const images = useMemo(() => orderArray(photos, order), []);
 
   const imageClick = (e, obj) => {
     setCurrent(obj.index);
@@ -62,7 +59,7 @@ const Gallery = ({ photos, order, captions, ...rest }) => {
     <div>
       {photos.length > 0 && (
         <PhotoGallery
-          photos={photos}
+          photos={images}
           onClick={imageClick}
           renderImage={GalleryImage}
           targetRowHeight={250}
@@ -71,7 +68,6 @@ const Gallery = ({ photos, order, captions, ...rest }) => {
         />
       )}
 
-      {/*
       <ModalGateway>
         {isOpen ? (
           <Modal
@@ -81,11 +77,10 @@ const Gallery = ({ photos, order, captions, ...rest }) => {
             }}
             styles={{ blanket: styleFn, positioner: styleFn }}
           >
-            <Carousel views={photos} currentIndex={current} />
+            <Carousel views={images} currentIndex={current} />
           </Modal>
         ) : null}
       </ModalGateway>
-      */}
     </div>
   );
 };
