@@ -1,13 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { default as PhotoGallery } from 'react-photo-gallery';
-import Carousel, { Modal, ModalGateway } from 'react-images';
+// import Carousel, { Modal, ModalGateway } from 'react-images';
 import Image from 'components/image';
-
-const titleFromPath = path => {
-  const dirs = path.split('/');
-  return dirs[dirs.length - 1].split('.')[0].replace('-', ' ');
-};
 
 /* Inspired with bushblade-knives-website
  * https://github.com/bushblade/bushblade-knives-website/blob/master/src/components/Gallery.js
@@ -15,11 +10,13 @@ const titleFromPath = path => {
 
 const GalleryImage = ({ index, onClick, photo, margin }) => (
   <Image
-    style={{ margin, height: photo.height, width: photo.width }}
+    style={{ margin }}
     onClick={e => onClick(e, { index, photo })}
-    key={photo.key}
-    fluid={photo.fluid}
-    alt={photo.key}
+    key={photo.id}
+    src={photo.src}
+    alt={photo.title}
+    width={photo.width}
+    height={photo.height}
   />
 );
 
@@ -27,67 +24,34 @@ GalleryImage.propTypes = {
   index: PropTypes.number.isRequired,
   onClick: PropTypes.func,
   photo: PropTypes.shape({
-    key: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    fluid: PropTypes.object.isRequired,
+    src: PropTypes.string.isRequired,
   }).isRequired,
   margin: PropTypes.number,
 };
 
-const matchCaption = (imageKey, captionArray) => {
-  const caption = (captionArray || []).find(({ name }) =>
-    imageKey.includes(name)
-  );
-  if (!caption) {
-    return null;
-  }
+// const orderArray = (array, order) => {
+//   const direction = String(order).toLowerCase();
+//   if (!['desc', 'asc'].includes(direction)) {
+//     return array;
+//   }
+//   array.sort();
+//   return direction === 'desc' ? array.reverse() : array;
+// };
 
-  const { desc, location, date } = caption;
-  const day = date ? new Date(date.replace(/-/g, '/')).toDateString() : null;
-  return `${desc}${desc && location ? ' - ' : ''}${location}${
-    (desc || location) && day ? ', ' : ''
-  }${day}`;
-};
-
-const orderArray = (array, order) => {
-  const direction = String(order).toLowerCase();
-  if (!['desc', 'asc'].includes(direction)) {
-    return array;
-  }
-  array.sort();
-  return direction === 'desc' ? array.reverse() : array;
-};
-
-const getImages = (imageArray, captionArray) => {
-  return [...imageArray].map(
-    ({
-      image: {
-        key,
-        childImageSharp: { fluid, original },
-      },
-    }) => ({
-      height: original.height,
-      width: original.width,
-      src: fluid.src,
-      srcSet: fluid.srcSet,
-      caption: matchCaption(key, captionArray),
-      fluid,
-      key: titleFromPath(key),
-    })
-  );
-};
-
-const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
+// const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
 
 const Gallery = ({ photos, order, captions, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
-  const images = useMemo(
-    () => getImages(orderArray(photos, order), captions),
-    []
-  );
+  // const images = useMemo(
+  //   () => getImages(orderArray(photos, order), captions),
+  //   []
+  // );
 
   const imageClick = (e, obj) => {
     setCurrent(obj.index);
@@ -98,7 +62,7 @@ const Gallery = ({ photos, order, captions, ...rest }) => {
     <div>
       {photos.length > 0 && (
         <PhotoGallery
-          photos={images}
+          photos={photos}
           onClick={imageClick}
           renderImage={GalleryImage}
           targetRowHeight={250}
@@ -107,6 +71,7 @@ const Gallery = ({ photos, order, captions, ...rest }) => {
         />
       )}
 
+      {/*
       <ModalGateway>
         {isOpen ? (
           <Modal
@@ -116,10 +81,11 @@ const Gallery = ({ photos, order, captions, ...rest }) => {
             }}
             styles={{ blanket: styleFn, positioner: styleFn }}
           >
-            <Carousel views={images} currentIndex={current} />
+            <Carousel views={photos} currentIndex={current} />
           </Modal>
         ) : null}
       </ModalGateway>
+      */}
     </div>
   );
 };

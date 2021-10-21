@@ -30,7 +30,6 @@ const Card = ({ index, path, title, image, date, description, tags }) => (
           <Image
             style={{
               margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem`,
-              display: 'flex',
             }}
             src={`https:${image.file.url}`}
             alt={title}

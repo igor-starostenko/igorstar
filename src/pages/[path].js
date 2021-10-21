@@ -17,7 +17,7 @@ const calculateRowHeight = imageCount => {
 };
 
 const Post = ({ post }) => {
-  const { images, thumbnail } = post;
+  const { images, thumbnail, targetRowHeight } = post;
   const imageUrl = thumbnail ? `https:${thumbnail.file.url}` : null;
 
   return (
@@ -29,7 +29,7 @@ const Post = ({ post }) => {
             <Gallery
               photos={images}
               order="asc"
-              targetRowHeight={calculateRowHeight(images.length)}
+              targetRowHeight={targetRowHeight}
             />
           )}
         </div>
@@ -56,6 +56,7 @@ Post.propTypes = {
     content: PropTypes.object.isRequired,
     thumbnail: PropTypes.object.isRequired,
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
+    targetRowHeight: PropTypes.number.isRequired,
   }).isRequired,
 };
 
@@ -65,13 +66,28 @@ export const getStaticProps = async ({ params }) => {
     'fields.path': params.path,
   });
   const post = posts.items[0];
+  const targetRowHeight = post.images
+    ? calculateRowHeight(post.images.length)
+    : 250;
 
   return {
     props: {
       post: {
         ...post,
         thumbnail: post.thumbnail ? parseFields(post.thumbnail) : null,
-        images: post.images ? post.images.map(parseFields) : [],
+        images: post.images
+          ? post.images.map(data => {
+              const { file, ...fields } = parseFields(data);
+              const { width, height } = file.details.image;
+              return {
+                ...fields,
+                src: `https:${file.url}`,
+                width,
+                height,
+              };
+            })
+          : [],
+        targetRowHeight,
       },
     },
   };
