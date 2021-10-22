@@ -1,8 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { default as PhotoGallery } from 'react-photo-gallery';
+import dynamic from 'next/dynamic';
+// import { default as PhotoGallery } from 'react-photo-gallery';
 import Carousel, { Modal, ModalGateway } from 'react-images';
 import Image from 'components/image';
+
+/* To avoid 'useLayoutEffect does nothing on the server' warning */
+const PhotoGallery = dynamic(() => import('react-photo-gallery'), {
+  ssr: false,
+});
 
 /* Inspired with bushblade-knives-website
  * https://github.com/bushblade/bushblade-knives-website/blob/master/src/components/Gallery.js
