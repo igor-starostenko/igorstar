@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import Link from 'next/link';
 import { getEntries, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
@@ -14,6 +16,51 @@ const calculateRowHeight = imageCount => {
   }
   const height = 300 * (1 - (multiplier * imageCount) / 100);
   return height > 100 ? height : 100;
+};
+
+const hasDivChild = children => {
+  for (let i = 0; i < children.length; i += 1) {
+    if (children[i].type === 'div') {
+      return true;
+    }
+  }
+};
+
+const options = {
+  renderNode: {
+    [BLOCKS.PARAGRAPH]: (node, children) => {
+      if (hasDivChild(children)) {
+        return <span>{children}</span>;
+      } else {
+        return <p>{children}</p>;
+      }
+    },
+    [INLINES.HYPERLINK]: node => {
+      if (
+        node.data.uri.includes('youtube.com/embed') ||
+        node.data.uri.includes('youtube-nocookie.com/embed')
+      ) {
+        return (
+          <div className="youtube-container">
+            <iframe
+              title={node.content[0].value}
+              className="youtube-video"
+              src={node.data.uri}
+              frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        );
+      } else {
+        return (
+          <Link href={node.data.uri}>
+            <a>{node.content[0].value}</a>
+          </Link>
+        );
+      }
+    },
+  },
 };
 
 const Post = ({ post }) => {
@@ -34,7 +81,7 @@ const Post = ({ post }) => {
           )}
         </div>
         <h1>{post.title}</h1>
-        {documentToReactComponents(post.content)}
+        {documentToReactComponents(post.content, options)}
       </Box>
     </Layout>
   );
