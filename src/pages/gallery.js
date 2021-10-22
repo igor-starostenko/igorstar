@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getEntries, parseItem } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Gallery from 'components/gallery';
 import Head from 'components/head';
 import Title from 'components/title';
 
-const GalleryPage = ({ data }) => (
+const GalleryPage = ({ page, gallery }) => (
   <Layout>
-    <Head pageTitle={data.galleryJson.title} />
+    <Head pageTitle={page.title} />
     <Box>
       <Title as="h2" size="large">
-        {data.galleryJson.title}
+        {page.title}
       </Title>
       <div style={{ margin: '0 -4rem' }}>
-        {data.images.edges.length > 0 && (
-          <Gallery photos={data.images.edges} targetRowHeight={250} />
+        {gallery.images.length > 0 && (
+          <Gallery photos={gallery.images} targetRowHeight={250} />
         )}
       </div>
     </Box>
@@ -23,18 +24,30 @@ const GalleryPage = ({ data }) => (
 );
 
 GalleryPage.propTypes = {
-  data: PropTypes.shape({
-    galleryJson: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-    }).isRequired,
-    images: PropTypes.shape({
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          image: PropTypes.object,
-        })
-      ).isRequired,
-    }).isRequired,
+  page: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+  }).isRequired,
+  gallery: PropTypes.shape({
+    images: PropTypes.arrayOf(PropTypes.object).isRequired,
   }).isRequired,
 };
 
 export default GalleryPage;
+
+export const getStaticProps = async () => {
+  const pages = await getEntries({
+    content_type: 'page',
+    'fields.title': 'Gallery',
+  });
+  const { items, ...gallery } = await getEntries({ content_type: 'gallery' });
+
+  return {
+    props: {
+      page: pages.items[0],
+      gallery: {
+        ...gallery,
+        images: items ? items.map(parseItem) : [],
+      },
+    },
+  };
+};
