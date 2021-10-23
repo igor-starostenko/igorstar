@@ -22,44 +22,48 @@ const formatDate = dateString => {
   });
 };
 
-const Card = ({ index, path, title, image, date, description, tags }) => (
-  <Fragment>
-    {image && (
-      <SLink href={`/${path}`}>
-        <a>
-          <Image
-            style={{
-              margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem`,
-            }}
-            src={`https:${image.file.url}`}
-            alt={title}
-            {...image.file.details.image}
-          />
-        </a>
-      </SLink>
-    )}
-    <Row>
-      <SLink href={`/${path}`}>
-        <a>
-          <Title>{title}</Title>
-        </a>
-      </SLink>
-      <DateText>— {formatDate(date)}</DateText>
-    </Row>
-    <Tags>
-      {tags.map(tag => (
-        <Tag key={tag}>#{tag}</Tag>
-      ))}
-    </Tags>
-    <Description>
-      {description}{' '}
-      <Link href={`/${path}`}>
-        <a>Read more</a>
-      </Link>
-    </Description>
-    <MobileDate>{date}</MobileDate>
-  </Fragment>
-);
+const Card = ({ index, path, title, image, date, description, tags }) => {
+  const href = `/posts/${path}`;
+
+  return (
+    <Fragment>
+      {image && (
+        <SLink href={href}>
+          <a>
+            <Image
+              style={{
+                margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem`,
+              }}
+              src={`https:${image.file.url}`}
+              alt={title}
+              {...image.file.details.image}
+            />
+          </a>
+        </SLink>
+      )}
+      <Row>
+        <SLink href={href}>
+          <a>
+            <Title>{title}</Title>
+          </a>
+        </SLink>
+        <DateText>— {formatDate(date)}</DateText>
+      </Row>
+      <Tags>
+        {tags.map(tag => (
+          <Tag key={tag}>#{tag}</Tag>
+        ))}
+      </Tags>
+      <Description>
+        {description}{' '}
+        <Link href={href}>
+          <a>Read more</a>
+        </Link>
+      </Description>
+      <MobileDate>{date}</MobileDate>
+    </Fragment>
+  );
+};
 
 Card.propTypes = {
   index: PropTypes.number.isRequired,
