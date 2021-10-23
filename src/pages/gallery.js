@@ -46,7 +46,12 @@ export const getStaticProps = async () => {
       page: pages.items[0],
       gallery: {
         ...gallery,
-        images: items ? items.map(parseItem) : [],
+        images: items
+          ? items.map(({ image, ...fields }) => ({
+              ...fields,
+              ...parseItem(image),
+            }))
+          : [],
       },
     },
   };
