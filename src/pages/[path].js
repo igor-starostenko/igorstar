@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getEntries, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
@@ -28,6 +29,24 @@ const hasDivChild = children => {
 
 const options = {
   renderNode: {
+    [BLOCKS.EMBEDDED_ASSET]: node => {
+      const { description, file, title } = node.data.target.fields;
+
+      if (file.contentType.includes('image')) {
+        const src = `https://${file.url}`;
+        const { width, height } = file.details.image;
+        if (description && description.startsWith('http')) {
+          return (
+            <Link href={description}>
+              <a>
+                <Image src={src} width={width} height={height} alt={title} />
+              </a>
+            </Link>
+          );
+        }
+        return <Image src={src} width={width} height={height} alt={title} />;
+      }
+    },
     [BLOCKS.PARAGRAPH]: (node, children) => {
       if (hasDivChild(children)) {
         return <span>{children}</span>;
