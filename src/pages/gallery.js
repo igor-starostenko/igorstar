@@ -43,7 +43,7 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      page: pages.items[0],
+      page: pages.items[0] || {},
       gallery: {
         ...gallery,
         images: items

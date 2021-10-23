@@ -82,6 +82,7 @@ export const getStaticProps = async () => {
 
   return {
     props: {
+      page: pages.items[0] || {},
       posts: {
         ...posts,
         /* eslint-disable no-unused-vars */
@@ -90,7 +91,6 @@ export const getStaticProps = async () => {
           ...fields,
         })),
       },
-      page: pages.items[0],
     },
   };
 };

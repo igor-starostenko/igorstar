@@ -131,7 +131,7 @@ export const getStaticProps = async ({ params }) => {
     content_type: 'post',
     'fields.path': params.path,
   });
-  const post = posts.items[0];
+  const post = posts.items[0] || {};
   const targetRowHeight = post.images
     ? calculateRowHeight(post.images.length)
     : 250;
