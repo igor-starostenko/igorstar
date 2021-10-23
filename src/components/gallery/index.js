@@ -39,22 +39,38 @@ GalleryImage.propTypes = {
   margin: PropTypes.number,
 };
 
-const orderArray = (array, order) => {
+const createSortFunction = orderBy => (a, b) => {
+  if (a[orderBy] < b[orderBy]) {
+    return -1;
+  }
+  if (a[orderBy] > b[orderBy]) {
+    return 1;
+  }
+  return 0;
+};
+
+const orderArray = (array, order, orderBy) => {
   const direction = String(order).toLowerCase();
   if (!['desc', 'asc'].includes(direction)) {
     return array;
   }
-  array.sort();
+
+  const sortFun = createSortFunction(orderBy);
+
+  array.sort(sortFun);
   return direction === 'desc' ? array.reverse() : array;
 };
 
 const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
 
-const Gallery = ({ photos, order, ...rest }) => {
+const Gallery = ({ photos, order, orderBy, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
-  const images = useMemo(() => orderArray(photos, order), []);
+  const images = useMemo(
+    () => orderArray(photos, order, orderBy || 'title'),
+    []
+  );
 
   const imageClick = (e, obj) => {
     setCurrent(obj.index);
@@ -94,6 +110,7 @@ const Gallery = ({ photos, order, ...rest }) => {
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
   order: PropTypes.string,
+  orderBy: PropTypes.string,
 };
 
 export default Gallery;
