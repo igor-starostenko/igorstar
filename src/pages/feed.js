@@ -1,25 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getEntries, parseItem } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Gallery from 'components/gallery';
 import Head from 'components/head';
 import Title from 'components/title';
 
-const FeedPage = ({ data }) => (
+const FeedPage = ({ page, feed }) => (
   <Layout>
-    <Head pageTitle={data.feedJson.title} />
+    <Head pageTitle={page.title} />
     <Box>
       <Title as="h2" size="large">
-        {data.feedJson.title}
+        {page.title}
       </Title>
       <div style={{ margin: '0 -4rem' }}>
-        {data.images.edges.length > 0 && (
-          <Gallery
-            photos={data.images.edges}
-            captions={data.feedJson.captions}
-            targetRowHeight={250}
-          />
+        {feed.images.length > 0 && (
+          <Gallery photos={feed.images} targetRowHeight={250} />
         )}
       </div>
     </Box>
@@ -27,26 +24,35 @@ const FeedPage = ({ data }) => (
 );
 
 FeedPage.propTypes = {
-  data: PropTypes.shape({
-    feedJson: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      captions: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          desc: PropTypes.string,
-          location: PropTypes.string,
-          date: PropTypes.date,
-        })
-      ),
-    }).isRequired,
-    images: PropTypes.shape({
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          image: PropTypes.object.isRequired,
-        })
-      ).isRequired,
-    }).isRequired,
+  page: PropTypes.shape({
+    title: PropTypes.string.isRequired,
   }).isRequired,
+  feed: PropTypes.shape({
+    images: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }).isRequired,
+};
+
+export const getStaticProps = async () => {
+  const pages = await getEntries({
+    content_type: 'page',
+    'fields.title': 'Photo Feed',
+  });
+  const { items, ...feed } = await getEntries({ content_type: 'feed' });
+
+  return {
+    props: {
+      page: pages.items[0] || {},
+      feed: {
+        ...feed,
+        images: items
+          ? items.map(({ image, ...fields }) => ({
+              ...fields,
+              ...parseItem(image),
+            }))
+          : [],
+      },
+    },
+  };
 };
 
 export default FeedPage;
