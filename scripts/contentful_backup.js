@@ -2,6 +2,7 @@ const contentful = require('contentful');
 const fs = require('fs');
 require('dotenv').config();
 
+const directory = process.env.CONTENTFUL_DIRECTORY || '.';
 const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
 
 const client = contentful.createClient({
@@ -37,7 +38,10 @@ client
         .getEntries({ content_type: id, limit })
         .then(response => {
           console.log(`Saving ${response.total} "${name}" Entries`);
-          saveFile(JSON.stringify(response, null, 4), `contentful${name}.json`);
+          saveFile(
+            JSON.stringify(response, null, 4),
+            `${directory}/${name}.json`
+          );
         })
         .catch(err => console.log(err));
     }
