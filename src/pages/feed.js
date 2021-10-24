@@ -44,7 +44,10 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Photo Feed',
   });
-  const { items, ...feed } = await getEntries({ content_type: 'feed' });
+  const { items, ...feed } = await getEntries({
+    content_type: 'feed',
+    limit: 1000,
+  });
 
   return {
     props: {
