@@ -7,6 +7,13 @@ import Gallery from 'components/gallery';
 import Head from 'components/head';
 import Title from 'components/title';
 
+const formatCaption = ({ description, locationText, date }) => {
+  const day = date ? new Date(date).toDateString() : null;
+  const locationPrefix = description && locationText ? ' - ' : '';
+  const dayPrefix = (description || locationText) && day ? ', ' : '';
+  return `${description}${locationPrefix}${locationText}${dayPrefix}${day}`;
+};
+
 const FeedPage = ({ page, feed }) => (
   <Layout>
     <Head pageTitle={page.title} />
@@ -45,11 +52,13 @@ export const getStaticProps = async () => {
       feed: {
         ...feed,
         images: items
-          ? items.map(({ image, description, ...fields }) => ({
-              caption: description,
-              ...fields,
-              ...parseItem(image),
-            }))
+          ? items.map(
+              ({ image, description, locationText, date, ...fields }) => ({
+                caption: formatCaption({ description, locationText, date }),
+                ...fields,
+                ...parseItem(image),
+              })
+            )
           : [],
       },
     },
