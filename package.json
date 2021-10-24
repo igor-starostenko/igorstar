@@ -10,7 +10,7 @@
     "build:dir": "mkdirp ./public/icons/",
     "build:favicons": "node scripts/favicons",
     "build": "npm run build:dir && npm run build:favicons && next build",
-    "contentful:backup": "node run scripts/contentful_backup.js"
+    "contentful:backup": "node scripts/contentful_backup.js"
   },
   "greenkeeper": {
     "ignore": [

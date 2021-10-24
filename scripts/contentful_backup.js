@@ -25,25 +25,31 @@ client
   .getContentTypes({ limit })
   .then(response => {
     console.log(`Saving ${response.total} Content Types`);
-    saveFile(JSON.stringify(response, null, 4), 'contentfulContentTypes.json');
+    saveFile(
+      JSON.stringify(response, null, 4),
+      `${directory}/ContentTypes.json`
+    );
     return response;
   })
   .then(contentTypes => {
     for (let i = 0; i <= contentTypes.total; i += 1) {
-      const {
-        sys: { id },
-        name,
-      } = contentTypes.items[i];
-      client
-        .getEntries({ content_type: id, limit })
-        .then(response => {
-          console.log(`Saving ${response.total} "${name}" Entries`);
-          saveFile(
-            JSON.stringify(response, null, 4),
-            `${directory}/${name}.json`
-          );
-        })
-        .catch(err => console.log(err));
+      const item = contentTypes.items[i];
+      if (item) {
+        const {
+          sys: { id },
+          name,
+        } = item;
+        client
+          .getEntries({ content_type: id, limit })
+          .then(response => {
+            console.log(`Saving ${response.total} "${name}" Entries`);
+            saveFile(
+              JSON.stringify(response, null, 4),
+              `${directory}/${name}.json`
+            );
+          })
+          .catch(err => console.log(err));
+      }
     }
   })
   .catch(err => console.log(err));
