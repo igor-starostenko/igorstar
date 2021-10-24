@@ -10,7 +10,8 @@
     "build:dir": "mkdirp ./public/icons/",
     "build:favicons": "node scripts/favicons",
     "build": "npm run build:dir && npm run build:favicons && next build",
-    "contentful:backup": "node scripts/contentful_backup.js"
+    "contentful:backup": "node scripts/contentful_backup.js",
+    "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE"
   },
   "greenkeeper": {
     "ignore": [
@@ -21,8 +22,6 @@
     "@contentful/rich-text-react-renderer": "^15.4.0",
     "babel-plugin-styled-components": "^1.13.2",
     "contentful": "^9.0.3",
-    "contentful-cli": "^1.9.20",
-    "contentful-migration": "^4.5.7",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^7.0.3",
     "framer-motion": "^4.1.17",
@@ -40,6 +39,9 @@
     "ava": "^0.25.0",
     "babel-eslint": "^10.0.1",
     "chrome-launcher": "^0.10.5",
+    "contentful-cli": "^1.9.26",
+    "contentful-management": "^7.44.2",
+    "contentful-migration": "^4.5.8",
     "core-js": "^2.6.2",
     "directory-named-webpack-plugin": "^4.0.0",
     "eslint": "^5.12.1",
