@@ -45,7 +45,8 @@ export const getStaticProps = async () => {
       feed: {
         ...feed,
         images: items
-          ? items.map(({ image, ...fields }) => ({
+          ? items.map(({ image, description, ...fields }) => ({
+              caption: description,
               ...fields,
               ...parseItem(image),
             }))
