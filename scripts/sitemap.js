@@ -1,6 +1,5 @@
 /*
 Generates a sitemap based on the entries in exportPathMap in next.config.js file
-Don't forget to add the domain name as process variable PUBLIC_DOMAIN!
 */
 
 const fs = require('fs');

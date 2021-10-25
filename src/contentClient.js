@@ -5,8 +5,8 @@ config();
 const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
 
 const client = createClient({
-  space: process.env.CONTENTFUL_SPACE,
-  accessToken: process.env.CONTENTFUL_TOKEN,
+  space: process.env.CONTENTFUL_SPACE_ID,
+  accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
 });
 
 const parseFields = item => {
