@@ -12,7 +12,8 @@
     "build:sitemap": "node scripts/post-export",
     "build": "npm run build:dir && npm run build:favicons && npm run build:sitemap && next build",
     "contentful:backup": "node scripts/contentful_backup.js",
-    "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID"
+    "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
+    "test:lighthouse": "npx ava scripts/lighthouse.test.js"
   },
   "greenkeeper": {
     "ignore": [
