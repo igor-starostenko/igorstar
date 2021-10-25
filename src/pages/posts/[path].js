@@ -4,7 +4,7 @@ import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getEntries, parseItem } from 'contentClient';
+import { getEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
@@ -149,10 +149,10 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
-  const posts = await getEntries({ content_type: 'post' });
+  const paths = await getPostsPaths();
 
   return {
-    paths: posts.items.map(({ path }) => ({ params: { path } })),
+    paths,
     fallback: false,
   };
 };

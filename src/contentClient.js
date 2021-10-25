@@ -1,5 +1,5 @@
-import { createClient } from 'contentful';
-import { config } from 'dotenv';
+const { createClient } = require('contentful');
+const { config } = require('dotenv');
 config();
 
 const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
@@ -9,7 +9,7 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_TOKEN,
 });
 
-export const parseFields = item => {
+const parseFields = item => {
   if (!item || !item.sys) {
     return null;
   }
@@ -23,7 +23,7 @@ export const parseFields = item => {
   };
 };
 
-export const parseImage = file => {
+const parseImage = file => {
   const { width, height } = file.details.image;
   return {
     src: `https:${file.url}`,
@@ -32,12 +32,12 @@ export const parseImage = file => {
   };
 };
 
-export const parseItem = data => {
+const parseItem = data => {
   const { file, ...fields } = parseFields(data);
   return { ...fields, ...parseImage(file) };
 };
 
-export const getEntries = async options => {
+const getEntries = async options => {
   const response = await client.getEntries({
     limit,
     ...options,
@@ -48,4 +48,17 @@ export const getEntries = async options => {
     total: response.total,
     items: response.items.map(parseFields),
   };
+};
+
+const getPostsPaths = async options => {
+  const posts = await getEntries({ content_type: 'post', ...options });
+  return posts.items.map(({ path }) => ({ params: { path } }));
+};
+
+module.exports = {
+  parseFields,
+  parseImage,
+  parseItem,
+  getEntries,
+  getPostsPaths,
 };
