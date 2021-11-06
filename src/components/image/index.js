@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Image from 'next/image';
 import { ImageWrapper } from './image.css';
 
-const MyImage = ({ style, ...rest }) => (
+const MyImage = ({ style, alt, ...rest }) => (
   <ImageWrapper style={style}>
-    <Image {...rest} />
+    <Image alt={alt} {...rest} />
   </ImageWrapper>
 );
 
