@@ -11,7 +11,7 @@ const GalleryPage = ({ page, gallery }) => (
   <Layout>
     <Head pageTitle={page.title} />
     <Box>
-      <Title as="h2" size="large">
+      <Title as="h1" size="large">
         {page.title}
       </Title>
       <div style={{ margin: '0 -4rem' }}>
