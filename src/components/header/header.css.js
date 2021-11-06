@@ -7,6 +7,9 @@ export const Container = styled.header`
   justify-content: space-between;
   align-items: stretch;
   padding: 2rem 4rem;
+  ${MEDIA.PHONE`
+    padding: 2rem 3rem;
+  `}
 
   a {
     color: #757575;

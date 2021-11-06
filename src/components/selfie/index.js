@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Box from 'components/box';
-import { Image } from './selfie.css';
+import { ImageWrapper, Image } from './selfie.css';
 
 const Selfie = ({ src, ...rest }) => (
-  <Box style={{ padding: '2rem 4rem 0rem 4rem' }} {...rest}>
+  <ImageWrapper {...rest}>
     <Image height={100} width={100} src={src} alt="Selfie" />
-  </Box>
+  </ImageWrapper>
 );
 
 Selfie.propTypes = {
