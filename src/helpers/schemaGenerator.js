@@ -2,14 +2,14 @@
 // If you're working with deeply nested pages, remove this or rework it.
 
 export default ({
-  location,
+  pathname,
   canonical,
   siteUrl,
   pageTitle,
   siteTitle,
   pageTitleFull,
 }) => {
-  const isSubPage = pageTitle && location.pathname !== '/';
+  const isSubPage = pageTitle && pathname !== '/';
 
   let schema = [
     {

@@ -9,7 +9,7 @@ module.exports = {
   themeColor: '#000',
   backgroundColor: '#fff',
   pathPrefix: null,
-  logo: path.resolve(__dirname, 'src/images/icon.png'),
+  logo: path.resolve(__dirname, 'public/icon.png'),
   social: {
     github: 'igor-starostenko',
     fivehundredpx: 'igorstar',

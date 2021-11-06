@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'gatsby';
-import get from 'lodash/get';
+import { getEntries, parseFields } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
+import Head from 'components/head';
 import Title from 'components/title';
 import Article from 'components/article';
 
-const Index = ({ data }) => (
+const Index = ({ page, posts }) => (
   <Layout>
+    <Head pageTitle={page.title} />
     <Box>
       <div
         style={{
@@ -19,28 +20,23 @@ const Index = ({ data }) => (
           justifyContent: 'space-between',
         }}
       >
-        <Title as="h2" size="large">
-          {data.homeJson.title}
+        <Title as="h1" size="large">
+          {page.title}
         </Title>
-        <h4>{data.allMarkdownRemark.totalCount} Posts</h4>
+        <span>{posts.total} Posts</span>
       </div>
       <div>
-        {data.allMarkdownRemark.edges.map(({ node }, index) => (
+        {posts.items.map((post, index) => (
           <Article
-            key={node.id}
+            key={post.id}
             index={index}
-            image={get(
-              data.images.edges.find(edge =>
-                `/${edge.node.Key}`.includes(node.fields.slug)
-              ),
-              'node.image'
-            )}
-            slug={node.fields.slug}
-            title={node.frontmatter.title}
-            date={node.frontmatter.date}
-            description={node.frontmatter.description}
-            tags={node.frontmatter.tags}
-            captions={node.frontmatter.captions}
+            image={post.thumbnail}
+            path={post.path}
+            title={post.title}
+            date={post.date}
+            description={post.description}
+            tags={post.tags}
+            linkText={post.linkText}
           />
         ))}
       </div>
@@ -49,56 +45,57 @@ const Index = ({ data }) => (
 );
 
 Index.propTypes = {
-  data: PropTypes.object.isRequired,
+  page: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    createdAt: PropTypes.string,
+    updatedAt: PropTypes.string,
+    title: PropTypes.string.isRequired,
+  }).isRequired,
+  posts: PropTypes.shape({
+    limit: PropTypes.number.isRequired,
+    skip: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        createdAt: PropTypes.string,
+        updatedAt: PropTypes.string,
+        title: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+        layout: PropTypes.string.isRequired,
+        draft: PropTypes.bool.isRequired,
+        category: PropTypes.string.isRequired,
+        tags: PropTypes.arrayOf(PropTypes.string),
+        description: PropTypes.string.isRequired,
+      }).isRequired
+    ),
+    linkText: PropTypes.string,
+  }).isRequired,
 };
 
 export default Index;
 
-export const query = graphql`
-  query HomeQuery {
-    homeJson {
-      title
-    }
-    images: allS3ImageAsset(
-      sort: { fields: Key }
-      filter: { Key: { regex: "^posts/.*-thumb.*/" } }
-    ) {
-      edges {
-        node {
-          Key
-          image: childImageSharp {
-            fluid(maxHeight: 480, quality: 90) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
-          }
-        }
-      }
-    }
-    allMarkdownRemark(
-      sort: { fields: [frontmatter___date], order: DESC }
-      filter: { frontmatter: { draft: { eq: false } } }
-    ) {
-      totalCount
-      edges {
-        node {
-          id
-          frontmatter {
-            title
-            date(formatString: "DD MMMM, YYYY")
-            description
-            tags
-            captions {
-              name
-              desc
-              location
-              date
-            }
-          }
-          fields {
-            slug
-          }
-        }
-      }
-    }
-  }
-`;
+export const getStaticProps = async () => {
+  const pages = await getEntries({
+    content_type: 'page',
+    'fields.title': 'Blog',
+  });
+  const posts = await getEntries({
+    content_type: 'post',
+    order: '-sys.createdAt',
+  });
+
+  return {
+    props: {
+      page: pages.items[0] || {},
+      posts: {
+        ...posts,
+        /* eslint-disable no-unused-vars */
+        items: posts.items.map(({ thumbnail, images, ...fields }) => ({
+          thumbnail: parseFields(thumbnail),
+          ...fields,
+        })),
+      },
+    },
+  };
+};
