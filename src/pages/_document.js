@@ -2,7 +2,7 @@ import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import config from '../../site-config';
 
-const { siteTitle, siteDescription, themeColor, social, siteUrl } = config;
+const { siteTitle, siteDescription, themeColor, social } = config;
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -14,6 +14,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <meta charset="UTF-8" />
           <meta content="IE=edge" httpEquiv="X-UA-Compatible" />
 
           <meta content={siteTitle} name="apple-mobile-web-app-title" />
