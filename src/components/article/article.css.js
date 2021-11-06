@@ -22,6 +22,13 @@ export const Row = styled.div`
   width: 100%;
 `;
 
+export const Thumb = styled.div`
+  margin: 0rem -3.9rem 0rem;
+  ${MEDIA.PHONE`
+    margin: 0rem -2.9rem 0rem;
+  `};
+`;
+
 export const Title = styled.h3`
   margin-bottom: 1rem;
   color: ${colors.black};

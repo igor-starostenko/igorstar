@@ -6,6 +6,7 @@ import {
   Card,
   SLink,
   Row,
+  Thumb,
   Title,
   Description,
   Tags,
@@ -40,14 +41,17 @@ const Article = ({
       {image && (
         <SLink href={href}>
           <a>
-            <Image
+            <Thumb
               style={{
-                margin: `${index === 0 ? 0 : 5.5}rem -3.9rem 0rem`,
+                marginTop: `${index === 0 ? 0 : 5.5}rem`,
               }}
-              src={`https:${image.file.url}`}
-              alt={title}
-              {...image.file.details.image}
-            />
+            >
+              <Image
+                src={`https:${image.file.url}`}
+                alt={title}
+                {...image.file.details.image}
+              />
+            </Thumb>
           </a>
         </SLink>
       )}
