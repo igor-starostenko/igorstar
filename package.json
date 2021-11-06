@@ -20,6 +20,9 @@
       "core-js"
     ]
   },
+  "engines": {
+    "node": ">=17.0.1"
+  },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.6.2",
     "babel-plugin-styled-components": "^1.13.3",
