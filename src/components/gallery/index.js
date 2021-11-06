@@ -17,7 +17,7 @@ const PhotoGallery = dynamic(() => import('react-photo-gallery'), {
 const GalleryImage = ({ index, onClick, photo, margin }) => (
   <Image
     style={{ margin }}
-    onClick={e => onClick(e, { index, photo })}
+    onClick={(e) => onClick(e, { index, photo })}
     key={photo.id}
     src={photo.src}
     alt={photo.title}
@@ -39,7 +39,7 @@ GalleryImage.propTypes = {
   margin: PropTypes.number,
 };
 
-const createSortFunction = orderBy => (a, b) => {
+const createSortFunction = (orderBy) => (a, b) => {
   if (a[orderBy] < b[orderBy]) {
     return -1;
   }
@@ -61,7 +61,7 @@ const orderArray = (array, order, orderBy) => {
   return direction === 'desc' ? array.reverse() : array;
 };
 
-const styleFn = styleObj => ({ ...styleObj, zIndex: 100 });
+const styleFn = (styleObj) => ({ ...styleObj, zIndex: 100 });
 
 const Gallery = ({ photos, order, orderBy, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
@@ -69,7 +69,7 @@ const Gallery = ({ photos, order, orderBy, ...rest }) => {
 
   const images = useMemo(
     () => orderArray(photos, order, orderBy || 'title'),
-    []
+    [photos, order, orderBy]
   );
 
   const imageClick = (e, obj) => {
