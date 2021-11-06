@@ -21,9 +21,9 @@ export const Container = styled.header`
 
 export const Logo = styled(LogoSvg)`
   ${MEDIA.TABLET`
-    width: 95px;
+    max-width: 90%;
   `}
   ${MEDIA.PHONE`
-    width: 80px;
+    max-width: 75%;
   `}
 `;
