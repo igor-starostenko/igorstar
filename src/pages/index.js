@@ -20,10 +20,10 @@ const Index = ({ page, posts }) => (
           justifyContent: 'space-between',
         }}
       >
-        <Title as="h2" size="large">
+        <Title as="h1" size="large">
           {page.title}
         </Title>
-        <h4>{posts.total} Posts</h4>
+        <span>{posts.total} Posts</span>
       </div>
       <div>
         {posts.items.map((post, index) => (

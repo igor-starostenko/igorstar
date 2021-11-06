@@ -54,7 +54,7 @@ const Article = ({
       <Row>
         <SLink href={href}>
           <a>
-            <Title>{title}</Title>
+            <Title as="h2">{title}</Title>
           </a>
         </SLink>
         <DateText>— {formatDate(date)}</DateText>

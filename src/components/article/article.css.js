@@ -35,7 +35,7 @@ export const Description = styled.p`
 
 export const Date = styled.span`
   margin-bottom: 1rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   color: ${colors.grey};
   float: right;
   ${MEDIA.PHONE`
