@@ -78,7 +78,10 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Blog',
   });
-  const posts = await getEntries({ content_type: 'post' });
+  const posts = await getEntries({
+    content_type: 'post',
+    order: '-sys.createdAt',
+  });
 
   return {
     props: {
