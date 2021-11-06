@@ -1,6 +1,14 @@
+public/browserconfig.xml
+public/icons/
+public/manifest.json
+public/sitemap.xml
+
 node_modules
 **/node_modules
-**/public
+
+.contentful
+.next
 .git
 .DS_Store
 .cache
+*.log

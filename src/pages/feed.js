@@ -1,26 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'gatsby';
+import { getEntries, parseItem } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Gallery from 'components/gallery';
 import Head from 'components/head';
 import Title from 'components/title';
 
-const FeedPage = ({ data }) => (
+const formatCaption = ({ description, locationText, date }) => {
+  const day = date ? new Date(date).toDateString() : null;
+  const locationPrefix = description && locationText ? ' - ' : '';
+  const dayPrefix = (description || locationText) && day ? ', ' : '';
+  return `${description}${locationPrefix}${locationText}${dayPrefix}${day}`;
+};
+
+const FeedPage = ({ page, feed }) => (
   <Layout>
-    <Head pageTitle={data.feedJson.title} />
+    <Head pageTitle={page.title} />
     <Box>
-      <Title as="h2" size="large">
-        {data.feedJson.title}
+      <Title as="h1" size="large">
+        {page.title}
       </Title>
       <div style={{ margin: '0 -4rem' }}>
-        {data.images.edges.length > 0 && (
-          <Gallery
-            photos={data.images.edges}
-            captions={data.feedJson.captions}
-            targetRowHeight={250}
-          />
+        {feed.images.length > 0 && (
+          <Gallery photos={feed.images} targetRowHeight={250} order="desc" />
         )}
       </div>
     </Box>
@@ -28,59 +31,41 @@ const FeedPage = ({ data }) => (
 );
 
 FeedPage.propTypes = {
-  data: PropTypes.shape({
-    feedJson: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      captions: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          desc: PropTypes.string,
-          location: PropTypes.string,
-          date: PropTypes.date,
-        })
-      ),
-    }).isRequired,
-    images: PropTypes.shape({
-      edges: PropTypes.arrayOf(
-        PropTypes.shape({
-          image: PropTypes.object.isRequired,
-        })
-      ).isRequired,
-    }).isRequired,
+  page: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+  }).isRequired,
+  feed: PropTypes.shape({
+    images: PropTypes.arrayOf(PropTypes.object).isRequired,
   }).isRequired,
 };
 
-export default FeedPage;
+export const getStaticProps = async () => {
+  const pages = await getEntries({
+    content_type: 'page',
+    'fields.title': 'Photo Feed',
+  });
+  const { items, ...feed } = await getEntries({
+    content_type: 'feed',
+    limit: 1000,
+  });
 
-export const query = graphql`
-  query FeedQuery {
-    feedJson {
-      title
-      captions {
-        name
-        desc
-        location
-        date
-      }
-    }
-    images: allS3ImageAsset(
-      sort: { fields: Key, order: DESC }
-      filter: { Key: { regex: "/^feed/.*$/" } }
-    ) {
-      edges {
-        image: node {
-          key: Key
-          childImageSharp {
-            original {
-              height
-              width
-            }
-            fluid(maxHeight: 1280, quality: 90) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+  return {
+    props: {
+      page: pages.items[0] || {},
+      feed: {
+        ...feed,
+        images: items
+          ? items.map(
+              ({ image, description, locationText, date, ...fields }) => ({
+                caption: formatCaption({ description, locationText, date }),
+                ...fields,
+                ...parseItem(image),
+              })
+            )
+          : [],
+      },
+    },
+  };
+};
+
+export default FeedPage;

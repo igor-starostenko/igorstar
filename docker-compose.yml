@@ -1,11 +1,10 @@
 version: "3.7"
 
 services:
-  gatsby:
+  nextjs:
     build:
       context: .
       dockerfile: Dockerfile
-    entrypoint: gatsby
     volumes:
       - .:/app
 
@@ -13,8 +12,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: yarn develop -H 0.0.0.0
+    command: yarn dev -H 0.0.0.0
     ports:
-      - "8000:8000"
+      - "3000:3000"
     volumes:
       - .:/app

@@ -9,6 +9,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.cache/
-public
+# Contentful
+.contentful/
+
 build
+.next
+
+public/browserconfig.xml
+public/icons/
+public/manifest.json
+public/sitemap.xml

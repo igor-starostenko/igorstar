@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12
 
 WORKDIR /opt
 
@@ -8,6 +8,8 @@ RUN yarn install
 
 COPY . .
 
-EXPOSE 8000
+RUN yarn build
 
-CMD ["yarn", "develop"]
+EXPOSE 3000
+
+CMD ["yarn", "start"]

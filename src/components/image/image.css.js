@@ -6,6 +6,7 @@ export const ImageWrapper = styled.div`
   border-radius: 2px;
   overflow: hidden;
   cursor: pointer;
+  line-height: 0;
   div {
     transition: transform 2s;
   }
