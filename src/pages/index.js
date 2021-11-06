@@ -36,6 +36,7 @@ const Index = ({ page, posts }) => (
             date={post.date}
             description={post.description}
             tags={post.tags}
+            linkText={post.linkText}
           />
         ))}
       </div>
@@ -68,6 +69,7 @@ Index.propTypes = {
         description: PropTypes.string.isRequired,
       }).isRequired
     ),
+    linkText: PropTypes.string,
   }).isRequired,
 };
 

@@ -23,7 +23,16 @@ const formatDate = dateString => {
   });
 };
 
-const Article = ({ index, path, title, image, date, description, tags }) => {
+const Article = ({
+  index,
+  path,
+  title,
+  image,
+  date,
+  description,
+  tags,
+  linkText,
+}) => {
   const href = `/posts/${path}`;
 
   return (
@@ -58,7 +67,7 @@ const Article = ({ index, path, title, image, date, description, tags }) => {
       <Description>
         {description}{' '}
         <Link href={href}>
-          <a>Read more</a>
+          <a>{linkText || 'Read more'}</a>
         </Link>
       </Description>
       <MobileDate>{date}</MobileDate>
@@ -84,6 +93,7 @@ Article.propTypes = {
   }),
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),
+  linkText: PropTypes.string,
 };
 
 Article.defaultProps = {
