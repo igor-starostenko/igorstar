@@ -14,7 +14,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <meta charset="UTF-8" />
+          <meta charSet="UTF-8" />
           <meta content="IE=edge" httpEquiv="X-UA-Compatible" />
 
           <meta content={siteTitle} name="apple-mobile-web-app-title" />
