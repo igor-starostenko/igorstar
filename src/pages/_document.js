@@ -6,7 +6,7 @@ import config from '../../site-config';
 const { siteTitle, siteDescription, themeColor, social } = config;
 
 class MyDocument extends Document {
-  static async getStaticProps(ctx) {
+  static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
 
