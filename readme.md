@@ -23,7 +23,7 @@
 
 ## Features
 
-: [X] 🌿 Static site based on [NextJS](https://nextjs.org/)
+- [X] 🌿 Static site based on [NextJS](https://nextjs.org/)
 - [X] 🎞  [Contentful CMS](https://contentful.github.io/) integrated
 - [X] 🤩 Page Transitions with [`framer-motion`](https://www.framer.com/motion/)
 - [X] 💅 [`styled-components`](https://www.styled-components.com/)
