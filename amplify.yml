@@ -10,7 +10,7 @@ frontend:
         - yarn eslint src
         - yarn build
   artifacts:
-    baseDirectory: public
+    baseDirectory: out
     files:
       - '**/*'
   cache:

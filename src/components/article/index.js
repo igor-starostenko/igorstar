@@ -15,7 +15,7 @@ import {
   MobileDate,
 } from './article.css.js';
 
-const formatDate = dateString => {
+const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-us', {
     year: 'numeric',
@@ -64,7 +64,7 @@ const Article = ({
         <DateText>— {formatDate(date)}</DateText>
       </Row>
       <Tags>
-        {tags.map(tag => (
+        {tags.map((tag) => (
           <Tag key={tag}>#{tag}</Tag>
         ))}
       </Tags>

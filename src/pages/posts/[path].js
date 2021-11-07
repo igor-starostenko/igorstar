@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
-import Image from 'next/image';
+import BaseImage from 'components/image/image';
 import { getEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
 
-const calculateRowHeight = imageCount => {
+const calculateRowHeight = (imageCount) => {
   let multiplier = 3;
   if (typeof window !== 'undefined') {
     multiplier = window.innerWidth > 450 ? 4 : 8;
@@ -19,7 +19,7 @@ const calculateRowHeight = imageCount => {
   return height > 100 ? height : 100;
 };
 
-const hasDivChild = children => {
+const hasDivChild = (children) => {
   for (let i = 0; i < children.length; i += 1) {
     if (children[i].type === 'div') {
       return true;
@@ -29,22 +29,29 @@ const hasDivChild = children => {
 
 const options = {
   renderNode: {
-    [BLOCKS.EMBEDDED_ASSET]: node => {
+    [BLOCKS.EMBEDDED_ASSET]: (node) => {
       const { description, file, title } = node.data.target.fields;
 
       if (file.contentType.includes('image')) {
-        const src = `https://${file.url}`;
+        const src = `https:${file.url}`;
         const { width, height } = file.details.image;
         if (description && description.startsWith('http')) {
           return (
             <Link href={description}>
               <a>
-                <Image src={src} width={width} height={height} alt={title} />
+                <BaseImage
+                  src={src}
+                  width={width}
+                  height={height}
+                  alt={title}
+                />
               </a>
             </Link>
           );
         }
-        return <Image src={src} width={width} height={height} alt={title} />;
+        return (
+          <BaseImage src={src} width={width} height={height} alt={title} />
+        );
       }
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
@@ -54,7 +61,7 @@ const options = {
         return <p>{children}</p>;
       }
     },
-    [INLINES.HYPERLINK]: node => {
+    [INLINES.HYPERLINK]: (node) => {
       if (
         node.data.uri.includes('youtube.com/embed') ||
         node.data.uri.includes('youtube-nocookie.com/embed')

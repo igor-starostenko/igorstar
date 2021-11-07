@@ -5,8 +5,9 @@ const { getPostsPaths } = require('./src/contentClient');
 const next_config = {
   images: {
     domains: ['images.ctfassets.net'],
+    ...{ ...(process.env.IMAGE_OPTIMIZATION ? {} : { loader: 'custom' }) },
   },
-  webpack: config => {
+  webpack: (config) => {
     config.plugins = config.plugins || [];
 
     config.plugins = [
@@ -29,7 +30,7 @@ const next_config = {
       (pages, { params }) =>
         Object.assign({}, pages, {
           [`/posts/${params.path}`]: {
-            page: '/posts',
+            page: '/posts/[path]',
             query: { post: params.path },
           },
         }),
@@ -41,7 +42,6 @@ const next_config = {
       '/about': { page: '/about' },
       '/feed': { page: '/feed' },
       '/gallery': { page: '/gallery' },
-      '/posts': { page: '/posts' },
     };
 
     return Object.assign({}, pages, insights);
