@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Image from 'next/image';
+import BaseImage from './image';
 import { ImageWrapper } from './image.css';
 
-const MyImage = ({ style, alt, ...rest }) => (
+const CustomImage = ({ style, alt, ...rest }) => (
   <ImageWrapper style={style}>
-    <Image alt={alt} {...rest} />
+    <BaseImage alt={alt} {...rest} />
   </ImageWrapper>
 );
 
-MyImage.propTypes = {
+CustomImage.propTypes = {
   style: PropTypes.object,
-  src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
 };
 
-export default MyImage;
+export default CustomImage;
