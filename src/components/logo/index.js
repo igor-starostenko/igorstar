@@ -1,8 +1,8 @@
 import React from 'react';
-import Image from 'next/image';
+import BaseImage from 'components/image/image';
 
 const LogoSvg = (props) => (
-  <Image width={105} height={22} src="/logo.svg" alt="logo" {...props} />
+  <BaseImage width={105} height={22} src="/logo.svg" alt="logo" {...props} />
 );
 
 export default LogoSvg;
