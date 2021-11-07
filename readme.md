@@ -25,6 +25,7 @@
 
 - [X] 🌿 Static site based on [NextJS](https://nextjs.org/)
 - [X] 🎞  [Contentful CMS](https://contentful.github.io/) integrated
+- [X] ⚙️  [AWS Amplfiy optimizations](https://aws.amazon.com/blogs/mobile/host-a-next-js-ssr-app-with-real-time-data-on-aws-amplify/) integrated
 - [X] 🤩 Page Transitions with [`framer-motion`](https://www.framer.com/motion/)
 - [X] 💅 [`styled-components`](https://www.styled-components.com/)
 - [X] 💯 Optimized with [Google Lighthouse](https://developers.google.com/web/tools/lighthouse/) (including test)

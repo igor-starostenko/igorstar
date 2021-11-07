@@ -12,8 +12,10 @@ yarn-error.log*
 # Contentful
 .contentful/
 
+# NextJS
 build
 .next
+out
 
 public/browserconfig.xml
 public/icons/

@@ -3,15 +3,14 @@
   "license": "MIT",
   "author": "Igor Starostenko <contact@igorstar.com>",
   "scripts": {
-    "dev": "next dev",
-    "start": "next start",
-    "ssr": "npm run build && npm run start",
+    "dev": "IMAGE_OPTIMIZATION=1 next dev",
+    "start": "IMAGE_OPTIMIZATION=1 next start",
     "format": "prettier --config ./.prettierrc --write src/**/*.js",
     "lint": "next lint",
     "build:dir": "mkdirp ./public/icons/",
     "build:favicons": "node scripts/favicons",
     "build:sitemap": "node scripts/post-export",
-    "build": "npm run build:dir && npm run build:favicons && npm run build:sitemap && next build",
+    "build": "npm run build:dir && npm run build:favicons && npm run build:sitemap && next build && next export",
     "contentful:backup": "node scripts/contentful_backup.js",
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
     "test:lighthouse": "npx ava scripts/lighthouse.test.js"
