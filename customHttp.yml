@@ -1,5 +1,11 @@
 customHeaders:
+  - pattern: '_next/**/*'
+    headers:
+      - key: Cache-Control
+        value: 'must-revalidated, max-age=86400, stale-while-revalidate=86400'
   - pattern: '**/*'
     headers:
-      - key: 'Cache-Control'
+      - key: Cache-Control
         value: 'max-age=86400, stale-while-revalidate=86400'
+
+
