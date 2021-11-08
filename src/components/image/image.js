@@ -4,6 +4,9 @@ import Image from 'next/image';
 
 const noOptimization = ({ src }) => src;
 
+/* For contentful query params see
+  https://www.contentful.com/developers/docs/references/images-api/#/reference
+ */
 const BaseImage = ({ alt, src, query = '?fm=webp', ...rest }) => (
   <Image
     alt={alt}
