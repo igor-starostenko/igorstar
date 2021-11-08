@@ -4,10 +4,10 @@ import Image from 'next/image';
 
 const noOptimization = ({ src }) => src;
 
-const BaseImage = ({ alt, src, ...rest }) => (
+const BaseImage = ({ alt, src, query = '?fm=webp', ...rest }) => (
   <Image
     alt={alt}
-    src={src}
+    src={src + query}
     {...(process.env.IMAGE_OPTIMIZATION
       ? {} // image optimization is enabled by default with SSR
       : {
@@ -21,6 +21,7 @@ const BaseImage = ({ alt, src, ...rest }) => (
 BaseImage.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
+  query: PropTypes.string,
 };
 
 export default BaseImage;
