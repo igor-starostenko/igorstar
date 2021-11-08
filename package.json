@@ -9,8 +9,8 @@
     "lint": "next lint",
     "build:dir": "mkdirp ./public/icons/",
     "build:favicons": "node scripts/favicons",
-    "build:sitemap": "node scripts/post-export",
-    "build": "npm run build:dir && npm run build:favicons && npm run build:sitemap && next build && next export",
+    "build:sitemap": "next-sitemap",
+    "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && next export",
     "contentful:backup": "node scripts/contentful_backup.js",
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
     "test:lighthouse": "npx ava scripts/lighthouse.test.js"
@@ -53,6 +53,7 @@
     "favicons": "^6.2.2",
     "lighthouse": "^8.6.0",
     "mkdirp": "^1.0.4",
+    "next-sitemap": "^1.6.203",
     "node-gyp": "^8.4.0",
     "prettier": "^2.4.1",
     "webpack": "^5.62.1"
