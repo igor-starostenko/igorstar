@@ -10,7 +10,7 @@
     "build:dir": "mkdirp ./public/icons/",
     "build:favicons": "node scripts/favicons",
     "build:sitemap": "next-sitemap",
-    "build": "npm run build:dir && npm run build:favicons && npm run build:sitemap && next build && next export",
+    "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && next export",
     "contentful:backup": "node scripts/contentful_backup.js",
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
     "test:lighthouse": "npx ava scripts/lighthouse.test.js"
