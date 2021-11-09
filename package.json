@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "IMAGE_OPTIMIZATION=1 next dev",
     "start": "IMAGE_OPTIMIZATION=1 next start",
+    "serve": "serve out",
     "format": "prettier --config ./.prettierrc --write src/**/*.js",
     "lint": "next lint",
     "build:dir": "mkdirp ./public/icons/",
