@@ -48,7 +48,7 @@
     "directory-named-webpack-plugin": "^4.0.0",
     "dotenv-webpack": "^7.0.3",
     "eslint": "<8.0.0",
-    "eslint-config-next": "12.0.3",
+    "eslint-config-next": "^12.2.3",
     "eslint-config-prettier": "^8.3.0",
     "favicons": "^6.2.2",
     "lighthouse": "^8.6.0",
