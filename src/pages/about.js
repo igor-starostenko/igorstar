@@ -10,7 +10,7 @@ import Selfie from 'components/selfie';
 const About = ({ page }) => (
   <Layout>
     <Head pageTitle={page.title} />
-    <Selfie src="/selfie.jpg" />
+    <Selfie src="/selfie.webp" />
     <Box style={{ paddingTop: '1rem' }}>
       {documentToReactComponents(page.content)}
     </Box>
