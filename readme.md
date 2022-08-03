@@ -56,13 +56,10 @@ cd igorstar
 yarn install
 
 # To develop
-yarn develop
+yarn dev
 
 # To build
 yarn build
-
-# To run static (SSG)
-yarn serve
 
 # To test SSR (for Lighthouse etc.)
 yarn start
