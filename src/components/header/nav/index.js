@@ -5,13 +5,13 @@ import { Container } from './nav.css';
 const Nav = () => (
   <Container>
     <Link href="/feed">
-      <a>Feed</a>
+      Feed
     </Link>
     <Link href="/gallery">
-      <a>Gallery</a>
+      Gallery
     </Link>
     <Link href="/about">
-      <a>About</a>
+      About
     </Link>
   </Container>
 );

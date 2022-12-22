@@ -37,16 +37,16 @@ const options = {
         const { width, height } = file.details.image;
         if (description && description.startsWith('http')) {
           return (
-            <Link href={description}>
-              <a>
-                <BaseImage
-                  src={src}
-                  width={width}
-                  height={height}
-                  alt={title}
-                />
-              </a>
-            </Link>
+            (<Link href={description}>
+
+              <BaseImage
+                src={src}
+                width={width}
+                height={height}
+                alt={title}
+              />
+
+            </Link>)
           );
         }
         return (
@@ -81,7 +81,7 @@ const options = {
       } else {
         return (
           <Link href={node.data.uri}>
-            <a>{node.content[0].value}</a>
+            {node.content[0].value}
           </Link>
         );
       }

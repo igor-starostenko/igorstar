@@ -6,9 +6,9 @@ import { Container, Logo } from './header.css';
 const Header = () => (
   <Container>
     <Link href="/">
-      <a>
-        <Logo />
-      </a>
+
+      <Logo />
+
     </Link>
 
     <Nav />

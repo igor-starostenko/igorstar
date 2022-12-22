@@ -40,26 +40,22 @@ const Article = ({
     <Card>
       {image && (
         <SLink href={href}>
-          <a>
-            <Thumb
-              style={{
-                marginTop: `${index === 0 ? 0 : 5.5}rem`,
-              }}
-            >
-              <Image
-                src={`https:${image.file.url}`}
-                alt={title}
-                {...image.file.details.image}
-              />
-            </Thumb>
-          </a>
+          <Thumb
+            style={{
+              marginTop: `${index === 0 ? 0 : 5.5}rem`,
+            }}
+          >
+            <Image
+              src={`https:${image.file.url}`}
+              alt={title}
+              {...image.file.details.image}
+            />
+          </Thumb>
         </SLink>
       )}
       <Row>
         <SLink href={href}>
-          <a>
-            <Title as="h2">{title}</Title>
-          </a>
+          <Title as="h2">{title}</Title>
         </SLink>
         <DateText>— {formatDate(date)}</DateText>
       </Row>
@@ -69,10 +65,7 @@ const Article = ({
         ))}
       </Tags>
       <Description>
-        {description}{' '}
-        <Link href={href}>
-          <a>{linkText || 'Read more'}</a>
-        </Link>
+        {description} <Link href={href}>{linkText || 'Read more'}</Link>
       </Description>
       <MobileDate>{date}</MobileDate>
     </Card>
