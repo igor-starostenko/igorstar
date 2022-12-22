@@ -27,6 +27,11 @@ export const Thumb = styled.div`
   ${MEDIA.PHONE`
     margin: 0rem -2.9rem 0rem;
   `};
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 `;
 
 export const Title = styled.h3`

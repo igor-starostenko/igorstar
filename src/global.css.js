@@ -113,11 +113,6 @@ const GlobalStyle = createGlobalStyle`
     margin-bottom: 1rem;
     line-height: 1.6;
   }
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
 `;
 
 export default GlobalStyle;
