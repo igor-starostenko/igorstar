@@ -82,7 +82,7 @@ export const getStaticProps = async () => {
   });
   const posts = await getEntries({
     content_type: 'post',
-    order: '-sys.createdAt',
+    order: '-fields.date',
   });
 
   return {
