@@ -46,7 +46,6 @@
     "contentful-migration": "^4.5.9",
     "core-js": "^3.19.1",
     "directory-named-webpack-plugin": "^4.0.0",
-    "dotenv-webpack": "^7.0.3",
     "eslint": "<8.0.0",
     "eslint-config-next": "^12.2.3",
     "eslint-config-prettier": "^8.3.0",
@@ -56,6 +55,6 @@
     "next-sitemap": "^1.6.203",
     "node-gyp": "^8.4.0",
     "prettier": "^2.4.1",
-    "webpack": "^5.62.1"
+    "webpack": "^5.75.0"
   }
 }
