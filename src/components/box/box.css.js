@@ -9,9 +9,4 @@ export const Container = styled.div`
   ${MEDIA.PHONE`
     padding: 2rem 3rem 8rem 3rem;
   `}
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
 `;
