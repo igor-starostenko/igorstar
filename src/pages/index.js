@@ -80,10 +80,18 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Blog',
   });
-  const posts = await getEntries({
-    content_type: 'post',
-    order: '-fields.date',
-  });
+
+  let posts = { items: [] };
+  // Ensure we load all posts, regardless of the API limit
+  while (posts.total != 0 && posts.items.length < (posts.total || 1)) {
+    let response = await getEntries({
+      content_type: 'post',
+      order: '-fields.date',
+      limit: 1000, // 1000 is the max
+      skip: posts.items.length,
+    });
+    posts = { ...response, items: [...posts.items, ...response.items] };
+  }
 
   return {
     props: {
