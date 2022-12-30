@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { getEntries, parseFields } from 'contentClient';
@@ -14,7 +14,33 @@ const Index = ({ page, posts }) => {
   const totalPages = Math.ceil(posts.total / pageSize);
   const router = useRouter();
   const pageNum = parseInt(router.query.page);
-  const displayCount = pageNum ? pageNum * pageSize : pageSize;
+  const [displayCount, setDisplayCount] = useState(
+    pageNum ? pageNum * pageSize : pageSize
+  );
+
+  // Listen to scroll positions for loading more data on scroll
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
+
+  const handleScroll = () => {
+    // To get page offset of last article
+    const lastRecordLoaded = document.querySelector('div > article:last-child');
+    if (lastRecordLoaded) {
+      const lastRecordLoadedOffset =
+        lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
+      const pageOffset = window.pageYOffset + window.innerHeight;
+      // Detects when last record is in view
+      if (pageOffset > lastRecordLoadedOffset) {
+        if (displayCount < posts.total) {
+          setDisplayCount(displayCount + pageSize);
+        }
+      }
+    }
+  };
 
   const displayPosts = posts.items.slice(
     pageNum ? pageNum * pageSize - pageSize : 0,
