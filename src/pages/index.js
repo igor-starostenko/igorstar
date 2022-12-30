@@ -36,16 +36,17 @@ const Index = ({ page, posts }) => {
       // Detects when last record is in view
       if (pageOffset > lastRecordLoadedOffset) {
         if (displayCount < posts.total) {
-          setDisplayCount(displayCount + pageSize);
+          const newDisplayCount = displayCount + pageSize;
+          setDisplayCount(
+            newDisplayCount > posts.total ? posts.total : newDisplayCount
+          );
         }
       }
     }
   };
 
-  const displayPosts = posts.items.slice(
-    pageNum ? pageNum * pageSize - pageSize : 0,
-    displayCount
-  );
+  const startIndex = pageNum ? pageNum * pageSize - pageSize : 0;
+  const displayPosts = posts.items.slice(startIndex, startIndex + displayCount);
 
   return (
     <Layout>
@@ -82,7 +83,7 @@ const Index = ({ page, posts }) => {
             />
           ))}
         </div>
-        {displayPosts.length < posts.total ? (
+        {displayPosts.length < posts.total - (pageNum || 1) * pageSize ? (
           <Pagination pageNum={pageNum || 1} totalPages={totalPages} />
         ) : (
           ''
