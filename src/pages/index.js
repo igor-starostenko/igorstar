@@ -5,7 +5,7 @@ import { getEntries, parseFields } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
-import Title from 'components/title';
+import Filter from 'components/filter';
 import Article from 'components/article';
 import Pagination from 'components/pagination';
 
@@ -52,22 +52,11 @@ const Index = ({ page, posts }) => {
     <Layout>
       <Head pageTitle={page.title} />
       <Box>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'baseline',
-            justifyItems: 'space-between',
-            width: '100%',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Title as="h1" size="large">
-            {page.title}
-          </Title>
-          <span>
-            Loaded {displayPosts.length} of {posts.total} posts
-          </span>
-        </div>
+        <Filter
+          title={page.title}
+          displayCount={displayPosts.length}
+          totalCount={posts.total}
+        />
         <div>
           {displayPosts.map((post, index) => (
             <Article
