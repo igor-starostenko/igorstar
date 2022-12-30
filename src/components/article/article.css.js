@@ -54,6 +54,7 @@ export const MobileDate = styled.span`
   display: none;
   color: ${colors.grey};
   float: right;
+  margin-top: 1rem;
   ${MEDIA.PHONE`
     display: block;
   `};

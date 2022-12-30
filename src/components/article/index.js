@@ -67,7 +67,7 @@ const Article = ({
       <Description>
         {description} <Link href={href}>{linkText || 'Read more'}</Link>
       </Description>
-      <MobileDate>{date}</MobileDate>
+      <MobileDate>{formatDate(date)}</MobileDate>
     </Card>
   );
 };
