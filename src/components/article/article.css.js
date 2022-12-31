@@ -20,6 +20,7 @@ export const SLink = styled(Link)`
 `;
 
 export const Row = styled.div`
+  width: 100%;
   display: inline-flex;
 `;
 
