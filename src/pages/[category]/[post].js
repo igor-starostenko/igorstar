@@ -125,8 +125,10 @@ Post.propTypes = {
 export const getStaticProps = async ({ params }) => {
   const posts = await getEntries({
     content_type: 'post',
-    'fields.path': params.path,
+    'fields.category': params.category,
+    'fields.path': params.post,
   });
+
   const post = posts.items[0] || {};
   const targetRowHeight = post.images
     ? calculateRowHeight(post.images.length)

@@ -26,6 +26,7 @@ const formatDate = (dateString) => {
 
 const Article = ({
   index,
+  category,
   path,
   title,
   image,
@@ -34,7 +35,7 @@ const Article = ({
   tags,
   linkText,
 }) => {
-  const href = `/posts/${path}`;
+  const href = `/${category}/${path}`;
 
   return (
     <Card>
@@ -74,6 +75,7 @@ const Article = ({
 
 Article.propTypes = {
   index: PropTypes.number.isRequired,
+  category: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
