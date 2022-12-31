@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import Title from 'components/title';
-import { TitleHeader, Categories, Counter } from './filter.css';
+import { Container, TitleHeader, Categories, Counter } from './filter.css';
 
 const filters = [
   { title: 'All', href: '/' },
@@ -11,7 +11,7 @@ const filters = [
 ];
 
 const Filter = ({ path, title, displayCount, totalCount }) => (
-  <div>
+  <Container>
     <TitleHeader>
       <Title as="h1" size="large">
         {title}
@@ -33,7 +33,7 @@ const Filter = ({ path, title, displayCount, totalCount }) => (
     <Counter>
       Loaded {displayCount} of {totalCount} posts
     </Counter>
-  </div>
+  </Container>
 );
 
 Filter.propTypes = {
