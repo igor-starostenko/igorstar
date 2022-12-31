@@ -15,11 +15,12 @@ export const Card = styled.article`
 `;
 
 export const SLink = styled(Link)`
+  width: 100%;
   text-decoration: none;
 `;
 
 export const Row = styled.div`
-  width: 100%;
+  display: inline-flex;
 `;
 
 export const Thumb = styled.div`
@@ -41,6 +42,8 @@ export const Description = styled.p`
 `;
 
 export const Date = styled.span`
+  min-width: 20%;
+  text-align: right;
   margin-bottom: 1rem;
   margin-top: 2.5rem;
   color: ${colors.grey};
