@@ -67,7 +67,7 @@ export const Tags = styled.div`
 
 export const Tag = styled.span`
   margin: 0.5rem 10px 0.5rem 0px;
-  padding: 3px;
+  padding: 5px;
   border-radius: 7px;
   color: ${colors.darkGrey};
   background: ${colors.lightestGrey};
