@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import Link from 'next/link';
+import { colors } from 'constants/theme';
 import BaseImage from 'components/image/image';
 import { getEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
@@ -28,6 +30,30 @@ const hasDivChild = (children) => {
 };
 
 const options = {
+  renderMark: {
+    [MARKS.CODE]: (text) => {
+      const isMultiline = text.includes('\n');
+      if (!isMultiline) {
+        return (
+          <code
+            style={{
+              background: colors.lightestGrey,
+              padding: '5px',
+              borderRadius: '5px',
+            }}
+          >
+            {text}
+          </code>
+        );
+      }
+
+      return (
+        <SyntaxHighlighter showLineNumbers={isMultiline}>
+          {text}
+        </SyntaxHighlighter>
+      );
+    },
+  },
   renderNode: {
     [BLOCKS.EMBEDDED_ASSET]: (node) => {
       const { description, file, title } = node.data.target.fields;
