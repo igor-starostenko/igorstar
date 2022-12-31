@@ -11,25 +11,29 @@ const filters = [
 ];
 
 const Filter = ({ path, title, displayCount, totalCount }) => (
-  <TitleHeader>
-    <Title as="h1" size="large">
-      {title}
-    </Title>
-    <Categories>
-      {filters.map(({ href, title }) => (
-        <Link
-          key={href}
-          href={href}
-          style={{ fontWeight: path === href ? 'bold' : 'inherit' }}
-        >
-          {title}
-        </Link>
-      ))}
-    </Categories>
+  <div>
+    <TitleHeader>
+      <Title as="h1" size="large">
+        {title}
+      </Title>
+      <Categories>
+        {filters.map(({ href, title }) => (
+          <Link
+            key={href}
+            href={href}
+            style={{
+              fontWeight: path === href ? 'bold' : 'inherit',
+            }}
+          >
+            {title}
+          </Link>
+        ))}
+      </Categories>
+    </TitleHeader>
     <Counter>
       Loaded {displayCount} of {totalCount} posts
     </Counter>
-  </TitleHeader>
+  </div>
 );
 
 Filter.propTypes = {

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
 import LogoSvg from 'components/logo';
 
@@ -12,7 +13,7 @@ export const Container = styled.header`
   `}
 
   a {
-    color: #757575;
+    color: ${colors.grey};
     transition: color 0.2s ease;
     text-decoration: none;
 

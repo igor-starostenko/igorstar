@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
 
+export const Container = styled.div`
+  position: relative;
+`;
+
 export const TitleHeader = styled.div`
   display: inline-flex;
   align-items: baseline;
@@ -11,16 +15,31 @@ export const TitleHeader = styled.div`
 `;
 
 export const Categories = styled.div`
+  padding: 12px;
+  ${MEDIA.PHONE`
+    padding: 8px;
+  `}
+  border-radius: 12px;
+  background: ${colors.lightestGrey};
+
+  a {
+    text-decoration: none;
+    color: ${colors.grey};
+
+    &:hover {
+      color: inherit;
+    }
+  }
+
   a:not(:first-child) {
     margin-left: 1.5rem;
   }
 `;
 
 export const Counter = styled.span`
-  display: none;
-  padding: 6px;
-  border-radius: 12px;
+  position: absolute;
+  right: 5px;
+  bottom: 0px;
   color: ${colors.darkGrey};
-  background: ${colors.lightestGrey};
   font-size: 1rem;
 `;
