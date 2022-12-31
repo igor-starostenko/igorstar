@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import Link from 'next/link';
+import { colors } from 'constants/theme';
 import BaseImage from 'components/image/image';
 import { getEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
@@ -28,6 +30,30 @@ const hasDivChild = (children) => {
 };
 
 const options = {
+  renderMark: {
+    [MARKS.CODE]: (text) => {
+      const isMultiline = text.includes('\n');
+      if (!isMultiline) {
+        return (
+          <code
+            style={{
+              background: colors.lightestGrey,
+              padding: '5px',
+              borderRadius: '5px',
+            }}
+          >
+            {text}
+          </code>
+        );
+      }
+
+      return (
+        <SyntaxHighlighter showLineNumbers={isMultiline}>
+          {text}
+        </SyntaxHighlighter>
+      );
+    },
+  },
   renderNode: {
     [BLOCKS.EMBEDDED_ASSET]: (node) => {
       const { description, file, title } = node.data.target.fields;
@@ -38,14 +64,7 @@ const options = {
         if (description && description.startsWith('http')) {
           return (
             <Link href={description}>
-              <a>
-                <BaseImage
-                  src={src}
-                  width={width}
-                  height={height}
-                  alt={title}
-                />
-              </a>
+              <BaseImage src={src} width={width} height={height} alt={title} />
             </Link>
           );
         }
@@ -79,11 +98,7 @@ const options = {
           </div>
         );
       } else {
-        return (
-          <Link href={node.data.uri}>
-            <a>{node.content[0].value}</a>
-          </Link>
-        );
+        return <Link href={node.data.uri}>{node.content[0].value}</Link>;
       }
     },
   },
@@ -136,8 +151,10 @@ Post.propTypes = {
 export const getStaticProps = async ({ params }) => {
   const posts = await getEntries({
     content_type: 'post',
-    'fields.path': params.path,
+    'fields.category': params.category,
+    'fields.path': params.post,
   });
+
   const post = posts.items[0] || {};
   const targetRowHeight = post.images
     ? calculateRowHeight(post.images.length)

@@ -15,11 +15,13 @@ export const Card = styled.article`
 `;
 
 export const SLink = styled(Link)`
+  width: 100%;
   text-decoration: none;
 `;
 
 export const Row = styled.div`
   width: 100%;
+  display: inline-flex;
 `;
 
 export const Thumb = styled.div`
@@ -41,6 +43,8 @@ export const Description = styled.p`
 `;
 
 export const Date = styled.span`
+  min-width: 20%;
+  text-align: right;
   margin-bottom: 1rem;
   margin-top: 2.5rem;
   color: ${colors.grey};
@@ -54,6 +58,7 @@ export const MobileDate = styled.span`
   display: none;
   color: ${colors.grey};
   float: right;
+  margin-top: 1rem;
   ${MEDIA.PHONE`
     display: block;
   `};
@@ -66,7 +71,7 @@ export const Tags = styled.div`
 
 export const Tag = styled.span`
   margin: 0.5rem 10px 0.5rem 0px;
-  padding: 3px;
+  padding: 5px;
   border-radius: 7px;
   color: ${colors.darkGrey};
   background: ${colors.lightestGrey};

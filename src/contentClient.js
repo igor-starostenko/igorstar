@@ -50,9 +50,31 @@ const getEntries = async (options) => {
   };
 };
 
+const getPosts = async (options) => {
+  let posts = { items: [] };
+  // Ensure we load all posts, regardless of the API limit
+  while (posts.total != 0 && posts.items.length < (posts.total || 1)) {
+    let response = await getEntries({
+      content_type: 'post',
+      ...options, // skip can't be overriden
+      skip: posts.items.length,
+    });
+    posts = { ...response, items: [...posts.items, ...response.items] };
+  }
+  return posts;
+};
+
+const getCategoriesPaths = async (options) => {
+  const posts = await getEntries({ content_type: 'post', ...options });
+  const categories = [...new Set(posts.items.map(({ category }) => category))];
+  return categories.map((category) => ({ params: { category } }));
+};
+
 const getPostsPaths = async (options) => {
   const posts = await getEntries({ content_type: 'post', ...options });
-  return posts.items.map(({ path }) => ({ params: { path } }));
+  return posts.items.map(({ category, path }) => ({
+    params: { category, post: path },
+  }));
 };
 
 module.exports = {
@@ -60,5 +82,7 @@ module.exports = {
   parseImage,
   parseItem,
   getEntries,
+  getPosts,
+  getCategoriesPaths,
   getPostsPaths,
 };
