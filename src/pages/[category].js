@@ -1,12 +1,17 @@
 import React from 'react';
-import { getEntries, getPosts, parseFields } from 'contentClient';
+import {
+  getEntries,
+  getPosts,
+  getCategoriesPaths,
+  parseFields,
+} from 'contentClient';
 import Category from 'components/category';
 
-const Index = ({ page, posts }) => <Category page={page} posts={posts} />;
+const CategoryIndex = ({ page, posts }) => (
+  <Category page={page} posts={posts} />
+);
 
-export default Index;
-
-export const getStaticProps = async () => {
+export const getStaticProps = async ({ params }) => {
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Blog',
@@ -14,7 +19,8 @@ export const getStaticProps = async () => {
 
   const posts = await getPosts({
     order: '-fields.date',
-    limit: 1000, // 1000 is the max
+    limit: 1000, // 1000 is the max,
+    'fields.category[in]': params.category,
   });
 
   return {
@@ -31,3 +37,14 @@ export const getStaticProps = async () => {
     },
   };
 };
+
+export const getStaticPaths = async () => {
+  const paths = await getCategoriesPaths();
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export default CategoryIndex;

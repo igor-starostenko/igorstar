@@ -64,7 +64,7 @@ const Footer = ({ author, social }) => (
     </Social>
     <Copyright>
       <Link href="/">
-        <a>{author}</a>
+        {author}
       </Link>{' '}
       © {new Date().getFullYear()}
     </Copyright>
