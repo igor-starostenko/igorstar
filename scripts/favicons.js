@@ -1,4 +1,4 @@
-const favicons = require('favicons');
+const { favicons } = require('favicons');
 const path = require('path');
 const fs = require('fs');
 
