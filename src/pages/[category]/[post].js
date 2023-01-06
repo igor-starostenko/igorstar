@@ -6,7 +6,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
 import BaseImage from 'components/image/image';
-import { getEntries, getPostsPaths, parseItem } from 'contentClient';
+import { getPosts, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
@@ -19,6 +19,27 @@ const calculateRowHeight = (imageCount) => {
   }
   const height = 300 * (1 - (multiplier * imageCount) / 100);
   return height > 100 ? height : 100;
+};
+
+const suggestedPostProps = [
+  'title',
+  'path',
+  'date',
+  'category',
+  'tags',
+  'description',
+  'thumbnail',
+];
+
+const filterObject = (object, props) => {
+  if (!Array.isArray(props)) {
+    return {};
+  }
+
+  return props
+    .filter((property) => property in object)
+    .map((property) => ({ [property]: object[property] }))
+    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
 };
 
 const hasDivChild = (children) => {
@@ -104,9 +125,11 @@ const options = {
   },
 };
 
-const Post = ({ post }) => {
+const Post = ({ post, previousPost, nextPost }) => {
   const { images, thumbnail, targetRowHeight } = post;
   const imageUrl = thumbnail ? thumbnail.src : null;
+
+  console.log({ previousPost, nextPost });
 
   return (
     <Layout>
@@ -146,16 +169,39 @@ Post.propTypes = {
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
     targetRowHeight: PropTypes.number.isRequired,
   }).isRequired,
+  previousPost: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string),
+    description: PropTypes.string.isRequired,
+    thumbnail: PropTypes.object,
+  }),
+  nextPost: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string),
+    description: PropTypes.string.isRequired,
+    thumbnail: PropTypes.object,
+  }),
 };
 
 export const getStaticProps = async ({ params }) => {
-  const posts = await getEntries({
-    content_type: 'post',
+  const posts = await getPosts({
+    limit: 100, // 1000 is the max,
+    'fields.draft': false,
     'fields.category': params.category,
-    'fields.path': params.post,
+    // 'fields.path': params.post,
+    order: '-fields.date',
   });
 
-  const post = posts.items[0] || {};
+  const postIndex = posts.items.findIndex((post) => post.path === params.post);
+  const post = posts.items[postIndex] || {};
+  const nextPost = posts.items[postIndex - 1] || {};
+  const previousPost = posts.items[postIndex + 1] || {};
   const targetRowHeight = post.images
     ? calculateRowHeight(post.images.length)
     : 250;
@@ -168,12 +214,24 @@ export const getStaticProps = async ({ params }) => {
         images: post.images ? post.images.map(parseItem) : [],
         targetRowHeight,
       },
+      previousPost: {
+        ...filterObject(previousPost, suggestedPostProps),
+        thumbnail: previousPost.thumbnail
+          ? parseItem(previousPost.thumbnail)
+          : null,
+      },
+      nextPost: {
+        ...filterObject(nextPost, suggestedPostProps),
+        thumbnail: nextPost.thumbnail ? parseItem(nextPost.thumbnail) : null,
+      },
     },
   };
 };
 
 export const getStaticPaths = async () => {
-  const paths = await getPostsPaths();
+  const paths = await getPostsPaths({
+    'fields.draft': false,
+  });
 
   return {
     paths,

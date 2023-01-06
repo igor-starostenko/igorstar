@@ -20,6 +20,7 @@ export const getStaticProps = async ({ params }) => {
   const posts = await getPosts({
     order: '-fields.date',
     limit: 1000, // 1000 is the max,
+    'fields.draft': false,
     'fields.category[in]': params.category,
   });
 
