@@ -28,6 +28,7 @@ const suggestedPostProps = [
   'category',
   'tags',
   'description',
+  'linkText',
   'thumbnail',
 ];
 
@@ -129,8 +130,6 @@ const Post = ({ post, previousPost, nextPost }) => {
   const { images, thumbnail, targetRowHeight } = post;
   const imageUrl = thumbnail ? thumbnail.src : null;
 
-  console.log({ previousPost, nextPost });
-
   return (
     <Layout>
       <Head pageTitle={post.title} imageUrl={imageUrl} />
@@ -164,6 +163,7 @@ Post.propTypes = {
     category: PropTypes.string.isRequired,
     tags: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.string.isRequired,
+    linkText: PropTypes.string,
     content: PropTypes.object.isRequired,
     thumbnail: PropTypes.object,
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -176,6 +176,7 @@ Post.propTypes = {
     category: PropTypes.string.isRequired,
     tags: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.string.isRequired,
+    linkText: PropTypes.string,
     thumbnail: PropTypes.object,
   }),
   nextPost: PropTypes.shape({
@@ -185,6 +186,7 @@ Post.propTypes = {
     category: PropTypes.string.isRequired,
     tags: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.string.isRequired,
+    linkText: PropTypes.string,
     thumbnail: PropTypes.object,
   }),
 };
@@ -199,9 +201,12 @@ export const getStaticProps = async ({ params }) => {
   });
 
   const postIndex = posts.items.findIndex((post) => post.path === params.post);
+  const nextPostIndex = postIndex === 0 ? postIndex + 2 : postIndex - 1;
+  const previousPostIndex =
+    postIndex === posts.total - 1 ? postIndex - 2 : postIndex + 1;
   const post = posts.items[postIndex] || {};
-  const nextPost = posts.items[postIndex - 1] || {};
-  const previousPost = posts.items[postIndex + 1] || {};
+  const nextPost = posts.items[nextPostIndex] || {};
+  const previousPost = posts.items[previousPostIndex] || {};
   const targetRowHeight = post.images
     ? calculateRowHeight(post.images.length)
     : 250;

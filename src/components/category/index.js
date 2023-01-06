@@ -106,9 +106,9 @@ Category.propTypes = {
         category: PropTypes.string.isRequired,
         tags: PropTypes.arrayOf(PropTypes.string),
         description: PropTypes.string.isRequired,
+        linkText: PropTypes.string,
       }).isRequired
     ),
-    linkText: PropTypes.string,
   }).isRequired,
 };
 
