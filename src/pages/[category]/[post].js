@@ -136,6 +136,16 @@ const Post = ({ post, recommendations }) => {
     <Layout>
       <Head pageTitle={post.title} imageUrl={imageUrl} />
       <Box>
+        <div
+          style={{
+            color: colors.grey,
+            margin: '1rem 0rem 2rem 0rem',
+          }}
+        >
+          <span>
+            Category: <Link href={`/${post.category}`}>{post.category}</Link>
+          </span>
+        </div>
         <div style={{ margin: '0 -4rem' }}>
           {images.length > 0 && (
             <Gallery
