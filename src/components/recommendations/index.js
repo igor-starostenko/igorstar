@@ -1,15 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'components/image';
-import {
-  Border,
-  Container,
-  Row,
-  SLink,
-  Tags,
-  Tag,
-  Thumb,
-} from './recommendations.css';
+import Hashtags from 'components/hashtags';
+import { Border, Container, Row, SLink, Thumb } from './recommendations.css';
 
 const Recommendations = ({ category, posts }) => (
   <Container>
@@ -27,11 +20,7 @@ const Recommendations = ({ category, posts }) => (
                 />
               </Thumb>
               <h3>{post.title}</h3>
-              <Tags>
-                {post.tags.map((tag) => (
-                  <Tag key={tag}>#{tag}</Tag>
-                ))}
-              </Tags>
+              {post.tags && <Hashtags tags={post.tags} isSmall />}
               <p>
                 {post.description}
                 <span> {post.linkText}</span>

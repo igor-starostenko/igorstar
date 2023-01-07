@@ -43,17 +43,3 @@ export const Thumb = styled.div`
     max-height: 13rem;
   }
 `;
-
-export const Tags = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-export const Tag = styled.span`
-  margin: 2px 5px 2px 0px;
-  padding: 5px;
-  border-radius: 7px;
-  color: ${colors.darkGrey};
-  background: ${colors.lightestGrey};
-  font-size: 1.4rem;
-`;
