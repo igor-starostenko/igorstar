@@ -13,6 +13,7 @@ export const Border = styled.div`
   border: 1px solid ${colors.lightGrey};
   color: ${colors.grey};
   text-decoration: none;
+  min-height: 14rem;
 `;
 
 export const SLink = styled(Link)`
@@ -21,9 +22,11 @@ export const SLink = styled(Link)`
 
   h3 {
     color: ${colors.black};
+    margin-bottom: 1rem;
   }
 
   p {
+    margin-top: 1rem;
     span {
       color: ${colors.secondary};
     }
