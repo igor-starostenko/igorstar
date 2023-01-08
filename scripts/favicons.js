@@ -35,18 +35,12 @@ const configuration = {
     appleStartup: true,
     coast: false,
     favicons: true,
-    firefox: false,
     windows: true,
     yandex: false,
   },
 };
 
-const callback = function (err, res) {
-  if (err) {
-    console.log(err.message);
-    return;
-  }
-
+const callback = function (res) {
   res.images.forEach((image) => {
     fs.writeFile(
       path.resolve(__dirname, '../public/icons/', image.name),
@@ -72,4 +66,7 @@ const callback = function (err, res) {
   });
 };
 
-favicons(source, configuration, callback);
+(async () => {
+  const response = await favicons(source, configuration);
+  callback(response);
+})();
