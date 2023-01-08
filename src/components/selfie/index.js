@@ -4,7 +4,7 @@ import { ImageWrapper, Image } from './selfie.css';
 
 const Selfie = ({ src, ...rest }) => (
   <ImageWrapper {...rest}>
-    <Image height={100} width={100} src={src} alt="Selfie" />
+    <Image height={100} width={100} src={src} alt="Selfie" priority />
   </ImageWrapper>
 );
 
