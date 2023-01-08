@@ -53,6 +53,17 @@ const hasDivChild = (children) => {
   }
 };
 
+const hasMultilineCode = (node) => {
+  return (
+    node.content.filter(
+      (content) =>
+        content.marks &&
+        content.value.includes('\n') &&
+        content.marks.filter(({ type }) => type === 'code').length > 0
+    ).length > 0
+  );
+};
+
 const options = {
   renderMark: {
     [MARKS.CODE]: (text) => {
@@ -100,6 +111,8 @@ const options = {
     [BLOCKS.PARAGRAPH]: (node, children) => {
       if (hasDivChild(children)) {
         return <span>{children}</span>;
+      } else if (hasMultilineCode(node)) {
+        return <div>{children}</div>;
       } else {
         return <p>{children}</p>;
       }
