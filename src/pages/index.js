@@ -1,5 +1,5 @@
 import React from 'react';
-import { getEntries, getPosts, parseFields } from 'contentClient';
+import { getEntries, getAllEntries, parseFields } from 'contentClient';
 import Category from 'components/category';
 
 const Index = ({ page, posts }) => <Category page={page} posts={posts} />;
@@ -12,7 +12,8 @@ export const getStaticProps = async () => {
     'fields.title': 'Blog',
   });
 
-  const posts = await getPosts({
+  const posts = await getAllEntries({
+    content_type: 'post',
     order: '-fields.date',
     limit: 1000, // 1000 is the max
   });

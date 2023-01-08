@@ -1,7 +1,12 @@
+const imageOptimization = (process.env.IMAGE_OPTIMIZATION || '1') === '1';
+
 const next_config = {
   images: {
     domains: ['images.ctfassets.net'],
-    ...{ ...(process.env.IMAGE_OPTIMIZATION ? {} : { loader: 'custom' }) },
+    ...{ ...(imageOptimization ? {} : { loader: 'custom' }) },
+  },
+  env: {
+    imageOptimization,
   },
 };
 

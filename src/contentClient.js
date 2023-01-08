@@ -50,18 +50,17 @@ const getEntries = async (options) => {
   };
 };
 
-const getPosts = async (options) => {
-  let posts = { items: [] };
-  // Ensure we load all posts, regardless of the API limit
-  while (posts.total != 0 && posts.items.length < (posts.total || 1)) {
+const getAllEntries = async (options) => {
+  let records = { items: [] };
+  // Ensure we load all records, regardless of the API limit
+  while (records.total != 0 && records.items.length < (records.total || 1)) {
     let response = await getEntries({
-      content_type: 'post',
       ...options, // skip can't be overriden
-      skip: posts.items.length,
+      skip: records.items.length,
     });
-    posts = { ...response, items: [...posts.items, ...response.items] };
+    records = { ...response, items: [...records.items, ...response.items] };
   }
-  return posts;
+  return records;
 };
 
 const getCategoriesPaths = async (options) => {
@@ -82,7 +81,7 @@ module.exports = {
   parseImage,
   parseItem,
   getEntries,
-  getPosts,
+  getAllEntries,
   getCategoriesPaths,
   getPostsPaths,
 };
