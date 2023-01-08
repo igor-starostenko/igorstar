@@ -8,6 +8,7 @@ const next_config = {
   env: {
     imageOptimization,
   },
+  productionBrowserSourceMaps: true,
 };
 
 module.exports = { ...next_config };
