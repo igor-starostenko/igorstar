@@ -12,14 +12,16 @@ const Recommendations = ({ category, posts }) => (
         <Border key={post.id}>
           <SLink href={`/${post.category}/${post.path}`}>
             <Row>
-              <Thumb>
-                <Image
-                  src={post.thumbnail.src}
-                  alt={post.thumbnail.description || post.title}
-                  width={post.thumbnail.width}
-                  height={post.thumbnail.height}
-                />
-              </Thumb>
+              {post.thumbnail && (
+                <Thumb>
+                  <Image
+                    src={post.thumbnail.src}
+                    alt={post.thumbnail.description || post.title}
+                    width={post.thumbnail.width}
+                    height={post.thumbnail.height}
+                  />
+                </Thumb>
+              )}
               <h3>{post.title}</h3>
               {post.tags && <Hashtags tags={post.tags} isSmall />}
               <p>
