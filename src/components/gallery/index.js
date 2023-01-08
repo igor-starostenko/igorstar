@@ -49,7 +49,11 @@ const createSortFunction = (orderBy) => (a, b) => {
   return 0;
 };
 
-const orderArray = (array, order, orderBy) => {
+const orderArray = (array, orderBy, order) => {
+  if (!orderBy) {
+    return array;
+  }
+
   const direction = String(order).toLowerCase();
   if (!['desc', 'asc'].includes(direction)) {
     return array;
@@ -68,7 +72,7 @@ const Gallery = ({ photos, order, orderBy, ...rest }) => {
   const [current, setCurrent] = useState(0);
 
   const images = useMemo(
-    () => orderArray(photos, order, orderBy || 'title'),
+    () => orderArray(photos, orderBy, order),
     [photos, order, orderBy]
   );
 

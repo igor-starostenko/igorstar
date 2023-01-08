@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getEntries, parseItem } from 'contentClient';
+import { getEntries, getAllEntries, parseItem } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Gallery from 'components/gallery';
@@ -23,7 +23,7 @@ const FeedPage = ({ page, feed }) => (
       </Title>
       <div style={{ margin: '0 -4rem' }}>
         {feed.images.length > 0 && (
-          <Gallery photos={feed.images} targetRowHeight={250} order="desc" />
+          <Gallery photos={feed.images} targetRowHeight={250} />
         )}
       </div>
     </Box>
@@ -44,10 +44,13 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Photo Feed',
   });
-  const { items, ...feed } = await getEntries({
+  const { items, ...feed } = await getAllEntries({
     content_type: 'feed',
+    order: '-fields.date',
     limit: 1000,
   });
+
+  console.log(items[0], items[items.length - 1]);
 
   return {
     props: {

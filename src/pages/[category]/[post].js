@@ -6,7 +6,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
 import BaseImage from 'components/image/image';
-import { getPosts, getPostsPaths, parseItem } from 'contentClient';
+import { getAllEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
@@ -211,7 +211,8 @@ Post.propTypes = {
 };
 
 export const getStaticProps = async ({ params }) => {
-  const posts = await getPosts({
+  const posts = await getAllEntries({
+    content_type: 'post',
     limit: 100, // 1000 is the max,
     'fields.draft': false,
     'fields.category': params.category,

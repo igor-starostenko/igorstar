@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getEntries, parseItem } from 'contentClient';
+import { getEntries, getAllEntries, parseItem } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Gallery from 'components/gallery';
@@ -39,7 +39,9 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Gallery',
   });
-  const { items, ...gallery } = await getEntries({ content_type: 'gallery' });
+  const { items, ...gallery } = await getAllEntries({
+    content_type: 'gallery',
+  });
 
   return {
     props: {
