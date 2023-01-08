@@ -24,7 +24,7 @@ export const Categories = styled.div`
 
   a {
     text-decoration: none;
-    color: ${colors.grey};
+    color: ${colors.darkGrey};
 
     &:hover {
       color: inherit;
