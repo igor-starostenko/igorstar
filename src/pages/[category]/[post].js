@@ -224,8 +224,14 @@ export const getStaticProps = async ({ params }) => {
   const previousPostIndex =
     postIndex === posts.total - 1 ? postIndex - 2 : postIndex + 1;
   const post = posts.items[postIndex] || {};
-  const nextPost = posts.items[nextPostIndex] || {};
-  const previousPost = posts.items[previousPostIndex] || {};
+  const recommendedPosts = (
+    post.recommendations && post.recommendations.length > 0
+      ? post.recommendations.map((path) =>
+          posts.items.find((post) => post.path === path)
+        )
+      : [posts.items[nextPostIndex] || {}, posts.items[previousPostIndex] || {}]
+  ).filter((post) => post !== undefined && post !== null);
+
   const targetRowHeight = post.images
     ? calculateRowHeight(post.images.length)
     : 250;
@@ -238,18 +244,10 @@ export const getStaticProps = async ({ params }) => {
         images: post.images ? post.images.map(parseItem) : [],
         targetRowHeight,
       },
-      recommendations: [
-        {
-          ...filterObject(previousPost, suggestedPostProps),
-          thumbnail: previousPost.thumbnail
-            ? parseItem(previousPost.thumbnail)
-            : null,
-        },
-        {
-          ...filterObject(nextPost, suggestedPostProps),
-          thumbnail: nextPost.thumbnail ? parseItem(nextPost.thumbnail) : null,
-        },
-      ],
+      recommendations: recommendedPosts.map((post) => ({
+        ...filterObject(post, suggestedPostProps),
+        thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
+      })),
     },
   };
 };
