@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import Image from 'components/image';
+import Hashtags from 'components/hashtags';
 import {
   Card,
   SLink,
@@ -9,8 +10,6 @@ import {
   Thumb,
   Title,
   Description,
-  Tags,
-  Tag,
   Date as DateText,
   MobileDate,
 } from './article.css.js';
@@ -60,11 +59,7 @@ const Article = ({
         </SLink>
         <DateText>— {formatDate(date)}</DateText>
       </Row>
-      <Tags>
-        {tags.map((tag) => (
-          <Tag key={tag}>#{tag}</Tag>
-        ))}
-      </Tags>
+      <Hashtags tags={tags} />
       <Description>
         {description} <Link href={href}>{linkText || 'Read more'}</Link>
       </Description>

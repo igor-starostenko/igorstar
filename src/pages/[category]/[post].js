@@ -6,11 +6,12 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
 import BaseImage from 'components/image/image';
-import { getEntries, getPostsPaths, parseItem } from 'contentClient';
+import { getAllEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
+import Recommendations from 'components/recommendations';
 
 const calculateRowHeight = (imageCount) => {
   let multiplier = 3;
@@ -21,12 +22,46 @@ const calculateRowHeight = (imageCount) => {
   return height > 100 ? height : 100;
 };
 
+const suggestedPostProps = [
+  'id',
+  'title',
+  'path',
+  'date',
+  'category',
+  'tags',
+  'description',
+  'linkText',
+  'thumbnail',
+];
+
+const filterObject = (object, props) => {
+  if (!Array.isArray(props)) {
+    return {};
+  }
+
+  return props
+    .filter((property) => property in object)
+    .map((property) => ({ [property]: object[property] }))
+    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
+};
+
 const hasDivChild = (children) => {
   for (let i = 0; i < children.length; i += 1) {
     if (children[i].type === 'div') {
       return true;
     }
   }
+};
+
+const hasMultilineCode = (node) => {
+  return (
+    node.content.filter(
+      (content) =>
+        content.marks &&
+        content.value.includes('\n') &&
+        content.marks.filter(({ type }) => type === 'code').length > 0
+    ).length > 0
+  );
 };
 
 const options = {
@@ -76,6 +111,8 @@ const options = {
     [BLOCKS.PARAGRAPH]: (node, children) => {
       if (hasDivChild(children)) {
         return <span>{children}</span>;
+      } else if (hasMultilineCode(node)) {
+        return <div>{children}</div>;
       } else {
         return <p>{children}</p>;
       }
@@ -104,7 +141,7 @@ const options = {
   },
 };
 
-const Post = ({ post }) => {
+const Post = ({ post, recommendations }) => {
   const { images, thumbnail, targetRowHeight } = post;
   const imageUrl = thumbnail ? thumbnail.src : null;
 
@@ -112,6 +149,16 @@ const Post = ({ post }) => {
     <Layout>
       <Head pageTitle={post.title} imageUrl={imageUrl} />
       <Box>
+        <div
+          style={{
+            color: colors.grey,
+            margin: '1rem 0rem 2rem 0rem',
+          }}
+        >
+          <span>
+            Category: <Link href={`/${post.category}`}>{post.category}</Link>
+          </span>
+        </div>
         <div style={{ margin: '0 -4rem' }}>
           {images.length > 0 && (
             <Gallery
@@ -123,6 +170,7 @@ const Post = ({ post }) => {
         </div>
         <h1>{post.title}</h1>
         {documentToReactComponents(post.content, options)}
+        <Recommendations category={post.category} posts={recommendations} />
       </Box>
     </Layout>
   );
@@ -141,21 +189,50 @@ Post.propTypes = {
     category: PropTypes.string.isRequired,
     tags: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.string.isRequired,
+    linkText: PropTypes.string,
     content: PropTypes.object.isRequired,
     thumbnail: PropTypes.object,
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
     targetRowHeight: PropTypes.number.isRequired,
   }).isRequired,
+  recommendations: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+      tags: PropTypes.arrayOf(PropTypes.string),
+      description: PropTypes.string.isRequired,
+      linkText: PropTypes.string,
+      thumbnail: PropTypes.object,
+    })
+  ),
 };
 
 export const getStaticProps = async ({ params }) => {
-  const posts = await getEntries({
+  const posts = await getAllEntries({
     content_type: 'post',
+    limit: 100, // 1000 is the max,
+    'fields.draft': false,
     'fields.category': params.category,
-    'fields.path': params.post,
+    // 'fields.path': params.post,
+    order: '-fields.date',
   });
 
-  const post = posts.items[0] || {};
+  const postIndex = posts.items.findIndex((post) => post.path === params.post);
+  const nextPostIndex = postIndex === 0 ? postIndex + 2 : postIndex - 1;
+  const previousPostIndex =
+    postIndex === posts.total - 1 ? postIndex - 2 : postIndex + 1;
+  const post = posts.items[postIndex] || {};
+  const recommendedPosts = (
+    post.recommendations && post.recommendations.length > 0
+      ? post.recommendations.map((path) =>
+          posts.items.find((post) => post.path === path)
+        )
+      : [posts.items[nextPostIndex] || {}, posts.items[previousPostIndex] || {}]
+  ).filter((post) => post !== undefined && post !== null);
+
   const targetRowHeight = post.images
     ? calculateRowHeight(post.images.length)
     : 250;
@@ -168,12 +245,18 @@ export const getStaticProps = async ({ params }) => {
         images: post.images ? post.images.map(parseItem) : [],
         targetRowHeight,
       },
+      recommendations: recommendedPosts.map((post) => ({
+        ...filterObject(post, suggestedPostProps),
+        thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
+      })),
     },
   };
 };
 
 export const getStaticPaths = async () => {
-  const paths = await getPostsPaths();
+  const paths = await getPostsPaths({
+    'fields.draft': false,
+  });
 
   return {
     paths,

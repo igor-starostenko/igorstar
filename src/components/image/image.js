@@ -11,7 +11,7 @@ const BaseImage = ({ alt, src, query = '?fm=webp', ...rest }) => (
   <SImage
     alt={alt}
     src={src + query}
-    {...(process.env.IMAGE_OPTIMIZATION
+    {...(process.env.imageOptimization
       ? {} // image optimization is enabled by default with SSR
       : {
           loader: noOptimization,
