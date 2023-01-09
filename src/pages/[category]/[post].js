@@ -108,11 +108,11 @@ const options = {
         if (description && description.startsWith('http')) {
           return (
             <Link href={description}>
-              <BaseImage {...imageProps} />
+              <BaseImage style={{ paddingTop: '2rem' }} {...imageProps} />
             </Link>
           );
         }
-        return <BaseImage {...imageProps} />;
+        return <BaseImage style={{ paddingTop: '2rem' }} {...imageProps} />;
       }
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
