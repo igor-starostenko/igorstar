@@ -10,7 +10,6 @@ const next_config = {
     nextImageExportOptimizer_exportFolderPath: 'out',
     nextImageExportOptimizer_quality: 50,
     nextImageExportOptimizer_storePicturesInWEBP: true,
-    nextImageExportOptimizer_exportFolderPath: 'nextImageExportOptimizer',
     nextImageExportOptimizer_generateAndUseBlurImages: true,
   },
   productionBrowserSourceMaps: true,
