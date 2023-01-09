@@ -14,7 +14,7 @@ const client = contentful.createClient({
 
 const saveFile = async (i, url, name) => {
   const path = imageDirectory + name;
-  if (fs.existsSync(path)) {
+  if (!replaceImages && fs.existsSync(path)) {
     return console.log(`${i + 1}. ${path} already exists`);
   }
 
