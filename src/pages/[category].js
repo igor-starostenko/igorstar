@@ -3,7 +3,7 @@ import {
   getEntries,
   getAllEntries,
   getCategoriesPaths,
-  parseFields,
+  parseItem,
 } from 'contentClient';
 import Category from 'components/category';
 
@@ -32,7 +32,7 @@ export const getStaticProps = async ({ params }) => {
         ...posts,
         /* eslint-disable no-unused-vars */
         items: posts.items.map(({ thumbnail, images, ...fields }) => ({
-          thumbnail: parseFields(thumbnail),
+          thumbnail: parseItem(thumbnail || {}),
           ...fields,
         })),
       },

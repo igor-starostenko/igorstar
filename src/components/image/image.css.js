@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Image from 'next/image';
+import ExportedImage from 'next-image-export-optimizer';
 
 export const ImageWrapper = styled.div`
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
@@ -19,7 +19,7 @@ export const ImageWrapper = styled.div`
   }
 `;
 
-export const SImage = styled(Image)`
+export const SImage = styled(ExportedImage)`
   max-width: 100%;
   height: auto;
 `;
