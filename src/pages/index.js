@@ -1,5 +1,5 @@
 import React from 'react';
-import { getEntries, getAllEntries, parseFields } from 'contentClient';
+import { getEntries, getAllEntries, parseItem } from 'contentClient';
 import Category from 'components/category';
 
 const Index = ({ page, posts }) => <Category page={page} posts={posts} />;
@@ -25,7 +25,7 @@ export const getStaticProps = async () => {
         ...posts,
         /* eslint-disable no-unused-vars */
         items: posts.items.map(({ thumbnail, images, ...fields }) => ({
-          thumbnail: parseFields(thumbnail),
+          thumbnail: parseItem(thumbnail || {}),
           ...fields,
         })),
       },

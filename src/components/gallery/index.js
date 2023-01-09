@@ -20,7 +20,8 @@ const GalleryImage = ({ index, onClick, photo, margin }) => (
     onClick={(e) => onClick(e, { index, photo })}
     key={photo.id}
     src={photo.src}
-    alt={photo.title}
+    backupSrc={photo.backupSrc}
+    alt={photo.alt}
     width={photo.width}
     height={photo.height}
   />
@@ -34,6 +35,7 @@ GalleryImage.propTypes = {
     title: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    backupSrc: PropTypes.string,
     src: PropTypes.string.isRequired,
   }).isRequired,
   margin: PropTypes.number,
