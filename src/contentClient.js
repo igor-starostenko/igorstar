@@ -23,18 +23,26 @@ const parseFields = (item) => {
   };
 };
 
-const parseImage = (file) => {
+const parseImage = (id, title, file) => {
   const { width, height } = file.details.image;
   return {
-    src: `https:${file.url}`,
+    src: `/images/${id}_${file.fileName}`,
+    backupSrc: `https:${file.url}`,
+    alt: title,
     width,
     height,
   };
 };
 
 const parseItem = (data) => {
-  const { file, ...fields } = parseFields(data);
-  return { ...fields, ...parseImage(file) };
+  const item = parseFields(data);
+
+  if (!item) {
+    return null;
+  }
+
+  const { id, title, file, ...fields } = item;
+  return { id, ...fields, ...parseImage(id, title, file) };
 };
 
 const getEntries = async (options) => {

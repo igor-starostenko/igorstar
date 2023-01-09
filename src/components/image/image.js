@@ -1,30 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SImage } from './image.css';
-
-const noOptimization = ({ src }) => src;
 
 /* For contentful query params see
   https://www.contentful.com/developers/docs/references/images-api/#/reference
  */
-const BaseImage = ({ alt, src, query = '?fm=webp', ...rest }) => (
-  <SImage
-    alt={alt}
-    src={src + query}
-    {...(process.env.imageOptimization
-      ? {} // image optimization is enabled by default with SSR
-      : {
-          loader: noOptimization,
-          unoptimized: true,
-        })}
-    {...rest}
-  />
-);
+const BaseImage = ({ alt, src, backupSrc, ...rest }) => {
+  const [isError, setIsError] = useState(false);
+
+  if (isError) {
+    /* eslint-disable @next/next/no-img-element */
+    return <img src={backupSrc} alt={alt} {...rest} />;
+  }
+
+  return (
+    <SImage src={src} alt={alt} onError={() => setIsError(true)} {...rest} />
+  );
+};
 
 BaseImage.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
-  query: PropTypes.string,
+  backupSrc: PropTypes.string,
 };
 
 export default BaseImage;

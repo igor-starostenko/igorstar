@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import BaseImage from 'components/image/image';
 import Box from 'components/box';
 import MEDIA from 'helpers/mediaTemplates';
 
-export const Image = styled(BaseImage)`
+export const Image = styled.img`
   cursor: initial;
   border-radius: 50%;
   border: 2px solid powderblue !important;

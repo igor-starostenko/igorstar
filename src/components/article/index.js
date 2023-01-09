@@ -46,9 +46,11 @@ const Article = ({
             }}
           >
             <Image
-              src={`https:${image.file.url}`}
-              alt={title}
-              {...image.file.details.image}
+              src={image.src}
+              backupSrc={image.backupSrc}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
             />
           </Thumb>
         </SLink>
@@ -75,15 +77,11 @@ Article.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   image: PropTypes.shape({
-    file: PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      details: PropTypes.shape({
-        image: PropTypes.shape({
-          width: PropTypes.number.isRequired,
-          height: PropTypes.number.isRequired,
-        }).isRequired,
-      }).isRequired,
-    }).isRequired,
+    src: PropTypes.string.isRequired,
+    backupSrc: PropTypes.string,
+    alt: PropTypes.string.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
   }),
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),

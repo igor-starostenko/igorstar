@@ -16,7 +16,8 @@ const Recommendations = ({ category, posts }) => (
                 <Thumb>
                   <Image
                     src={post.thumbnail.src}
-                    alt={post.thumbnail.description || post.title}
+                    backupSrc={post.thumbnail.backupSrc}
+                    alt={post.thumbnail.alt || post.title}
                     width={post.thumbnail.width}
                     height={post.thumbnail.height}
                   />
