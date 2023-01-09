@@ -4,6 +4,7 @@ const contentful = require('contentful');
 require('dotenv').config();
 
 const imageDirectory = process.env.IMAGE_DIRECTORY || './public/images/';
+const replaceImages = parseInt(process.env.REPLACE_IMAGES || '0');
 const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
 
 const client = contentful.createClient({
@@ -12,9 +13,13 @@ const client = contentful.createClient({
 });
 
 const saveFile = async (i, url, name) => {
+  const path = imageDirectory + name;
+  if (fs.existsSync(path)) {
+    return console.log(`${i + 1}. ${path} already exists`);
+  }
+
   const response = await fetch(url);
   const buffer = await response.buffer();
-  const path = imageDirectory + name;
   fs.writeFile(path, buffer, () =>
     console.log(`${i + 1}. Saved ${url} into ${path}`)
   );
