@@ -19,7 +19,6 @@ const Recommendations = ({ category, posts }) => (
                     backupSrc={post.thumbnail.backupSrc}
                     alt={post.thumbnail.alt || post.title}
                     fill
-                    objectFit="contain"
                   />
                 </Thumb>
               )}

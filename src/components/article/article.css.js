@@ -25,8 +25,34 @@ export const Row = styled.div`
 `;
 
 export const Thumb = styled.div`
+  position: relative;
+  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+  border-radius: 2px;
+  overflow: hidden;
+  cursor: pointer;
+  line-height: 0;
+  img {
+    object-fit: cover;
+    transition: transform 2s;
+  }
+  :hover {
+    box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
+    img {
+      transform: scale(1.02);
+    }
+  }
+
+  max-height: 41rem;
+  height: 60vw;
   margin: 0rem -3.9rem 0rem;
+  ${MEDIA.TABLET`
+    max-height: 36rem;
+    height: 55vw;
+  `};
   ${MEDIA.PHONE`
+    max-height: 24rem;
+    height: 50vw;
     margin: 0rem -2.9rem 0rem;
   `};
 `;
