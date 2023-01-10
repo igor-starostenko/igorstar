@@ -97,6 +97,7 @@ const options = {
       } = node.data.target;
       const { width, height } = file.details.image;
       const imageProps = {
+        style: { paddingTop: '2rem' },
         src: `/images/${id}_${file.fileName}`,
         backupSrc: `https:${file.url}`,
         alt: title,
@@ -108,11 +109,11 @@ const options = {
         if (description && description.startsWith('http')) {
           return (
             <Link href={description}>
-              <BaseImage style={{ paddingTop: '2rem' }} {...imageProps} />
+              <BaseImage {...imageProps} />
             </Link>
           );
         }
-        return <BaseImage style={{ paddingTop: '2rem' }} {...imageProps} />;
+        return <BaseImage {...imageProps} />;
       }
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
