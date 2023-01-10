@@ -14,7 +14,6 @@ export const Border = styled.div`
   border: 1px solid ${colors.lightGrey};
   color: ${colors.grey};
   text-decoration: none;
-  min-height: 14rem;
 `;
 
 export const SLink = styled(Link)`
@@ -36,6 +35,7 @@ export const SLink = styled(Link)`
 
 export const Row = styled.div`
   margin: 1rem;
+  min-height: 14rem;
 `;
 
 export const Thumb = styled.div`
