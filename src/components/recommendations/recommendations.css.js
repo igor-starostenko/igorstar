@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
+import MEDIA from 'helpers/mediaTemplates';
 
 export const Container = styled.div`
   margin-top: 7rem;
@@ -38,11 +39,16 @@ export const Row = styled.div`
 `;
 
 export const Thumb = styled.div`
+  position: relative;
   width: 30%;
   float: left;
   margin: 0rem 1rem 0.5rem 0rem;
+  min-height: 11rem;
 
-  img {
-    max-height: 13rem;
-  }
+  ${MEDIA.TABLET`
+    min-height: 8rem;
+  `};
+  ${MEDIA.PHONE`
+    min-height: 4rem;
+  `};
 `;
