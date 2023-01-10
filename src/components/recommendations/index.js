@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Image from 'components/image';
 import Hashtags from 'components/hashtags';
+import Image from 'components/image/image';
 import { Border, Container, Row, SLink, Thumb } from './recommendations.css';
 
 const Recommendations = ({ category, posts }) => (
@@ -18,8 +18,7 @@ const Recommendations = ({ category, posts }) => (
                     src={post.thumbnail.src}
                     backupSrc={post.thumbnail.backupSrc}
                     alt={post.thumbnail.alt || post.title}
-                    width={post.thumbnail.width}
-                    height={post.thumbnail.height}
+                    fill
                   />
                 </Thumb>
               )}

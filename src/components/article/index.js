@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import Image from 'components/image';
+import Image from 'components/image/image';
 import Hashtags from 'components/hashtags';
 import {
   Card,
@@ -49,8 +49,7 @@ const Article = ({
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={image.width}
-              height={image.height}
+              fill
             />
           </Thumb>
         </SLink>
