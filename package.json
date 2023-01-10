@@ -13,7 +13,7 @@
     "build:favicons": "node scripts/favicons",
     "build:images": "npm run contentful:assets && next-image-export-optimizer --exportFolderPath=out --nextConfigPath=next.config.js",
     "build:sitemap": "next-sitemap",
-    "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && next export && npm run build:images",
+    "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && npm run build:images && next export",
     "contentful:assets": "node scripts/contentful_assets.js",
     "contentful:backup": "node scripts/contentful_backup.js",
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",

@@ -91,21 +91,29 @@ const options = {
   },
   renderNode: {
     [BLOCKS.EMBEDDED_ASSET]: (node) => {
-      const { description, file, title } = node.data.target.fields;
+      const {
+        sys: { id },
+        fields: { description, file, title },
+      } = node.data.target;
+      const { width, height } = file.details.image;
+      const imageProps = {
+        style: { paddingTop: '2rem' },
+        src: `/images/${id}_${file.fileName}`,
+        backupSrc: `https:${file.url}`,
+        alt: title,
+        width,
+        height,
+      };
 
       if (file.contentType.includes('image')) {
-        const src = `https:${file.url}`;
-        const { width, height } = file.details.image;
         if (description && description.startsWith('http')) {
           return (
             <Link href={description}>
-              <BaseImage src={src} width={width} height={height} alt={title} />
+              <BaseImage {...imageProps} />
             </Link>
           );
         }
-        return (
-          <BaseImage src={src} width={width} height={height} alt={title} />
-        );
+        return <BaseImage {...imageProps} />;
       }
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
