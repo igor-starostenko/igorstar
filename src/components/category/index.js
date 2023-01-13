@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
 import Filter from 'components/filter';
 import Article from 'components/article';
-import Pagination from 'components/pagination';
+
+const Pagination = dynamic(() => import('components/pagination'));
 
 const Category = ({ page, posts }) => {
   const pageSize = 10;
