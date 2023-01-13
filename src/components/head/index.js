@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import schemaGenerator from 'helpers/schemaGenerator';
@@ -79,6 +78,6 @@ SEO.propTypes = {
   imageUrl: PropTypes.string,
 };
 
-const ConfigSEO = props => <SEO {...config} {...props} />;
+const ConfigSEO = (props) => <SEO {...config} {...props} />;
 
 export default ConfigSEO;

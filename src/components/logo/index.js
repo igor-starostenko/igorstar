@@ -1,4 +1,3 @@
-import React from 'react';
 import BaseImage from 'components/image/image';
 
 const LogoSvg = (props) => (
