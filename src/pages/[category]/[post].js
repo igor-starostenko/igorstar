@@ -4,7 +4,6 @@ import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
-import { getAllEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
@@ -221,6 +220,8 @@ Post.propTypes = {
 };
 
 export const getStaticProps = async ({ params }) => {
+  const { getAllEntries, parseItem } = await import('contentClient');
+
   const posts = await getAllEntries({
     content_type: 'post',
     limit: 100, // 1000 is the max,
@@ -264,6 +265,8 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
+  const { getPostsPaths } = await import('contentClient');
+
   const paths = await getPostsPaths({
     'fields.draft': false,
   });
