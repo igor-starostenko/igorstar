@@ -1,3 +1,7 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const next_config = {
   images: {
     domains: ['images.ctfassets.net'],
@@ -15,4 +19,4 @@ const next_config = {
   productionBrowserSourceMaps: true,
 };
 
-module.exports = next_config;
+module.exports = withBundleAnalyzer(next_config);
