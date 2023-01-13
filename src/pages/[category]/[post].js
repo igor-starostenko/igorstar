@@ -14,6 +14,10 @@ const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'));
 
 const BaseImage = dynamic(() => import('components/image/image'));
 
+const DateText = dynamic(() => import('components/date'), {
+  ssr: false,
+});
+
 const calculateRowHeight = (imageCount) => {
   let multiplier = 3;
   if (typeof window !== 'undefined') {
@@ -178,6 +182,9 @@ const Post = ({ post, recommendations }) => {
           )}
         </div>
         <h1>{post.title}</h1>
+        <div style={{ display: 'inline-flex' }}>
+          <DateText date={post.date} />
+        </div>
         {documentToReactComponents(post.content, options)}
         <Recommendations category={post.category} posts={recommendations} />
       </Box>

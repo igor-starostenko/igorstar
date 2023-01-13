@@ -44,13 +44,13 @@ const Article = ({
         <SLink href={href}>
           <Title as="h2">{title}</Title>
         </SLink>
-        <DateText date={date} />
+        <DateText isMobile={false} date={date} />
       </Row>
       <Hashtags tags={tags} />
       <Description>
         {description} <Link href={href}>{linkText || 'Read more'}</Link>
       </Description>
-      <DateText isMobile date={date} />
+      <DateText isMobile={true} date={date} />
     </Card>
   );
 };
