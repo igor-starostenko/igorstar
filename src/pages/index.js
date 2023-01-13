@@ -8,6 +8,7 @@ export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } = await import(
     'contentClient'
   );
+
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Blog',
