@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getEntries, getAllEntries, parseItem } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Gallery from 'components/gallery';
@@ -40,6 +39,10 @@ FeedPage.propTypes = {
 };
 
 export const getStaticProps = async () => {
+  const { getEntries, getAllEntries, parseItem } = await import(
+    'contentClient'
+  );
+
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Photo Feed',
@@ -49,8 +52,6 @@ export const getStaticProps = async () => {
     order: '-fields.date',
     limit: 1000,
   });
-
-  console.log(items[0], items[items.length - 1]);
 
   return {
     props: {

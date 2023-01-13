@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-// import { default as PhotoGallery } from 'react-photo-gallery';
-import Carousel, { Modal, ModalGateway } from 'react-images';
-import Image from 'components/image';
+import { ModalGateway } from 'react-images';
+
+const Carousel = dynamic(() => import('components/carousel'));
+const Image = dynamic(() => import('components/image'));
 
 /* To avoid 'useLayoutEffect does nothing on the server' warning */
 const PhotoGallery = dynamic(() => import('react-photo-gallery'), {
@@ -67,8 +68,6 @@ const orderArray = (array, orderBy, order) => {
   return direction === 'desc' ? array.reverse() : array;
 };
 
-const styleFn = (styleObj) => ({ ...styleObj, zIndex: 100 });
-
 const Gallery = ({ photos, order, orderBy, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -98,15 +97,14 @@ const Gallery = ({ photos, order, orderBy, ...rest }) => {
 
       <ModalGateway>
         {isOpen ? (
-          <Modal
+          <Carousel
             onClose={() => {
               setCurrent(0);
               setOpen(false);
             }}
-            styles={{ blanket: styleFn, positioner: styleFn }}
-          >
-            <Carousel views={images} currentIndex={current} />
-          </Modal>
+            views={images}
+            currentIndex={current}
+          />
         ) : null}
       </ModalGateway>
     </div>

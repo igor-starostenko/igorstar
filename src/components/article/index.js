@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import Image from 'components/image/image';
 import Hashtags from 'components/hashtags';
 import {
   Card,
@@ -13,6 +13,9 @@ import {
   Date as DateText,
   MobileDate,
 } from './article.css.js';
+
+// To avoid error: "Text content does not match server-rendered HTML."
+const Image = dynamic(() => import('components/image/image'), { ssr: false });
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
