@@ -1,7 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { getEntries } from 'contentClient';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
@@ -24,6 +22,8 @@ About.propTypes = {
 export default About;
 
 export const getStaticProps = async () => {
+  const { getEntries } = await import('contentClient');
+
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'About',

@@ -1,17 +1,22 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import dynamic from 'next/dynamic';
 import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import SyntaxHighlighter from 'react-syntax-highlighter';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
-import BaseImage from 'components/image/image';
-import { getAllEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
 import Recommendations from 'components/recommendations';
+
+const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'));
+
+const BaseImage = dynamic(() => import('components/image/image'));
+
+const DateText = dynamic(() => import('components/date'), {
+  ssr: false,
+});
 
 const calculateRowHeight = (imageCount) => {
   let multiplier = 3;
@@ -177,6 +182,9 @@ const Post = ({ post, recommendations }) => {
           )}
         </div>
         <h1>{post.title}</h1>
+        <div style={{ display: 'inline-flex' }}>
+          <DateText date={post.date} />
+        </div>
         {documentToReactComponents(post.content, options)}
         <Recommendations category={post.category} posts={recommendations} />
       </Box>
@@ -219,6 +227,8 @@ Post.propTypes = {
 };
 
 export const getStaticProps = async ({ params }) => {
+  const { getAllEntries, parseItem } = await import('contentClient');
+
   const posts = await getAllEntries({
     content_type: 'post',
     limit: 100, // 1000 is the max,
@@ -262,6 +272,8 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
+  const { getPostsPaths } = await import('contentClient');
+
   const paths = await getPostsPaths({
     'fields.draft': false,
   });

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import Hashtags from 'components/hashtags';
 import Image from 'components/image/image';

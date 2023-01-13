@@ -45,6 +45,7 @@
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^13.1.1",
     "ava": "^3.15.0",
     "chrome-launcher": "^0.14.2",
     "contentful-cli": "^1.9.31",

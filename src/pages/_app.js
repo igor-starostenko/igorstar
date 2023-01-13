@@ -1,4 +1,3 @@
-import React from 'react';
 // import App from 'next/app'
 import { AnimatePresence } from 'framer-motion';
 import GlobalStyle from 'global.css.js';

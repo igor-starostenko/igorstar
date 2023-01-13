@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Container, Social, Copyright } from './footer.css';
@@ -63,10 +62,7 @@ const Footer = ({ author, social }) => (
       </SocialLink>
     </Social>
     <Copyright>
-      <Link href="/">
-        {author}
-      </Link>{' '}
-      © {new Date().getFullYear()}
+      <Link href="/">{author}</Link> © {new Date().getFullYear()}
     </Copyright>
   </Container>
 );
