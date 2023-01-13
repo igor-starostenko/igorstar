@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import Header from 'components/header';
@@ -42,7 +41,7 @@ Layout.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const LayoutWithConfig = props => <Layout config={config} {...props} />;
+const LayoutWithConfig = (props) => <Layout config={config} {...props} />;
 
 LayoutWithConfig.propTypes = {
   children: PropTypes.node.isRequired,

@@ -1,10 +1,3 @@
-import React from 'react';
-import {
-  getEntries,
-  getAllEntries,
-  getCategoriesPaths,
-  parseItem,
-} from 'contentClient';
 import Category from 'components/category';
 
 const CategoryIndex = ({ page, posts }) => (
@@ -12,6 +5,10 @@ const CategoryIndex = ({ page, posts }) => (
 );
 
 export const getStaticProps = async ({ params }) => {
+  const { getEntries, getAllEntries, parseItem } = await import(
+    'contentClient'
+  );
+
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Blog',
@@ -41,6 +38,8 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
+  const { getCategoriesPaths } = await import('contentClient');
+
   const paths = await getCategoriesPaths();
 
   return {

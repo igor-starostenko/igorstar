@@ -1,17 +1,19 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import dynamic from 'next/dynamic';
 import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import SyntaxHighlighter from 'react-syntax-highlighter';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
-import BaseImage from 'components/image/image';
 import { getAllEntries, getPostsPaths, parseItem } from 'contentClient';
 import Gallery from 'components/gallery';
 import Layout from 'components/layout';
 import Box from 'components/box';
 import Head from 'components/head';
 import Recommendations from 'components/recommendations';
+
+const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'));
+
+const BaseImage = dynamic(() => import('components/image/image'));
 
 const calculateRowHeight = (imageCount) => {
   let multiplier = 3;
