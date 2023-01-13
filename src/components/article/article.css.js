@@ -67,25 +67,3 @@ export const Description = styled.p`
   text-decoration: none;
   color: ${colors.black};
 `;
-
-export const Date = styled.span`
-  min-width: 20%;
-  text-align: right;
-  margin-bottom: 1rem;
-  margin-top: 2.5rem;
-  color: ${colors.grey};
-  float: right;
-  ${MEDIA.PHONE`
-    display: none;
-  `};
-`;
-
-export const MobileDate = styled.span`
-  display: none;
-  color: ${colors.grey};
-  float: right;
-  margin-top: 1rem;
-  ${MEDIA.PHONE`
-    display: block;
-  `};
-`;

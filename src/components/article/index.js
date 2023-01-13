@@ -1,29 +1,13 @@
 import PropTypes from 'prop-types';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+import Image from 'components/image/image';
 import Hashtags from 'components/hashtags';
-import {
-  Card,
-  SLink,
-  Row,
-  Thumb,
-  Title,
-  Description,
-  Date as DateText,
-  MobileDate,
-} from './article.css.js';
+import { Card, SLink, Row, Thumb, Title, Description } from './article.css';
 
-// To avoid error: "Text content does not match server-rendered HTML."
-const Image = dynamic(() => import('components/image/image'), { ssr: false });
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-us', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-};
+const DateText = dynamic(() => import('components/date'), {
+  ssr: false,
+});
 
 const Article = ({
   index,
@@ -60,13 +44,13 @@ const Article = ({
         <SLink href={href}>
           <Title as="h2">{title}</Title>
         </SLink>
-        <DateText>— {formatDate(date)}</DateText>
+        <DateText date={date} />
       </Row>
       <Hashtags tags={tags} />
       <Description>
         {description} <Link href={href}>{linkText || 'Read more'}</Link>
       </Description>
-      <MobileDate>— {formatDate(date)}</MobileDate>
+      <DateText isMobile date={date} />
     </Card>
   );
 };
