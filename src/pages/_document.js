@@ -80,6 +80,7 @@ class MyDocument extends Document {
           />
 
           <link href="/manifest.json" rel="manifest" />
+          <link href="/manifest.webmanifest" rel="manifest" />
 
           <link
             href="/icons/apple-touch-icon-57x57.png"
