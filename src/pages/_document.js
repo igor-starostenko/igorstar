@@ -82,11 +82,6 @@ class MyDocument extends Document {
           <link
             crossOrigin="use-credentials"
             rel="manifest"
-            href="/manifest.json"
-          />
-          <link
-            crossOrigin="use-credentials"
-            rel="manifest"
             href="/manifest.webmanifest"
           />
 
