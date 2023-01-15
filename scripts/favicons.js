@@ -30,7 +30,7 @@ const configuration = {
   display: 'standalone',
   orientation: 'any',
   start_url: '/',
-  version: '1.0',
+  version: '2.4.4',
   logging: true,
   icons: {
     android: true,
