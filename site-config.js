@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  version: '2.4.4',
   author: 'Igor Starostenko',
   siteTitle: 'IgorStar: Blog',
   siteTitleShort: 'IgorStar',
