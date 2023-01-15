@@ -25,6 +25,7 @@ const GalleryImage = ({ index, onClick, photo, margin }) => (
     alt={photo.alt}
     width={photo.width}
     height={photo.height}
+    {...(index === 0 ? { priority: true } : {})}
   />
 );
 
