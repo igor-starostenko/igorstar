@@ -3,7 +3,10 @@ const path = require('path');
 const fs = require('fs');
 
 const {
+  author,
   siteTitleShort,
+  siteDescription,
+  siteUrl,
   themeColor,
   backgroundColor,
 } = require('../site-config');
@@ -17,9 +20,9 @@ const source = 'public/icon.png';
 const configuration = {
   path: '/icons/',
   appName: siteTitleShort,
-  appDescription: null,
-  developerName: null,
-  developerURL: null,
+  appDescription: siteDescription,
+  developerName: author,
+  developerURL: siteUrl,
   dir: 'auto',
   lang: 'en-US',
   background: backgroundColor,
@@ -27,7 +30,7 @@ const configuration = {
   display: 'standalone',
   orientation: 'any',
   start_url: '/',
-  version: '1.0',
+  version: '2.4.4',
   logging: true,
   icons: {
     android: true,
