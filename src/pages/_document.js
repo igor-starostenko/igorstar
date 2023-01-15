@@ -79,11 +79,7 @@ class MyDocument extends Document {
             name="msapplication-square310x310"
           />
 
-          <link
-            crossOrigin="use-credentials"
-            rel="manifest"
-            href="/manifest.webmanifest"
-          />
+          <link rel="manifest" href="/manifest.webmanifest" />
 
           <link
             href="/icons/apple-touch-icon-57x57.png"
