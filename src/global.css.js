@@ -90,6 +90,11 @@ const GlobalStyle = createGlobalStyle`
     font-family: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace;
   }
 
+  .flickr-embed-frame {
+    display: block;
+    margin: 0 auto !important;
+  }
+
   .youtube-container {
     position: relative;
     width: 100%;

@@ -12,6 +12,8 @@ import Recommendations from 'components/recommendations';
 
 const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'));
 
+const FlickrImage = dynamic(() => import('components/image/flickrImage'));
+
 const BaseImage = dynamic(() => import('components/image/image'));
 
 const DateText = dynamic(() => import('components/date'), {
@@ -67,6 +69,16 @@ const hasMultilineCode = (node) => {
         content.marks.filter(({ type }) => type === 'code').length > 0
     ).length > 0
   );
+};
+
+const isFlickrEmbed = ({ data }) => {
+  return data.uri.includes('data-flickr-embed');
+};
+
+const isFlickrNode = (node) => {
+  const links = node.content.filter(({ nodeType }) => nodeType === 'hyperlink');
+
+  return links.filter(isFlickrEmbed).length > 0;
 };
 
 const options = {
@@ -126,6 +138,8 @@ const options = {
         return <span>{children}</span>;
       } else if (hasMultilineCode(node)) {
         return <div>{children}</div>;
+      } else if (isFlickrNode(node)) {
+        return <div>{children}</div>;
       } else {
         return <p>{children}</p>;
       }
@@ -147,6 +161,8 @@ const options = {
             ></iframe>
           </div>
         );
+      } else if (isFlickrEmbed(node)) {
+        return <FlickrImage xml={node.data.uri} />;
       } else {
         return <Link href={node.data.uri}>{node.content[0].value}</Link>;
       }
