@@ -4,6 +4,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const next_config = {
   images: {
+    loader: 'custom',
     remotePatterns: [
       {
         protocol: 'https',
