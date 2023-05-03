@@ -22,7 +22,7 @@ const GalleryImage = ({ index, onClick, photo, margin }) => (
     key={photo.id}
     src={photo.src}
     backupSrc={photo.backupSrc}
-    alt={photo.alt}
+    alt={photo.description || photo.alt}
     width={photo.width}
     height={photo.height}
     {...(index === 0 ? { priority: true } : {})}
@@ -34,7 +34,8 @@ GalleryImage.propTypes = {
   onClick: PropTypes.func,
   photo: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    description: PropTypes.string,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     backupSrc: PropTypes.string,
@@ -78,7 +79,7 @@ const Gallery = ({ photos, order, orderBy, ...rest }) => {
     [photos, order, orderBy]
   );
 
-  const imageClick = (e, obj) => {
+  const imageClick = (_e, obj) => {
     setCurrent(obj.index);
     setOpen(true);
   };

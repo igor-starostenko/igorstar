@@ -52,7 +52,7 @@ const Category = ({ page, posts }) => {
   return (
     <Layout>
       <Head pageTitle={page.title} />
-      <Box>
+      <Box isMain>
         <Filter
           path={router.asPath}
           title={page.title}
