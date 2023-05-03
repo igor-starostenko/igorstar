@@ -35,7 +35,7 @@ const FlickrImage = ({ xml, isRaw = false }) => {
   }
 
   if (isRaw === true) {
-    return <div dangerouslySetInnerHTML={{ __html: xml }} />;
+    return <span dangerouslySetInnerHTML={{ __html: xml }} />;
   }
 
   return (
