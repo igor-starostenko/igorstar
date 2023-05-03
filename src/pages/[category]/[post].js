@@ -12,6 +12,8 @@ import Recommendations from 'components/recommendations';
 
 const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'));
 
+const FlickrImage = dynamic(() => import('components/image/flickrImage'));
+
 const BaseImage = dynamic(() => import('components/image/image'));
 
 const DateText = dynamic(() => import('components/date'), {
@@ -147,6 +149,8 @@ const options = {
             ></iframe>
           </div>
         );
+      } else if (node.data.uri.includes('data-flickr-embed')) {
+        return <FlickrImage xml={node.data.uri} />;
       } else {
         return <Link href={node.data.uri}>{node.content[0].value}</Link>;
       }
