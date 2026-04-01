@@ -19,6 +19,15 @@
   Personal blog. Feel free to use it as a template.
 </p>
 
+<p>
+  <a href="https://github.com/igor-starostenko/igorstar/blob/master/license.md">
+    <img
+      src="https://img.shields.io/github/license/igor-starostenko/igorstar?color=blue"
+      alt="MIT License"
+    />
+  </a>
+</p>
+
 ***
 
 ## Features
@@ -85,4 +94,4 @@ yarn contentful:export
 
 ## Author
 
-* Igor Starostenko ([@IgorStarostenko](https://twitter.com/IgorStarostenko))
+* Igor Starostenko (<contact@igorstar.com>)
