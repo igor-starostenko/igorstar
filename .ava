@@ -1,0 +1,4 @@
+{
+  "require": ["esm"],
+  "nodeArguments": "--experimental-vm-modules"
+}
