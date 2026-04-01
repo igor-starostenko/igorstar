@@ -1,6 +1,7 @@
 {
   "name": "igorstar",
   "license": "MIT",
+  "type": "module",
   "author": "Igor Starostenko <contact@igorstar.com>",
   "scripts": {
     "analyze": "source-map-explorer .next/static/**/*.js",
@@ -17,7 +18,9 @@
     "contentful:assets": "node scripts/contentful_assets.js",
     "contentful:backup": "node scripts/contentful_backup.js",
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
-    "test:lighthouse": "npx ava scripts/lighthouse.test.js"
+    "test:lighthouse": "npx ava scripts/lighthouse.test.js",
+    "test:helpers": "npx ava scripts/schemaGenerator.test.js scripts/mediaTemplates.test.js",
+    "test": "npm run test:helpers && npm run test:lighthouse"
   },
   "greenkeeper": {
     "ignore": [
@@ -57,6 +60,7 @@
     "eslint": "<8.0.0",
     "eslint-config-next": "^12.2.3",
     "eslint-config-prettier": "^8.3.0",
+    "esm": "^3.2.25",
     "favicons": "^7.0.2",
     "lighthouse": "^8.6.0",
     "mkdirp": "^1.0.4",
