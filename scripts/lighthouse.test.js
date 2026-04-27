@@ -1,7 +1,7 @@
-const chromeLauncher = require('chrome-launcher');
-const { test } = require('ava');
-const lighthouse = require('lighthouse');
-const { siteUrl } = require('../site-config');
+import test from 'ava';
+import chromeLauncher from 'chrome-launcher';
+import lighthouse from 'lighthouse';
+import { siteUrl } from '../site-config.js';
 
 const launchChromeAndRunLighthouse = (
   url,

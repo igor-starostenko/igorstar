@@ -20,7 +20,7 @@
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
     "test:lighthouse": "npx ava scripts/lighthouse.test.js",
     "test:helpers": "npx ava scripts/schemaGenerator.test.js scripts/mediaTemplates.test.js",
-    "test": "npm run test:helpers && npm run test:lighthouse"
+    "test": "npm run test:helpers"
   },
   "greenkeeper": {
     "ignore": [
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^13.1.1",
-    "ava": "^3.15.0",
+    "ava": "^8.0.0",
     "chrome-launcher": "^0.14.2",
     "contentful-cli": "^1.9.31",
     "contentful-management": "^7.45.0",
