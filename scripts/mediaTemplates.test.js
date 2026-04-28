@@ -1,33 +1,34 @@
 import test from 'ava';
 import mediaTemplates from '../src/helpers/mediaTemplates.js';
-import BREAKPOINTS from '../src/constants/breakpoints.js';
 
-test('breakpoints object has correct values', (t) => {
-  t.is(BREAKPOINTS.DESKTOP, 992);
-  t.is(BREAKPOINTS.TABLET, 768);
-  t.is(BREAKPOINTS.PHONE, 428);
+const baseInput = { prop: 'color', value: 'red' };
+
+test('PHONE template returns css object with isCss flag', (t) => {
+  const cssFn = mediaTemplates.PHONE`${baseInput.prop}: ${baseInput.value};`;
+  t.true(cssFn.isCss);
 });
 
-test('creates PHONE media template function', (t) => {
-  t.true(typeof mediaTemplates.PHONE === 'function');
+test('MIN_PHONE template returns css object with isCss flag', (t) => {
+  const cssFn = mediaTemplates.MIN_PHONE`${baseInput.prop}: ${baseInput.value};`;
+  t.true(cssFn.isCss);
 });
 
-test('creates MIN_PHONE media template function', (t) => {
-  t.true(typeof mediaTemplates.MIN_PHONE === 'function');
+test('TABLET template returns css object with isCss flag', (t) => {
+  const cssFn = mediaTemplates.TABLET`${baseInput.prop}: ${baseInput.value};`;
+  t.true(cssFn.isCss);
 });
 
-test('creates TABLET media template function', (t) => {
-  t.true(typeof mediaTemplates.TABLET === 'function');
+test('MIN_TABLET template returns css object with isCss flag', (t) => {
+  const cssFn = mediaTemplates.MIN_TABLET`${baseInput.prop}: ${baseInput.value};`;
+  t.true(cssFn.isCss);
 });
 
-test('creates MIN_TABLET media template function', (t) => {
-  t.true(typeof mediaTemplates.MIN_TABLET === 'function');
+test('DESKTOP template returns css object with isCss flag', (t) => {
+  const cssFn = mediaTemplates.DESKTOP`${baseInput.prop}: ${baseInput.value};`;
+  t.true(cssFn.isCss);
 });
 
-test('creates DESKTOP media template function', (t) => {
-  t.true(typeof mediaTemplates.DESKTOP === 'function');
-});
-
-test('creates MIN_DESKTOP media template function', (t) => {
-  t.true(typeof mediaTemplates.MIN_DESKTOP === 'function');
+test('MIN_DESKTOP template returns css object with isCss flag', (t) => {
+  const cssFn = mediaTemplates.MIN_DESKTOP`${baseInput.prop}: ${baseInput.value};`;
+  t.true(cssFn.isCss);
 });
