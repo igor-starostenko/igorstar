@@ -1,12 +1,8 @@
-import favicons from 'favicons';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+const { favicons } = require('favicons');
+const path = require('path');
+const fs = require('fs');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const siteConfig = await import('../site-config.js').then(m => m.default || m);
+const siteConfig = require('../site-config.cjs');
 
 const {
   author,

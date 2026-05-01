@@ -8,7 +8,7 @@ const Image = ({ style, alt, ...rest }) => (
   </ImageWrapper>
 );
 
-CustomImage.propTypes = {
+Image.propTypes = {
   style: PropTypes.object,
   alt: PropTypes.string.isRequired,
 };

@@ -1,7 +1,6 @@
 {
   "name": "igorstar",
   "license": "MIT",
-  "type": "module",
   "author": "Igor Starostenko <contact@igorstar.com>",
   "scripts": {
     "analyze": "source-map-explorer .next/static/**/*.js",
@@ -11,7 +10,7 @@
     "lint": "next lint",
     "build:analyze": "npm run build && npm run analyze",
     "build:dir": "mkdirp ./public/icons/ && mkdirp ./public/images/",
-    "build:favicons": "node scripts/favicons",
+    "build:favicons": "node scripts/favicons.cjs",
     "build:images": "npm run contentful:assets && next-image-export-optimizer --exportFolderPath=out --nextConfigPath=next.config.js",
     "build:sitemap": "next-sitemap",
     "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && npm run build:images && next export",
@@ -21,7 +20,7 @@
     "test:lighthouse": "vitest run src/test/lighthouse.test.mjs",
     "test:helpers": "vitest run src/helpers/*.test.js",
     "test:components": "vitest run src/components/**/*.test.jsx",
-    "test": "vitest --exclude src/test/lighthouse.test.mjs"
+    "test": "vitest --exclude src/test/lighthouse.test.mjs --run"
   },
   "greenkeeper": {
     "ignore": [

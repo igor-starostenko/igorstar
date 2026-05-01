@@ -1,7 +1,7 @@
 import { describe, beforeAll, it, expect, skipped } from 'vitest';
 import chromeLauncher from 'chrome-launcher';
 import lighthouse from 'lighthouse';
-import siteConfig from '../../site-config.js';
+import siteConfig from '../../site-config.cjs';
 
 let scores;
 let chromeAvailable = false;

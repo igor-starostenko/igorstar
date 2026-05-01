@@ -1,10 +1,6 @@
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+const { resolve } = require('path');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export default {
+const config = {
   version: '2.5.0',
   author: 'Igor Starostenko',
   siteTitle: 'IgorStar: Blog',
@@ -14,7 +10,7 @@ export default {
   themeColor: '#000',
   backgroundColor: '#fff',
   pathPrefix: null,
-  logo: __dirname + '/public/icon.png',
+  logo: resolve(__dirname, 'public/icon.png'),
   social: {
     github: 'igor-starostenko',
     fivehundredpx: 'igorstar',
@@ -23,3 +19,5 @@ export default {
     youtube: 'UCo68YrHvGcKqNWrMb0kV-QA',
   },
 };
+
+module.exports = config;

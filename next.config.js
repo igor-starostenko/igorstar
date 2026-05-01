@@ -4,6 +4,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const next_config = {
   images: {
+    unoptimized: true,
     loader: 'custom',
     remotePatterns: [
       {

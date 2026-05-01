@@ -1,4 +1,4 @@
-const { siteUrl } = require('./site-config');
+const { siteUrl } = require('./site-config.cjs');
 
 module.exports = {
   siteUrl,

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import schemaGenerator from 'helpers/schemaGenerator.js';
-import config from '../../../site-config.js';
+import config from '../../../site-config.cjs';
 
 const appendSiteUrl = (siteUrl, imageUrl) => {
   const origin =
