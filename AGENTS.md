@@ -27,6 +27,7 @@ Use `yarn` instead of `npm` when possible.
 - Address the relevant warnings as they appear
 - Static site deployment via AWS Amplify
 - Ensure new changes have test coverages
+- New tests should not contain hardcoded values that directly depend on the corresponding values in the files, being tested
 - Verify every change with unit tests: `yarn test`
 - Run with `yarn test:lighthouse`
 - Lighthouse testing only on demand

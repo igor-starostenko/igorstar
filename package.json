@@ -18,9 +18,10 @@
     "contentful:assets": "node scripts/contentful_assets.js",
     "contentful:backup": "node scripts/contentful_backup.js",
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
-    "test:lighthouse": "npx ava scripts/lighthouse.test.js",
-    "test:helpers": "npx ava scripts/schemaGenerator.test.js scripts/mediaTemplates.test.js",
-    "test": "npm run test:helpers"
+    "test:lighthouse": "vitest run src/test/lighthouse.test.mjs",
+    "test:helpers": "vitest run src/helpers/*.test.js",
+    "test:components": "vitest run src/components/**/*.test.jsx",
+    "test": "vitest --exclude src/test/lighthouse.test.mjs"
   },
   "greenkeeper": {
     "ignore": [
@@ -49,8 +50,16 @@
     "xml2js": "^0.5.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.28.6",
+    "@babel/preset-react": "^7.28.5",
+    "@babel/register": "^7.28.6",
     "@next/bundle-analyzer": "^13.1.1",
-    "ava": "^8.0.0",
+    "@node-loader/babel": "^2.1.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@vitest/ui": "^4.1.5",
     "chrome-launcher": "^0.14.2",
     "contentful-cli": "^1.9.31",
     "contentful-management": "^7.45.0",
@@ -62,12 +71,14 @@
     "eslint-config-prettier": "^8.3.0",
     "esm": "^3.2.25",
     "favicons": "^7.0.2",
+    "jsdom": "^29.1.1",
     "lighthouse": "^8.6.0",
     "mkdirp": "^1.0.4",
     "next-sitemap": "^3.1.43",
     "node-gyp": "^9.3.1",
     "prettier": "^2.4.1",
     "source-map-explorer": "^2.5.3",
+    "vitest": "^4.1.5",
     "webpack": "^5.76.0"
   }
 }

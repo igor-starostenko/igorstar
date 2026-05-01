@@ -1,12 +1,12 @@
-import test from 'ava';
-import schemaGenerator from '../src/helpers/schemaGenerator.js';
+import { test, expect } from 'vitest';
+import schemaGenerator from './schemaGenerator.js';
 
 const baseInput = {
   siteUrl: 'https://example.com',
   siteTitle: 'Demo Site',
 };
 
-test('generates WebSite schema for homepage', (t) => {
+test('generates WebSite schema for homepage', () => {
   const result = schemaGenerator({
     ...baseInput,
     pathname: '/',
@@ -15,8 +15,8 @@ test('generates WebSite schema for homepage', (t) => {
     pageTitleFull: 'Demo Site',
   });
 
-  t.is(result.length, 1);
-  t.deepEqual(result[0], {
+  expect(result).toHaveLength(1);
+  expect(result[0]).toEqual({
     '@context': 'http://schema.org',
     '@type': 'WebSite',
     url: 'https://example.com',
@@ -25,7 +25,7 @@ test('generates WebSite schema for homepage', (t) => {
   });
 });
 
-test('generates WebSite and BreadcrumbList schema for subpage', (t) => {
+test('generates WebSite and BreadcrumbList schema for subpage', () => {
   const result = schemaGenerator({
     ...baseInput,
     pathname: '/services',
@@ -34,9 +34,9 @@ test('generates WebSite and BreadcrumbList schema for subpage', (t) => {
     pageTitleFull: 'Services | Demo Site',
   });
 
-  t.is(result.length, 2);
+  expect(result).toHaveLength(2);
 
-  t.deepEqual(result[0], {
+  expect(result[0]).toEqual({
     '@context': 'http://schema.org',
     '@type': 'WebSite',
     url: 'https://example.com/services',
@@ -44,7 +44,7 @@ test('generates WebSite and BreadcrumbList schema for subpage', (t) => {
     alternateName: 'Services | Demo Site',
   });
 
-  t.deepEqual(result[1], {
+  expect(result[1]).toEqual({
     '@context': 'http://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
@@ -68,7 +68,7 @@ test('generates WebSite and BreadcrumbList schema for subpage', (t) => {
   });
 });
 
-test('generates schema with pageTitle when pathname is / but pageTitle provided', (t) => {
+test('generates schema with pageTitle when pathname is / but pageTitle provided', () => {
   const result = schemaGenerator({
     ...baseInput,
     pathname: '/',
@@ -77,11 +77,11 @@ test('generates schema with pageTitle when pathname is / but pageTitle provided'
     pageTitleFull: 'Home | Demo Site',
   });
 
-  t.is(result.length, 1);
-  t.is(result[0].name, 'Home');
+  expect(result).toHaveLength(1);
+  expect(result[0].name).toBe('Home');
 });
 
-test('uses siteTitle when pathname is / and pageTitle is empty', (t) => {
+test('uses siteTitle when pathname is / and pageTitle is empty', () => {
   const result = schemaGenerator({
     ...baseInput,
     pathname: '/',
@@ -90,11 +90,11 @@ test('uses siteTitle when pathname is / and pageTitle is empty', (t) => {
     pageTitleFull: 'Demo Site',
   });
 
-  t.is(result.length, 1);
-  t.is(result[0].name, 'Demo Site');
+  expect(result).toHaveLength(1);
+  expect(result[0].name).toBe('Demo Site');
 });
 
-test('returns array of schemas', (t) => {
+test('returns array of schemas', () => {
   const result = schemaGenerator({
     ...baseInput,
     pathname: '/contact',
@@ -103,5 +103,5 @@ test('returns array of schemas', (t) => {
     pageTitleFull: 'Contact | Demo Site',
   });
 
-  t.true(Array.isArray(result));
+  expect(Array.isArray(result)).toBe(true);
 });
