@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Nav from 'components/header/nav';
-import { Container, Logo } from './header.css';
+import Nav from 'components/header/nav/nav.jsx';
+import { Container, Logo } from './header.css.js';
 
 const Header = () => (
   <Container>

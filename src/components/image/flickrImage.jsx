@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { parseString } from 'xml2js';
-import BaseImage from './image';
-import FlickrIcon from 'components/icons/flickr';
+import BaseImage from './baseImage.jsx';
+import FlickrIcon from 'components/icons/flickrIcon.jsx';
 import {
   ImageContainer,
   ImageFrame,
@@ -10,7 +10,7 @@ import {
   ImageFooter,
   ImageTitle,
   ImageCopyright,
-} from './image.css';
+} from './image.css.js';
 
 const FlickrImage = ({ xml, isRaw = false }) => {
   let href, title, src, width, height;

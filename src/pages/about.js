@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import Layout from 'components/layout';
-import Box from 'components/box';
-import Head from 'components/head';
-import Selfie from 'components/selfie';
+import Layout from 'components/layout/layout.jsx';
+import Box from 'components/box/box.jsx';
+import Head from 'components/head/head.jsx';
+import Selfie from 'components/selfie/selfie.jsx';
 
 const About = ({ page }) => (
   <Layout>

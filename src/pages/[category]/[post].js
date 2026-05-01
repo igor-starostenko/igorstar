@@ -3,20 +3,20 @@ import dynamic from 'next/dynamic';
 import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
-import { colors } from 'constants/theme';
-import Gallery from 'components/gallery';
-import Layout from 'components/layout';
-import Box from 'components/box';
-import Head from 'components/head';
-import Recommendations from 'components/recommendations';
+import { colors } from 'constants/theme.js';
+import Gallery from 'components/gallery/gallery.jsx';
+import Layout from 'components/layout/layout.jsx';
+import Box from 'components/box/box.jsx';
+import Head from 'components/head/head.jsx';
+import Recommendations from 'components/recommendations/recommendations.jsx';
 
 const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'));
 
-const FlickrImage = dynamic(() => import('components/image/flickrImage'));
+const FlickrImage = dynamic(() => import('components/image/flickrImage.jsx'));
 
-const BaseImage = dynamic(() => import('components/image/image'));
+const BaseImage = dynamic(() => import('components/image/baseImage.jsx'));
 
-const DateText = dynamic(() => import('components/date'), {
+const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
 

@@ -1,5 +1,5 @@
-import Box from 'components/box';
-import Layout from 'components/layout';
+import Box from 'components/box/box.jsx';
+import Layout from 'components/layout/layout.jsx';
 
 const NotFound = () => (
   <Layout>

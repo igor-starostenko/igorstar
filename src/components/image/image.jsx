@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import BaseImage from './image';
-import { ImageWrapper } from './image.css';
+import BaseImage from './baseImage.jsx';
+import { ImageWrapper } from './image.css.js';
 
-const CustomImage = ({ style, alt, ...rest }) => (
+const Image = ({ style, alt, ...rest }) => (
   <ImageWrapper style={style}>
     <BaseImage alt={alt} {...rest} />
   </ImageWrapper>
@@ -13,4 +13,4 @@ CustomImage.propTypes = {
   alt: PropTypes.string.isRequired,
 };
 
-export default CustomImage;
+export default Image;

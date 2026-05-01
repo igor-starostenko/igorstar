@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import Layout from 'components/layout';
-import Box from 'components/box';
-import Head from 'components/head';
-import Filter from 'components/filter';
-import Article from 'components/article';
+import Layout from 'components/layout/layout.jsx';
+import Box from 'components/box/box.jsx';
+import Head from 'components/head/head.jsx';
+import Filter from 'components/filter/filter.jsx';
+import Article from 'components/article/article.jsx';
 
-const Pagination = dynamic(() => import('components/pagination'));
+const Pagination = dynamic(() => import('components/pagination/pagination.jsx'));
 
 const Category = ({ page, posts }) => {
   const pageSize = 10;

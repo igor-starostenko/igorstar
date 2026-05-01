@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import schemaGenerator from 'helpers/schemaGenerator';
 import { useRouter } from 'next/router';
-import config from '../../../site-config';
+import schemaGenerator from 'helpers/schemaGenerator.js';
+import config from '../../../site-config.js';
 
 const appendSiteUrl = (siteUrl, imageUrl) => {
   const origin =

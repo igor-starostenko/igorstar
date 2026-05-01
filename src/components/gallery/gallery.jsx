@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { ModalGateway } from 'react-images';
 
-const Carousel = dynamic(() => import('components/carousel'));
-const Image = dynamic(() => import('components/image'));
+const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
+const Image = dynamic(() => import('components/image/image.jsx'));
 
 /* To avoid 'useLayoutEffect does nothing on the server' warning */
 const PhotoGallery = dynamic(() => import('react-photo-gallery'), {

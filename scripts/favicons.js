@@ -1,6 +1,12 @@
-const { favicons } = require('favicons');
-const path = require('path');
-const fs = require('fs');
+import favicons from 'favicons';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const siteConfig = await import('../site-config.js').then(m => m.default || m);
 
 const {
   author,
@@ -9,7 +15,8 @@ const {
   siteUrl,
   themeColor,
   backgroundColor,
-} = require('../site-config');
+  version,
+} = siteConfig;
 
 const dir = path.resolve(__dirname, '../public/icons/');
 if (!fs.existsSync(dir)) {
@@ -30,7 +37,7 @@ const configuration = {
   display: 'standalone',
   orientation: 'any',
   start_url: '/',
-  version: '2.4.4',
+  version,
   logging: true,
   icons: {
     android: true,

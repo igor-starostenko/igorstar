@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { ImageWrapper, Image } from './selfie.css';
+import { ImageWrapper, Image } from './selfie.css.js';
 
 const Selfie = ({ src, ...rest }) => (
   <ImageWrapper {...rest}>

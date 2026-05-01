@@ -74,7 +74,10 @@ yarn build
 # To preview production build locally
 yarn start
 
-# To test code style
+# To test
+yarn test
+
+# To verify code style
 yarn lint
 
 # To format JS (precommit)

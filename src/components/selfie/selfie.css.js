@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Box from 'components/box';
-import MEDIA from 'helpers/mediaTemplates';
+import Box from 'components/box/box.jsx';
+import MEDIA from 'helpers/mediaTemplates.js';
 
 export const Image = styled.img`
   cursor: initial;

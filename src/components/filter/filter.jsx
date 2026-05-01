@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import Title from 'components/title';
-import { Container, TitleHeader, Categories, Counter } from './filter.css';
+import Title from 'components/title/title.jsx';
+import { Container, TitleHeader, Categories, Counter } from './filter.css.js';
 
 const filters = [
   { title: 'All', href: '/' },

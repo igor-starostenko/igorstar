@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
-import config from '../../site-config';
+import config from '../../site-config.js';
 
 const { siteTitle, siteDescription, themeColor, social } = config;
 

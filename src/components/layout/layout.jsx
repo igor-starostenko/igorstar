@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
-import Header from 'components/header';
-import Footer from 'components/footer';
-import { timeout } from 'constants/transition';
-import config from '../../../site-config';
-import { Content } from './layout.css';
+import Header from 'components/header/header.jsx';
+import Footer from 'components/footer/footer.jsx';
+import { timeout } from 'constants/transition.js';
+import config from '../../../site-config.js';
+import { Content } from './layout.css.js';
 
 const Layout = ({ config, children }) => {
   const { siteTitleShort, author, social } = config;

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Container } from './nav.css';
+import { Container } from './nav.css.js';
 
 const Nav = () => (
   <Container>

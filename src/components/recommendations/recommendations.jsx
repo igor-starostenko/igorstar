@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import Hashtags from 'components/hashtags';
-import Image from 'components/image/image';
-import { Border, Container, Row, SLink, Thumb } from './recommendations.css';
+import Hashtags from 'components/hashtags/hashtags.jsx';
+import Image from 'components/image/image.jsx';
+import { Border, Container, Row, SLink, Thumb } from './recommendations.css.js';
 
 const Recommendations = ({ category, posts }) => (
   <Container>

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Text } from './title.css';
+import { Text } from './title.css.js';
 
 const Title = ({ children, as = 'span', size }) => {
   return (

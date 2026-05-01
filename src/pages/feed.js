@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import Layout from 'components/layout';
-import Box from 'components/box';
-import Gallery from 'components/gallery';
-import Head from 'components/head';
-import Title from 'components/title';
+import Layout from 'components/layout/layout.jsx';
+import Box from 'components/box/box.jsx';
+import Gallery from 'components/gallery/gallery.jsx';
+import Head from 'components/head/head.jsx';
+import Title from 'components/title/title.jsx';
 
 const formatCaption = ({ description, locationText, date }) => {
   const day = date ? new Date(date).toDateString() : null;

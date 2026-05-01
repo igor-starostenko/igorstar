@@ -1,4 +1,4 @@
-import Category from 'components/category';
+import Category from 'components/category/category.jsx';
 
 const CategoryIndex = ({ page, posts }) => (
   <Category page={page} posts={posts} />

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Row } from './pagination.css';
+import { Row } from './pagination.css.js';
 
 const Pagination = ({ pageNum, totalPages }) => (
   <Row>

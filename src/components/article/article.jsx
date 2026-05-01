@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import Image from 'components/image/image';
-import Hashtags from 'components/hashtags';
-import { Card, SLink, Row, Thumb, Title, Description } from './article.css';
+import Image from 'components/image/image.jsx';
+import Hashtags from 'components/hashtags/hashtags.jsx';
+import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
 
-const DateText = dynamic(() => import('components/date'), {
+const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
 

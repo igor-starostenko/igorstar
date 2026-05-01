@@ -1,7 +1,11 @@
-const path = require('path');
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-module.exports = {
-  version: '2.4.4',
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default {
+  version: '2.5.0',
   author: 'Igor Starostenko',
   siteTitle: 'IgorStar: Blog',
   siteTitleShort: 'IgorStar',
@@ -10,13 +14,12 @@ module.exports = {
   themeColor: '#000',
   backgroundColor: '#fff',
   pathPrefix: null,
-  logo: path.resolve(__dirname, 'public/icon.png'),
+  logo: __dirname + '/public/icon.png',
   social: {
     github: 'igor-starostenko',
     fivehundredpx: 'igorstar',
     flickr: 'igor_star',
     linkedin: 'igorstarostenko',
-    twitter: 'IgorStarostenko',
     youtube: 'UCo68YrHvGcKqNWrMb0kV-QA',
   },
 };
