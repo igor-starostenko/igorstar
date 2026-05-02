@@ -28,7 +28,7 @@
     ]
   },
   "engines": {
-    "node": ">=25.8.2"
+    "node": ">=25.9.0"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.16.2",
