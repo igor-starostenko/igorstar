@@ -63,6 +63,11 @@ Do you have suggestions or feedback? [Open an issue](https://github.com/igor-sta
 # Clone repo
 git clone https://github.com/igor-starostenko/igorstar.git
 cd igorstar
+
+# If you need to enable yarn
+npm install -g corepack
+corepack enable
+
 yarn install
 
 # To develop
