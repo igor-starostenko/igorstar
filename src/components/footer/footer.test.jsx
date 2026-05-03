@@ -43,7 +43,7 @@ test('renders current year in copyright', () => {
   expect(screen.getByText(new RegExp(`© ${currentYear}`))).toBeInTheDocument();
 });
 
-test('requires author prop', () => {
-  const { container } = render(<Footer author="John" />);
-  expect(container).toBeDefined();
+test('renders with required props', () => {
+  const { container } = render(<Footer author="John" social={validSocial} />);
+  expect(container.firstChild).toBeDefined();
 });

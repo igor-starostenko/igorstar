@@ -14,6 +14,6 @@ test('applies isMain prop', () => {
 });
 
 test('renders empty children', () => {
-  const { container } = render(<Box />);
+  const { container } = render(<Box>{''}</Box>);
   expect(container.firstChild.tagName).toBe('DIV');
 });

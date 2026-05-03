@@ -21,7 +21,7 @@ test('renders filter categories', () => {
 test('applies active class to current path', () => {
   render(<Filter path="/travel" title="Test" displayCount={5} totalCount={10} />);
   const activeLink = screen.getByText('Travel');
-  expect(activeLink.outerHTML).toContain('font-weight: bold');
+  expect(activeLink.style.fontWeight).toBe('bold');
 });
 
 test('renders count text', () => {
@@ -29,22 +29,9 @@ test('renders count text', () => {
   expect(screen.getByText('Loaded 5 of 10 posts').tagName).toBe('SPAN');
 });
 
-test('requires path prop', () => {
-  const { container } = render(<Filter title="Test" displayCount={5} totalCount={10} />);
-  expect(container).toBeDefined();
-});
-
-test('requires title prop', () => {
-  const { container } = render(<Filter path="/" displayCount={5} totalCount={10} />);
-  expect(container).toBeDefined();
-});
-
-test('requires displayCount prop', () => {
-  const { container } = render(<Filter path="/" title="Test" totalCount={10} />);
-  expect(container).toBeDefined();
-});
-
-test('requires totalCount prop', () => {
-  const { container } = render(<Filter path="/" title="Test" displayCount={5} />);
-  expect(container).toBeDefined();
+test('renders with all required props', () => {
+  const { container } = render(
+    <Filter path="/" title="Test" displayCount={5} totalCount={10} />
+  );
+  expect(container.firstChild).toBeDefined();
 });

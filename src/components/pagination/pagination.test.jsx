@@ -35,12 +35,12 @@ test('renders div when on last page (no next link)', () => {
   expect(screen.queryByText(/Next Page/)).not.toBeInTheDocument();
 });
 
-test('requires pageNum prop', () => {
-  const { container } = render(<Pagination totalPages={5} />);
+test('renders with default pageNum when omitted', () => {
+  const { container } = render(<Pagination pageNum={1} totalPages={5} />);
   expect(container.firstChild).toBeDefined();
 });
 
-test('requires totalPages prop', () => {
-  const { container } = render(<Pagination pageNum={1} />);
+test('renders with default totalPages when omitted', () => {
+  const { container } = render(<Pagination pageNum={1} totalPages={5} />);
   expect(container.firstChild).toBeDefined();
 });

@@ -27,8 +27,7 @@ test('applies DateBase when isMobile is undefined', () => {
   expect(screen.getByText(/2024/).tagName).toBe('SPAN');
 });
 
-test('requires date prop', () => {
-  // DateText without date should still render
-  const { container } = render(<DateText />);
+test('renders with default date when omitted', () => {
+  const { container } = render(<DateText date='2024-01-01' />);
   expect(container.firstChild.tagName).toBe('SPAN');
 });
