@@ -20,7 +20,6 @@ test('renders previous page link when pageNum > 1', () => {
 
 test('renders div when on first page (no previous link)', () => {
   render(<Pagination pageNum={1} totalPages={5} />);
-  // When on first page, no previous link should be rendered
   expect(screen.queryByText(/Previous Page/)).not.toBeInTheDocument();
 });
 
@@ -31,7 +30,6 @@ test('renders next page link when pageNum < totalPages', () => {
 
 test('renders div when on last page (no next link)', () => {
   render(<Pagination pageNum={5} totalPages={5} />);
-  // When on last page, no next link should be rendered
   expect(screen.queryByText(/Next Page/)).not.toBeInTheDocument();
 });
 

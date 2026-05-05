@@ -1,7 +1,6 @@
 import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-// Mocking dependencies
 vi.mock('next/link', () => ({
   __esModule: true,
   default: ({ children, href }) => <a href={href}>{children}</a>,

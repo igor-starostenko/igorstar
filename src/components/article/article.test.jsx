@@ -1,7 +1,6 @@
 import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-// Mocking dependencies to ensure isolation and stability
 vi.mock('next/link', () => ({
   __esModule: true,
   default: ({ children, href }) => <a href={href}>{children}</a>,
@@ -116,6 +115,5 @@ test('renders image only if provided', () => {
 test('constructs correct href for links', () => {
   render(<Article {...mockArticleProps} />);
   const links = screen.getAllByRole('link');
-  // One for the image/thumb, one for title, one for description link
   expect(links[0]).toHaveAttribute('href', '/travel/my-trip');
 });

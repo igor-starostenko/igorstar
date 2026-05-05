@@ -1,7 +1,6 @@
 import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-// Mock the BaseImage component to avoid rendering actual image logic
 vi.mock('./baseImage.jsx', () => ({
   default: (props) => (
     <img
@@ -13,7 +12,6 @@ vi.mock('./baseImage.jsx', () => ({
   ),
 }));
 
-// Mock the ImageWrapper styling component
 vi.mock('./image.css.js', () => ({
   __esModule: true,
   ImageWrapper: ({ children, style }) => (

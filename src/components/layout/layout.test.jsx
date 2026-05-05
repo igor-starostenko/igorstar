@@ -1,7 +1,6 @@
 import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-// Mocking dependencies
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }) => <div {...props}>{children}</div>,

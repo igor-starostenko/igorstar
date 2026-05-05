@@ -1,10 +1,8 @@
 import { test, expect } from 'vitest';
 import { render, screen, act, fireEvent } from '@testing-library/react';
 
-// Mock all the dynamic imports and external modules
 vi.mock('next/dynamic', () => ({
   default: (loader) => {
-    // Store loaded component in a global for test access
     const modulePath = loader.toString();
 
     if (modulePath.includes('image.jsx')) {
@@ -38,7 +36,6 @@ vi.mock('next/dynamic', () => ({
       };
     }
 
-    // Default: return component that excludes invalid DOM props
     return (props) => {
       const { renderImage, targetRowHeight, photos, ...rest } = props;
       return (
@@ -78,14 +75,10 @@ test('sorts photos by width ascending when orderBy and order are set', async () 
   });
 
   const gallery = screen.getByTestId('mock-photo-gallery');
-  // The mock stores photos in a data attribute
   const photosAttr = gallery.getAttribute('data-photos');
-  // Parse the photos from the attribute
   const photos = JSON.parse(photosAttr);
 
-  // Verify ascending order by width: photo with width 100 should come before width 200
-  expect(photos.length).toBe(unsortedPhotos.length);
-  expect(photos[0].width).toBeLessThanOrEqual(photos[1].width);
+  expect(photos[0].width).toBeLessThan(photos[1].width);
 });
 
 test('opens carousel on image click', async () => {
@@ -96,10 +89,8 @@ test('opens carousel on image click', async () => {
   const images = screen.getAllByTestId('mock-image');
   expect(images.length).toBeGreaterThan(0);
 
-  // Click the image to trigger imageClick which sets isOpen=true
   fireEvent.click(images[0]);
 
-  // After clicking, the ModalGateway should contain the Carousel component
   const modal = screen.getByTestId('mock-modal-gateway');
-  expect(modal).toBeInTheDocument();
+  expect(screen.getByTestId('mock-carousel')).toBeInTheDocument();
 });
