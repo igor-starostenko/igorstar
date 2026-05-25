@@ -45,3 +45,14 @@ test('calls onClose when modal is clicked', () => {
   fireEvent.click(screen.getByTestId('mock-modal'));
   expect(onClose).toHaveBeenCalled();
 });
+
+test('renders views with correct currentIndex', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal onClose={onClose} currentIndex={1} views={mockViews} />
+  );
+
+  const viewElements = screen.getAllByTestId('carousel-view');
+  expect(viewElements[0].getAttribute('data-index')).toBe('0');
+  expect(viewElements[1].getAttribute('data-index')).toBe('1');
+});
