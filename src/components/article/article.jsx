@@ -14,10 +14,10 @@ const Article = ({
   category,
   path,
   title,
-  image,
+  image = null,
   date,
   description,
-  tags,
+  tags = [],
   linkText,
 }) => {
   const href = `/${category}/${path}`;
@@ -72,11 +72,6 @@ Article.propTypes = {
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),
   linkText: PropTypes.string,
-};
-
-Article.defaultProps = {
-  tags: [],
-  image: null,
 };
 
 export default Article;
