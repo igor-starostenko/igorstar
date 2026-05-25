@@ -9,10 +9,18 @@ export default defineConfig({
     exclude: ['node_modules/**', 'out/**'],
   },
   resolve: {
-    alias: {
-      helpers: path.resolve(__dirname, 'src/helpers'),
-      constants: path.resolve(__dirname, 'src/constants'),
-      components: path.resolve(__dirname, 'src/components'),
-    },
+    alias: [
+      { find: /^helpers/, replacement: path.resolve(__dirname, 'src/helpers') },
+      { find: /^constants/, replacement: path.resolve(__dirname, 'src/constants') },
+      { find: /^components/, replacement: path.resolve(__dirname, 'src/components') },
+      { find: /^pages/, replacement: path.resolve(__dirname, 'src/pages') },
+      { find: /^src\//, replacement: path.resolve(__dirname, 'src/') + '/' },
+      { find: /^contentClient/, replacement: path.resolve(__dirname, 'src/contentClient.js') },
+      { find: /^global\.css\.js/, replacement: path.resolve(__dirname, 'src/global.css.js') },
+      { find: /^site-config\.cjs/, replacement: path.resolve(__dirname, 'src/site-config.cjs') },
+    ],
+  },
+  optimizeDeps: {
+    extensions: ['.js', '.jsx'],
   },
 });
