@@ -21,8 +21,13 @@ test('renders FlickrIcon', () => {
   expect(container.firstChild.tagName).toBe('svg');
 });
 
-test('renders GithubIcon', () => {
+test('renders GithubIcon with isDark=false (default)', () => {
   const { container } = render(<GithubIcon width="24" />);
+  expect(container.firstChild.tagName).toBe('svg');
+});
+
+test('renders GithubIcon with isDark=true', () => {
+  const { container } = render(<GithubIcon width="24" isDark={true} />);
   expect(container.firstChild.tagName).toBe('svg');
 });
 
