@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { parseString } from 'xml2js';
+import { parseStringSync } from 'xml2js';
 import BaseImage from './baseImage.jsx';
 import FlickrIcon from 'components/icons/flickrIcon.jsx';
 import {
@@ -15,22 +15,27 @@ import {
 const FlickrImage = ({ xml, isRaw = false }) => {
   let href, title, src, width, height;
 
-  parseString(
-    xml,
-    { ignoreAttrs: false, mergeAttrs: true, explicitArray: false },
-    function (err, { a }) {
-      if (err || !a) {
-        return null;
-      }
-      href = a.href;
-      title = a.title;
-      if (a.img) {
-        src = a.img.src;
-        width = a.img.width;
-        height = a.img.height;
-      }
+  try {
+    const result = parseStringSync(
+      xml,
+      { ignoreAttrs: false, mergeAttrs: true, explicitArray: false }
+    );
+    
+    if (!result?.a) {
+      return <span />;
     }
-  );
+    
+    const { a } = result;
+    href = a.href;
+    title = a.title;
+    if (a.img) {
+      src = a.img.src;
+      width = a.img.width;
+      height = a.img.height;
+    }
+  } catch {
+    return <span />;
+  }
 
   if (!href || !title || !src || !width || !height) {
     return <span />;
