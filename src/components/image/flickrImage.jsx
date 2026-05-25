@@ -19,14 +19,16 @@ const FlickrImage = ({ xml, isRaw = false }) => {
     xml,
     { ignoreAttrs: false, mergeAttrs: true, explicitArray: false },
     function (err, { a }) {
-      if (err) {
+      if (err || !a) {
         return null;
       }
       href = a.href;
       title = a.title;
-      src = a.img.src;
-      width = a.img.width;
-      height = a.img.height;
+      if (a.img) {
+        src = a.img.src;
+        width = a.img.width;
+        height = a.img.height;
+      }
     }
   );
 
