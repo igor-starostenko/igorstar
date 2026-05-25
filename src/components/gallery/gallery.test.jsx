@@ -94,3 +94,55 @@ test('opens carousel on image click', async () => {
   const modal = screen.getByTestId('mock-modal-gateway');
   expect(screen.getByTestId('mock-carousel')).toBeInTheDocument();
 });
+
+test('sorts photos by width descending when order is desc', async () => {
+  await act(async () => {
+    render(<Gallery photos={unsortedPhotos} order="desc" orderBy="width" />);
+  });
+
+  const gallery = screen.getByTestId('mock-photo-gallery');
+  const photosAttr = gallery.getAttribute('data-photos');
+  const photos = JSON.parse(photosAttr);
+
+  expect(photos[0].width).toBeGreaterThan(photos[1].width);
+});
+
+test('returns unsorted array when orderBy is not provided', async () => {
+  await act(async () => {
+    render(<Gallery photos={unsortedPhotos} />);
+  });
+
+  const gallery = screen.getByTestId('mock-photo-gallery');
+  const photosAttr = gallery.getAttribute('data-photos');
+  const photos = JSON.parse(photosAttr);
+
+  expect(photos[0].id).toBe('2');
+});
+
+test('returns unsorted array when order direction is invalid', async () => {
+  await act(async () => {
+    render(<Gallery photos={unsortedPhotos} order="invalid" orderBy="width" />);
+  });
+
+  const gallery = screen.getByTestId('mock-photo-gallery');
+  const photosAttr = gallery.getAttribute('data-photos');
+  const photos = JSON.parse(photosAttr);
+
+  expect(photos[0].id).toBe('2');
+});
+
+test('renders gallery with empty photos array', async () => {
+  await act(async () => {
+    render(<Gallery photos={[]} />);
+  });
+
+  expect(screen.queryByTestId('mock-photo-gallery')).not.toBeInTheDocument();
+});
+
+test('renders gallery with single photo', async () => {
+  await act(async () => {
+    render(<Gallery photos={[{ id: '1', src: 'a.jpg', width: 100, height: 200 }]} />);
+  });
+
+  expect(screen.getByTestId('mock-photo-gallery')).toBeInTheDocument();
+});
