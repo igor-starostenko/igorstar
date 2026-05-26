@@ -1,6 +1,4 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const next_config = {
   images: {
@@ -29,4 +27,4 @@ const next_config = {
   productionBrowserSourceMaps: true,
 };
 
-module.exports = withBundleAnalyzer(next_config);
+export default withBundleAnalyzer(next_config);
