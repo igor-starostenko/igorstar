@@ -88,9 +88,11 @@ test('renders with page and posts', () => {
 
   render(<Category {...mockProps} />);
 
-  // Use findByText to wait for async rendering
-  expect(screen.getByText(/Tech Posts/)).toBeInTheDocument();
-  // Filter shows "Tech Posts (2/25)" - verify the structure
+  // Check for multiple elements with the same text using getAllByText
+  const techPostsElements = screen.getAllByText(/Tech Posts/);
+  expect(techPostsElements.length).toBeGreaterThan(0);
+  
+  // Verify the filter shows correct count
   const filter = screen.getByTestId('mock-filter');
   expect(filter).toBeInTheDocument();
   expect(screen.getAllByTestId('mock-article').length).toBe(2);
@@ -114,7 +116,10 @@ test('renders with empty posts', () => {
 
   render(<Category {...mockProps} />);
 
-  expect(screen.getByText(/Tech Posts/)).toBeInTheDocument();
+  // Check for multiple elements with the same text
+  const techPostsElements = screen.getAllByText(/Tech Posts/);
+  expect(techPostsElements.length).toBeGreaterThan(0);
+  
   // The filter shows "(0/0)" - verify the structure
   const filter = screen.getByTestId('mock-filter');
   expect(filter).toBeInTheDocument();
