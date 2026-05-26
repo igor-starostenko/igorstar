@@ -1,0 +1,11 @@
+{
+  "overrides": [
+    {
+      "files": ["src/**/*.test.{js,jsx}"],
+      "rules": {
+        "@next/next/no-img-element": "off",
+        "react/display-name": "off"
+      }
+    }
+  ]
+}
