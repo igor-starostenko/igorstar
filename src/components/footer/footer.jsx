@@ -64,13 +64,13 @@ const Footer = ({ author, social }) => (
 );
 
 Footer.propTypes = {
-  author: PropTypes.string,
+  author: PropTypes.string.isRequired,
   social: PropTypes.shape({
     github: PropTypes.string,
     linkedin: PropTypes.string,
     flickr: PropTypes.string,
     fivehundredpx: PropTypes.string,
-  }),
+  }).isRequired,
 };
 
 export default Footer;
