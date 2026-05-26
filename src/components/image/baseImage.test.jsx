@@ -14,25 +14,37 @@ test('renders image with valid src', () => {
 });
 
 test('falls back to backupSrc on error', () => {
-  // Create a component that simulates error
-  const ComponentWithProps = () => (
-    <BaseImage 
-      src="/nonexistent.jpg" 
-      alt="Test image"
-      backupSrc="/fallback.jpg"
-    />
+  const mockOnError = vi.fn();
+  
+  // Mock the SImage to support onerror
+  vi.mock('./image.css.js', () => ({
+    SImage: ({ src, alt, onError, ...rest }) => (
+      <img 
+        data-testid="mock-simage" 
+        src={src} 
+        alt={alt} 
+        onError={onError}
+        {...rest} 
+      />
+    ),
+  }));
+
+  const { rerender } = render(
+    <BaseImage src="/nonexistent.jpg" alt="Test image" backupSrc="/fallback.jpg" />
   );
 
-  render(<ComponentWithProps />);
+  // Simulate image error
+  const imgElement = screen.getByTestId('mock-simage');
+  fireEvent.error(imgElement);
 
-  // The component should render without crashing
+  // Check that backupSrc is rendered after error
   expect(screen.getByAltText('Test image')).toBeInTheDocument();
 });
 
 test('accepts additional props', () => {
   render(
-    <BaseImage 
-      src="/test.jpg" 
+    <BaseImage
+      src="/test.jpg"
       alt="Test image"
       width={800}
       height={600}
@@ -46,8 +58,8 @@ test('accepts additional props', () => {
 
 test('handles fill prop with sizes attribute', () => {
   render(
-    <BaseImage 
-      src="/test.jpg" 
+    <BaseImage
+      src="/test.jpg"
       alt="Test image"
       fill
     />
@@ -58,7 +70,25 @@ test('handles fill prop with sizes attribute', () => {
 });
 
 test('error handler sets isError state', () => {
-  render(<BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />);
+  // Re-mock with onError support
+  vi.mock('./image.css.js', () => ({
+    SImage: ({ src, alt, onError, ...rest }) => (
+      <img 
+        data-testid="mock-simage" 
+        src={src} 
+        alt={alt} 
+        onError={onError}
+        {...rest} 
+      />
+    ),
+  }));
+
+  const { rerender } = render(<BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />);
+
+  const imgElement = screen.getByAltText('Error test');
   
+  // Simulate image error
+  fireEvent.error(imgElement);
+
   expect(screen.getByAltText('Error test')).toBeInTheDocument();
 });

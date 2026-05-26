@@ -1,20 +1,23 @@
 import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-// next/head renders to document.head, not DOM - mock returns null
+// Mock next/head - it renders to document.head, not visible DOM
 vi.mock('next/head', () => ({
-  default: ({ children, title }) => {
+  default: ({ children }) => {
     // Return null since next/head doesn't render visible DOM
     return null;
   },
 }));
 
+// Mock next/router
 vi.mock('next/router', () => ({
+  __esModule: true,
   useRouter: () => ({
     pathname: '/',
   }),
 }));
 
+// Mock schemaGenerator
 vi.mock('helpers/schemaGenerator.js', () => ({
   default: ({ pathname, canonical, siteUrl, pageTitle, siteTitle, pageTitleFull }) => ({
     '@context': 'https://schema.org',
@@ -23,40 +26,41 @@ vi.mock('helpers/schemaGenerator.js', () => ({
   }),
 }));
 
-vi.mock('../../../site-config.cjs', async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
+// Mock site-config.cjs
+vi.mock('../../site-config.cjs', () => ({
+  __esModule: true,
+  default: {
     siteTitle: 'IgorStar: Blog',
     siteTitleShort: 'IgorStar',
     siteDescription: 'Test Description',
     themeColor: '#000000',
     social: { twitter: 'testuser' },
-  };
-});
+  },
+}));
 
 import ConfigSEO from './head.jsx';
 
-test('renders SEO component with default props', () => {
-  render(<ConfigSEO />);
+// Basic rendering tests - next/head renders to document.head, not visible DOM
+test('renders SEO component with default props without error', () => {
+  expect(() => render(<ConfigSEO />)).not.toThrow();
 });
 
-test('renders with pageTitle', () => {
-  render(<ConfigSEO pageTitle="My Page" />);
+test('renders with pageTitle without error', () => {
+  expect(() => render(<ConfigSEO pageTitle="My Page" />)).not.toThrow();
 });
 
-test('renders with pageTitleFull', () => {
-  render(<ConfigSEO pageTitle="My Page" pageTitleFull="Custom Title" />);
+test('renders with pageTitleFull without error', () => {
+  expect(() => render(<ConfigSEO pageTitle="My Page" pageTitleFull="Custom Title" />)).not.toThrow();
 });
 
-test('renders with imageUrl', () => {
-  render(<ConfigSEO imageUrl="/custom-social.jpg" />);
+test('renders with imageUrl without error', () => {
+  expect(() => render(<ConfigSEO imageUrl="/custom-social.jpg" />)).not.toThrow();
 });
 
-test('uses canonical URL when provided', () => {
-  render(<ConfigSEO canonical="/custom-page" />);
+test('uses canonical URL without error', () => {
+  expect(() => render(<ConfigSEO canonical="/custom-page" />)).not.toThrow();
 });
 
-test('generates schema.org JSON-LD', () => {
-  render(<ConfigSEO pageTitle="Test Page" />);
+test('generates schema.org JSON-LD without error', () => {
+  expect(() => render(<ConfigSEO pageTitle="Test Page" />)).not.toThrow();
 });

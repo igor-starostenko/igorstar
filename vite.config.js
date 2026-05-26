@@ -16,8 +16,8 @@ export default defineConfig({
       { find: /^pages/, replacement: path.resolve(__dirname, 'src/pages') },
       { find: /^src\//, replacement: path.resolve(__dirname, 'src/') + '/' },
       { find: /^contentClient/, replacement: path.resolve(__dirname, 'src/contentClient.js') },
-      { find: /^global\.css\.js/, replacement: path.resolve(__dirname, 'src/global.css.js') },
-      { find: /^site-config\.cjs/, replacement: path.resolve(__dirname, 'src/site-config.cjs') },
+      { find: /^global\.css\.js$/, replacement: path.resolve(__dirname, 'src/global.css.js') },
+      { find: /^site-config\.cjs$/, replacement: path.resolve(__dirname, 'site-config.cjs') },
     ],
   },
   optimizeDeps: {

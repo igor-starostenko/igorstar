@@ -25,11 +25,14 @@ vi.mock('styled-components', () => ({
   },
 }));
 
-vi.mock('../../../site-config.cjs', () => ({
-  siteTitle: 'Test Site',
-  siteDescription: 'Test Description',
-  themeColor: '#000000',
-  social: { twitter: 'testuser' },
+vi.mock('../../site-config.cjs', () => ({
+  __esModule: true,
+  default: {
+    siteTitle: 'Test Site',
+    siteDescription: 'Test Description',
+    themeColor: '#000000',
+    social: { twitter: 'testuser' },
+  },
 }));
 
 import MyDocument from './_document.jsx';

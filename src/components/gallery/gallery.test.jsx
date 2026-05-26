@@ -56,34 +56,38 @@ vi.mock('react-images', () => ({
 
 import Gallery from './gallery.jsx';
 
-const unsortedPhotos = [
+// Helper to create fresh array instances for each test
+const getUnsortedPhotos = () => [
   { id: '2', src: 'b.jpg', width: 200, height: 100 },
   { id: '1', src: 'a.jpg', width: 100, height: 200 },
 ];
 
 test('renders PhotoGallery when photos are provided', async () => {
+  const photos = getUnsortedPhotos();
   await act(async () => {
-    render(<Gallery photos={unsortedPhotos} />);
+    render(<Gallery photos={photos} />);
   });
 
   expect(screen.getByTestId('mock-photo-gallery')).toBeInTheDocument();
 });
 
 test('sorts photos by width ascending when orderBy and order are set', async () => {
+  const photos = getUnsortedPhotos();
   await act(async () => {
-    render(<Gallery photos={unsortedPhotos} order="asc" orderBy="width" />);
+    render(<Gallery photos={photos} order="asc" orderBy="width" />);
   });
 
   const gallery = screen.getByTestId('mock-photo-gallery');
   const photosAttr = gallery.getAttribute('data-photos');
-  const photos = JSON.parse(photosAttr);
+  const parsedPhotos = JSON.parse(photosAttr);
 
-  expect(photos[0].width).toBeLessThan(photos[1].width);
+  expect(parsedPhotos[0].width).toBeLessThan(parsedPhotos[1].width);
 });
 
 test('opens carousel on image click', async () => {
+  const photos = getUnsortedPhotos();
   await act(async () => {
-    render(<Gallery photos={unsortedPhotos} />);
+    render(<Gallery photos={photos} />);
   });
 
   const images = screen.getAllByTestId('mock-image');
@@ -96,39 +100,42 @@ test('opens carousel on image click', async () => {
 });
 
 test('sorts photos by width descending when order is desc', async () => {
+  const photos = getUnsortedPhotos();
   await act(async () => {
-    render(<Gallery photos={unsortedPhotos} order="desc" orderBy="width" />);
+    render(<Gallery photos={photos} order="desc" orderBy="width" />);
   });
 
   const gallery = screen.getByTestId('mock-photo-gallery');
   const photosAttr = gallery.getAttribute('data-photos');
-  const photos = JSON.parse(photosAttr);
+  const parsedPhotos = JSON.parse(photosAttr);
 
-  expect(photos[0].width).toBeGreaterThan(photos[1].width);
+  expect(parsedPhotos[0].width).toBeGreaterThan(parsedPhotos[1].width);
 });
 
 test('returns unsorted array when orderBy is not provided', async () => {
+  const photos = getUnsortedPhotos();
   await act(async () => {
-    render(<Gallery photos={unsortedPhotos} />);
+    render(<Gallery photos={photos} />);
   });
 
   const gallery = screen.getByTestId('mock-photo-gallery');
   const photosAttr = gallery.getAttribute('data-photos');
-  const photos = JSON.parse(photosAttr);
+  const parsedPhotos = JSON.parse(photosAttr);
 
-  expect(photos[0].id).toBe('2');
+  expect(parsedPhotos[0].id).toBe('2');
 });
 
 test('returns unsorted array when order direction is invalid', async () => {
+  const photos = getUnsortedPhotos();
   await act(async () => {
-    render(<Gallery photos={unsortedPhotos} order="invalid" orderBy="width" />);
+    render(<Gallery photos={photos} order="invalid" orderBy="width" />);
   });
 
   const gallery = screen.getByTestId('mock-photo-gallery');
   const photosAttr = gallery.getAttribute('data-photos');
-  const photos = JSON.parse(photosAttr);
+  const parsedPhotos = JSON.parse(photosAttr);
 
-  expect(photos[0].id).toBe('2');
+  expect(parsedPhotos[0].id).toBe('2');
 });
 
 test('renders gallery with empty photos array', async () => {

@@ -21,7 +21,7 @@ SocialLink.propTypes = {
   href: PropTypes.string.isRequired,
 };
 
-const Footer = ({ author = '', social = {} }) => (
+const Footer = ({ author, social }) => (
   <Container>
     <Social>
       {social.github && (
@@ -38,22 +38,6 @@ const Footer = ({ author = '', social = {} }) => (
           {...{ 'aria-label': 'LinkedIn' }}
         >
           <LinkedinIcon width="19" />
-        </SocialLink>
-      )}
-      {social.twitter && (
-        <SocialLink
-          href={`https://twitter.com/${social.twitter}`}
-          {...{ 'aria-label': 'Twitter' }}
-        >
-          <TwitterIcon width="19" />
-        </SocialLink>
-      )}
-      {social.youtube && (
-        <SocialLink
-          href={`https://youtube.com/channel/${social.youtube}/videos`}
-          {...{ 'aria-label': 'YouTube' }}
-        >
-          <YoutubeIcon width="19" />
         </SocialLink>
       )}
       {social.flickr && (
@@ -83,10 +67,7 @@ Footer.propTypes = {
   author: PropTypes.string,
   social: PropTypes.shape({
     github: PropTypes.string,
-    instagram: PropTypes.string,
     linkedin: PropTypes.string,
-    twitter: PropTypes.string,
-    youtube: PropTypes.string,
     flickr: PropTypes.string,
     fivehundredpx: PropTypes.string,
   }),

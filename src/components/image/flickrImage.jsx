@@ -12,7 +12,7 @@ import {
   ImageCopyright,
 } from './image.css.js';
 
-const FlickrImage = ({ xml, isRaw = false }) => {
+const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
   let href, title, src, width, height;
 
   try {
@@ -54,6 +54,7 @@ const FlickrImage = ({ xml, isRaw = false }) => {
           width={width}
           height={height}
           alt={title}
+          backupSrc={backupSrc}
         />
         <ImageFrame>
           <ImageHeader>
@@ -72,6 +73,7 @@ const FlickrImage = ({ xml, isRaw = false }) => {
 FlickrImage.propTypes = {
   xml: PropTypes.string,
   isRaw: PropTypes.bool,
+  backupSrc: PropTypes.string,
 };
 
 export default FlickrImage;

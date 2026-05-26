@@ -250,7 +250,6 @@ export const getStaticProps = async ({ params }) => {
     limit: 100, // 1000 is the max,
     'fields.draft': false,
     'fields.category': params.category,
-    // 'fields.path': params.post,
     order: '-fields.date',
   });
 

@@ -1,4 +1,4 @@
-FROM node:26-bookworm
+FROM node:25-bookworm
 
 WORKDIR /opt
 

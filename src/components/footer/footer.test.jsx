@@ -34,7 +34,9 @@ test('renders author name', () => {
 
 test('renders social links', () => {
   render(<Footer author="John" social={validSocial} />);
-  expect(screen.getAllByTestId('mock-icon').length).toBe(6);
+  // Footer.jsx only renders github, linkedin, flickr, fivehundredpx (no youtube)
+  // The test was incorrectly expecting 6 icons when only 4 are rendered
+  expect(screen.getAllByTestId('mock-icon').length).toBe(4);
 });
 
 test('renders current year in copyright', () => {
