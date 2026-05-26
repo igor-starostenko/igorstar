@@ -5,9 +5,15 @@ on:
     branches:
       - v2.5.0d
       - v2.5.0
+    paths:
+      - '**/*.js'
+      - '**/*.jsx'
   pull_request:
     branches:
       - v2.5.0
+    paths:
+      - '**/*.js'
+      - '**/*.jsx'
 
 jobs:
   test:
