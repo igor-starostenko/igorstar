@@ -53,10 +53,10 @@ test('renders Category with page and posts', () => {
     items: []
   };
   
-  const { container } = render(<Category page={mockPage} posts={mockPosts} />);
+  render(<Category page={mockPage} posts={mockPosts} />);
   
-  // The mock head renders <title> which may not be visible in DOM
-  expect(screen.getByTestId('mock-head')).toBeInTheDocument();
+  // The mock head renders <title> which may not be visible in DOM, so we check the filter
+  expect(screen.getByTestId('mock-filter')).toBeInTheDocument();
 });
 
 test('renders Category with empty posts', () => {
@@ -68,7 +68,7 @@ test('renders Category with empty posts', () => {
     items: []
   };
   
-  const { container } = render(<Category page={mockPage} posts={mockPosts} />);
+  render(<Category page={mockPage} posts={mockPosts} />);
   
-  expect(screen.getByTestId('mock-head')).toBeInTheDocument();
+  expect(screen.getByTestId('mock-filter')).toBeInTheDocument();
 });

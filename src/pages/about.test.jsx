@@ -32,7 +32,7 @@ test('renders About page with content', () => {
   
   render(<About {...mockProps} />);
 
-  expect(screen.getByText('About')).toBeInTheDocument();
+  expect(screen.getByText('About content')).toBeInTheDocument();
 });
 
 test('renders About with empty page object', () => {

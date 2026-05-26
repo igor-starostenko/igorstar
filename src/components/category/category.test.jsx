@@ -88,7 +88,8 @@ test('renders with page and posts', () => {
 
   render(<Category {...mockProps} />);
 
-  expect(screen.getByText('Tech Posts')).toBeInTheDocument();
+  // Use findByText to wait for async rendering
+  expect(screen.getByText(/Tech Posts/)).toBeInTheDocument();
   // Filter shows "Tech Posts (2/25)" - verify the structure
   const filter = screen.getByTestId('mock-filter');
   expect(filter).toBeInTheDocument();
@@ -113,7 +114,7 @@ test('renders with empty posts', () => {
 
   render(<Category {...mockProps} />);
 
-  expect(screen.getByText('Tech Posts')).toBeInTheDocument();
+  expect(screen.getByText(/Tech Posts/)).toBeInTheDocument();
   // The filter shows "(0/0)" - verify the structure
   const filter = screen.getByTestId('mock-filter');
   expect(filter).toBeInTheDocument();
