@@ -1,4 +1,4 @@
-import { describe, beforeAll, it, expect, skipped } from 'vitest';
+import { describe, beforeAll, it, expect } from 'vitest';
 import chromeLauncher from 'chrome-launcher';
 import lighthouse from 'lighthouse';
 import siteConfig from '../../site-config.cjs';
@@ -30,8 +30,6 @@ describe('Lighthouse Scores', () => {
       console.log('Lighthouse test skipped - Chrome not available');
     }
   });
-
-  const logScore = score => `Is ${score * 100}.`;
 
   it('Performance Score above 90', () => {
     if (!chromeAvailable) {

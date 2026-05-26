@@ -80,16 +80,16 @@ const Footer = ({ author = '', social = {} }) => (
 );
 
 Footer.propTypes = {
-  author: PropTypes.string.isRequired,
+  author: PropTypes.string,
   social: PropTypes.shape({
-    github: PropTypes.string.isRequired,
+    github: PropTypes.string,
     instagram: PropTypes.string,
-    linkedin: PropTypes.string.isRequired,
-    twitter: PropTypes.string.isRequired,
-    youtube: PropTypes.string.isRequired,
-    flickr: PropTypes.string.isRequired,
-    fivehundredpx: PropTypes.string.isRequired,
-  }).isRequired,
+    linkedin: PropTypes.string,
+    twitter: PropTypes.string,
+    youtube: PropTypes.string,
+    flickr: PropTypes.string,
+    fivehundredpx: PropTypes.string,
+  }),
 };
 
 export default Footer;

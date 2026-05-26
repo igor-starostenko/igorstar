@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   presets: [
     [
       "next/babel",
@@ -10,4 +10,3 @@ export default {
   ],
   plugins: ["styled-components"]
 };
-

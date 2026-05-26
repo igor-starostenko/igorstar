@@ -1,4 +1,4 @@
-FROM node:25-bookworm
+FROM node:26-bookworm
 
 WORKDIR /opt
 
@@ -10,7 +10,7 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --immutable
 
-COPY . .
+COPY .
 
 RUN yarn build
 
