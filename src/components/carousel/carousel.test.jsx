@@ -54,6 +54,35 @@ test('calls onClose when modal is clicked', () => {
 
 test('currentIndex prop controls view rendering', () => {
   const onClose = vi.fn();
+  
+  // Mock the Carousel component to verify currentIndex is passed correctly
+  vi.mock('react-images', () => {
+    const MockModal = ({ onClose, children }) => (
+      <div data-testid="mock-modal" onClick={onClose}>
+        {children}
+      </div>
+    );
+
+    const MockCarousel = ({ views, currentIndex }) => {
+      // Store currentIndex for assertion
+      MockCarousel.mockCurrentIndex = currentIndex;
+      return (
+        <div data-testid="mock-carousel">
+          {views.map((v, i) => {
+            const isActive = v.id === String(currentIndex);
+            return (
+              <div key={i} data-testid="carousel-view" data-index={i}>
+                <img src={v.src} alt={v.alt} width={v.width} height={v.height} />
+              </div>
+            );
+          })}
+        </div>
+      );
+    };
+
+    return { __esModule: true, default: MockCarousel, Modal: MockModal, Carousel: MockCarousel };
+  });
+
   render(
     <CarouselModal onClose={onClose} currentIndex="1" views={mockViews} />
   );
@@ -68,4 +97,7 @@ test('currentIndex prop controls view rendering', () => {
   
   // Verify second element has correct index
   expect(viewElements[1]).toHaveAttribute('data-index', '1');
+  
+  // Verify currentIndex was passed to the mock (indirectly verified by correct rendering)
+  expect(MockCarousel.mockCurrentIndex).toBe('1');
 });
