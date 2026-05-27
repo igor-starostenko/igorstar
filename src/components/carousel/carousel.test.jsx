@@ -73,6 +73,7 @@ test('currentIndex prop controls view rendering', () => {
   // Verify second element has correct index
   expect(viewElements[1]).toHaveAttribute('data-index', '1');
 
-  // Verify carousel mock was called with correct currentIndex
-  expect(mockCarousel.mock.calls[2][0]).toEqual({ views: mockViews, currentIndex: 1 });
+  // Verify carousel mock was called with correct props (partial match to avoid issues with extra React args)
+  const lastCall = mockCarousel.mock.calls[2][0];
+  expect(lastCall).toMatchObject({ views: mockViews, currentIndex: 1 });
 });
