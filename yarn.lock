@@ -5380,7 +5380,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:10":
+"framer-motion@npm:10.18.0":
   version: 10.18.0
   resolution: "framer-motion@npm:10.18.0"
   dependencies:
@@ -6078,7 +6078,7 @@ __metadata:
     eslint-config-prettier: "npm:^8.3.0"
     esm: "npm:^3.2.25"
     favicons: "npm:^7.0.2"
-    framer-motion: "npm:10"
+    framer-motion: "npm:10.18.0"
     jsdom: "npm:^29.1.1"
     lighthouse: "npm:^8.6.0"
     mkdirp: "npm:^1.0.4"
@@ -6095,7 +6095,7 @@ __metadata:
     react-photo-gallery: "npm:^8.0.0"
     react-syntax-highlighter: "npm:^15.5.0"
     source-map-explorer: "npm:^2.5.3"
-    styled-components: "npm:6"
+    styled-components: "npm:6.4.2"
     vitest: "npm:^4.1.5"
     webpack: "npm:^5.76.0"
     xml2js: "npm:^0.5.0"
@@ -10794,7 +10794,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:6":
+"styled-components@npm:6.4.2":
   version: 6.4.2
   resolution: "styled-components@npm:6.4.2"
   dependencies:
