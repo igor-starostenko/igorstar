@@ -2,7 +2,15 @@ import { test, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 vi.mock('./image.css.js', () => ({
-  SImage: ({ src, alt, ...rest }) => <img data-testid="mock-simage" src={src} alt={alt} {...rest} />,
+  SImage: ({ src, alt, onError, ...rest }) => (
+    <img 
+      data-testid="mock-simage" 
+      src={src} 
+      alt={alt} 
+      onError={onError}
+      {...rest} 
+    />
+  ),
 }));
 
 import BaseImage from './baseImage.jsx';
@@ -75,20 +83,7 @@ test('handles fill prop with sizes attribute', () => {
 });
 
 test('error handler sets isError state', () => {
-  // Re-mock with onError support
-  vi.mock('./image.css.js', () => ({
-    SImage: ({ src, alt, onError, ...rest }) => (
-      <img 
-        data-testid="mock-simage" 
-        src={src} 
-        alt={alt} 
-        onError={onError}
-        {...rest} 
-      />
-    ),
-  }));
-
-  const { rerender } = render(<BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />);
+  render(<BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />);
 
   const imgElement = screen.getByAltText('Error test');
   

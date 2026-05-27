@@ -28,3 +28,6 @@ public/sitemap*.xml
 public/robots.txt
 .yarn/cache
 .yarn/install-state.gz
+
+# Claude settings (user-local)
+.claude/settings.local.json
