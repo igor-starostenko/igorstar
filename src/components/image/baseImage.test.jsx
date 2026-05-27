@@ -2,7 +2,15 @@ import { test, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 vi.mock('./image.css.js', () => ({
-  SImage: ({ src, alt, ...rest }) => <img data-testid="mock-simage" src={src} alt={alt} {...rest} />,
+  SImage: ({ src, alt, onError, ...rest }) => (
+    <img 
+      data-testid="mock-simage" 
+      src={src} 
+      alt={alt} 
+      onError={onError}
+      {...rest} 
+    />
+  ),
 }));
 
 import BaseImage from './baseImage.jsx';
@@ -14,19 +22,6 @@ test('renders image with valid src', () => {
 });
 
 test('falls back to backupSrc on error', () => {
-  // Mock the SImage to support onerror and track src changes
-  vi.mock('./image.css.js', () => ({
-    SImage: ({ src, alt, onError, ...rest }) => (
-      <img 
-        data-testid="mock-simage" 
-        src={src} 
-        alt={alt} 
-        onError={onError}
-        {...rest} 
-      />
-    ),
-  }));
-
   const { container } = render(
     <BaseImage src="/nonexistent.jpg" alt="Test image" backupSrc="/fallback.jpg" />
   );
@@ -39,7 +34,7 @@ test('falls back to backupSrc on error', () => {
   fireEvent.error(imgElement);
 
   // Check that src changed to backupSrc after error
-  const updatedImg = screen.getByTestId('mock-simage');
+  const updatedImg = screen.getByAltText('Test image');
   expect(updatedImg).toHaveAttribute('src', '/fallback.jpg');
   
   // Verify the img element is still in the document
@@ -75,19 +70,6 @@ test('handles fill prop with sizes attribute', () => {
 });
 
 test('error handler sets isError state', () => {
-  // Re-mock with onError support
-  vi.mock('./image.css.js', () => ({
-    SImage: ({ src, alt, onError, ...rest }) => (
-      <img 
-        data-testid="mock-simage" 
-        src={src} 
-        alt={alt} 
-        onError={onError}
-        {...rest} 
-      />
-    ),
-  }));
-
   const { rerender } = render(<BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />);
 
   const imgElement = screen.getByAltText('Error test');
@@ -97,3 +79,4 @@ test('error handler sets isError state', () => {
 
   expect(screen.getByAltText('Error test')).toBeInTheDocument();
 });
+
