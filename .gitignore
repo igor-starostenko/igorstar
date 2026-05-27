@@ -31,3 +31,4 @@ public/robots.txt
 
 # Claude settings (user-local)
 .claude/settings.local.json
+# Updated v2.5.0c to point to latest v2.5.0
