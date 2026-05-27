@@ -70,7 +70,7 @@ test('handles fill prop with sizes attribute', () => {
 });
 
 test('error handler sets isError state', () => {
-  const { rerender } = render(<BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />);
+  render(<BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />);
 
   const imgElement = screen.getByAltText('Error test');
   
