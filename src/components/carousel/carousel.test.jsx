@@ -63,18 +63,16 @@ test('currentIndex prop controls view rendering', () => {
   );
 
   const viewElements = screen.getAllByTestId('carousel-view');
-  
+
   // Verify we have the expected number of elements
   expect(viewElements).toHaveLength(2);
-  
+
   // Verify first element has correct index
   expect(viewElements[0]).toHaveAttribute('data-index', '0');
-  
+
   // Verify second element has correct index
   expect(viewElements[1]).toHaveAttribute('data-index', '1');
-  
+
   // Verify carousel mock was called with correct currentIndex
-  expect(mockCarousel).toHaveBeenCalledWith(
-    { views: mockViews, currentIndex: '1' }
-  );
+  expect(mockCarousel.mock.calls[2][0]).toEqual({ views: mockViews, currentIndex: 1 });
 });
