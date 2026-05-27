@@ -14,9 +14,7 @@ test('renders image with valid src', () => {
 });
 
 test('falls back to backupSrc on error', () => {
-  const mockOnError = vi.fn();
-  
-  // Mock the SImage to support onerror
+  // Mock the SImage to support onerror and track src changes
   vi.mock('./image.css.js', () => ({
     SImage: ({ src, alt, onError, ...rest }) => (
       <img 
@@ -29,16 +27,23 @@ test('falls back to backupSrc on error', () => {
     ),
   }));
 
-  const { rerender } = render(
+  const { container } = render(
     <BaseImage src="/nonexistent.jpg" alt="Test image" backupSrc="/fallback.jpg" />
   );
 
-  // Simulate image error
+  // Verify initial src is the primary one
   const imgElement = screen.getByTestId('mock-simage');
+  expect(imgElement).toHaveAttribute('src', '/nonexistent.jpg');
+
+  // Simulate image error
   fireEvent.error(imgElement);
 
-  // Check that backupSrc is rendered after error
-  expect(screen.getByAltText('Test image')).toBeInTheDocument();
+  // Check that src changed to backupSrc after error
+  const updatedImg = screen.getByTestId('mock-simage');
+  expect(updatedImg).toHaveAttribute('src', '/fallback.jpg');
+  
+  // Verify the img element is still in the document
+  expect(updatedImg).toBeInTheDocument();
 });
 
 test('accepts additional props', () => {
