@@ -22,7 +22,7 @@ test('renders image with valid src', () => {
 });
 
 test('falls back to backupSrc on error', () => {
-  const { container } = render(
+  render(
     <BaseImage src="/nonexistent.jpg" alt="Test image" backupSrc="/fallback.jpg" />
   );
 

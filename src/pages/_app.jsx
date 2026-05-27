@@ -6,7 +6,7 @@ import GlobalStyle from 'global.css.js';
 const MyApp = ({ Component, pageProps, router }) => (
   <>
     <GlobalStyle />
-    <AnimatePresence exitBeforeEnter>
+    <AnimatePresence mode="wait">
       <Component {...pageProps} key={router.route} />
     </AnimatePresence>
   </>

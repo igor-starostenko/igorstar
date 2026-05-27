@@ -5,7 +5,6 @@ vi.mock('react-images', () => {
   const mockCarousel = vi.fn(({ views, currentIndex }) => (
     <div data-testid="mock-carousel">
       {views.map((v, i) => {
-        const isActive = v.id === String(currentIndex);
         return (
           <div key={i} data-testid="carousel-view" data-index={i}>
             <img src={v.src} alt={v.alt} width={v.width} height={v.height} />
@@ -39,7 +38,7 @@ const mockViews = [
 test('renders modal and carousel with provided props', () => {
   const onClose = vi.fn();
   render(
-    <CarouselModal onClose={onClose} currentIndex="1" views={mockViews} />
+    <CarouselModal onClose={onClose} currentIndex={1} views={mockViews} />
   );
 
   expect(screen.getByTestId('mock-modal')).toBeInTheDocument();
@@ -50,7 +49,7 @@ test('renders modal and carousel with provided props', () => {
 test('calls onClose when modal is clicked', () => {
   const onClose = vi.fn();
   render(
-    <CarouselModal onClose={onClose} currentIndex="0" views={mockViews} />
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
   );
   fireEvent.click(screen.getByTestId('mock-modal'));
   expect(onClose).toHaveBeenCalled();
@@ -60,7 +59,7 @@ test('currentIndex prop controls view rendering', () => {
   const onClose = vi.fn();
 
   render(
-    <CarouselModal onClose={onClose} currentIndex="1" views={mockViews} />
+    <CarouselModal onClose={onClose} currentIndex={1} views={mockViews} />
   );
 
   const viewElements = screen.getAllByTestId('carousel-view');
@@ -76,7 +75,6 @@ test('currentIndex prop controls view rendering', () => {
   
   // Verify carousel mock was called with correct currentIndex
   expect(mockCarousel).toHaveBeenCalledWith(
-    { views: mockViews, currentIndex: '1' },
-    expect.anything()
+    { views: mockViews, currentIndex: '1' }
   );
 });
