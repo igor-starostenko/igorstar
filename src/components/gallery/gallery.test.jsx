@@ -1,6 +1,7 @@
 import { test, expect } from 'vitest';
 import { render, screen, act, fireEvent } from '@testing-library/react';
 
+// Mock next/dynamic to return our components directly
 vi.mock('next/dynamic', () => ({
   default: (loader) => {
     const modulePath = loader.toString();
@@ -8,7 +9,7 @@ vi.mock('next/dynamic', () => ({
     if (modulePath.includes('image.jsx')) {
       return ({ style, onClick, alt }) => (
         <div data-testid="mock-image" style={style} onClick={onClick}>
-          {alt}
+          {alt || ''}
         </div>
       );
     }
@@ -21,19 +22,6 @@ vi.mock('next/dynamic', () => ({
           ))}
         </div>
       );
-    }
-
-    if (modulePath.includes('react-photo-gallery')) {
-      return ({ photos, onClick, renderImage }) => {
-        const renderedImages = photos.map((photo, index) =>
-          renderImage({ photo, index, onClick })
-        );
-        return (
-          <div data-testid="mock-photo-gallery" data-photos={JSON.stringify(photos)}>
-            {renderedImages}
-          </div>
-        );
-      };
     }
 
     return (props) => {
@@ -49,26 +37,22 @@ vi.mock('next/dynamic', () => ({
   },
 }));
 
-vi.mock('react-images', () => ({
-  __esModule: true,
-  ModalGateway: ({ children }) => <div data-testid="mock-modal-gateway">{children}</div>,
-}));
-
 import Gallery from './gallery.jsx';
 
 // Helper to create fresh array instances for each test
 const getUnsortedPhotos = () => [
-  { id: '2', src: 'b.jpg', width: 200, height: 100 },
-  { id: '1', src: 'a.jpg', width: 100, height: 200 },
+  { id: '2', src: 'b.jpg', alt: 'B image', width: 200, height: 100 },
+  { id: '1', src: 'a.jpg', alt: 'A image', width: 100, height: 200 },
 ];
 
-test('renders PhotoGallery when photos are provided', async () => {
+test('renders image gallery when photos are provided', async () => {
   const photos = getUnsortedPhotos();
   await act(async () => {
     render(<Gallery photos={photos} />);
   });
 
-  expect(screen.getByTestId('mock-photo-gallery')).toBeInTheDocument();
+  const images = screen.getAllByTestId('mock-image');
+  expect(images.length).toBe(2);
 });
 
 test('sorts photos by width ascending when orderBy and order are set', async () => {
@@ -77,11 +61,9 @@ test('sorts photos by width ascending when orderBy and order are set', async () 
     render(<Gallery photos={photos} order="asc" orderBy="width" />);
   });
 
-  const gallery = screen.getByTestId('mock-photo-gallery');
-  const photosAttr = gallery.getAttribute('data-photos');
-  const parsedPhotos = JSON.parse(photosAttr);
-
-  expect(parsedPhotos[0].width).toBeLessThan(parsedPhotos[1].width);
+  const images = screen.getAllByTestId('mock-image');
+  // After sorting ascending, first should be width 100
+  expect(images[0]).toHaveTextContent('A image');
 });
 
 test('opens carousel on image click', async () => {
@@ -95,7 +77,7 @@ test('opens carousel on image click', async () => {
 
   fireEvent.click(images[0]);
 
-  const modal = screen.getByTestId('mock-modal-gateway');
+  // Carousel should be visible
   expect(screen.getByTestId('mock-carousel')).toBeInTheDocument();
 });
 
@@ -105,11 +87,9 @@ test('sorts photos by width descending when order is desc', async () => {
     render(<Gallery photos={photos} order="desc" orderBy="width" />);
   });
 
-  const gallery = screen.getByTestId('mock-photo-gallery');
-  const photosAttr = gallery.getAttribute('data-photos');
-  const parsedPhotos = JSON.parse(photosAttr);
-
-  expect(parsedPhotos[0].width).toBeGreaterThan(parsedPhotos[1].width);
+  const images = screen.getAllByTestId('mock-image');
+  // After sorting descending, first should be width 200
+  expect(images[0]).toHaveTextContent('B image');
 });
 
 test('returns unsorted array when orderBy is not provided', async () => {
@@ -118,11 +98,9 @@ test('returns unsorted array when orderBy is not provided', async () => {
     render(<Gallery photos={photos} />);
   });
 
-  const gallery = screen.getByTestId('mock-photo-gallery');
-  const photosAttr = gallery.getAttribute('data-photos');
-  const parsedPhotos = JSON.parse(photosAttr);
-
-  expect(parsedPhotos[0].id).toBe('2');
+  const images = screen.getAllByTestId('mock-image');
+  // Order should be preserved (2, 1) when not sorted
+  expect(images[0]).toHaveTextContent('B image');
 });
 
 test('returns unsorted array when order direction is invalid', async () => {
@@ -131,11 +109,9 @@ test('returns unsorted array when order direction is invalid', async () => {
     render(<Gallery photos={photos} order="invalid" orderBy="width" />);
   });
 
-  const gallery = screen.getByTestId('mock-photo-gallery');
-  const photosAttr = gallery.getAttribute('data-photos');
-  const parsedPhotos = JSON.parse(photosAttr);
-
-  expect(parsedPhotos[0].id).toBe('2');
+  const images = screen.getAllByTestId('mock-image');
+  // Order should be preserved (2, 1) when invalid
+  expect(images[0]).toHaveTextContent('B image');
 });
 
 test('renders gallery with empty photos array', async () => {
@@ -143,13 +119,14 @@ test('renders gallery with empty photos array', async () => {
     render(<Gallery photos={[]} />);
   });
 
-  expect(screen.queryByTestId('mock-photo-gallery')).not.toBeInTheDocument();
+  expect(screen.queryByTestId('mock-image')).not.toBeInTheDocument();
 });
 
 test('renders gallery with single photo', async () => {
   await act(async () => {
-    render(<Gallery photos={[{ id: '1', src: 'a.jpg', width: 100, height: 200 }]} />);
+    render(<Gallery photos={[{ id: '1', src: 'a.jpg', alt: 'Single image', width: 100, height: 200 }]} />);
   });
 
-  expect(screen.getByTestId('mock-photo-gallery')).toBeInTheDocument();
+  const images = screen.getAllByTestId('mock-image');
+  expect(images.length).toBe(1);
 });

@@ -1,19 +1,17 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-import { ModalGateway } from 'react-images';
+import styled from 'styled-components';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const Image = dynamic(() => import('components/image/image.jsx'));
 
-/* To avoid 'useLayoutEffect does nothing on the server' warning */
-const PhotoGallery = dynamic(() => import('react-photo-gallery'), {
-  ssr: false,
-});
-
-/* Inspired with bushblade-knives-website
- * https://github.com/bushblade/bushblade-knives-website/blob/master/src/components/Gallery.js
- */
+// Simple responsive photo gallery grid
+const PhotoGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: ${props => props.margin || 1}px;
+`;
 
 const GalleryImage = ({ index, onClick, photo, margin }) => (
   <Image
@@ -87,28 +85,29 @@ const Gallery = ({ photos, order, orderBy, ...rest }) => {
   return (
     <div>
       {photos.length > 0 && (
-        <PhotoGallery
-          photos={images}
-          onClick={imageClick}
-          renderImage={GalleryImage}
-          targetRowHeight={250}
-          margin={1}
-          {...rest}
-        />
+        <PhotoGrid margin={1}>
+          {images.map((photo, index) => (
+            <GalleryImage
+              key={photo.id}
+              index={index}
+              photo={photo}
+              onClick={imageClick}
+              margin={1}
+            />
+          ))}
+        </PhotoGrid>
       )}
 
-      <ModalGateway>
-        {isOpen ? (
-          <Carousel
-            onClose={() => {
-              setCurrent(0);
-              setOpen(false);
-            }}
-            views={images}
-            currentIndex={current}
-          />
-        ) : null}
-      </ModalGateway>
+      {isOpen && (
+        <Carousel
+          onClose={() => {
+            setCurrent(0);
+            setOpen(false);
+          }}
+          views={images}
+          currentIndex={current}
+        />
+      )}
     </div>
   );
 };
