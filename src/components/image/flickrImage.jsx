@@ -14,6 +14,7 @@ import {
 
 const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
   let href, title, src, width, height;
+  let error = false;
 
   try {
     const result = parseStringSync(
@@ -22,22 +23,26 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
     );
     
     if (!result?.a) {
-      return <span />;
-    }
-    
-    const { a } = result;
-    href = a.href;
-    title = a.title;
-    if (a.img) {
-      src = a.img.src;
-      width = a.img.width;
-      height = a.img.height;
+      error = true;
+    } else {
+      const { a } = result;
+      href = a.href;
+      title = a.title;
+      if (a.img) {
+        src = a.img.src;
+        width = a.img.width;
+        height = a.img.height;
+      }
     }
   } catch {
-    return <span />;
+    error = true;
   }
 
   if (!href || !title || !src || !width || !height) {
+    error = true;
+  }
+
+  if (error) {
     return <span />;
   }
 

@@ -49,11 +49,8 @@ const GalleryImage = styled.img`
 `;
 
 const CarouselModal = ({ onClose, currentIndex, views }) => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   const [visibleIndex, setVisibleIndex] = useState(currentIndex);
-
-  useEffect(() => {
-    setVisibleIndex(currentIndex);
-  }, [currentIndex]);
 
   const handlePrev = () => {
     setVisibleIndex((prev) => (prev === 0 ? views.length - 1 : prev - 1));

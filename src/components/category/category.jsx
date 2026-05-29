@@ -19,14 +19,6 @@ const Category = ({ page, posts }) => {
     pageNum ? pageNum * pageSize : pageSize
   );
 
-  // Listen to scroll positions for loading more data on scroll
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  });
-
   const handleScroll = () => {
     // To get page offset of last article
     const lastRecordLoaded = document.querySelector('div > article:last-child');
@@ -45,6 +37,14 @@ const Category = ({ page, posts }) => {
       }
     }
   };
+
+  // Listen to scroll positions for loading more data on scroll
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [displayCount]);
 
   const startIndex = pageNum ? pageNum * pageSize - pageSize : 0;
   const displayPosts = posts.items.slice(startIndex, startIndex + displayCount);

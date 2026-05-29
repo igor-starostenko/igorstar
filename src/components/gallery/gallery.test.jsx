@@ -7,21 +7,25 @@ vi.mock('next/dynamic', () => ({
     const modulePath = loader.toString();
 
     if (modulePath.includes('image.jsx')) {
-      return ({ style, onClick, alt }) => (
+      const ImageMock = ({ style, onClick, alt }) => (
         <div data-testid="mock-image" style={style} onClick={onClick}>
           {alt || ''}
         </div>
       );
+      ImageMock.displayName = 'ImageMock';
+      return ImageMock;
     }
 
     if (modulePath.includes('carousel.jsx')) {
-      return ({ onClose, views, currentIndex }) => (
+      const CarouselMock = ({ onClose, views, currentIndex }) => (
         <div data-testid="mock-carousel" onClick={onClose}>
           {views.map((v, i) => (
             <div key={i} data-testid="carousel-view" />
           ))}
         </div>
       );
+      CarouselMock.displayName = 'CarouselMock';
+      return CarouselMock;
     }
 
     return (props) => {
