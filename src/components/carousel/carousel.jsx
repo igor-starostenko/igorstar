@@ -83,7 +83,7 @@ const CarouselModal = ({ onClose, currentIndex, views }) => {
           &times;
         </CloseButton>
         <ImageContainer>
-          <GalleryImage src={view.src} alt={view.alt || view.description} />
+          <GalleryImage src={view.src} alt={(view.alt || view.description) ?? ''} />
         </ImageContainer>
         {views.length > 1 && (
           <>
