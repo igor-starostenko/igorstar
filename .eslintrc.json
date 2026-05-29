@@ -1,7 +1,18 @@
 {
-  "extends": "next",
+  "extends": [
+    "next",
+    "prettier"
+  ],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off"
-  }
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "build/",
+    "public/",
+    "coverage/"
+  ]
 }
