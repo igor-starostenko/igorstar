@@ -65,7 +65,7 @@
     "contentful-migration": "^4.5.9",
     "core-js": "^3.19.1",
     "directory-named-webpack-plugin": "^4.0.0",
-    "eslint": "^10.4.0",
+    "eslint": "^9.7.0",
     "eslint-config-next": "^16.2.6",
     "eslint-config-prettier": "^10.1.8",
     "esm": "^3.2.25",
