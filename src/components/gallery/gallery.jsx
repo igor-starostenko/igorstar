@@ -1,18 +1,10 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-import styled from 'styled-components';
 import { PhotoAlbum, MouseClickZoom } from 'react-photo-album';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const Image = dynamic(() => import('components/image/image.jsx'));
-
-// Simple responsive photo gallery grid
-const PhotoGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${props => props.margin || 1}px;
-`;
 
 const GalleryImage = ({ index, onClick, photo, margin }) => (
   <Image
