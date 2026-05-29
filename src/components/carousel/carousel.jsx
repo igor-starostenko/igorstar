@@ -1,55 +1,14 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ModalContent = styled.div`
-  max-width: 90%;
-  max-height: 90%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 40px;
-  cursor: pointer;
-  z-index: 101;
-`;
-
-const ImageContainer = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const GalleryImage = styled.img`
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-`;
+import {
+  ModalOverlay,
+  ModalContent,
+  CloseButton,
+  ImageContainer,
+  GalleryImage,
+} from './carousel.css.js';
 
 const CarouselModal = ({ onClose, currentIndex, views }) => {
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   const [visibleIndex, setVisibleIndex] = useState(currentIndex);
 
   const handlePrev = () => {
