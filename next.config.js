@@ -25,6 +25,15 @@ const next_config = {
     nextImageExportOptimizer_generateAndUseBlurImages: true,
   },
   productionBrowserSourceMaps: true,
+  webpack: (config, { isServer }) => {
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      'styled-components': isServer
+        ? 'styled-components/esm'
+        : 'styled-components',
+    };
+    return config;
+  },
 };
 
 export default withBundleAnalyzer(next_config);
