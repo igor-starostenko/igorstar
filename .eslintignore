@@ -1,0 +1,19 @@
+next.config.js
+next-env.d.ts
+
+# Build outputs
+.next/
+out/
+build/
+
+# Contentful scripts
+scripts/contentful_*.js
+
+# Public assets (not source files)
+public/
+
+# Coverage reports
+coverage/
+
+# Lockfile
+yarn.lock
