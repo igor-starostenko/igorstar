@@ -116,18 +116,6 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, ..
             />
           </div>
 
-          {/* Original grid for backward compatibility if needed */}
-          <PhotoGrid margin={1} style={{ display: 'none' }}>
-            {images.map((photo, index) => (
-              <GalleryImage
-                key={photo.id}
-                index={index}
-                photo={photo}
-                onClick={imageClick}
-                margin={1}
-              />
-            ))}
-          </PhotoGrid>
         </>
       )}
 

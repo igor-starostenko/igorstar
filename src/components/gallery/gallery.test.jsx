@@ -55,6 +55,15 @@ vi.mock('react-photo-album', () => ({
   MouseClickZoom: () => <span data-testid="mock-mouse-click-zoom">Zoom</span>,
 }));
 
+// Mock react-photo-gallery for backward compatibility
+vi.mock('react-photo-gallery', () => ({
+  PhotoGrid: ({ children, margin }) => (
+    <div data-testid="mock-photo-gallery" style={{ margin: `-${margin}px` }}>
+      {children}
+    </div>
+  ),
+}));
+
 import Gallery from './gallery.jsx';
 
 // Helper to create fresh array instances for each test
@@ -69,7 +78,7 @@ test('renders image gallery when photos are provided', async () => {
     render(<Gallery photos={photos} />);
   });
 
-  const images = screen.getAllByTestId('mock-image');
+  const images = screen.getAllByTestId('mock-photo-album-image');
   expect(images.length).toBe(2);
 });
 
@@ -79,7 +88,7 @@ test('sorts photos by width ascending when orderBy and order are set', async () 
     render(<Gallery photos={photos} order="asc" orderBy="width" />);
   });
 
-  const images = screen.getAllByTestId('mock-image');
+  const images = screen.getAllByTestId('mock-photo-album-image');
   // After sorting ascending, first should be width 100
   expect(images[0]).toHaveTextContent('A image');
 });
@@ -90,7 +99,7 @@ test('opens carousel on image click', async () => {
     render(<Gallery photos={photos} />);
   });
 
-  const images = screen.getAllByTestId('mock-image');
+  const images = screen.getAllByTestId('mock-photo-album-image');
   expect(images.length).toBeGreaterThan(0);
 
   fireEvent.click(images[0]);
@@ -105,7 +114,7 @@ test('sorts photos by width descending when order is desc', async () => {
     render(<Gallery photos={photos} order="desc" orderBy="width" />);
   });
 
-  const images = screen.getAllByTestId('mock-image');
+  const images = screen.getAllByTestId('mock-photo-album-image');
   // After sorting descending, first should be width 200
   expect(images[0]).toHaveTextContent('B image');
 });
@@ -116,7 +125,7 @@ test('returns unsorted array when orderBy is not provided', async () => {
     render(<Gallery photos={photos} />);
   });
 
-  const images = screen.getAllByTestId('mock-image');
+  const images = screen.getAllByTestId('mock-photo-album-image');
   // Order should be preserved (2, 1) when not sorted
   expect(images[0]).toHaveTextContent('B image');
 });
@@ -127,7 +136,7 @@ test('returns unsorted array when order direction is invalid', async () => {
     render(<Gallery photos={photos} order="invalid" orderBy="width" />);
   });
 
-  const images = screen.getAllByTestId('mock-image');
+  const images = screen.getAllByTestId('mock-photo-album-image');
   // Order should be preserved (2, 1) when invalid
   expect(images[0]).toHaveTextContent('B image');
 });
@@ -137,7 +146,7 @@ test('renders gallery with empty photos array', async () => {
     render(<Gallery photos={[]} />);
   });
 
-  expect(screen.queryByTestId('mock-image')).not.toBeInTheDocument();
+  expect(screen.queryByTestId('mock-photo-album-image')).not.toBeInTheDocument();
 });
 
 test('renders gallery with single photo', async () => {
@@ -145,6 +154,6 @@ test('renders gallery with single photo', async () => {
     render(<Gallery photos={[{ id: '1', src: 'a.jpg', alt: 'Single image', width: 100, height: 200 }]} />);
   });
 
-  const images = screen.getAllByTestId('mock-image');
+  const images = screen.getAllByTestId('mock-photo-album-image');
   expect(images.length).toBe(1);
 });
