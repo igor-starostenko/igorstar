@@ -37,6 +37,24 @@ vi.mock('next/dynamic', () => ({
   },
 }));
 
+// Mock react-photo-album
+vi.mock('react-photo-album', () => ({
+  PhotoAlbum: ({ photos, onClick }) => (
+    <div data-testid="mock-photo-album">
+      {photos.map((photo, index) => (
+        <div
+          key={index}
+          data-testid="mock-photo-album-image"
+          onClick={(e) => onClick(e, { index })}
+        >
+          {photo.alt || ''}
+        </div>
+      ))}
+    </div>
+  ),
+  MouseClickZoom: () => <span data-testid="mock-mouse-click-zoom">Zoom</span>,
+}));
+
 import Gallery from './gallery.jsx';
 
 // Helper to create fresh array instances for each test

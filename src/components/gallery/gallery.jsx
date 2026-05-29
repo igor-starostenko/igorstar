@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
+import { PhotoAlbum, MouseClickZoom } from 'react-photo-album';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const Image = dynamic(() => import('components/image/image.jsx'));
@@ -68,12 +69,21 @@ const orderArray = (array, orderBy, order) => {
   return direction === 'desc' ? array.reverse() : array;
 };
 
+// Map gallery photos to react-photo-album format
+const mapToPhotoAlbumFormat = (photos) =>
+  photos.map((photo) => ({
+    src: photo.src,
+    width: photo.width,
+    height: photo.height,
+    alt: photo.description || photo.alt,
+  }));
+
 const Gallery = ({ photos, order, orderBy, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
   const images = useMemo(
-    () => orderArray(photos, orderBy, order),
+    () => orderArray([...photos], orderBy, order),
     [photos, order, orderBy]
   );
 
@@ -82,20 +92,43 @@ const Gallery = ({ photos, order, orderBy, ...rest }) => {
     setOpen(true);
   };
 
+  // Handle click on photo in PhotoAlbum (returns index)
+  const handlePhotoClick = (event, { index }) => {
+    setCurrent(index);
+    setOpen(true);
+  };
+
+  const photoAlbumPhotos = useMemo(() => mapToPhotoAlbumFormat(images), [images]);
+
   return (
     <div>
       {photos.length > 0 && (
-        <PhotoGrid margin={1}>
-          {images.map((photo, index) => (
-            <GalleryImage
-              key={photo.id}
-              index={index}
-              photo={photo}
-              onClick={imageClick}
-              margin={1}
+        <>
+          {/* Use PhotoAlbum for responsive grid */}
+          <div style={{ margin: '-4px' }}>
+            <PhotoAlbum
+              photos={photoAlbumPhotos}
+              onClick={handlePhotoClick}
+              layout="rows"
+              targetRowHeight={150}
+              rowGap={4}
+              mouseClickZoom={<MouseClickZoom />}
             />
-          ))}
-        </PhotoGrid>
+          </div>
+
+          {/* Original grid for backward compatibility if needed */}
+          <PhotoGrid margin={1} style={{ display: 'none' }}>
+            {images.map((photo, index) => (
+              <GalleryImage
+                key={photo.id}
+                index={index}
+                photo={photo}
+                onClick={imageClick}
+                margin={1}
+              />
+            ))}
+          </PhotoGrid>
+        </>
       )}
 
       {isOpen && (

@@ -6589,6 +6589,7 @@ __metadata:
     prop-types: "npm:^15.6.2"
     react: "npm:^19.2.6"
     react-dom: "npm:^19.2.6"
+    react-photo-album: "npm:^3.6.0"
     react-syntax-highlighter: "npm:^16.1.1"
     source-map-explorer: "npm:^2.5.3"
     styled-components: "npm:^6.4.2"
@@ -9342,6 +9343,19 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 10c0/2bdb6b93fbb1820b024b496042cce405c57e2f85e777c9aabd55f9b26d145408f9f74f5934676ffdc46f3dcff656d78413a6e43968e7b3f92eea35b3052e9053
+  languageName: node
+  linkType: hard
+
+"react-photo-album@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "react-photo-album@npm:3.6.0"
+  peerDependencies:
+    "@types/react": ^18 || ^19
+    react: ^18 || ^19
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/eeb5cc49b4a657e7c87bfaa694df967897d633da8b4f368bedd383617c1ffdbd0b51a1350b28fe5b9407d2066099c4d3ac23715662050b794dba984c3dface40
   languageName: node
   linkType: hard
 
