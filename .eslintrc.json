@@ -1,12 +1,7 @@
 {
-  "extends": ["next/core-web-vitals"],
-  "overrides": [
-    {
-      "files": ["src/**/*.test.{js,jsx}"],
-      "rules": {
-        "@next/next/no-img-element": "off",
-        "react/display-name": "off"
-      }
-    }
-  ]
+  "extends": "next",
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
+  }
 }
