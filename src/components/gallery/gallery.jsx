@@ -78,7 +78,7 @@ const mapToPhotoAlbumFormat = (photos) =>
     alt: photo.description || photo.alt,
   }));
 
-const Gallery = ({ photos, order, orderBy, ...rest }) => {
+const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, ...rest }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
@@ -110,8 +110,8 @@ const Gallery = ({ photos, order, orderBy, ...rest }) => {
               photos={photoAlbumPhotos}
               onClick={handlePhotoClick}
               layout="rows"
-              targetRowHeight={150}
-              rowGap={4}
+              targetRowHeight={targetRowHeight}
+              rowGap={rowGap}
               mouseClickZoom={<MouseClickZoom />}
             />
           </div>
@@ -149,6 +149,8 @@ Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
   order: PropTypes.string,
   orderBy: PropTypes.string,
+  targetRowHeight: PropTypes.number,
+  rowGap: PropTypes.number,
 };
 
 export default Gallery;
