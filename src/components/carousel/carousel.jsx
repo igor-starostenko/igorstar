@@ -31,15 +31,17 @@ const CarouselModal = ({ onClose, currentIndex, views }) => {
   }, [onClose, views.length]);
 
   const view = views[visibleIndex];
+  const src = view?.src ?? '';
+  const altText = (view?.alt || view?.description) ?? '';
 
   return (
     <ModalOverlay onClick={onClose}>
-      <ModalContent onClick={(e) => e.stopPropagation()}>
+      <ModalContent role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose} aria-label="Close">
           &times;
         </CloseButton>
         <ImageContainer>
-          <GalleryImage src={view.src} alt={(view.alt || view.description) ?? ''} />
+          <GalleryImage src={src} alt={altText} />
         </ImageContainer>
         {views.length > 1 && (
           <>

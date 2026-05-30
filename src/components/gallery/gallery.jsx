@@ -1,65 +1,8 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import dynamic from 'next/dynamic';
 import { PhotoAlbum, MouseClickZoom } from 'react-photo-album';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
-const Image = dynamic(() => import('components/image/image.jsx'));
-
-const GalleryImage = ({ index, onClick, photo, margin }) => (
-  <Image
-    style={{ margin }}
-    onClick={(e) => onClick(e, { index, photo })}
-    key={photo.id}
-    src={photo.src}
-    backupSrc={photo.backupSrc}
-    alt={photo.description || photo.alt}
-    width={photo.width}
-    height={photo.height}
-    {...(index === 0 ? { priority: true } : {})}
-  />
-);
-
-GalleryImage.propTypes = {
-  index: PropTypes.number.isRequired,
-  onClick: PropTypes.func,
-  photo: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    alt: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    backupSrc: PropTypes.string,
-    src: PropTypes.string.isRequired,
-  }).isRequired,
-  margin: PropTypes.number,
-};
-
-const createSortFunction = (orderBy) => (a, b) => {
-  if (a[orderBy] < b[orderBy]) {
-    return -1;
-  }
-  if (a[orderBy] > b[orderBy]) {
-    return 1;
-  }
-  return 0;
-};
-
-const orderArray = (array, orderBy, order) => {
-  if (!orderBy) {
-    return array;
-  }
-
-  const direction = String(order).toLowerCase();
-  if (!['desc', 'asc'].includes(direction)) {
-    return array;
-  }
-
-  const sortFun = createSortFunction(orderBy);
-
-  array.sort(sortFun);
-  return direction === 'desc' ? array.reverse() : array;
-};
 
 // Map gallery photos to react-photo-album format
 const mapToPhotoAlbumFormat = (photos) =>
@@ -67,10 +10,31 @@ const mapToPhotoAlbumFormat = (photos) =>
     src: photo.src,
     width: photo.width,
     height: photo.height,
-    alt: photo.description || photo.alt,
+    alt: photo.description || photo.alt || '',
   }));
 
-const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, ...rest }) => {
+const createSortFunction = (orderBy) => {
+  if (!orderBy) return () => 0;
+  
+  return (a, b) => {
+    if (a[orderBy] < b[orderBy]) return -1;
+    if (a[orderBy] > b[orderBy]) return 1;
+    return 0;
+  };
+};
+
+const orderArray = (array, orderBy, order) => {
+  if (!orderBy) return array;
+
+  const direction = String(order).toLowerCase();
+  if (!['desc', 'asc'].includes(direction)) return array;
+
+  const sortFun = createSortFunction(orderBy);
+  array.sort(sortFun);
+  return direction === 'desc' ? array.reverse() : array;
+};
+
+const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4 }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
@@ -79,13 +43,8 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, ..
     [photos, order, orderBy]
   );
 
-  const imageClick = (_e, obj) => {
-    setCurrent(obj.index);
-    setOpen(true);
-  };
-
   // Handle click on photo in PhotoAlbum (returns index)
-  const handlePhotoClick = (event, { index }) => {
+  const handlePhotoClick = (_event, { index }) => {
     setCurrent(index);
     setOpen(true);
   };
@@ -107,7 +66,6 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, ..
               mouseClickZoom={<MouseClickZoom />}
             />
           </div>
-
         </>
       )}
 
