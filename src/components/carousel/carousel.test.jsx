@@ -1,11 +1,6 @@
 import { test, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-// Mock next/dynamic to return our component directly
-vi.mock('next/dynamic', () => ({
-  default: (fn) => fn(),
-}));
-
 import CarouselModal from './carousel.jsx';
 
 const mockViews = [

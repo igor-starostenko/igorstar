@@ -59,15 +59,6 @@ vi.mock('react-photo-album', () => ({
   MouseClickZoom: () => <span data-testid="mock-mouse-click-zoom">Zoom</span>,
 }));
 
-// Mock react-photo-gallery for backward compatibility
-vi.mock('react-photo-gallery', () => ({
-  PhotoGrid: ({ children, margin }) => (
-    <div data-testid="mock-photo-gallery" style={{ margin: `-${margin}px` }}>
-      {children}
-    </div>
-  ),
-}));
-
 import Gallery from './gallery.jsx';
 
 // Helper to create fresh array instances for each test

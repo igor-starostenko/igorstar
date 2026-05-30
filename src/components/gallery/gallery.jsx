@@ -97,7 +97,7 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, ..
       {photos.length > 0 && (
         <>
           {/* Use PhotoAlbum for responsive grid */}
-          <div style={{ margin: '-4px' }}>
+          <div style={{ margin: `-${rowGap}px` }}>
             <PhotoAlbum
               photos={photoAlbumPhotos}
               onClick={handlePhotoClick}
