@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
@@ -9,6 +10,7 @@ vi.mock('components/hashtags/hashtags.jsx', () => ({
   default: ({ tags, isSmall }) => (
     <div data-testid="mock-hashtags" data-small={isSmall ? 'true' : 'false'}>
       {tags?.join(', ') || ''}
+
     </div>
   ),
 }));

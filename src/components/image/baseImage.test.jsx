@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { test, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
@@ -79,4 +80,3 @@ test('error handler sets isError state', () => {
 
   expect(screen.getByAltText('Error test')).toBeInTheDocument();
 });
-

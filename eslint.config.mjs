@@ -4,6 +4,13 @@ import eslintConfigPrettier from "eslint-config-prettier";
 export default [
   ...next,
   {
+    files: ["**/*.test.{js,jsx}", "**/__tests__/**/*.{js,jsx}"],
+    rules: {
+      "next/no-img-element": "off",
+    },
+  },
+  eslintConfigPrettier,
+  {
     ignores: [
       "next.config.js",
       "next-env.d.ts",
@@ -22,11 +29,4 @@ export default [
       "react/prop-types": "off",
     },
   },
-  {
-    files: ["**/*.test.{js,jsx}", "**/__tests__/**/*.{js,jsx}"],
-    rules: {
-      "next/no-img-element": "off",
-    },
-  },
-  eslintConfigPrettier,
 ];
