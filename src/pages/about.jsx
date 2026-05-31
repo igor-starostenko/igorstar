@@ -29,9 +29,15 @@ export const getStaticProps = async () => {
     'fields.title': 'About',
   });
 
+  const page = pages.items[0];
+
+  if (!page) {
+    return { notFound: true };
+  }
+
   return {
     props: {
-      page: pages.items[0],
+      page,
     },
   };
 };
