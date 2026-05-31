@@ -23,7 +23,7 @@ vi.mock('@contentful/rich-text-react-renderer', () => ({
   documentToReactComponents: (node) => <div data-testid="mock-rich-text">About content</div>,
 }));
 
-import About from './about.jsx';
+import About from 'pages/about.jsx';
 
 test('renders About page with content', () => {
   const mockProps = { 

@@ -1,6 +1,6 @@
-const { siteUrl } = require('./site-config.cjs');
+import siteConfig from './site-config.cjs';
 
-module.exports = {
-  siteUrl,
+export default {
+  siteUrl: siteConfig.siteUrl,
   generateRobotsTxt: true,
 };

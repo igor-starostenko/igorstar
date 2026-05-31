@@ -9,7 +9,7 @@ vi.mock('components/box/box.jsx', () => ({
   default: ({ children }) => <div data-testid="mock-box">{children}</div>,
 }));
 
-import NotFound from './404.jsx';
+import NotFound from 'pages/404.jsx';
 
 test('renders Not Found page with message', () => {
   render(<NotFound />);

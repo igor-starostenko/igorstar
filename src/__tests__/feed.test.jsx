@@ -25,7 +25,7 @@ vi.mock('components/title/title.jsx', () => ({
   default: ({ children, as }) => <h1 data-testid="mock-title">{children}</h1>,
 }));
 
-import FeedPage from './feed.jsx';
+import FeedPage from 'pages/feed.jsx';
 
 test('renders Feed with images', () => {
   const mockProps = { 

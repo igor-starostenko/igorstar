@@ -1,6 +1,7 @@
 import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const next_config = {
+  output: 'export',
   images: {
     unoptimized: true,
     remotePatterns: [

@@ -65,7 +65,7 @@ vi.mock('react-syntax-highlighter', () => ({
   default: ({ children }) => <pre data-testid="mock-code">{children}</pre>,
 }));
 
-import Post from './[post].jsx';
+import Post from '../pages/[category]/[post].jsx';
 
 const mockPost = {
   id: 'post-1',

@@ -11,7 +11,7 @@ vi.mock('global.css.js', () => ({
 
 const MockComponent = () => <div data-testid="test-component">Content</div>;
 
-import MyApp from './_app.jsx';
+import MyApp from 'pages/_app.jsx';
 
 test('renders children within AnimatePresence and GlobalStyle', () => {
   const mockPageProps = { foo: 'bar' };

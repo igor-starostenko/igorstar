@@ -35,7 +35,7 @@ vi.mock('../../site-config.cjs', () => ({
   },
 }));
 
-import MyDocument from './_document.jsx';
+import MyDocument from 'pages/_document.jsx';
 
 // Note: getInitialProps testing is complex due to Next.js internals
 // This test just verifies the method exists and can be called without throwing

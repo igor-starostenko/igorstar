@@ -40,7 +40,7 @@ vi.mock('components/head/head.jsx', () => ({
   default: ({ pageTitle }) => <title data-testid="mock-head">{pageTitle}</title>,
 }));
 
-import CategoryIndex from './[category].jsx';
+import CategoryIndex from 'pages/[category].jsx';
 
 test('renders category page with posts', () => {
   const mockProps = { 
