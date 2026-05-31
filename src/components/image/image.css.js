@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import ExportedImage from 'next-image-export-optimizer';
+import NextImage from 'next/image';
 import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
 
@@ -21,7 +21,7 @@ export const ImageWrapper = styled.div`
   }
 `;
 
-export const SImage = styled(ExportedImage)`
+export const SImage = styled(NextImage)`
   max-width: 100%;
   height: auto;
 `;
@@ -35,9 +35,7 @@ export const ImageFrame = styled.div`
   opacity: 0;
   transition: opacity 150ms ease-in-out;
 
-  ${MEDIA.PHONE`
-    opacity: 1;
-  `}
+  ${MEDIA.PHONE`opacity: 1;`}
 `;
 
 export const ImageContainer = styled.div`
