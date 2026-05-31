@@ -18,15 +18,7 @@ const next_config = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
   },
   productionBrowserSourceMaps: true,
-  webpack: (config, { isServer }) => {
-    config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-      'styled-components': isServer
-        ? 'styled-components/esm'
-        : 'styled-components',
-    };
-    return config;
-  },
+  turbopack: {},
 };
 
 export default withBundleAnalyzer()(next_config);
