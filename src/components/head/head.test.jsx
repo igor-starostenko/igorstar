@@ -17,15 +17,6 @@ vi.mock('next/router', () => ({
   }),
 }));
 
-// Mock schemaGenerator
-vi.mock('helpers/schemaGenerator.js', () => ({
-  default: ({ pathname, canonical, siteUrl, pageTitle, siteTitle, pageTitleFull }) => ({
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: pageTitleFull,
-  }),
-}));
-
 // Mock site-config.cjs - using test data
 vi.mock('../../site-config.cjs', () => ({
   __esModule: true,
@@ -38,29 +29,25 @@ vi.mock('../../site-config.cjs', () => ({
   },
 }));
 
-import ConfigSEO from './head.jsx';
+import SEO from './head.jsx';
 
 // Basic rendering tests - next/head renders to document.head, not visible DOM
 test('renders SEO component with default props without error', () => {
-  expect(() => render(<ConfigSEO />)).not.toThrow();
+  expect(() => render(<SEO />)).not.toThrow();
 });
 
 test('renders with pageTitle without error', () => {
-  expect(() => render(<ConfigSEO pageTitle="My Page" />)).not.toThrow();
+  expect(() => render(<SEO pageTitle="My Page" />)).not.toThrow();
 });
 
 test('renders with pageTitleFull without error', () => {
-  expect(() => render(<ConfigSEO pageTitle="My Page" pageTitleFull="Custom Title" />)).not.toThrow();
+  expect(() => render(<SEO pageTitle="My Page" pageTitleFull="Custom Title" />)).not.toThrow();
 });
 
 test('renders with imageUrl without error', () => {
-  expect(() => render(<ConfigSEO imageUrl="/custom-social.jpg" />)).not.toThrow();
+  expect(() => render(<SEO imageUrl="/custom-social.jpg" />)).not.toThrow();
 });
 
 test('uses canonical URL without error', () => {
-  expect(() => render(<ConfigSEO canonical="/custom-page" />)).not.toThrow();
-});
-
-test('generates schema.org JSON-LD without error', () => {
-  expect(() => render(<ConfigSEO pageTitle="Test Page" />)).not.toThrow();
+  expect(() => render(<SEO canonical="/custom-page" />)).not.toThrow();
 });

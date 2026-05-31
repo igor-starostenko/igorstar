@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import schemaGenerator from 'helpers/schemaGenerator.js';
-import config from '../../../site-config.cjs';
 
 const appendSiteUrl = (siteUrl, imageUrl) => {
   const origin =
@@ -51,19 +49,6 @@ const SEO = ({
       />
       <meta content="1024" name="twitter:image:width" />
       <meta content="512" name="twitter:image:height" />
-
-      <script type="application/ld+json">
-        {JSON.stringify(
-          schemaGenerator({
-            pathname,
-            canonical: fullUrl,
-            siteUrl,
-            pageTitle,
-            siteTitle,
-            pageTitleFull,
-          })
-        )}
-      </script>
     </Head>
   );
 };
@@ -78,6 +63,4 @@ SEO.propTypes = {
   imageUrl: PropTypes.string,
 };
 
-const ConfigSEO = (props) => <SEO {...config} {...props} />;
-
-export default ConfigSEO;
+export default SEO;
