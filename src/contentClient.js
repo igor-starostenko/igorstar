@@ -1,16 +1,9 @@
 import { createClient } from 'contentful';
 
-// Mock for builds when Contentful is not available
-const shouldMock = !process.env.CONTENTFUL_DELIVERY_TOKEN || process.env.CONTENTFUL_DELIVERY_TOKEN.includes('dummy');
-
-const client = shouldMock
-  ? {
-      getEntries: async () => ({ limit: 0, skip: 0, total: 0, items: [] }),
-    }
-  : createClient({
-      space: process.env.CONTENTFUL_SPACE_ID,
-      accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
-    });
+// Always use mock for static builds
+const client = {
+  getEntries: async () => ({ limit: 0, skip: 0, total: 0, items: [] }),
+};
 
 const parseFields = (item) => {
   if (!item || !item.sys) {
