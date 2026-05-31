@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import schemaGenerator from 'helpers/schemaGenerator.js';
 
 const appendSiteUrl = (siteUrl, imageUrl) => {
   const origin =
@@ -21,6 +22,16 @@ const SEO = ({
   const router = useRouter();
   const pathname = router.pathname;
   const fullUrl = canonical || siteUrl + (pathname || '');
+  const schemaJson = JSON.stringify(
+    schemaGenerator({
+      pathname,
+      canonical: fullUrl,
+      siteUrl,
+      pageTitle,
+      siteTitle,
+      pageTitleFull,
+    })
+  );
 
   return (
     <Head>
@@ -49,6 +60,13 @@ const SEO = ({
       />
       <meta content="1024" name="twitter:image:width" />
       <meta content="512" name="twitter:image:height" />
+
+      {/* Schema.org JSON-LD - rendered via dangerouslySetInnerHTML to avoid processing issues */}
+      <script
+        id="schema-org"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: schemaJson }}
+      />
     </Head>
   );
 };
@@ -63,4 +81,12 @@ SEO.propTypes = {
   imageUrl: PropTypes.string,
 };
 
-export default SEO;
+const config = {
+  siteTitle: 'Blog Site',
+  siteTitleShort: 'Site',
+  siteUrl: 'https://example.com',
+};
+
+const ConfigSEO = (props) => <SEO {...config} {...props} />;
+
+export default ConfigSEO;
