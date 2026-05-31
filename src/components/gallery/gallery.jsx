@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-import { PhotoAlbum, MouseClickZoom } from 'react-photo-album';
+import { RowsPhotoAlbum } from 'react-photo-album';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -16,7 +16,7 @@ const mapToPhotoAlbumFormat = (photos) =>
 
 const createSortFunction = (orderBy) => {
   if (!orderBy) return () => 0;
-  
+
   return (a, b) => {
     if (a[orderBy] < b[orderBy]) return -1;
     if (a[orderBy] > b[orderBy]) return 1;
@@ -56,15 +56,13 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4 }) 
     <div>
       {photos.length > 0 && (
         <>
-          {/* Use PhotoAlbum for responsive grid */}
+          {/* Use RowsPhotoAlbum for responsive grid */}
           <div style={{ margin: `-${rowGap}px` }}>
-            <PhotoAlbum
+            <RowsPhotoAlbum
               photos={photoAlbumPhotos}
               onClick={handlePhotoClick}
-              layout="rows"
               targetRowHeight={targetRowHeight}
               rowGap={rowGap}
-              mouseClickZoom={<MouseClickZoom />}
             />
           </div>
         </>
