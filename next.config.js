@@ -3,7 +3,6 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 const next_config = {
   images: {
     unoptimized: true,
-    loader: 'img',
     remotePatterns: [
       {
         protocol: 'https',
