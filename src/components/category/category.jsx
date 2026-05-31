@@ -19,30 +19,30 @@ const Category = ({ page, posts }) => {
     pageNum ? pageNum * pageSize : pageSize
   );
 
-  const handleScroll = () => {
-    // To get page offset of last article
-    const lastRecordLoaded = document.querySelector('div > article:last-child');
-    if (lastRecordLoaded) {
-      const lastRecordLoadedOffset =
-        lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
-      const pageOffset = window.pageYOffset + window.innerHeight;
-      // Detects when last record is in view
-      if (pageOffset > lastRecordLoadedOffset) {
-        if (displayCount < posts.total) {
-          const newDisplayCount = displayCount + pageSize;
-          setDisplayCount(
-            newDisplayCount > posts.total ? posts.total : newDisplayCount
-          );
-        }
-      }
-    }
-  };
-
   // Listen to scroll positions for loading more data on scroll
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    const handleScrollHandler = () => {
+      // To get page offset of last article
+      const lastRecordLoaded = document.querySelector('div > article:last-child');
+      if (lastRecordLoaded) {
+        const lastRecordLoadedOffset =
+          lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
+        const pageOffset = window.pageYOffset + window.innerHeight;
+        // Detects when last record is in view
+        if (pageOffset > lastRecordLoadedOffset) {
+          if (displayCount < posts.total) {
+            const newDisplayCount = displayCount + pageSize;
+            setDisplayCount(
+              newDisplayCount > posts.total ? posts.total : newDisplayCount
+            );
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScrollHandler);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollHandler);
     };
   }, [displayCount, posts.total]);
 

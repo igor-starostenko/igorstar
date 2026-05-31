@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   ModalOverlay,
@@ -11,23 +11,23 @@ import {
 const CarouselModal = ({ onClose, currentIndex, views }) => {
   const [visibleIndex, setVisibleIndex] = useState(currentIndex);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setVisibleIndex((prev) => (prev === 0 ? views.length - 1 : prev - 1));
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setVisibleIndex((prev) => (prev === views.length - 1 ? 0 : prev + 1));
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Escape') onClose();
-    if (e.key === 'ArrowLeft') handlePrev();
-    if (e.key === 'ArrowRight') handleNext();
-  };
+  }, []);
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    const handleKeyDownHandler = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') handlePrev();
+      if (e.key === 'ArrowRight') handleNext();
+    };
+
+    document.addEventListener('keydown', handleKeyDownHandler);
+    return () => document.removeEventListener('keydown', handleKeyDownHandler);
   }, [onClose, views.length]);
 
   const view = views[visibleIndex];

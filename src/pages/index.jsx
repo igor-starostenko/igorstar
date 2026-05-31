@@ -25,7 +25,7 @@ export const getStaticProps = async () => {
       page: pages.items[0] || {},
       posts: {
         ...posts,
-        /* eslint-disable no-unused-vars */
+         
         items: posts.items.map(({ thumbnail, images, ...fields }) => ({
           thumbnail: parseItem(thumbnail || {}),
           ...fields,

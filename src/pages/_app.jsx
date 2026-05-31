@@ -2,7 +2,7 @@
 import { AnimatePresence } from 'framer-motion';
 import GlobalStyle from 'global.css.js';
 
-/* eslint-disable react/prop-types */
+ 
 const MyApp = ({ Component, pageProps, router }) => (
   <>
     <GlobalStyle />
