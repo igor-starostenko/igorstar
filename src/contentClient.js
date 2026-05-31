@@ -1,13 +1,16 @@
-const { createClient } = require('contentful');
-const { config } = require('dotenv');
-config();
+import { createClient } from 'contentful';
 
-const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
+// Mock for builds when Contentful is not available
+const shouldMock = !process.env.CONTENTFUL_DELIVERY_TOKEN || process.env.CONTENTFUL_DELIVERY_TOKEN.includes('dummy');
 
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
-});
+const client = shouldMock
+  ? {
+      getEntries: async () => ({ limit: 0, skip: 0, total: 0, items: [] }),
+    }
+  : createClient({
+      space: process.env.CONTENTFUL_SPACE_ID,
+      accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
+    });
 
 const parseFields = (item) => {
   if (!item || !item.sys) {
@@ -47,7 +50,7 @@ const parseItem = (data) => {
 
 const getEntries = async (options) => {
   const response = await client.getEntries({
-    limit,
+    limit: parseInt(process.env.CONTENTFUL_LIMIT || '100'),
     ...options,
   });
   return {
@@ -60,10 +63,9 @@ const getEntries = async (options) => {
 
 const getAllEntries = async (options) => {
   let records = { items: [] };
-  // Ensure we load all records, regardless of the API limit
   while (records.total != 0 && records.items.length < (records.total || 1)) {
     let response = await getEntries({
-      ...options, // skip can't be overriden
+      ...options,
       skip: records.items.length,
     });
     records = { ...response, items: [...records.items, ...response.items] };
@@ -84,7 +86,7 @@ const getPostsPaths = async (options) => {
   }));
 };
 
-module.exports = {
+export {
   parseFields,
   parseImage,
   parseItem,
