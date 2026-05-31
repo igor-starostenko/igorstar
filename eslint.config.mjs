@@ -22,5 +22,11 @@ export default [
       "react/prop-types": "off",
     },
   },
+  {
+    files: ["**/*.test.{js,jsx}", "**/__tests__/**/*.{js,jsx}"],
+    rules: {
+      "next/no-img-element": "off",
+    },
+  },
   eslintConfigPrettier,
 ];
