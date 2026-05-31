@@ -6622,7 +6622,6 @@ __metadata:
     lighthouse: "npm:^13.3.0"
     mkdirp: "npm:^1.0.4"
     next: "npm:^16.2.6"
-    next-image-export-optimizer: "npm:^1.20.1"
     next-sitemap: "npm:^4.2.3"
     node-gyp: "npm:^12.3.0"
     prettier: "npm:^3.8.3"
@@ -8442,21 +8441,6 @@ __metadata:
   version: 2.1.1
   resolution: "netmask@npm:2.1.1"
   checksum: 10c0/c78e31869b0578fb0a9874a0c0fdf0e1f8b3492392d1043355fb11d9ea42ef94e0216c6aee7d8e15db39d1a8caf331f9b144ae3ee43fd951b73a66837711fb09
-  languageName: node
-  linkType: hard
-
-"next-image-export-optimizer@npm:^1.20.1":
-  version: 1.20.1
-  resolution: "next-image-export-optimizer@npm:1.20.1"
-  dependencies:
-    sharp: "npm:^0.34.5"
-    typescript: "npm:^5.2.2"
-  peerDependencies:
-    next: ^14.2.18 || ^15.0.3 || ^16.0.0
-    react: "^18.2.0 || ^19.0.0-0 "
-  bin:
-    next-image-export-optimizer: dist/optimizeImages.js
-  checksum: 10c0/4059d77536f6c914fb2f253eccc6395e173330e32d893d06a6f930fa4cbdbd183d7de02e35e380afaa0abe3d49bbd44e0946fda6d3a9bbd70d38ef4495ea8fd2
   languageName: node
   linkType: hard
 
@@ -11261,7 +11245,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.0.2, typescript@npm:^5.2.2":
+"typescript@npm:^5.0.2":
   version: 5.9.3
   resolution: "typescript@npm:5.9.3"
   bin:
@@ -11271,7 +11255,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.0.2#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.2.2#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.0.2#optional!builtin<compat/typescript>":
   version: 5.9.3
   resolution: "typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"
   bin:
