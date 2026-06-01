@@ -1,6 +1,7 @@
 import { test, expect } from 'vitest';
 /* eslint-disable @next/next/no-img-element */
 import { render, screen } from '@testing-library/react';
+import { describe, beforeEach, vi } from 'vitest';
 
 // Mock next/head - it renders to document.head, not visible DOM
 vi.mock('next/head', () => ({
@@ -10,12 +11,12 @@ vi.mock('next/head', () => ({
   },
 }));
 
-// Mock next/router
+// Mock next/router - include useRouter hook since we import it directly
 vi.mock('next/router', () => ({
   __esModule: true,
-  useRouter: () => ({
+  useRouter: vi.fn(() => ({
     pathname: '/',
-  }),
+  })),
 }));
 
 // Mock schemaGenerator
@@ -41,27 +42,34 @@ vi.mock('../../site-config.cjs', () => ({
 
 import ConfigSEO from './head.jsx';
 
-// Basic rendering tests - next/head renders to document.head, not visible DOM
-test('renders SEO component with default props without error', () => {
-  expect(() => render(<ConfigSEO />)).not.toThrow();
-});
+describe('SEO Component', () => {
+  beforeEach(() => {
+    // Clear all mocks before each test
+    vi.clearAllMocks();
+  });
 
-test('renders with pageTitle without error', () => {
-  expect(() => render(<ConfigSEO pageTitle="My Page" />)).not.toThrow();
-});
+  // Basic rendering tests - next/head renders to document.head, not visible DOM
+  test('renders SEO component with default props without error', () => {
+    expect(() => render(<ConfigSEO />)).not.toThrow();
+  });
 
-test('renders with pageTitleFull without error', () => {
-  expect(() => render(<ConfigSEO pageTitle="My Page" pageTitleFull="Custom Title" />)).not.toThrow();
-});
+  test('renders with pageTitle without error', () => {
+    expect(() => render(<ConfigSEO pageTitle="My Page" />)).not.toThrow();
+  });
 
-test('renders with imageUrl without error', () => {
-  expect(() => render(<ConfigSEO imageUrl="/custom-social.jpg" />)).not.toThrow();
-});
+  test('renders with pageTitleFull without error', () => {
+    expect(() => render(<ConfigSEO pageTitle="My Page" pageTitleFull="Custom Title" />)).not.toThrow();
+  });
 
-test('uses canonical URL without error', () => {
-  expect(() => render(<ConfigSEO canonical="/custom-page" />)).not.toThrow();
-});
+  test('renders with imageUrl without error', () => {
+    expect(() => render(<ConfigSEO imageUrl="/custom-social.jpg" />)).not.toThrow();
+  });
 
-test('generates schema.org JSON-LD without error', () => {
-  expect(() => render(<ConfigSEO pageTitle="Test Page" />)).not.toThrow();
+  test('uses canonical URL without error', () => {
+    expect(() => render(<ConfigSEO canonical="/custom-page" />)).not.toThrow();
+  });
+
+  test('generates schema.org JSON-LD without error', () => {
+    expect(() => render(<ConfigSEO pageTitle="Test Page" />)).not.toThrow();
+  });
 });

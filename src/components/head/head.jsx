@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import schemaGenerator from 'helpers/schemaGenerator.js';
 
 const appendSiteUrl = (siteUrl, imageUrl) => {
@@ -9,7 +10,6 @@ const appendSiteUrl = (siteUrl, imageUrl) => {
   return imageUrl.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
 };
 
-// Extends Head with addition page specific tags
 const SEO = ({
   siteTitle,
   siteTitleShort,
@@ -22,16 +22,33 @@ const SEO = ({
   const router = useRouter();
   const pathname = router.pathname;
   const fullUrl = canonical || siteUrl + (pathname || '');
-  const schemaJson = JSON.stringify(
-    schemaGenerator({
+
+  useEffect(() => {
+    // Inject JSON-LD script after mount to avoid Next.js processing
+    const schema = schemaGenerator({
       pathname,
       canonical: fullUrl,
       siteUrl,
       pageTitle,
       siteTitle,
       pageTitleFull,
-    })
-  );
+    });
+    
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'schema-org';
+    script.text = JSON.stringify(schema);
+    
+    document.head.appendChild(script);
+    
+    return () => {
+      // Cleanup on unmount
+      const existing = document.getElementById('schema-org');
+      if (existing) {
+        document.head.removeChild(existing);
+      }
+    };
+  }, [pathname, fullUrl, siteUrl, pageTitle, siteTitle, pageTitleFull]);
 
   return (
     <Head>
@@ -60,13 +77,6 @@ const SEO = ({
       />
       <meta content="1024" name="twitter:image:width" />
       <meta content="512" name="twitter:image:height" />
-
-      {/* Schema.org JSON-LD - rendered via dangerouslySetInnerHTML to avoid processing issues */}
-      <script
-        id="schema-org"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: schemaJson }}
-      />
     </Head>
   );
 };
