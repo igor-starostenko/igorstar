@@ -6,7 +6,7 @@ const baseInput = {
   siteTitle: 'Demo Site',
 };
 
-test('generates WebSite schema for homepage', () => {
+test('generates WebSite and WebPage schema for homepage', () => {
   const result = schemaGenerator({
     ...baseInput,
     pathname: '/',
@@ -15,17 +15,25 @@ test('generates WebSite schema for homepage', () => {
     pageTitleFull: 'Demo Site',
   });
 
-  expect(result).toHaveLength(1);
-  expect(result[0]).toEqual({
-    '@context': 'http://schema.org',
+  expect(result['@context']).toBe('https://schema.org');
+  expect(result['@graph']).toHaveLength(2);
+  
+  // WebSite always uses siteUrl
+  expect(result['@graph'][0]).toEqual({
     '@type': 'WebSite',
     url: 'https://example.com',
     name: 'Demo Site',
-    alternateName: 'Demo Site',
+  });
+  
+  // WebPage uses the canonical (homepage URL)
+  expect(result['@graph'][1]).toEqual({
+    '@type': 'WebPage',
+    url: 'https://example.com',
+    name: 'Demo Site',
   });
 });
 
-test('generates WebSite and BreadcrumbList schema for subpage', () => {
+test('generates WebSite and WebPage schema for subpage', () => {
   const result = schemaGenerator({
     ...baseInput,
     pathname: '/services',
@@ -34,37 +42,21 @@ test('generates WebSite and BreadcrumbList schema for subpage', () => {
     pageTitleFull: 'Services | Demo Site',
   });
 
-  expect(result).toHaveLength(2);
+  expect(result['@context']).toBe('https://schema.org');
+  expect(result['@graph']).toHaveLength(2);
 
-  expect(result[0]).toEqual({
-    '@context': 'http://schema.org',
+  // WebSite always uses siteUrl
+  expect(result['@graph'][0]).toEqual({
     '@type': 'WebSite',
-    url: 'https://example.com/services',
-    name: 'Services',
-    alternateName: 'Services | Demo Site',
+    url: 'https://example.com',
+    name: 'Demo Site',
   });
 
-  expect(result[1]).toEqual({
-    '@context': 'http://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        item: {
-          '@id': 'https://example.com',
-          name: 'Demo Site',
-        },
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        item: {
-          '@id': 'https://example.com/services',
-          name: 'Services',
-        },
-      },
-    ],
+  // WebPage uses the page's canonical
+  expect(result['@graph'][1]).toEqual({
+    '@type': 'WebPage',
+    url: 'https://example.com/services',
+    name: 'Services | Demo Site',
   });
 });
 
@@ -77,8 +69,8 @@ test('generates schema with pageTitle when pathname is / but pageTitle provided'
     pageTitleFull: 'Home | Demo Site',
   });
 
-  expect(result).toHaveLength(1);
-  expect(result[0].name).toBe('Home');
+  expect(result['@context']).toBe('https://schema.org');
+  expect(result['@graph'][0].name).toBe('Demo Site');
 });
 
 test('uses siteTitle when pathname is / and pageTitle is empty', () => {
@@ -90,11 +82,11 @@ test('uses siteTitle when pathname is / and pageTitle is empty', () => {
     pageTitleFull: 'Demo Site',
   });
 
-  expect(result).toHaveLength(1);
-  expect(result[0].name).toBe('Demo Site');
+  expect(result['@context']).toBe('https://schema.org');
+  expect(result['@graph'][0].name).toBe('Demo Site');
 });
 
-test('returns array of schemas', () => {
+test('returns object with @context and @graph', () => {
   const result = schemaGenerator({
     ...baseInput,
     pathname: '/contact',
@@ -103,5 +95,7 @@ test('returns array of schemas', () => {
     pageTitleFull: 'Contact | Demo Site',
   });
 
-  expect(Array.isArray(result)).toBe(true);
+  expect(typeof result).toBe('object');
+  expect(result['@context']).toBe('https://schema.org');
+  expect(result['@graph']).toHaveLength(2);
 });

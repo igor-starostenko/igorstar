@@ -9,44 +9,28 @@ const schemaGenerator = ({
   siteTitle,
   pageTitleFull,
 }) => {
-  const isSubPage = pageTitle && pathname !== '/';
+  const isSubPage = pathname !== '/';
 
-  let schema = [
-    {
-      '@context': 'http://schema.org',
-      '@type': 'WebSite',
-      url: canonical,
-      name: pageTitle || siteTitle,
-      alternateName: pageTitleFull,
-    },
-  ];
+  // Use @graph pattern to avoid Safari bug with array root
+  const websiteSchema = {
+    '@type': 'WebSite',
+    url: siteUrl,
+    name: siteTitle,
+  };
 
-  if (isSubPage) {
-    schema.push({
-      '@context': 'http://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          item: {
-            '@id': siteUrl,
-            name: siteTitle,
-          },
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          item: {
-            '@id': canonical,
-            name: pageTitle,
-          },
-        },
-      ],
-    });
-  }
+  const pageSchema = {
+    '@type': 'WebPage',
+    url: canonical,
+    name: pageTitleFull,
+  };
 
-  return schema;
+  // Always include both WebSite and WebPage in @graph
+  const graph = [websiteSchema, pageSchema];
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': graph,
+  };
 };
 
 export default schemaGenerator;

@@ -19,12 +19,17 @@ vi.mock('next/router', () => ({
   })),
 }));
 
-// Mock schemaGenerator
+// Mock schemaGenerator - returns object with @graph instead of array
 vi.mock('helpers/schemaGenerator.js', () => ({
   default: ({ pathname, canonical, siteUrl, pageTitle, siteTitle, pageTitleFull }) => ({
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: pageTitleFull,
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        url: siteUrl,
+        name: siteTitle,
+      },
+    ],
   }),
 }));
 
