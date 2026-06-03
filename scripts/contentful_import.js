@@ -5,7 +5,14 @@ require('dotenv').config();
 const data = fs.readFileSync(process.env.IMPORT_FILE_NAME, 'utf8');
 const json = JSON.parse(data);
 const space = process.env.CONTENTFUL_SPACE_ID;
-const accessToken = process.env.CONTENTFUL_PAT;
+const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN || process.env.CONTENTFUL_PAT;
+
+if (!space || !accessToken) {
+  console.error('Missing Contentful credentials:');
+  console.error('  - CONTENTFUL_SPACE_ID');
+  console.error('  - CONTENTFUL_ACCESS_TOKEN or CONTENTFUL_PAT (management token)');
+  process.exit(1);
+}
 
 const client = contentful.createClient({ space, accessToken });
 

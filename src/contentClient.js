@@ -1,9 +1,16 @@
 import { createClient } from 'contentful';
 
-// Always use mock for static builds
-const client = {
-  getEntries: async () => ({ limit: 0, skip: 0, total: 0, items: [] }),
-};
+const spaceId = process.env.CONTENTFUL_SPACE_ID;
+const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
+
+if (!spaceId || !accessToken) {
+  console.error('Missing Contentful credentials:');
+  console.error('  - CONTENTFUL_SPACE_ID');
+  console.error('  - CONTENTFUL_ACCESS_TOKEN');
+  process.exit(1);
+}
+
+const client = createClient({ space: spaceId, accessToken });
 
 const parseFields = (item) => {
   if (!item || !item.sys) {

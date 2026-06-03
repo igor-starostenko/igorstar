@@ -63,7 +63,18 @@ const SEO = ({
       {/* Schema.org JSON-LD - using @graph pattern to avoid Safari bug */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: schemaJson }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            schemaGenerator({
+              pathname,
+              canonical: fullUrl,
+              siteUrl,
+              pageTitle,
+              siteTitle,
+              pageTitleFull,
+            })
+          ),
+        }}
       />
     </Head>
   );
