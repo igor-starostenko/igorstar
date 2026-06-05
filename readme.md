@@ -110,6 +110,18 @@ yarn contentful:backup
 yarn contentful:export
 ```
 
+## Contentful Configuration
+
+Set these environment variables in a `.env` file at the project root:
+
+```bash
+CONTENTFUL_SPACE_ID=your_space_id
+CONTENTFUL_ACCESS_TOKEN=your_delivery_token
+```
+
+- `CONTENTFUL_SPACE_ID`: Your Contentful space ID (Settings → Spaces)
+- `CONTENTFUL_ACCESS_TOKEN`: Delivery token for reading content (Settings → API keys)
+
 ## Author
 
 * Igor Starostenko (<contact@igorstar.com>)
