@@ -7,7 +7,7 @@ const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
 
 const client = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
 });
 
 /* eslint-disable no-console */

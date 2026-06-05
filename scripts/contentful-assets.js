@@ -8,10 +8,9 @@ const imageDirectory = process.env.IMAGE_DIRECTORY || './public/images/';
 const replaceImages = parseInt(process.env.REPLACE_IMAGES || '0', 10);
 const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100', 10);
 
-// Skip if Contentful credentials are not available
-if (!process.env.CONTENTFUL_SPACE_ID || !process.env.CONTENTFUL_DELIVERY_TOKEN) {
-  console.log('Contentful credentials not available. Skipping contentful:assets step.');
-  process.exit(0);
+if (!process.env.CONTENTFUL_SPACE_ID || !process.env.CONTENTFUL_ACCESS_TOKEN) {
+  console.log('Contentful credentials are not configured.');
+  process.exit(1);
 }
 
 const client = createClient({
