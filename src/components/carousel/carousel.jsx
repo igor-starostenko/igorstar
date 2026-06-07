@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   ModalOverlay,
@@ -11,10 +11,8 @@ import {
 const CarouselModal = ({ onClose, currentIndex, views }) => {
   const [visibleIndex, setVisibleIndex] = useState(currentIndex);
 
-  // Sync visibleIndex when currentIndex changes (modal opens with new image)
-  useEffect(() => {
-    setVisibleIndex(currentIndex);
-  }, [currentIndex]);
+  // Avoid calling setState synchronously in effect - use derived state instead
+  const effectiveVisibleIndex = useMemo(() => currentIndex, [currentIndex]);
 
   const handlePrev = useCallback(() => {
     setVisibleIndex((prev) => (prev === 0 ? views.length - 1 : prev - 1));
@@ -33,9 +31,9 @@ const CarouselModal = ({ onClose, currentIndex, views }) => {
 
     document.addEventListener('keydown', handleKeyDownHandler);
     return () => document.removeEventListener('keydown', handleKeyDownHandler);
-  }, [onClose, views.length]);
+  }, [onClose, handlePrev, handleNext]);
 
-  const view = views[visibleIndex];
+  const view = views[effectiveVisibleIndex];
   const src = view?.src ?? '';
   const altText = (view?.alt || view?.description) ?? '';
 
