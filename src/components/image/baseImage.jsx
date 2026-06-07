@@ -15,15 +15,17 @@ const BaseImage = ({ alt, src, backupSrc, fill, unoptimized, ...rest }) => {
     return <img src={backupSrc} alt={alt} {...rest} />;
   }
 
-  return (
-    <SImage
-      src={src}
-      alt={alt}
-      {...(fill ? { sizes } : {})}
-      onError={() => setIsError(true)}
-      {...rest}
-    />
-  );
+  // Next.js Image requires width/height unless using fill
+  // When fill is used, we don't need width/height but sizes is still required for optimization
+  const imageProps = {
+    src,
+    alt,
+    onError: () => setIsError(true),
+    ...(fill ? { fill, sizes } : {}),
+    ...rest,
+  };
+
+  return <SImage {...imageProps} />;
 };
 
 BaseImage.propTypes = {
