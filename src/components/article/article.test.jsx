@@ -42,7 +42,7 @@ vi.mock('./article.css.js', () => ({
   Card: ({ children }) => <div data-testid="mock-card">{children}</div>,
   SLink: ({ children, href }) => <a href={href}>{children}</a>,
   Row: ({ children }) => <div>{children}</div>,
-  Thumb: ({ children, style }) => <div data-testid="mock-thumb" style={style}>{children}</div>,
+  Thumb: ({ children, className }) => <div data-testid="mock-thumb" className={className}>{children}</div>,
   Title: ({ children }) => <h2>{children}</h2>,
   Description: ({ children }) => <p>{children}</p>,
 }));
@@ -99,12 +99,12 @@ test('does not apply priority to image if index is not 0', () => {
 
 test('renders thumb with correct margin for index 0', () => {
   render(<Article {...mockArticleProps} index={0} />);
-  expect(screen.getByTestId('mock-thumb')).toHaveStyle({ marginTop: '0rem' });
+  expect(screen.getByTestId('mock-thumb')).toHaveClass('first');
 });
 
 test('renders thumb with correct margin for index > 0', () => {
   render(<Article {...mockArticleProps} index={1} />);
-  expect(screen.getByTestId('mock-thumb')).toHaveStyle({ marginTop: '5.5rem' });
+  expect(screen.getByTestId('mock-thumb')).not.toHaveClass('first');
 });
 
 test('renders image only if provided', () => {

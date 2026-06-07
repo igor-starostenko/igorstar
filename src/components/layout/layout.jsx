@@ -4,13 +4,13 @@ import Header from 'components/header/header.jsx';
 import Footer from 'components/footer/footer.jsx';
 import { timeout } from 'constants/transition.js';
 import config from '../../../site-config.cjs';
-import { Content } from './layout.css.js';
+import { Container, Content } from './layout.css.js';
 
 const Layout = ({ config, children }) => {
   const { siteTitleShort, author, social } = config;
 
   return (
-    <div style={{ height: '100%' }}>
+    <Container>
       <motion.div
         key="header"
         initial={{ y: -100 }}
@@ -32,7 +32,7 @@ const Layout = ({ config, children }) => {
       </motion.div>
 
       <Footer author={author} social={social} />
-    </div>
+    </Container>
   );
 };
 

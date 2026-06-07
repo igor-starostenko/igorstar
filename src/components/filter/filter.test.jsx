@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('next/link', () => ({
   __esModule: true,
-  default: ({ children, href, style }) => <a href={href} style={style}>{children}</a>,
+  default: ({ children, href, className }) => <a href={href} className={className}>{children}</a>,
 }));
 
 import Filter from './filter.jsx';
@@ -21,7 +21,7 @@ test('renders filter categories', () => {
 test('applies active class to current path', () => {
   render(<Filter path="/travel" title="Test" displayCount={5} totalCount={10} />);
   const activeLink = screen.getByText('Travel');
-  expect(activeLink.style.fontWeight).toBe('bold');
+  expect(activeLink).toHaveClass('active');
 });
 
 test('renders count text', () => {

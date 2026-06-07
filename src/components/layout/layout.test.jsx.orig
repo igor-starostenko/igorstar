@@ -25,7 +25,6 @@ vi.mock('../../../site-config.cjs', () => ({
 
 vi.mock('./layout.css.js', () => ({
   __esModule: true,
-  Container: ({ children }) => <div>{children}</div>,
   Content: ({ children }) => <main data-testid="mock-content">{children}</main>,
 }));
 
