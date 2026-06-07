@@ -7,7 +7,7 @@ vi.mock('./baseImage.jsx', () => ({
     <img
       data-testid="mock-base-image"
       src={props.src}
-      alt={props.alt}
+      alt={props.alt || ''}
       {...props}
     />
   ),
