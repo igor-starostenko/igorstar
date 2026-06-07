@@ -29,8 +29,8 @@ const parseFields = (item) => {
 const parseImage = (id, title, file) => {
   const { width, height } = file.details.image;
   return {
-    src: `/images/${id}_${file.fileName}`,
-    backupSrc: `https:${file.url}`,
+    src: `https:${file.url}`,
+    backupSrc: null,
     alt: title,
     width,
     height,
