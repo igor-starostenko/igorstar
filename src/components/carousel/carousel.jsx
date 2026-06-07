@@ -11,13 +11,18 @@ import {
 const CarouselModal = ({ onClose, currentIndex, views }) => {
   const [visibleIndex, setVisibleIndex] = useState(currentIndex);
 
+  // Sync visibleIndex when currentIndex changes (modal opens with new image)
+  useEffect(() => {
+    setVisibleIndex(currentIndex);
+  }, [currentIndex]);
+
   const handlePrev = useCallback(() => {
     setVisibleIndex((prev) => (prev === 0 ? views.length - 1 : prev - 1));
-  }, []);
+  }, [views.length]);
 
   const handleNext = useCallback(() => {
     setVisibleIndex((prev) => (prev === views.length - 1 ? 0 : prev + 1));
-  }, []);
+  }, [views.length]);
 
   useEffect(() => {
     const handleKeyDownHandler = (e) => {

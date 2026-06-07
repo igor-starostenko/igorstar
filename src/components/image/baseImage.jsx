@@ -7,7 +7,7 @@ const sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
 /* For contentful query params see
   https://www.contentful.com/developers/docs/references/images-api/#/reference
  */
-const BaseImage = ({ alt, src, backupSrc, fill, unoptimized, ...rest }) => {
+const BaseImage = ({ alt, src, backupSrc = '', fill, unoptimized, ...rest }) => {
   const [isError, setIsError] = useState(false);
 
   if (isError) {

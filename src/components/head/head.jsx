@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import schemaGenerator from 'helpers/schemaGenerator.js';
+import config from 'site-config.cjs';
 
 const appendSiteUrl = (siteUrl, imageUrl) => {
   const origin =
@@ -21,16 +22,6 @@ const SEO = ({
   const router = useRouter();
   const pathname = router.pathname;
   const fullUrl = canonical || siteUrl + (pathname || '');
-  const schemaJson = JSON.stringify(
-    schemaGenerator({
-      pathname,
-      canonical: fullUrl,
-      siteUrl,
-      pageTitle,
-      siteTitle,
-      pageTitleFull,
-    })
-  );
 
   return (
     <Head>
@@ -88,12 +79,6 @@ SEO.propTypes = {
   pageTitle: PropTypes.string,
   pageTitleFull: PropTypes.string,
   imageUrl: PropTypes.string,
-};
-
-const config = {
-  siteTitle: 'Blog Site',
-  siteTitleShort: 'Site',
-  siteUrl: 'https://example.com',
 };
 
 const ConfigSEO = (props) => <SEO {...config} {...props} />;
