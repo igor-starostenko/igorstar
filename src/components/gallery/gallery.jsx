@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
+import styled from 'styled-components';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -35,6 +36,11 @@ const orderArray = (array, orderBy, order) => {
   return direction === 'desc' ? array.reverse() : array;
 };
 
+const GalleryContainer = styled.div`
+  margin: ${({ rowGap }) => `-${rowGap}px`};
+  max-width: ${({ containerWidth }) => `${containerWidth}px`};
+`;
+
 const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, containerWidth = 788 }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -59,14 +65,14 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, co
       {photos.length > 0 && (
         <>
           {/* Use RowsPhotoAlbum for responsive grid with CSS 3-column constraint */}
-          <div style={{ margin: `-${rowGap}px`, maxWidth: `${containerWidth}px` }}>
+          <GalleryContainer rowGap={rowGap} containerWidth={containerWidth}>
             <RowsPhotoAlbum
               photos={photoAlbumPhotos}
               onClick={handlePhotoClick}
               targetRowHeight={targetRowHeight}
               rowGap={rowGap}
             />
-          </div>
+          </GalleryContainer>
         </>
       )}
 
