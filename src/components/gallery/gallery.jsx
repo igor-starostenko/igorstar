@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-import { RowsPhotoAlbum } from 'react-photo-album';
+import { ColumnsPhotoAlbum } from 'react-photo-album';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -59,12 +59,12 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4 }) 
     <div>
       {photos.length > 0 && (
         <>
-          {/* Use RowsPhotoAlbum for responsive grid */}
+          {/* Use ColumnsPhotoAlbum for fixed 3-column grid */}
           <div style={{ margin: `-${rowGap}px` }}>
-            <RowsPhotoAlbum
+            <ColumnsPhotoAlbum
               photos={photoAlbumPhotos}
               onClick={handlePhotoClick}
-              targetRowHeight={targetRowHeight}
+              columns={3}
               rowGap={rowGap}
             />
           </div>

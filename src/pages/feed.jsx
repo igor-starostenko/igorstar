@@ -21,7 +21,9 @@ const FeedPage = ({ page, feed }) => (
       </Title>
       <div style={{ margin: '0 -4rem' }}>
         {feed.images.length > 0 && (
-          <Gallery photos={feed.images} targetRowHeight={250} />
+          <div style={{ maxWidth: '788px' }}>
+            <Gallery photos={feed.images} targetRowHeight={250} rowGap={8} />
+          </div>
         )}
       </div>
     </Box>
