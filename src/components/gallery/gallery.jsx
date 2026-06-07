@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
