@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
@@ -44,11 +45,10 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, co
   );
 
   // Handle click on photo in PhotoAlbum (returns index)
-  const handlePhotoClick = (...args) => {
+  const handlePhotoClick = (_event, { index }) => {
     // react-photo-album passes (event, { index }) or just { index } depending on version
-    const param = args[0];
-    const index = param?.index ?? (typeof param === 'number' ? param : 0);
-    setCurrent(index);
+    const idx = index ?? (typeof _event === 'number' ? _event : 0);
+    setCurrent(idx);
     setOpen(true);
   };
 
