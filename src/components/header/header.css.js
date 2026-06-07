@@ -24,6 +24,8 @@ export const Container = styled.header`
 `;
 
 export const Logo = styled(LogoSvg)`
+  box-shadow: none;
+  
   ${MEDIA.TABLET`
     max-width: 90%;
   `}
