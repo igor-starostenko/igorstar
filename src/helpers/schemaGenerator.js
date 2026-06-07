@@ -2,14 +2,12 @@
 // If you're working with deeply nested pages, remove this or rework it.
 
 const schemaGenerator = ({
-  pathname,
   canonical,
   siteUrl,
   pageTitle,
   siteTitle,
   pageTitleFull,
 }) => {
-  const isSubPage = pathname !== '/';
 
   // Use @graph pattern to avoid Safari bug with array root
   const websiteSchema = {

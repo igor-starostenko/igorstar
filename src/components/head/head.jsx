@@ -57,7 +57,6 @@ const SEO = ({
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             schemaGenerator({
-              pathname,
               canonical: fullUrl,
               siteUrl,
               pageTitle,
