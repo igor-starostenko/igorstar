@@ -45,7 +45,10 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4 }) 
   );
 
   // Handle click on photo in PhotoAlbum (returns index)
-  const handlePhotoClick = (_event, { index }) => {
+  const handlePhotoClick = (...args) => {
+    // react-photo-album passes (event, { index }) or just { index } depending on version
+    const param = args[0];
+    const index = param?.index ?? (typeof param === 'number' ? param : 0);
     setCurrent(index);
     setOpen(true);
   };
