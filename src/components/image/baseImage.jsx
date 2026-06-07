@@ -12,20 +12,22 @@ const BaseImage = ({ alt, src, backupSrc = '', fill, unoptimized, ...rest }) => 
 
   if (isError) {
     /* eslint-disable @next/next/no-img-element */
+    // If backupSrc is empty/falsy, render nothing instead of broken image
+    if (!backupSrc) return null;
     return <img src={backupSrc} alt={alt} {...rest} />;
   }
 
   // Next.js Image requires width/height unless using fill
   // When fill is used, we don't need width/height but sizes is still required for optimization
+  // Filter out props that should not be passed to DOM elements (fill, unoptimized are Next.js specific)
   const imageProps = {
     src,
     alt,
     onError: () => setIsError(true),
     ...(fill ? { fill, sizes } : {}),
-    ...rest,
   };
 
-  return <SImage {...imageProps} />;
+  return <SImage {...imageProps} {...rest} />;
 };
 
 BaseImage.propTypes = {
