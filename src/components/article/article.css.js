@@ -26,6 +26,7 @@ export const Row = styled.div`
 
 export const Thumb = styled.div`
   position: relative;
+  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease-in-out;
   border-radius: 2px;
   overflow: hidden;
@@ -36,6 +37,7 @@ export const Thumb = styled.div`
     transition: transform 2s;
   }
   :hover {
+    box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
     img {
       transform: scale(1.02);
     }
