@@ -120,7 +120,16 @@ CONTENTFUL_ACCESS_TOKEN=your_delivery_token
 ```
 
 - `CONTENTFUL_SPACE_ID`: Your Contentful space ID (Settings → Spaces)
-- `CONTENTFUL_ACCESS_TOKEN`: Delivery token for reading content (Settings → API keys)
+- `CONTENTFUL_ACCESS_TOKEN`: Delivery token for reading content (Settings → API keys → Content delivery tokens)
+
+To get your credentials:
+1. Log in to [Contentful](https://app.contentful.com)
+2. Select your space
+3. Go to Settings → API keys
+4. Create or copy an existing Content delivery token (type: read-only)
+5. Copy your Space ID from Settings → General settings
+
+> **Note:** The project uses `CONTENTFUL_ACCESS_TOKEN` for the delivery token only. No PAT (Personal Access Token) is required.
 
 ## Author
 
