@@ -7,13 +7,25 @@ import styled from 'styled-components';
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
 // Map gallery photos to react-photo-album format
-const mapToPhotoAlbumFormat = (photos) =>
-  photos.map((photo) => ({
-    src: photo.src,
-    width: photo.width,
-    height: photo.height,
-    alt: photo.description || photo.alt || '',
-  }));
+const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
+  photos.map((photo) => {
+    // Get original dimensions or use fallbacks
+    const originalWidth = photo.width || 1200;
+    const originalHeight = photo.height || 800;
+    
+    // Calculate aspect ratio from original dimensions
+    const aspectRatio = originalWidth / originalHeight;
+    
+    // Use targetRowHeight as the height constraint, calculate proportional width
+    const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
+    
+    return {
+      src: photo.src,
+      width: constrainedWidth,
+      height: targetRowHeight,
+      alt: photo.description || photo.alt || '',
+    };
+  });
 
 const createSortFunction = (orderBy) => {
   if (!orderBy) return () => 0;
@@ -41,7 +53,7 @@ const GalleryContainer = styled.div`
   max-width: ${(props) => props.$containerWidth}px;
 `;
 
-const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, containerWidth = 788 }) => {
+const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, containerWidth = 900 }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
@@ -58,7 +70,7 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, co
     setOpen(true);
   };
 
-  const photoAlbumPhotos = useMemo(() => mapToPhotoAlbumFormat(images), [images]);
+  const photoAlbumPhotos = useMemo(() => mapToPhotoAlbumFormat(images, targetRowHeight), [images, targetRowHeight]);
 
   return (
     <div>
@@ -100,15 +112,7 @@ Gallery.propTypes = {
 };
 
 const GlobalStyles = () => (
-  <style>{`
-    .react-photo-album--photo img {
-      max-width: 100% !important;
-      height: auto !important;
-    }
-    .react-photo-album--grid__photo {
-      width: 100% !important;
-    }
-  `}</style>
+
 );
 
 export default Gallery;
