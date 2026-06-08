@@ -21,26 +21,6 @@ export const Container = styled.header`
       color: inherit;
     }
   }
-
-  /* Override ImageWrapper box-shadow for logo - more specific selector */
-  a .logo-image-wrapper,
-  .logo-image-wrapper {
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    overflow: visible !important;
-    cursor: default !important;
-
-    div {
-      transition: none !important;
-    }
-
-    &:hover {
-      box-shadow: none !important;
-      div {
-        transform: none !important;
-      }
-    }
-  }
 `;
 
 export const Logo = styled(LogoSvg)`
@@ -51,3 +31,4 @@ export const Logo = styled(LogoSvg)`
     max-width: 75%;
   `}
 `;
+
