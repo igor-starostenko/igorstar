@@ -22,17 +22,22 @@ export const Container = styled.header`
     }
   }
 
-  /* Override ImageWrapper box-shadow for logo */
+  /* Override ImageWrapper box-shadow for logo - more specific selector */
+  a .logo-image-wrapper,
   .logo-image-wrapper {
     box-shadow: none !important;
-    border-radius: 0;
-    overflow: visible;
-    cursor: default;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    cursor: default !important;
+
+    div {
+      transition: none !important;
+    }
 
     &:hover {
       box-shadow: none !important;
       div {
-        transform: none;
+        transform: none !important;
       }
     }
   }
