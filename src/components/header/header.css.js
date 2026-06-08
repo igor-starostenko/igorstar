@@ -21,14 +21,10 @@ export const Container = styled.header`
       color: inherit;
     }
   }
-
-  /* Override box-shadow for logo wrapper */
-  a:first-child .imagecss__ImageWrapper-sc-1f8xre3-0 {
-    box-shadow: none;
-  }
 `;
 
 export const Logo = styled(LogoSvg)`
+  box-shadow: none;
   ${MEDIA.TABLET`
     max-width: 90%;
   `}
