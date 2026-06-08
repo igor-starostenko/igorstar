@@ -99,4 +99,16 @@ Gallery.propTypes = {
   containerWidth: PropTypes.number,
 };
 
+const GlobalStyles = () => (
+  <style>{`
+    .react-photo-album--photo img {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+    .react-photo-album--grid__photo {
+      width: 100% !important;
+    }
+  `}</style>
+);
+
 export default Gallery;
