@@ -194,6 +194,7 @@ const Post = ({ post, recommendations }) => {
               photos={images}
               order="asc"
               targetRowHeight={targetRowHeight}
+              containerWidth={700}
             />
           )}
         </div>
