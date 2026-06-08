@@ -188,7 +188,7 @@ const Post = ({ post, recommendations }) => {
             Category: <Link href={`/${post.category}`}>{post.category}</Link>
           </span>
         </div>
-        <div style={{ margin: '0 -4rem' }}>
+        <div style={{ maxWidth: '700px', margin: '0 auto 2rem auto' }}>
           {images.length > 0 && (
             <Gallery
               photos={images}
