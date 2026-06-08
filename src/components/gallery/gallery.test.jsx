@@ -69,6 +69,19 @@ vi.mock('react-photo-album', () => ({
       ))}
     </div>
   ),
+  MasonryPhotoAlbum: ({ photos, onClick }) => (
+    <div data-testid="mock-masonry-photo-album">
+      {photos.map((photo, index) => (
+        <div
+          key={index}
+          data-testid="mock-masonry-photo-album-image"
+          onClick={(e) => onClick(e, { index })}
+        >
+          {photo.alt || ''}
+        </div>
+      ))}
+    </div>
+  ),
   MouseClickZoom: () => <span data-testid="mock-mouse-click-zoom">Zoom</span>,
 }));
 
@@ -86,7 +99,7 @@ test('renders image gallery when photos are provided', async () => {
     render(<Gallery photos={photos} />);
   });
 
-  const images = screen.getAllByTestId('mock-rows-photo-album-image');
+  const images = screen.getAllByTestId('mock-masonry-photo-album-image');
   expect(images.length).toBe(2);
 });
 
@@ -96,7 +109,7 @@ test('sorts photos by width ascending when orderBy and order are set', async () 
     render(<Gallery photos={photos} order="asc" orderBy="width" />);
   });
 
-  const images = screen.getAllByTestId('mock-rows-photo-album-image');
+  const images = screen.getAllByTestId('mock-masonry-photo-album-image');
   expect(images[0]).toHaveTextContent('A image');
 });
 
@@ -106,7 +119,7 @@ test('opens carousel on image click', async () => {
     render(<Gallery photos={photos} />);
   });
 
-  const images = screen.getAllByTestId('mock-rows-photo-album-image');
+  const images = screen.getAllByTestId('mock-masonry-photo-album-image');
   expect(images.length).toBeGreaterThan(0);
 
   fireEvent.click(images[0]);
@@ -120,7 +133,7 @@ test('sorts photos by width descending when order is desc', async () => {
     render(<Gallery photos={photos} order="desc" orderBy="width" />);
   });
 
-  const images = screen.getAllByTestId('mock-rows-photo-album-image');
+  const images = screen.getAllByTestId('mock-masonry-photo-album-image');
   expect(images[0]).toHaveTextContent('B image');
 });
 
@@ -130,7 +143,7 @@ test('returns unsorted array when orderBy is not provided', async () => {
     render(<Gallery photos={photos} />);
   });
 
-  const images = screen.getAllByTestId('mock-rows-photo-album-image');
+  const images = screen.getAllByTestId('mock-masonry-photo-album-image');
   expect(images[0]).toHaveTextContent('B image');
 });
 
@@ -140,7 +153,7 @@ test('returns unsorted array when order direction is invalid', async () => {
     render(<Gallery photos={photos} order="invalid" orderBy="width" />);
   });
 
-  const images = screen.getAllByTestId('mock-rows-photo-album-image');
+  const images = screen.getAllByTestId('mock-masonry-photo-album-image');
   expect(images[0]).toHaveTextContent('B image');
 });
 
@@ -149,7 +162,7 @@ test('renders gallery with empty photos array', async () => {
     render(<Gallery photos={[]} />);
   });
 
-  expect(screen.queryByTestId('mock-rows-photo-album-image')).not.toBeInTheDocument();
+  expect(screen.queryByTestId('mock-masonry-photo-album-image')).not.toBeInTheDocument();
 });
 
 test('renders gallery with single photo', async () => {
@@ -157,6 +170,6 @@ test('renders gallery with single photo', async () => {
     render(<Gallery photos={[{ id: '1', src: 'a.jpg', alt: 'Single image', width: 100, height: 200 }]} />);
   });
 
-  const images = screen.getAllByTestId('mock-rows-photo-album-image');
+  const images = screen.getAllByTestId('mock-masonry-photo-album-image');
   expect(images.length).toBe(1);
 });
