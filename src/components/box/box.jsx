@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { Container } from './box.css';
 
-const Box = ({ children, ...rest }) => (
-  <Container {...rest}>{children}</Container>
+const Box = ({ children, isMain, ...rest }) => (
+  <Container $isMain={isMain} {...rest}>{children}</Container>
 );
 
 Box.propTypes = {
