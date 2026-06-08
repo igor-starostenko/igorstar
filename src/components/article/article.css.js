@@ -55,34 +55,6 @@ export const Thumb = styled.div`
     height: 50vw;
     margin: 0rem -2.9rem 0rem;
   `};
-
-  &.first {
-    margin-top: 0rem;
-  }
-  &:not(.first) {
-    margin-top: 5.5rem;
-  }
-
-  /* Ensure Next.js Image wrapper fills the Thumb container */
-  & > div {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-
-    & img {
-      position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-    }
-  }
 `;
 
 export const Title = styled.h3`
