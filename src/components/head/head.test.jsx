@@ -33,7 +33,7 @@ vi.mock('helpers/schemaGenerator.js', () => ({
 }));
 
 // Mock site-config.cjs - using test data
-vi.mock('../../site-config.cjs', () => ({
+vi.mock('../../../site-config.cjs', () => ({
   __esModule: true,
   default: {
     siteTitle: 'Test Blog',
