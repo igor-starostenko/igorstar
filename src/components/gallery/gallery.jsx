@@ -111,8 +111,4 @@ Gallery.propTypes = {
   containerWidth: PropTypes.number,
 };
 
-const GlobalStyles = () => (
-
-);
-
 export default Gallery;
