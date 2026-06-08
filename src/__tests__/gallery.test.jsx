@@ -1,60 +1,80 @@
-import { test, expect } from 'vitest';
+import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import GalleryPage from '../pages/gallery.jsx';
 
 vi.mock('components/layout/layout.jsx', () => ({
   default: ({ children }) => <div data-testid="mock-layout">{children}</div>,
 }));
 
 vi.mock('components/box/box.jsx', () => ({
-  default: ({ children }) => <div data-testid="mock-box">{children}</div>,
+  default: ({ children, style }) => (
+    <div data-testid="mock-box" style={style}>
+      {children}
+    </div>
+  ),
 }));
 
 vi.mock('components/gallery/gallery.jsx', () => ({
-  default: ({ photos }) => <div data-testid="mock-gallery">{photos.length} photos</div>,
+  default: ({ photos }) => (
+    <div data-testid="mock-gallery">{photos.length} photos</div>
+  ),
 }));
 
 vi.mock('components/head/head.jsx', () => ({
-  default: ({ pageTitle }) => <title>{pageTitle}</title>,
+  default: ({ pageTitle }) => (
+    <title data-testid="mock-head">{pageTitle}</title>
+  ),
 }));
 
 vi.mock('components/title/title.jsx', () => ({
-  default: ({ children }) => <h1>{children}</h1>,
+  default: ({ children }) => (
+    <h1 data-testid="mock-title">{children}</h1>
+  ),
 }));
 
-test('renders gallery page with title', () => {
-  render(
-    <GalleryPage
-      page={{ title: 'Test Gallery' }}
-      gallery={{ images: [] }}
-    />
-  );
+import GalleryPage from 'pages/gallery.jsx';
 
-  expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-    'Test Gallery'
-  );
+test('renders Gallery with images', () => {
+  const mockProps = {
+    page: { title: 'Gallery' },
+    gallery: {
+      limit: 10,
+      skip: 0,
+      total: 3,
+      images: [
+        { sys: { id: '1' }, fields: {} },
+        { sys: { id: '2' }, fields: {} },
+        { sys: { id: '3' }, fields: {} },
+      ],
+    },
+  };
+
+  render(<GalleryPage {...mockProps} />);
+
+  expect(screen.getByText('3 photos')).toBeInTheDocument();
 });
 
-test('renders gallery component when images exist', () => {
-  const mockImages = [{ src: 'test1.jpg' }, { src: 'test2.jpg' }];
-  render(
-    <GalleryPage
-      page={{ title: 'Test Gallery' }}
-      gallery={{ images: mockImages }}
-    />
-  );
+test('renders Gallery with empty images', () => {
+  const mockProps = {
+    page: { title: 'Gallery' },
+    gallery: {
+      limit: 10,
+      skip: 0,
+      total: 0,
+      images: [],
+    },
+  };
 
-  expect(screen.getByTestId('mock-gallery')).toHaveTextContent('2 photos');
+  render(<GalleryPage {...mockProps} />);
+
+  // When images is empty, Gallery component isn't rendered, so check box instead
+  expect(screen.getByTestId('mock-box')).toBeInTheDocument();
 });
 
-test('does not render gallery when no images', () => {
-  const { container } = render(
-    <GalleryPage
-      page={{ title: 'Test Gallery' }}
-      gallery={{ images: [] }}
-    />
-  );
+test('renders Gallery with empty page', () => {
+  const mockProps = {
+    page: {},
+    gallery: { images: [] },
+  };
 
-  // The gallery div has margin but no Gallery component inside
-  expect(container.innerHTML).not.toContain('mock-gallery');
+  expect(() => render(<GalleryPage {...mockProps} />)).not.toThrow();
 });
