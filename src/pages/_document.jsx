@@ -43,7 +43,7 @@ class MyDocument extends Document {
           <meta content={siteDescription} property="og:description" />
           <meta content={siteDescription} name="twitter:description" />
 
-          <meta content="yes" name="apple-mobile-web-app-capable" />
+          <meta content="yes" name="mobile-web-app-capable" />
           <meta
             content="black-translucent"
             name="apple-mobile-web-app-status-bar-style"

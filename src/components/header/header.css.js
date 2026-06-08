@@ -21,10 +21,24 @@ export const Container = styled.header`
       color: inherit;
     }
   }
+
+  /* Override ImageWrapper box-shadow for logo */
+  .logo-image-wrapper {
+    box-shadow: none !important;
+    border-radius: 0;
+    overflow: visible;
+    cursor: default;
+
+    &:hover {
+      box-shadow: none !important;
+      div {
+        transform: none;
+      }
+    }
+  }
 `;
 
 export const Logo = styled(LogoSvg)`
-  box-shadow: none;
   ${MEDIA.TABLET`
     max-width: 90%;
   `}

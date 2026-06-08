@@ -37,8 +37,8 @@ const orderArray = (array, orderBy, order) => {
 };
 
 const GalleryContainer = styled.div`
-  margin: ${({ rowGap }) => `-${rowGap}px`};
-  max-width: ${({ containerWidth }) => `${containerWidth}px`};
+  margin: ${(props) => props.$rowGap}px;
+  max-width: ${(props) => props.$containerWidth}px;
 `;
 
 const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, containerWidth = 788 }) => {
@@ -65,7 +65,7 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, co
       {photos.length > 0 && (
         <>
           {/* Use RowsPhotoAlbum for responsive grid with CSS 3-column constraint */}
-          <GalleryContainer rowGap={rowGap} containerWidth={containerWidth}>
+          <GalleryContainer $rowGap={-rowGap} $containerWidth={containerWidth}>
             <RowsPhotoAlbum
               photos={photoAlbumPhotos}
               onClick={handlePhotoClick}
