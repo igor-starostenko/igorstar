@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
+import styled from 'styled-components';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const Image = dynamic(() => import('components/image/image.jsx'));
