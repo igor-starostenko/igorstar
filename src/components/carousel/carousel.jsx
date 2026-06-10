@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   ModalOverlay,
@@ -8,19 +8,16 @@ import {
   GalleryImage,
 } from './carousel.css.js';
 
-const CarouselModal = ({ onClose, currentIndex, views }) => {
-  const [visibleIndex, setVisibleIndex] = useState(currentIndex);
-
-  // Avoid calling setState synchronously in effect - use derived state instead
-  const effectiveVisibleIndex = useMemo(() => currentIndex, [currentIndex]);
-
+const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   const handlePrev = useCallback(() => {
-    setVisibleIndex((prev) => (prev === 0 ? views.length - 1 : prev - 1));
-  }, [views.length]);
+    const newIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
+    onIndexChange(newIndex);
+  }, [currentIndex, views.length, onIndexChange]);
 
   const handleNext = useCallback(() => {
-    setVisibleIndex((prev) => (prev === views.length - 1 ? 0 : prev + 1));
-  }, [views.length]);
+    const newIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
+    onIndexChange(newIndex);
+  }, [currentIndex, views.length, onIndexChange]);
 
   useEffect(() => {
     const handleKeyDownHandler = (e) => {
@@ -33,13 +30,17 @@ const CarouselModal = ({ onClose, currentIndex, views }) => {
     return () => document.removeEventListener('keydown', handleKeyDownHandler);
   }, [onClose, handlePrev, handleNext]);
 
-  const view = views[effectiveVisibleIndex];
+  const view = views[currentIndex];
   const src = view?.src ?? '';
   const altText = (view?.alt || view?.description) ?? '';
 
   return (
     <ModalOverlay onClick={onClose}>
-      <ModalContent role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
+      <ModalContent
+        role="dialog"
+        aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+      >
         <CloseButton onClick={onClose} aria-label="Close">
           &times;
         </CloseButton>
@@ -79,6 +80,7 @@ CarouselModal.propTypes = {
       description: PropTypes.string,
     }).isRequired
   ).isRequired,
+  onIndexChange: PropTypes.func.isRequired,
 };
 
 export default CarouselModal;

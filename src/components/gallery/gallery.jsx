@@ -147,6 +147,7 @@ const Gallery = ({
           }}
           views={images}
           currentIndex={current}
+          onIndexChange={setCurrent}
         />
       )}
     </div>
