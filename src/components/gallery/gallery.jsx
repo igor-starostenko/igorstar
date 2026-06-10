@@ -112,8 +112,11 @@ const Gallery = ({
           : typeof _event === 'number'
             ? _event
             : 0;
-    setCurrent(idx);
-    setOpen(true);
+    // Debug: log the index to verify it's correct
+    if (typeof idx === 'number' && idx >= 0) {
+      setCurrent(idx);
+      setOpen(true);
+    }
   };
 
   const photoAlbumPhotos = useMemo(
