@@ -1,10 +1,10 @@
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
-import { ImageWrapper, Image } from './selfie.css.js';
+
+const Image = dynamic(() => import('components/image/image.jsx'));
 
 const Selfie = ({ src, ...rest }) => (
-  <ImageWrapper {...rest}>
-    <Image height={100} width={100} src={src} alt="Selfie" priority />
-  </ImageWrapper>
+  <Image height={100} width={100} src={src} alt="Selfie" priority {...rest} />
 );
 
 Selfie.propTypes = {

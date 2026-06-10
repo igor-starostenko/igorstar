@@ -2,10 +2,23 @@
 import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-vi.mock('./selfie.css.js', () => ({
-  __esModule: true,
-  ImageWrapper: ({ children }) => <div data-testid="mock-wrapper">{children}</div>,
-  Image: ({ src, alt }) => <img data-testid="mock-image" src={src} alt={alt} />,
+vi.mock('next/dynamic', () => ({
+  default: (loader) => {
+    if (loader.toString().includes('image.jsx')) {
+      const ImageMock = ({ height, width, src, alt, priority }) => (
+        <img
+          data-testid="mock-image"
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+        />
+      );
+      ImageMock.displayName = 'ImageMock';
+      return ImageMock;
+    }
+    return () => <div data-testid="mock-dynamic" />;
+  },
 }));
 
 import Selfie from './selfie.jsx';
