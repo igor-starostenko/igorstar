@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-import { MasonryPhotoAlbum } from "react-photo-album";
+import { RowsPhotoAlbum } from "react-photo-album";
 import styled from 'styled-components';
+import "react-photo-album/rows.css";
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -12,13 +13,13 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     // Get original dimensions or use fallbacks
     const originalWidth = photo.width || 1200;
     const originalHeight = photo.height || 800;
-    
+
     // Calculate aspect ratio from original dimensions
     const aspectRatio = originalWidth / originalHeight;
-    
+
     // Use targetRowHeight as the height constraint, calculate proportional width
     const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
-    
+
     return {
       src: photo.src,
       width: constrainedWidth,
@@ -49,11 +50,11 @@ const orderArray = (array, orderBy, order) => {
 };
 
 const GalleryContainer = styled.div`
-  margin: ${(props) => props.$rowGap}px;
+  margin: ${(props) => props.$spacing}px;
   max-width: ${(props) => props.$containerWidth}px;
 `;
 
-const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, containerWidth = 900 }) => {
+const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, spacing = 1, containerWidth = 900 }) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
@@ -75,17 +76,15 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, rowGap = 4, co
   return (
     <div>
       {photos.length > 0 && (
-        <>
-          {/* Use MasonryPhotoAlbum for responsive 3-column grid layout */}
-          <GalleryContainer $rowGap={-rowGap} $containerWidth={containerWidth}>
-            <MasonryPhotoAlbum
-              photos={photoAlbumPhotos}
-              onClick={handlePhotoClick}
-              targetRowHeight={targetRowHeight}
-              rowGap={rowGap}
-            />
-          </GalleryContainer>
-        </>
+        <GalleryContainer $spacing={spacing} $containerWidth={containerWidth}>
+          <RowsPhotoAlbum
+            photos={photoAlbumPhotos}
+            onClick={handlePhotoClick}
+            targetRowHeight={targetRowHeight}
+            spacing={spacing}
+            padding={0}
+          />
+        </GalleryContainer>
       )}
 
       {isOpen && (
@@ -107,7 +106,7 @@ Gallery.propTypes = {
   order: PropTypes.string,
   orderBy: PropTypes.string,
   targetRowHeight: PropTypes.number,
-  rowGap: PropTypes.number,
+  spacing: PropTypes.number,
   containerWidth: PropTypes.number,
 };
 
