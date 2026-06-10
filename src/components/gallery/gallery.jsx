@@ -113,6 +113,7 @@ const Gallery = ({
             ? _event
             : 0;
     // Debug: log the index to verify it's correct
+    console.log('handlePhotoClick:', { _event, arg, idx });
     if (typeof idx === 'number' && idx >= 0) {
       setCurrent(idx);
       setOpen(true);
