@@ -8,6 +8,11 @@ import styled from 'styled-components';
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const Image = dynamic(() => import('components/image/image.jsx'));
 
+/* GalleryImage - Styled component with shadow for gallery images */
+const GalleryImage = styled(Image)`
+  border-radius: 0;
+`;
+
 /* Next.js Image renderer for react-photo-album */
 const renderNextImage = (
   { alt = '', title, sizes },
@@ -23,7 +28,7 @@ const renderNextImage = (
         aspectRatio: `${width} / ${height}`,
       }}
     >
-      <Image
+      <GalleryImage
         fill
         src={src}
         alt={alt}
