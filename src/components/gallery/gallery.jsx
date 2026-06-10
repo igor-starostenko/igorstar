@@ -102,9 +102,16 @@ const Gallery = ({
   );
 
   // Handle click on photo in PhotoAlbum (returns index)
-  const handlePhotoClick = (_event, { index }) => {
-    // react-photo-album passes (event, { index }) or just { index } depending on version
-    const idx = index ?? (typeof _event === 'number' ? _event : 0);
+  const handlePhotoClick = (_event, arg) => {
+    // react-photo-album passes (event, { index }) or just index depending on version
+    const idx =
+      typeof arg === 'object' && arg !== null
+        ? (arg.index ?? (_event && typeof _event === 'number' ? _event : 0))
+        : typeof arg === 'number'
+          ? arg
+          : typeof _event === 'number'
+            ? _event
+            : 0;
     setCurrent(idx);
     setOpen(true);
   };
