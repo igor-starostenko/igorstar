@@ -3,15 +3,9 @@ import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
-import styled from 'styled-components';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const Image = dynamic(() => import('components/image/image.jsx'));
-
-/* GalleryImage - Styled component with shadow for gallery images */
-const GalleryImage = styled(Image)`
-  border-radius: 0;
-`;
 
 /* Next.js Image renderer for react-photo-album */
 const renderNextImage = (
@@ -21,7 +15,7 @@ const renderNextImage = (
   const src = typeof photo === 'string' ? photo : (photo.src ?? photo.url);
 
   return (
-    <GalleryImage
+    <Image
       style={{
         width: '100%',
         position: 'relative',
@@ -112,7 +106,6 @@ const Gallery = ({
       _event.detail?.index ??
       (typeof arg === 'object' && arg !== null ? arg.index : undefined) ??
       (typeof arg === 'number' ? arg : undefined);
-    console.log('handlePhotoClick:', { _event, arg, idx });
     if (typeof idx === 'number' && idx >= 0) {
       setCurrent(idx);
       setOpen(true);
