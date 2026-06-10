@@ -103,16 +103,15 @@ const Gallery = ({
 
   // Handle click on photo in PhotoAlbum (returns index)
   const handlePhotoClick = (_event, arg) => {
-    // react-photo-album passes (event, { index }) or just index depending on version
+    // react-photo-album passes index/photo info in different ways:
+    // - _event.index (direct property on event)
+    // - arg.index (second parameter object)
+    // - arg directly as index number
     const idx =
-      typeof arg === 'object' && arg !== null
-        ? (arg.index ?? (_event && typeof _event === 'number' ? _event : 0))
-        : typeof arg === 'number'
-          ? arg
-          : typeof _event === 'number'
-            ? _event
-            : 0;
-    // Debug: log the index to verify it's correct
+      _event.index ??
+      _event.detail?.index ??
+      (typeof arg === 'object' && arg !== null ? arg.index : undefined) ??
+      (typeof arg === 'number' ? arg : undefined);
     console.log('handlePhotoClick:', { _event, arg, idx });
     if (typeof idx === 'number' && idx >= 0) {
       setCurrent(idx);
