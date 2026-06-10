@@ -1,11 +1,39 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-import { RowsPhotoAlbum } from "react-photo-album";
+import { RowsPhotoAlbum } from 'react-photo-album';
+import 'react-photo-album/rows.css';
 import styled from 'styled-components';
-import "react-photo-album/rows.css";
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
+const Image = dynamic(() => import('components/image/image.jsx'));
+
+/* Next.js Image renderer for react-photo-album */
+const renderNextImage = (
+  { alt = '', title, sizes },
+  { photo, width, height }
+) => {
+  const src = typeof photo === 'string' ? photo : (photo.src ?? photo.url);
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        position: 'relative',
+        aspectRatio: `${width} / ${height}`,
+      }}
+    >
+      <Image
+        fill
+        src={src}
+        alt={alt}
+        title={title}
+        sizes={sizes}
+        placeholder={'blurDataURL' in photo ? 'blur' : undefined}
+      />
+    </div>
+  );
+};
 
 // Map gallery photos to react-photo-album format
 const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
@@ -54,7 +82,14 @@ const GalleryContainer = styled.div`
   max-width: ${(props) => props.$containerWidth}px;
 `;
 
-const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, spacing = 1, containerWidth = 900 }) => {
+const Gallery = ({
+  photos,
+  order,
+  orderBy,
+  targetRowHeight = 150,
+  spacing = 1,
+  containerWidth = 900,
+}) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
@@ -71,7 +106,10 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, spacing = 1, c
     setOpen(true);
   };
 
-  const photoAlbumPhotos = useMemo(() => mapToPhotoAlbumFormat(images, targetRowHeight), [images, targetRowHeight]);
+  const photoAlbumPhotos = useMemo(
+    () => mapToPhotoAlbumFormat(images, targetRowHeight),
+    [images, targetRowHeight]
+  );
 
   return (
     <div>
@@ -80,6 +118,7 @@ const Gallery = ({ photos, order, orderBy, targetRowHeight = 150, spacing = 1, c
           <RowsPhotoAlbum
             photos={photoAlbumPhotos}
             onClick={handlePhotoClick}
+            render={{ image: renderNextImage }}
             targetRowHeight={targetRowHeight}
             spacing={spacing}
             padding={0}
