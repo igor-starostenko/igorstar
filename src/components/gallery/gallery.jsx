@@ -8,11 +8,6 @@ import styled from 'styled-components';
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const Image = dynamic(() => import('components/image/image.jsx'));
 
-/* GalleryImage - Styled component with shadow for gallery images */
-const GalleryImage = styled(Image)`
-  border-radius: 0;
-`;
-
 /* Next.js Image renderer for react-photo-album */
 const renderNextImage = (
   { alt = '', title, sizes },
@@ -21,22 +16,19 @@ const renderNextImage = (
   const src = typeof photo === 'string' ? photo : (photo.src ?? photo.url);
 
   return (
-    <div
+    <Image
       style={{
         width: '100%',
         position: 'relative',
         aspectRatio: `${width} / ${height}`,
       }}
-    >
-      <GalleryImage
-        fill
-        src={src}
-        alt={alt}
-        title={title}
-        sizes={sizes}
-        placeholder={'blurDataURL' in photo ? 'blur' : undefined}
-      />
-    </div>
+      fill
+      src={src}
+      alt={alt}
+      title={title}
+      sizes={sizes}
+      placeholder={'blurDataURL' in photo ? 'blur' : undefined}
+    />
   );
 };
 
@@ -92,7 +84,7 @@ const Gallery = ({
   order,
   orderBy,
   targetRowHeight = 150,
-  spacing = 1,
+  spacing = 2,
   containerWidth = 900,
 }) => {
   const [isOpen, setOpen] = useState(false);
