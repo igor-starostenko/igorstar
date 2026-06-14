@@ -3,12 +3,12 @@ import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('./baseImage.jsx', () => ({
-  default: (props) => (
+  default: ({ alt, src, ...rest }) => (
     <img
       data-testid="mock-base-image"
-      src={props.src}
-      alt={props.alt || ''}
-      {...props}
+      src={src}
+      alt={alt || ''}
+      {...rest}
     />
   ),
 }));
