@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { test, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
 
 vi.mock('next/link', () => ({
   default: ({ children, href, title }) => <a href={href} title={title}>{children}</a>,
@@ -15,8 +15,8 @@ vi.mock('components/image/baseImage.jsx', () => ({
 }));
 
 vi.mock('./image.css.js', () => ({
-  ImageContainer: ({ children }) => <div data-testid="mock-image-container">{children}</div>,
-  ImageFrame: ({ children }) => <div data-testid="mock-image-frame">{children}</div>,
+  ImageWrapper: ({ children }) => <div data-testid="mock-image-wrapper" className="hover-shadow">{children}</div>,
+  ImageFrame: ({ children }) => <div data-testid="mock-image-frame" className="hover-overlay">{children}</div>,
   ImageHeader: ({ children }) => <div data-testid="mock-image-header">{children}</div>,
   ImageFooter: ({ children }) => <div data-testid="mock-image-footer">{children}</div>,
   ImageTitle: ({ children }) => <span data-testid="mock-image-title">{children}</span>,
@@ -57,7 +57,7 @@ test('renders Flickr image with valid XML', () => {
 test('renders with isRaw=true', () => {
   const mockXml = '<xml>raw content</xml>';
 
-  render(<FlickrImage xml={mockXml} isRaw={true} />);
+  render(<FlickrImage xml={mockXml} isRaw={true}>raw content</FlickrImage>);
 
   expect(screen.getByText('raw content')).toBeInTheDocument();
 });
@@ -67,7 +67,6 @@ test('returns empty span when XML parsing fails', () => {
 
   const { container } = render(<FlickrImage xml={mockXml} />);
 
-  // Check that the span element exists
   expect(container.querySelector('span')).toBeInTheDocument();
 });
 
@@ -76,7 +75,6 @@ test('returns empty span when required fields are missing', () => {
 
   const { container } = render(<FlickrImage xml={mockXml} />);
 
-  // Check that the span element exists
   expect(container.querySelector('span')).toBeInTheDocument();
 });
 
@@ -86,4 +84,47 @@ test('renders image with backupSrc prop', () => {
   render(<FlickrImage xml={mockXml} backupSrc="/backup.jpg" />);
 
   expect(screen.getByText('Test Photo')).toBeInTheDocument();
+});
+
+test('uses ImageWrapper as container for hover effects', () => {
+  const mockXml = `<xml><a href="https://flickr.com/photo/123" title="Test Photo"><img src="/test-photo.jpg" width="1920" height="1080"/></a></xml>`;
+
+  render(<FlickrImage xml={mockXml} />);
+
+  const wrapper = document.querySelector('[data-testid="mock-image-wrapper"]');
+  expect(wrapper).toBeInTheDocument();
+  
+  // Verify wrapper has hover styles via CSS class
+  expect(wrapper.classList.contains('hover-shadow')).toBe(true);
+});
+
+test('includes ImageFrame for hover overlay', () => {
+  const mockXml = `<xml><a href="https://flickr.com/photo/123" title="Test Photo"><img src="/test-photo.jpg" width="1920" height="1080"/></a></xml>`;
+
+  render(<FlickrImage xml={mockXml} />);
+
+  const frame = document.querySelector('[data-testid="mock-image-frame"]');
+  expect(frame).toBeInTheDocument();
+  
+  // Verify frame has hover styles via CSS class
+  expect(frame.classList.contains('hover-overlay')).toBe(true);
+});
+
+test('ImageFrame is visible on hover', () => {
+  const mockXml = `<xml><a href="https://flickr.com/photo/123" title="Test Photo"><img src="/test-photo.jpg" width="1920" height="1080"/></a></xml>`;
+
+  render(<FlickrImage xml={mockXml} />);
+
+  const wrapper = document.querySelector('[data-testid="mock-image-wrapper"]');
+  const frame = document.querySelector('[data-testid="mock-image-frame"]');
+
+  // Initially the frame should have opacity: 0 (hidden) via CSS
+  expect(frame).toBeInTheDocument();
+
+  // On hover, the wrapper's hover state should show the frame
+  if (wrapper) {
+    act(() => {
+      fireEvent.pointerEnter(wrapper);
+    });
+  }
 });

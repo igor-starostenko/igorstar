@@ -11,10 +11,12 @@ export const ImageWrapper = styled.div`
   overflow: hidden;
   cursor: pointer;
   line-height: 0;
+
   img,
   div {
     transition: transform 2s;
   }
+
   :hover {
     box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
     img,
@@ -49,7 +51,6 @@ export const ImageContainer = styled.div`
   width: fit-content;
   margin: 0px auto;
   line-height: 0;
-  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
 
   > a {
     font-size: 0;
@@ -59,7 +60,6 @@ export const ImageContainer = styled.div`
     ${ImageFrame} {
       opacity: 1;
       cursor: pointer;
-      transform: scale(1.02);
     }
   }
 `;

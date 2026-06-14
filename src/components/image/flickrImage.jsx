@@ -5,7 +5,6 @@ import BaseImage from './baseImage.jsx';
 import FlickrIcon from 'components/icons/flickrIcon.jsx';
 import {
   ImageWrapper,
-  ImageContainer,
   ImageFrame,
   ImageHeader,
   ImageFooter,
@@ -13,63 +12,70 @@ import {
   ImageCopyright,
 } from './image.css.js';
 
+const parseFlickrXml = (xml) => {
+  if (typeof window === 'undefined') return null;
+  
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, 'text/html');
+    const link = doc.querySelector('a');
+
+    if (!link) {
+      return null;
+    }
+
+    const href = link.href;
+    const title = link.title || doc.querySelector('img')?.alt || 'Flickr image';
+    const img = doc.querySelector('img');
+
+    if (!href || !title) {
+      return null;
+    }
+
+    let src, width, height;
+    if (img) {
+      src = img.src;
+      width = parseInt(img.width) || 424; // flickr default
+      height = parseInt(img.height) || 640; // flickr default
+    }
+
+    if (src) {
+      return { href, title, src, width, height };
+    }
+  } catch (e) {
+    // Parsing error
+  }
+
+  return null;
+};
+
 const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(false);
+  const [parsedData, setParsedData] = useState(null);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    // Only run on client where DOMParser is available
-    if (typeof window !== 'undefined') {
-      try {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(xml, 'text/html');
-        const link = doc.querySelector('a');
-
-        if (link) {
-          const href = link.href;
-          const title = link.title || doc.querySelector('img')?.alt || 'Flickr image';
-
-          const img = doc.querySelector('img');
-          let src, width, height;
-          if (img) {
-            src = img.src;
-            width = parseInt(img.width) || 424; // flickr default
-            height = parseInt(img.height) || 640; // flickr default
-          }
-
-          if (href && title && src) {
-            setData({ href, title, src, width, height });
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } catch (e) {
-        setError(true);
-      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const result = parseFlickrXml(xml);
+    setParsedData(result);
+    if (!result) {
+      setHasError(true);
     }
   }, [xml]);
-
-  if (!data && !error) {
-    // Loading state - return null to avoid hydration mismatch
-    return null;
-  }
-
-  if (error || !data) {
-    // Error state - return empty span
-    return <span />;
-  }
-
-  const { href, title, src, width, height } = data;
 
   if (isRaw === true) {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
   }
 
+  if (hasError || !parsedData) {
+    // Error or loading state
+    return <span />;
+  }
+
+  const { href, title, src, width, height } = parsedData;
+
   return (
-    <ImageContainer>
-      <Link href={href} title={title}>
+    <Link href={href} title={title}>
+      <ImageWrapper>
         <BaseImage
           unoptimized
           src={src}
@@ -87,8 +93,8 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
             <ImageCopyright>All rights reserved</ImageCopyright>
           </ImageFooter>
         </ImageFrame>
-      </Link>
-    </ImageContainer>
+      </ImageWrapper>
+    </Link>
   );
 };
 
