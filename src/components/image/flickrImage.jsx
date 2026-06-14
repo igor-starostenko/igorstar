@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { parseStringSync } from 'xml2js';
 import BaseImage from './baseImage.jsx';
 import FlickrIcon from 'components/icons/flickrIcon.jsx';
 import {
+  ImageWrapper,
   ImageContainer,
   ImageFrame,
   ImageHeader,
@@ -13,46 +14,62 @@ import {
 } from './image.css.js';
 
 const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
-  let href, title, src, width, height;
-  let error = false;
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(false);
 
-  try {
-    const result = parseStringSync(
-      xml,
-      { ignoreAttrs: false, mergeAttrs: true, explicitArray: false }
-    );
-    
-    if (!result?.a) {
-      error = true;
-    } else {
-      const { a } = result;
-      href = a.href;
-      title = a.title;
-      if (a.img) {
-        src = a.img.src;
-        width = a.img.width;
-        height = a.img.height;
+  useEffect(() => {
+    // Only run on client where DOMParser is available
+    if (typeof window !== 'undefined') {
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(xml, 'text/html');
+        const link = doc.querySelector('a');
+
+        if (link) {
+          const href = link.href;
+          const title = link.title || doc.querySelector('img')?.alt || 'Flickr image';
+
+          const img = doc.querySelector('img');
+          let src, width, height;
+          if (img) {
+            src = img.src;
+            width = parseInt(img.width) || 424; // flickr default
+            height = parseInt(img.height) || 640; // flickr default
+          }
+
+          if (href && title && src) {
+            setData({ href, title, src, width, height });
+          } else {
+            setError(true);
+          }
+        } else {
+          setError(true);
+        }
+      } catch (e) {
+        setError(true);
       }
     }
-  } catch {
-    error = true;
+  }, [xml]);
+
+  if (!data && !error) {
+    // Loading state - return null to avoid hydration mismatch
+    return null;
   }
 
-  if (!href || !title || !src || !width || !height) {
-    error = true;
-  }
-
-  if (error) {
+  if (error || !data) {
+    // Error state - return empty span
     return <span />;
   }
+
+  const { href, title, src, width, height } = data;
 
   if (isRaw === true) {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
   }
 
   return (
-    <Link href={href} title={title}>
-      <ImageContainer>
+    <ImageContainer>
+      <Link href={href} title={title}>
         <BaseImage
           unoptimized
           src={src}
@@ -70,8 +87,8 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
             <ImageCopyright>All rights reserved</ImageCopyright>
           </ImageFooter>
         </ImageFrame>
-      </ImageContainer>
-    </Link>
+      </Link>
+    </ImageContainer>
   );
 };
 

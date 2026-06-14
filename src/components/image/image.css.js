@@ -4,17 +4,20 @@ import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
 
 export const ImageWrapper = styled.div`
+  position: relative;
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease-in-out;
   border-radius: 2px;
   overflow: hidden;
   cursor: pointer;
   line-height: 0;
+  img,
   div {
     transition: transform 2s;
   }
   :hover {
     box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
+    img,
     div {
       transform: scale(1.02);
     }
@@ -22,8 +25,9 @@ export const ImageWrapper = styled.div`
 `;
 
 export const SImage = styled(NextImage)`
-  max-width: 100%;
+  max-width: none;
   height: auto;
+  display: block;
 `;
 
 export const ImageFrame = styled.div`
@@ -33,7 +37,9 @@ export const ImageFrame = styled.div`
   top: 15px;
   right: 15px;
   opacity: 0;
-  transition: opacity 150ms ease-in-out;
+  transition:
+    opacity 150ms ease-in-out,
+    transform 2s;
 
   ${MEDIA.PHONE`opacity: 1;`}
 `;
@@ -43,6 +49,7 @@ export const ImageContainer = styled.div`
   width: fit-content;
   margin: 0px auto;
   line-height: 0;
+  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
 
   > a {
     font-size: 0;
@@ -52,6 +59,7 @@ export const ImageContainer = styled.div`
     ${ImageFrame} {
       opacity: 1;
       cursor: pointer;
+      transform: scale(1.02);
     }
   }
 `;
