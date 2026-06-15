@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Layout from 'components/layout/layout.jsx';
-import { Container } from 'components/layout/layout.css.js';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Selfie from 'components/selfie/selfie.jsx';
