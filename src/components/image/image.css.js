@@ -69,10 +69,20 @@ export const ImageCopyright = styled.span`
 `;
 
 export const ImageContainer = styled(ImageWrapper)`
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  img {
+    transition: transform 2s;
+  }
+
   :hover {
     ${ImageFrame} {
       opacity: 1;
       cursor: pointer;
+    }
+
+    img {
+      transform: scale(1.02);
     }
   }
 `;

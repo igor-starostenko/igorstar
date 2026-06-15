@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
-import styled from 'styled-components';
+import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js'
 import NextImage from 'next/image';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
@@ -16,12 +16,10 @@ const renderNextImage = (
   const src = typeof photo === 'string' ? photo : (photo.src ?? photo.url);
 
   return (
-    <div
+    <GalleryImageWrapper
       style={{
         width: `${width}px`,
         height: `${height}px`,
-        position: 'relative',
-        overflow: 'hidden',
       }}
     >
       <NextImage
@@ -33,7 +31,7 @@ const renderNextImage = (
         loading="eager"
         placeholder={'blurDataURL' in photo ? 'blur' : undefined}
       />
-    </div>
+    </GalleryImageWrapper>
   );
 };
 
@@ -78,16 +76,6 @@ const orderArray = (array, orderBy, order) => {
   array.sort(sortFun);
   return direction === 'desc' ? array.reverse() : array;
 };
-
-const GalleryContainer = styled.div`
-  margin: ${(props) => props.$spacing}px;
-  max-width: ${(props) => props.$containerWidth}px;
-
-  /* Override react-photo-album CSS to ensure valid position for Next.js...[truncated]
-  .react-photo-album--photo {
-    position: relative !important;
-  }
-`;
 
 const Gallery = ({
   photos,
