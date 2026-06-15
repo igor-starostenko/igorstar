@@ -15,18 +15,21 @@ vi.mock('components/hashtags/hashtags.jsx', () => ({
   ),
 }));
 
-vi.mock('components/image/image.jsx', () => ({
-  default: ({ src, backupSrc, alt }) => (
-    <img data-testid="mock-image" src={src} alt={alt} />
+vi.mock('components/image/baseImage.jsx', () => ({
+  default: ({ src, backupSrc, alt, ...rest }) => (
+    <img data-testid="mock-base-image" src={src} alt={alt} {...rest} />
   ),
 }));
 
 vi.mock('./recommendations.css.js', () => ({
   Container: ({ children }) => <div data-testid="mock-container">{children}</div>,
-  Border: ({ children }) => <div data-testid="mock-border">{children}</div>,
-  Row: ({ children }) => <div data-testid="mock-row">{children}</div>,
+  Card: ({ children }) => <div data-testid="mock-card">{children}</div>,
   SLink: ({ children, href }) => <a data-testid="mock-link" href={href}>{children}</a>,
-  Thumb: ({ children }) => <div data-testid="mock-thumb">{children}</div>,
+  ThumbWrapper: ({ children }) => <div data-testid="mock-thumb-wrapper">{children}</div>,
+  Thumb: ({ src, alt, ...rest }) => (
+    <img data-testid="mock-thumb" src={src} alt={alt} {...rest} />
+  ),
+  Details: ({ children }) => <div data-testid="mock-details">{children}</div>,
 }));
 
 import Recommendations from './recommendations.jsx';
@@ -61,7 +64,7 @@ test('renders with posts', () => {
   render(<Recommendations {...mockProps} />);
 
   expect(screen.getByText('Read more about tech')).toBeInTheDocument();
-  expect(screen.getAllByTestId('mock-border').length).toBe(2);
+  expect(screen.getAllByTestId('mock-card').length).toBe(2);
 });
 
 test('renders with empty posts', () => {
