@@ -3,12 +3,13 @@ import { test, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 vi.mock('./image.css.js', () => ({
-  SImage: ({ src, alt, onError, ...rest }) => (
+  SImage: ({ src, alt, onError, fill, sizes, placeholder, title, loading, unoptimized, priority, style, className, ...rest }) => (
     <img 
       data-testid="mock-simage" 
       src={src} 
       alt={alt} 
       onError={onError}
+      sizes={sizes}
       {...rest} 
     />
   ),
