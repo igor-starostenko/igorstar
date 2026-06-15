@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import NextImage from 'next/image';
 
 import { colors } from 'constants/theme';
+import MEDIA from 'helpers/mediaTemplates.js';
 
 export const ImageWrapper = styled.div`
   position: relative;
@@ -23,17 +24,17 @@ export const SImage = styled(NextImage)`
 
 export const ImageFrame = styled.div`
   position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  bottom: 15px;
+  left: 15px;
+  top: 15px;
+  right: 15px;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
 
   opacity: 0;
+  ${MEDIA.PHONE`
+    opacity: 1;
+  `}
 `;
 
 export const ImageHeader = styled.div`
@@ -79,7 +80,6 @@ export const ImageContainer = styled.div`
   }
 
   :hover {
-    transform: scale(1.02);
     ${ImageFrame} {
       opacity: 1;
       cursor: pointer;
