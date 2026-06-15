@@ -68,8 +68,8 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
   const { href, title, src, width, height } = data;
 
   return (
-    <Link href={href} title={title}>
-      <ImageContainer>
+    <ImageContainer>
+      <Link href={href} title={title}>
         <BaseImage
           unoptimized
           src={src}
@@ -87,8 +87,8 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
             <ImageCopyright>All rights reserved</ImageCopyright>
           </ImageFooter>
         </ImageFrame>
-      </ImageContainer>
-    </Link>
+      </Link>
+    </ImageContainer>
   );
 };
 
