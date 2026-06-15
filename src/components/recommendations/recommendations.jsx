@@ -11,16 +11,27 @@ const Recommendations = ({ category, posts }) => (
         <Border key={post.id}>
           <SLink href={`/${post.category}/${post.path}`}>
             <Row>
-              {post.thumbnail && (
+              {post.thumbnail ? (
                 <Thumb>
                   <Image
                     src={post.thumbnail.src}
                     backupSrc={post.thumbnail.backupSrc}
                     alt={post.thumbnail.alt || post.title}
                     fill
+                    style={{ height: '100%' }}
                   />
                 </Thumb>
-              )}
+              ) : post.images && post.images.length > 0 ? (
+                <Thumb>
+                  <Image
+                    src={post.images[0].src}
+                    backupSrc={post.images[0].backupSrc}
+                    alt={post.images[0].alt || post.title}
+                    fill
+                    style={{ height: '100%' }}
+                  />
+                </Thumb>
+              ) : null}
               <h3>{post.title}</h3>
               {post.tags && <Hashtags tags={post.tags} isSmall />}
               <p>

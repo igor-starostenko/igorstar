@@ -31,8 +31,10 @@ const Article = ({
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              fill
-              {...(index === 0 ? { priority: true } : {})}
+              width={image.width}
+              height={image.height}
+              loading="eager"
+              priority={index === 0}
             />
           </Thumb>
         </SLink>

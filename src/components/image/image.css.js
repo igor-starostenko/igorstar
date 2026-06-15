@@ -1,50 +1,7 @@
-import styled from 'styled-components';
-import NextImage from 'next/image';
-import { colors } from 'constants/theme';
-import MEDIA from 'helpers/mediaTemplates';
+// @prettier-ignore
+import { styled } from 'styled-components';
 
-export const ImageWrapper = styled.div`
-  position: relative;
-  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease-in-out;
-  border-radius: 2px;
-  overflow: hidden;
-  cursor: pointer;
-  line-height: 0;
-
-  img,
-  div {
-    transition: transform 2s;
-  }
-
-  :hover {
-    box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
-    img,
-    div {
-      transform: scale(1.02);
-    }
-  }
-`;
-
-export const SImage = styled(NextImage)`
-  max-width: none;
-  height: auto;
-  display: block;
-`;
-
-export const ImageFrame = styled.div`
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  top: 15px;
-  right: 15px;
-  opacity: 0;
-  transition:
-    opacity 150ms ease-in-out,
-    transform 2s;
-
-  ${MEDIA.PHONE`opacity: 1;`}
-`;
+import colors from 'config/colors';
 
 export const ImageContainer = styled.div`
   position: relative;
@@ -58,12 +15,38 @@ export const ImageContainer = styled.div`
   }
 
   :hover {
+    transform: scale(1.02);
     ${ImageFrame} {
       opacity: 1;
       cursor: pointer;
-      transform: scale(1.02);
     }
   }
+`;
+
+export const ImageWrapper = styled.div`
+  position: relative;
+  width: fit-content;
+  margin: 0px auto;
+  line-height: 0;
+
+  > a {
+    font-size: 0;
+  }
+`;
+
+export const ImageFrame = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
 `;
 
 export const ImageHeader = styled.div`

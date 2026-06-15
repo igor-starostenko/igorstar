@@ -72,7 +72,10 @@ const hasMultilineCode = (node) => {
 };
 
 const isFlickrEmbed = ({ data }) => {
-  return data.uri.includes('data-flickr-embed');
+  return (
+    data.uri.includes('data-flickr-embed') ||
+    data.uri.includes('class="flickr-embed"')
+  );
 };
 
 const isFlickrNode = (node) => {
@@ -133,6 +136,12 @@ const options = {
         return <BaseImage {...imageProps} />;
       }
     },
+    [BLOCKS.EMBEDDED_ENTRY]: (node) => {
+      const { uri } = node.data.target.fields || {};
+      if (uri && uri.includes('data-flickr-embed')) {
+        return <FlickrImage xml={uri} />;
+      }
+    },
     [BLOCKS.PARAGRAPH]: (node, children) => {
       if (hasDivChild(children)) {
         return <span>{children}</span>;
@@ -162,7 +171,16 @@ const options = {
           </div>
         );
       } else if (isFlickrEmbed(node)) {
-        return <FlickrImage xml={node.data.uri} />;
+        // Decode HTML entities in URI if needed (Contentful may encode them)
+        const decodeUri = (uri) => {
+          try {
+            return uri.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+          } catch {
+            return uri;
+          }
+        };
+        const xml = decodeUri(node.data.uri);
+        return <FlickrImage xml={xml} />;
       } else {
         return <Link href={node.data.uri}>{node.content[0].value}</Link>;
       }

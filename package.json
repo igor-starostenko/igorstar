@@ -43,8 +43,7 @@
     "react-dom": "^19.2.6",
     "react-photo-album": "^3.6.0",
     "react-syntax-highlighter": "^16.1.1",
-    "styled-components": "^6.4.2",
-    "xml2js": "^0.6.2"
+    "styled-components": "^6.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

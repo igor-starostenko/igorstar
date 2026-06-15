@@ -6634,7 +6634,6 @@ __metadata:
     styled-components: "npm:^6.4.2"
     vitest: "npm:^4.1.7"
     webpack: "npm:^5.107.2"
-    xml2js: "npm:^0.6.2"
   languageName: unknown
   linkType: soft
 
@@ -11951,7 +11950,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xml2js@npm:^0.6.1, xml2js@npm:^0.6.2":
+"xml2js@npm:^0.6.1":
   version: 0.6.2
   resolution: "xml2js@npm:0.6.2"
   dependencies:

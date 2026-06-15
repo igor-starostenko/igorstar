@@ -7,6 +7,13 @@ vi.mock('next/dynamic', () => ({
   default: (loader) => {
     const modulePath = loader.toString();
 
+    if (modulePath.includes('carousel.jsx')) {
+      // Carousel component - returns a simple wrapper
+      const CarouselMock = ({ children }) => <div data-testid="mock-carousel">{children}</div>;
+      CarouselMock.displayName = 'CarouselMock';
+      return CarouselMock;
+    }
+
     if (modulePath.includes('image.jsx')) {
       const ImageMock = ({ style, onClick, alt }) => (
         <div data-testid="mock-image" style={style} onClick={onClick}>
@@ -32,11 +39,7 @@ vi.mock('next/dynamic', () => ({
         return (
           <div
             data-testid="mock-rows-photo-album-image"
-            style={
-              fill
-                ? { position: 'relative', width: '100%', height: '100%' }
-                : {}
-            }
+            style={fill ? { position: 'relative', ...style } : {}}
             title={title}
           >
             <Image
@@ -146,6 +149,44 @@ vi.mock('react-photo-album', () => ({
     </div>
   ),
   MouseClickZoom: () => <span data-testid="mock-mouse-click-zoom">Zoom</span>,
+  ColumnsPhotoAlbum: ({ photos, onClick, render }) => {
+    // When custom render is provided, use it instead of default rendering
+    if (render && render.image) {
+      return (
+        <div data-testid="mock-columns-photo-album">
+          {photos.map((photo, index) => (
+            <div
+              key={index}
+              data-testid="mock-columns-photo-album-wrapper"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onClick) onClick(e, { index });
+              }}
+            >
+              {render.image(
+                { alt: photo.alt },
+                { photo, width: photo.width, height: photo.height }
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div data-testid="mock-columns-photo-album">
+        {photos.map((photo, index) => (
+          <div
+            key={index}
+            data-testid="mock-columns-photo-album-image"
+            onClick={(e) => onClick && onClick(e, { index })}
+          >
+            {photo.alt || ''}
+          </div>
+        ))}
+      </div>
+    );
+  },
 }));
 
 import Gallery from './gallery.jsx';

@@ -43,19 +43,20 @@ export const Thumb = styled.div`
   width: 30%;
   float: left;
   margin: 0rem 1rem 0.5rem 0rem;
-  max-height: 14rem;
-  height: 40vw;
 
   img {
-    object-fit: contain;
+    object-fit: cover;
   }
 
   ${MEDIA.TABLET`
-    max-height: 12rem;
-    height: 30vw;
+    height: 5rem;
   `};
   ${MEDIA.PHONE`
-    max-height: 8rem;
-    height: 19vw;
+    height: 4rem;
   `};
+
+  @media (min-width: 992px) {
+    max-height: 14rem;
+    height: 40vw;
+  }
 `;
