@@ -31,4 +31,3 @@ export const Logo = styled(LogoSvg)`
     max-width: 75%;
   `}
 `;
-
