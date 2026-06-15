@@ -26,7 +26,7 @@ const BaseImage = ({ alt, src, backupSrc = '', fill, unoptimized, priority, load
     src,
     alt,
     onError: () => setIsError(true),
-    ...(fill ? { sizes } : {}),
+    ...(fill ? { fill, sizes } : {}),
   };
 
   // For non-fill mode with explicit dimensions
