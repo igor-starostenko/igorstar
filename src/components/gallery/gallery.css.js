@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 
 export const GalleryContainer = styled.div`
   margin: ${(props) => props.$spacing}px;

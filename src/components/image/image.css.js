@@ -1,5 +1,4 @@
-// @prettier-ignore
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 import NextImage from 'next/image';
 
 import { colors } from 'constants/theme';
