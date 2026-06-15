@@ -6,6 +6,7 @@ const LogoSvg = (props) => (
     height={22}
     src="/logo.svg"
     query=""
+    loading="eager"
     alt="logo"
     {...props}
   />
