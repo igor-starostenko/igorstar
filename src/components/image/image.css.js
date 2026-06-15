@@ -1,7 +1,7 @@
 // @prettier-ignore
 import { styled } from 'styled-components';
 
-import colors from 'config/colors';
+import { colors } from 'constants/theme';
 
 export const ImageContainer = styled.div`
   position: relative;
