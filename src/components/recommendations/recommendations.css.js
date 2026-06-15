@@ -43,6 +43,15 @@ export const Thumb = styled.div`
   width: 30%;
   float: left;
   margin: 0rem 1rem 0.5rem 0rem;
+  height: 8rem;
+
+  > * {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
 
   img {
     object-fit: cover;
@@ -57,6 +66,6 @@ export const Thumb = styled.div`
 
   @media (min-width: 992px) {
     max-height: 14rem;
-    height: 40vw;
+    height: 8rem;
   }
 `;

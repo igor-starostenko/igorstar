@@ -31,7 +31,6 @@ export const ImageFrame = styled.div`
   opacity: 0;
   transition: opacity 150ms ease-in-out;
 
-  opacity: 0;
   ${MEDIA.PHONE`
     opacity: 1;
   `}
