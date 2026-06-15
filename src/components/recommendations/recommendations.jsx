@@ -9,7 +9,7 @@ const Recommendations = ({ category, posts }) => (
       {posts.map((post) => (
         <SLink href={`/${post.category}/${post.path}`} key={post.id}>
           <Card>
-            {post.thumbnail ? (
+            {post.thumbnail && (
               <ThumbWrapper>
                 <Thumb
                   src={post.thumbnail.src}
@@ -18,16 +18,7 @@ const Recommendations = ({ category, posts }) => (
                   fill
                 />
               </ThumbWrapper>
-            ) : post.images && post.images.length > 0 ? (
-              <ThumbWrapper>
-                <Thumb
-                  src={post.images[0].src}
-                  backupSrc={post.images[0].backupSrc}
-                  alt={post.images[0].alt || post.title}
-                  fill
-                />
-              </ThumbWrapper>
-            ) : null}
+            )}
             <Details>
               <h3>{post.title}</h3>
               {post.tags && <Hashtags tags={post.tags} isSmall />}
