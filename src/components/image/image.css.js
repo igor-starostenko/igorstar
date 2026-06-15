@@ -3,26 +3,6 @@ import { styled } from 'styled-components';
 
 import { colors } from 'constants/theme';
 
-export const ImageContainer = styled.div`
-  position: relative;
-  width: fit-content;
-  margin: 0px auto;
-  line-height: 0;
-  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
-
-  > a {
-    font-size: 0;
-  }
-
-  :hover {
-    transform: scale(1.02);
-    ${ImageFrame} {
-      opacity: 1;
-      cursor: pointer;
-    }
-  }
-`;
-
 export const ImageWrapper = styled.div`
   position: relative;
   width: fit-content;
@@ -78,4 +58,24 @@ export const ImageCopyright = styled.span`
   bottom: 0px;
   right: 0px;
   font-size: 10px;
+`;
+
+export const ImageContainer = styled.div`
+  position: relative;
+  width: fit-content;
+  margin: 0px auto;
+  line-height: 0;
+  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
+
+  > a {
+    font-size: 0;
+  }
+
+  :hover {
+    transform: scale(1.02);
+    ${ImageFrame} {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
 `;
