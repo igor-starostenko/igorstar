@@ -17,14 +17,14 @@ test('generates WebSite and WebPage schema for homepage', () => {
 
   expect(result['@context']).toBe('https://schema.org');
   expect(result['@graph']).toHaveLength(2);
-  
+
   // WebSite always uses siteUrl
   expect(result['@graph'][0]).toEqual({
     '@type': 'WebSite',
     url: 'https://example.com',
     name: 'Demo Site',
   });
-  
+
   // WebPage uses the canonical (homepage URL)
   expect(result['@graph'][1]).toEqual({
     '@type': 'WebPage',

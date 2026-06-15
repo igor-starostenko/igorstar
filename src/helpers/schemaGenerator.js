@@ -8,7 +8,6 @@ const schemaGenerator = ({
   siteTitle,
   pageTitleFull,
 }) => {
-
   // Use @graph pattern to avoid Safari bug with array root
   const websiteSchema = {
     '@type': 'WebSite',

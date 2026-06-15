@@ -189,22 +189,39 @@ vi.mock('react-photo-album', () => ({
   },
 }));
 
+// Mock next/image for direct usage in gallery.jsx
+vi.mock('next/image', () => ({
+  default: ({ src, alt, fill, sizes, placeholder, title, style }) => {
+    // Return a wrapper div with an img element
+    return (
+      <div data-testid="mock-next-image" style={style}>
+        {alt && <span>{alt}</span>}
+      </div>
+    );
+  },
+}));
+
 import Gallery from './gallery.jsx';
 
 // Helper to create fresh array instances for each test
 const getUnsortedPhotos = () => [
-  { id: '2', src: 'b.jpg', alt: 'B image', width: 200, height: 100 },
-  { id: '1', src: 'a.jpg', alt: 'A image', width: 100, height: 200 },
+  { id: '2', src: '/b.jpg', alt: 'B image', width: 200, height: 100 },
+  { id: '1', src: '/a.jpg', alt: 'A image', width: 100, height: 200 },
 ];
 
 // Test helper that gets images - adapts to which mock mode is used
 const getGalleryImages = () => {
-  // When using custom render (next/image), we get mock-image
+  // When using custom render (next/image), we get mock-next-image
   try {
-    return screen.getAllByTestId('mock-image');
+    return screen.getAllByTestId('mock-next-image');
   } catch (e) {
-    // Fall back to default mock mode
-    return screen.getAllByTestId('mock-rows-photo-album-image');
+    // Fall back to mock-image
+    try {
+      return screen.getAllByTestId('mock-image');
+    } catch (e2) {
+      // Fall back to default mock mode
+      return screen.getAllByTestId('mock-rows-photo-album-image');
+    }
   }
 };
 
@@ -287,7 +304,7 @@ test('renders gallery with single photo', async () => {
         photos={[
           {
             id: '1',
-            src: 'a.jpg',
+            src: '/a.jpg',
             alt: 'Single image',
             width: 100,
             height: 200,
