@@ -11,7 +11,7 @@ vi.mock('components/icons/flickrIcon.jsx', () => ({
 }));
 
 vi.mock('components/image/baseImage.jsx', () => ({
-  default: ({ src, alt, ...rest }) => <img data-testid="mock-base-image" src={src} alt={alt} {...rest} />,
+  default: ({ src, alt, backupSrc, unoptimized, priority, loading, width, height, style, className, ...rest }) => <img data-testid="mock-base-image" src={src} alt={alt} {...rest} />,
 }));
 
 vi.mock('./image.css.js', () => ({
