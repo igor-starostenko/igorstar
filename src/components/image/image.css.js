@@ -1,5 +1,6 @@
 // @prettier-ignore
 import { styled } from 'styled-components';
+import NextImage from 'next/image';
 
 import { colors } from 'constants/theme';
 
@@ -12,6 +13,12 @@ export const ImageWrapper = styled.div`
   > a {
     font-size: 0;
   }
+`;
+
+export const SImage = styled(NextImage)`
+  max-width: none;
+  height: auto;
+  display: block;
 `;
 
 export const ImageFrame = styled.div`
