@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('next/dynamic', () => ({
   default: (loader) => {
-    if (loader.toString().includes('image.jsx')) {
+    if (typeof loader === 'function' && loader.toString().includes('next/image')) {
       const ImageMock = ({ height, width, src, alt, priority }) => (
         <img
           data-testid="mock-image"
