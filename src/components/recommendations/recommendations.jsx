@@ -7,8 +7,8 @@ const Recommendations = ({ category, posts }) => (
     <h2>Read more about {category}</h2>
     <div>
       {posts.map((post) => (
-        <SLink href={`/${post.category}/${post.path}`}>
-          <Card key={post.id}>
+        <SLink href={`/${post.category}/${post.path}`} key={post.id}>
+          <Card>
             {post.thumbnail ? (
               <ThumbWrapper>
                 <Thumb

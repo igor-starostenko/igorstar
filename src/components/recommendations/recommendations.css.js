@@ -46,9 +46,10 @@ export const Card = styled.div`
 export const ThumbWrapper = styled.div`
   flex: 0 0 30%;
   margin: 2rem 0rem 0.5rem 0rem;
+  position: relative;
 
   ${MEDIA.PHONE`
-    margin: 0rem 0rem 0rem 0rem;
+    margin: 1rem 0rem 0rem 0rem;
   `};
 `;
 
