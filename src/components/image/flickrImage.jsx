@@ -51,6 +51,10 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
     }
   }, [xml]);
 
+  if (isRaw === true) {
+    return <span dangerouslySetInnerHTML={{ __html: xml }} />;
+  }
+
   if (!data && !error) {
     // Loading state - return null to avoid hydration mismatch
     return null;
@@ -62,10 +66,6 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
   }
 
   const { href, title, src, width, height } = data;
-
-  if (isRaw === true) {
-    return <span dangerouslySetInnerHTML={{ __html: xml }} />;
-  }
 
   return (
     <ImageContainer>

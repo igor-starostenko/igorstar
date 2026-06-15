@@ -15,6 +15,7 @@ vi.mock('components/image/baseImage.jsx', () => ({
 }));
 
 vi.mock('./image.css.js', () => ({
+  ImageContainer: ({ children }) => <div data-testid="mock-image-container" className="hover-shadow">{children}</div>,
   ImageWrapper: ({ children }) => <div data-testid="mock-image-wrapper" className="hover-shadow">{children}</div>,
   ImageFrame: ({ children }) => <div data-testid="mock-image-frame" className="hover-overlay">{children}</div>,
   ImageHeader: ({ children }) => <div data-testid="mock-image-header">{children}</div>,
@@ -86,16 +87,16 @@ test('renders image with backupSrc prop', () => {
   expect(screen.getByText('Test Photo')).toBeInTheDocument();
 });
 
-test('uses ImageWrapper as container for hover effects', () => {
+test('uses ImageContainer as container for hover effects', () => {
   const mockXml = `<xml><a href="https://flickr.com/photo/123" title="Test Photo"><img src="/test-photo.jpg" width="1920" height="1080"/></a></xml>`;
 
   render(<FlickrImage xml={mockXml} />);
 
-  const wrapper = document.querySelector('[data-testid="mock-image-wrapper"]');
-  expect(wrapper).toBeInTheDocument();
+  const container = document.querySelector('[data-testid="mock-image-container"]');
+  expect(container).toBeInTheDocument();
   
-  // Verify wrapper has hover styles via CSS class
-  expect(wrapper.classList.contains('hover-shadow')).toBe(true);
+  // Verify container has hover styles via CSS class
+  expect(container.classList.contains('hover-shadow')).toBe(true);
 });
 
 test('includes ImageFrame for hover overlay', () => {
@@ -115,16 +116,16 @@ test('ImageFrame is visible on hover', () => {
 
   render(<FlickrImage xml={mockXml} />);
 
-  const wrapper = document.querySelector('[data-testid="mock-image-wrapper"]');
+  const container = document.querySelector('[data-testid="mock-image-container"]');
   const frame = document.querySelector('[data-testid="mock-image-frame"]');
 
   // Initially the frame should have opacity: 0 (hidden) via CSS
   expect(frame).toBeInTheDocument();
 
-  // On hover, the wrapper's hover state should show the frame
-  if (wrapper) {
+  // On hover, the container's hover state should show the frame
+  if (container) {
     act(() => {
-      fireEvent.pointerEnter(wrapper);
+      fireEvent.pointerEnter(container);
     });
   }
 });
