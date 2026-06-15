@@ -10,6 +10,7 @@ export const ImageWrapper = styled.div`
   width: fit-content;
   margin: 0px auto;
   line-height: 0;
+  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
 
   > a {
     font-size: 0;
@@ -17,9 +18,8 @@ export const ImageWrapper = styled.div`
 `;
 
 export const SImage = styled(NextImage)`
-  max-width: none;
+  max-width: 100%;
   height: auto;
-  display: block;
 `;
 
 export const ImageFrame = styled.div`
@@ -68,17 +68,7 @@ export const ImageCopyright = styled.span`
   font-size: 10px;
 `;
 
-export const ImageContainer = styled.div`
-  position: relative;
-  width: fit-content;
-  margin: 0px auto;
-  line-height: 0;
-  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
-
-  > a {
-    font-size: 0;
-  }
-
+export const ImageContainer = styled(ImageWrapper)`
   :hover {
     ${ImageFrame} {
       opacity: 1;
