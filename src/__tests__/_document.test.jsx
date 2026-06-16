@@ -5,7 +5,7 @@ vi.mock('next/document', async (importOriginal) => {
   return {
     ...actual,
     Document: class MockDocument {
-      static async getInitialProps(ctx) {
+      static async getInitialProps(_ctx) {
         // Return mock initial props without calling the real method
         return {
           html: '<html></html>',

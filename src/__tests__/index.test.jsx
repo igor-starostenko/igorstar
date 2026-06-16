@@ -17,13 +17,13 @@ vi.mock('components/layout/layout.jsx', () => ({
 }));
 
 vi.mock('components/box/box.jsx', () => ({
-  default: ({ children, isMain }) => (
+  default: ({ children, _isMain }) => (
     <div data-testid="mock-box">{children}</div>
   ),
 }));
 
 vi.mock('components/filter/filter.jsx', () => ({
-  default: ({ path, title, displayCount, totalCount }) => (
+  default: ({ _path, title, displayCount, totalCount }) => (
     <div data-testid="mock-filter">
       {title} ({displayCount}/{totalCount})
     </div>

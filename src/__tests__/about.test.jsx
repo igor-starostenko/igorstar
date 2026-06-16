@@ -27,7 +27,7 @@ vi.mock('components/head/head.jsx', () => ({
 }));
 
 vi.mock('@contentful/rich-text-react-renderer', () => ({
-  documentToReactComponents: (node) => (
+  documentToReactComponents: (_node) => (
     <div data-testid="mock-rich-text">About content</div>
   ),
 }));

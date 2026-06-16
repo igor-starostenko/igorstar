@@ -25,7 +25,7 @@ const parseFields = (item) => {
   };
 };
 
-const parseImage = (id, title, file) => {
+const parseImage = (_id, title, file) => {
   const { width, height } = file.details.image;
   return {
     src: `https:${file.url}`,

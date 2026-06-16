@@ -9,7 +9,7 @@ vi.mock('next/router', () => ({
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: (loader) => {
+  default: (_loader) => {
     const MockDynamic = ({ children }) => (
       <div data-testid="mock-dynamic">{children}</div>
     );
@@ -36,7 +36,7 @@ vi.mock('components/head/head.jsx', () => ({
 }));
 
 vi.mock('components/filter/filter.jsx', () => ({
-  default: ({ path, title, displayCount, totalCount }) => (
+  default: ({ _path, title, displayCount, totalCount }) => (
     <div data-testid="mock-filter">
       {title} ({displayCount}/{totalCount})
     </div>

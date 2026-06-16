@@ -8,7 +8,7 @@ vi.mock('next/link', () => ({
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: (loader) => {
+  default: (_loader) => {
     const MockDynamicComponent = ({ children, ...props }) => {
       const { isMobile, ...rest } = props;
       return (

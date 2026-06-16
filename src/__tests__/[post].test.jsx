@@ -1,14 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Image from 'next/image';
 
 vi.mock('next/link', () => ({
-  default: ({ children, href }) => <a href={href}>{children}</a>,
+  default: ({ _children, _href }) => <a>link</a>,
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: (loader) => {
+  default: (_loader) => {
     const MockDynamic = ({ children }) => (
       <div data-testid="mock-dynamic">{children}</div>
     );
@@ -23,8 +22,8 @@ vi.mock('@contentful/rich-text-types', () => ({
 }));
 
 vi.mock('@contentful/rich-text-react-renderer', () => ({
-  documentToReactComponents: (node, options) => (
-    <div data-testid="mock-rich-text">{String(node)}</div>
+  documentToReactComponents: (_node, _options) => (
+    <div data-testid="mock-rich-text">{"[object Object]"}</div>
   ),
 }));
 

@@ -26,7 +26,7 @@ vi.mock('components/head/head.jsx', () => ({
 }));
 
 vi.mock('components/title/title.jsx', () => ({
-  default: ({ children, as }) => <h1 data-testid="mock-title">{children}</h1>,
+  default: ({ children, _as }) => <h1 data-testid="mock-title">{children}</h1>,
 }));
 
 import FeedPage from 'pages/feed.jsx';

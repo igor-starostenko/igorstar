@@ -4,7 +4,7 @@
 const schemaGenerator = ({
   canonical,
   siteUrl,
-  pageTitle,
+  _pageTitle,
   siteTitle,
   pageTitleFull,
 }) => {

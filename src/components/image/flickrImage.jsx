@@ -45,7 +45,7 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
         } else {
           setError(true);
         }
-      } catch (e) {
+      } catch (_e) {
         setError(true);
       }
     }

@@ -31,10 +31,10 @@ vi.mock('next/dynamic', () => ({
       const BaseNextImageMock = ({
         src,
         alt,
-        fill,
-        sizes,
-        placeholder,
-        title,
+        fill: _fill,
+        sizes: _sizes,
+        placeholder: _placeholder,
+        title: _title,
         style,
       }) => {
         // Return a wrapper div that contains the Next.js Image element
@@ -60,9 +60,9 @@ vi.mock('next/dynamic', () => ({
     }
 
     if (modulePath.includes('carousel.jsx')) {
-      const CarouselMock = ({ onClose, views, currentIndex }) => (
+      const CarouselMock = ({ onClose, views, _currentIndex }) => (
         <div data-testid="mock-carousel" onClick={onClose}>
-          {views.map((v, i) => (
+          {views.map((_v, i) => (
             <div key={i} data-testid="carousel-view" />
           ))}
         </div>
@@ -193,7 +193,7 @@ vi.mock('react-photo-album', () => ({
 
 // Mock next/image for direct usage in gallery.jsx
 vi.mock('next/image', () => ({
-  default: ({ src, alt, fill, sizes, placeholder, title, style }) => {
+  default: ({ src: _src, alt, fill: _fill, sizes: _sizes, placeholder: _placeholder, title: _title, style }) => {
     // Return a wrapper div with an img element
     return (
       <div data-testid="mock-next-image" style={style}>
@@ -216,11 +216,11 @@ const getGalleryImages = () => {
   // When using custom render (next/image), we get mock-next-image
   try {
     return screen.getAllByTestId('mock-next-image');
-  } catch (e) {
+  } catch (_e) {
     // Fall back to mock-image
     try {
       return screen.getAllByTestId('mock-image');
-    } catch (e2) {
+    } catch (_e2) {
       // Fall back to default mock mode
       return screen.getAllByTestId('mock-rows-photo-album-image');
     }

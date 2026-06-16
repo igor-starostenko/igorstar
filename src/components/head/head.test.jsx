@@ -1,9 +1,9 @@
 import { describe, beforeEach, test, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 // Mock next/head - it renders to document.head, not visible DOM
 vi.mock('next/head', () => ({
-  default: ({ children }) => {
+  default: ({ _children }) => {
     // Return null since next/head doesn't render visible DOM
     return null;
   },
@@ -20,12 +20,12 @@ vi.mock('next/router', () => ({
 // Mock schemaGenerator - returns object with @graph instead of array
 vi.mock('helpers/schemaGenerator.js', () => ({
   default: ({
-    pathname,
-    canonical,
+    _pathname,
+    _canonical,
     siteUrl,
-    pageTitle,
+    _pageTitle,
     siteTitle,
-    pageTitleFull,
+    _pageTitleFull,
   }) => ({
     '@context': 'https://schema.org',
     '@graph': [

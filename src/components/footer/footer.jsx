@@ -6,8 +6,6 @@ import {
   FlickrIcon,
   GithubIcon,
   LinkedinIcon,
-  TwitterIcon,
-  YoutubeIcon,
 } from '../icons/index.jsx';
 
 const SocialLink = ({ children, href, ...rest }) => (
