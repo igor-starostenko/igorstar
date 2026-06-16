@@ -1,6 +1,5 @@
-import { test, expect } from 'vitest';
+import { describe, beforeEach, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { describe, beforeEach, vi } from 'vitest';
 
 // Mock next/head - it renders to document.head, not visible DOM
 vi.mock('next/head', () => ({
