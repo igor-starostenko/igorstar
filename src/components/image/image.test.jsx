@@ -1,5 +1,5 @@
 import { test, expect, vi } from 'vitest';
-/* eslint-disable @next/next/no-img-element */
+ 
 /* eslint-disable jsx-a11y/alt-text */
 import { render, screen } from '@testing-library/react';
 

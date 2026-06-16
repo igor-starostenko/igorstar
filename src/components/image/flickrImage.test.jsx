@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 import { test, expect } from 'vitest';
 import { render, screen, act, fireEvent } from '@testing-library/react';
 

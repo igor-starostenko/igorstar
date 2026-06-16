@@ -24,7 +24,7 @@ export default defineConfig([
   {
     files: ["**/*.test.{js,jsx}", "**/__tests__/**/*.{js,jsx}"],
     rules: {
-      "next/no-img-element": "off",
+      "@next/next/no-img-element": "off"
     },
   },
   prettier,
