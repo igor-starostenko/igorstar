@@ -29,6 +29,12 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
           const title =
             link.title || doc.querySelector('img')?.alt || 'Flickr image';
           const img = doc.querySelector('img');
+          let src, width, height;
+          if (img) {
+            src = img.src;
+            width = parseInt(img.width) || 424; // flickr default
+            height = parseInt(img.height) || 640; // flickr default
+          }
 
           if (href && title && src) {
             setData({ href, title, src, width, height });
