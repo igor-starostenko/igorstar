@@ -25,7 +25,6 @@ const renderNextImage = ({ alt, title, sizes }, { photo, width, height }) => {
         alt={alt}
         title={title}
         sizes={sizes}
-        loading="eager"
         placeholder={'blurDataURL' in photo ? 'blur' : undefined}
       />
     </GalleryImageWrapper>
