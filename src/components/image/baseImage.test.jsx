@@ -3,14 +3,28 @@ import { test, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
 vi.mock('./image.css.js', () => ({
-  SImage: ({ src, alt, onError, fill, sizes, placeholder, title, loading, unoptimized, priority, style, className, ...rest }) => (
-    <img 
-      data-testid="mock-simage" 
-      src={src} 
-      alt={alt} 
+  SImage: ({
+    src,
+    alt,
+    onError,
+    fill,
+    sizes,
+    placeholder,
+    title,
+    loading,
+    unoptimized,
+    priority,
+    style,
+    className,
+    ...rest
+  }) => (
+    <img
+      data-testid="mock-simage"
+      src={src}
+      alt={alt}
       onError={onError}
       sizes={sizes}
-      {...rest} 
+      {...rest}
     />
   ),
 }));
@@ -25,7 +39,11 @@ test('renders image with valid src', () => {
 
 test('falls back to backupSrc on error', () => {
   render(
-    <BaseImage src="/nonexistent.jpg" alt="Test image" backupSrc="/fallback.jpg" />
+    <BaseImage
+      src="/nonexistent.jpg"
+      alt="Test image"
+      backupSrc="/fallback.jpg"
+    />
   );
 
   // Verify initial src is the primary one
@@ -38,19 +56,14 @@ test('falls back to backupSrc on error', () => {
   // Check that src changed to backupSrc after error
   const updatedImg = screen.getByAltText('Test image');
   expect(updatedImg).toHaveAttribute('src', '/fallback.jpg');
-  
+
   // Verify the img element is still in the document
   expect(updatedImg).toBeInTheDocument();
 });
 
 test('accepts additional props', () => {
   render(
-    <BaseImage
-      src="/test.jpg"
-      alt="Test image"
-      width={800}
-      height={600}
-    />
+    <BaseImage src="/test.jpg" alt="Test image" width={800} height={600} />
   );
 
   const img = screen.getByAltText('Test image');
@@ -59,23 +72,22 @@ test('accepts additional props', () => {
 });
 
 test('handles fill prop with sizes attribute', () => {
-  render(
-    <BaseImage
-      src="/test.jpg"
-      alt="Test image"
-      fill
-    />
-  );
+  render(<BaseImage src="/test.jpg" alt="Test image" fill />);
 
   const img = screen.getByAltText('Test image');
-  expect(img).toHaveAttribute('sizes', '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw');
+  expect(img).toHaveAttribute(
+    'sizes',
+    '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+  );
 });
 
 test('error handler sets isError state', () => {
-  render(<BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />);
+  render(
+    <BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" />
+  );
 
   const imgElement = screen.getByAltText('Error test');
-  
+
   // Simulate image error
   fireEvent.error(imgElement);
 
@@ -83,13 +95,7 @@ test('error handler sets isError state', () => {
 });
 
 test('does not add fill prop when fill is false (explicit false)', () => {
-  render(
-    <BaseImage
-      src="/test.jpg"
-      alt="Test image"
-      fill={false}
-    />
-  );
+  render(<BaseImage src="/test.jpg" alt="Test image" fill={false} />);
 
   const img = screen.getByAltText('Test image');
   // When fill is explicitly false, the SImage should NOT receive the fill prop
@@ -98,12 +104,7 @@ test('does not add fill prop when fill is false (explicit false)', () => {
 
 test('passes width and height props correctly', () => {
   render(
-    <BaseImage
-      src="/test.jpg"
-      alt="Test image"
-      width={800}
-      height={600}
-    />
+    <BaseImage src="/test.jpg" alt="Test image" width={800} height={600} />
   );
 
   const img = screen.getByAltText('Test image');
@@ -112,8 +113,9 @@ test('passes width and height props correctly', () => {
 });
 
 test('handles Contentful image URL with query params', () => {
-  const contentfulSrc = 'https://images.ctfassets.net/abc123/xyz.jpg?w=800&q=75';
-  
+  const contentfulSrc =
+    'https://images.ctfassets.net/abc123/xyz.jpg?w=800&q=75';
+
   render(
     <BaseImage
       src={contentfulSrc}
@@ -130,12 +132,7 @@ test('handles Contentful image URL with query params', () => {
 });
 
 test('renders with only required props (no explicit width/height)', () => {
-  render(
-    <BaseImage
-      src="/test.jpg"
-      alt="Minimal image"
-    />
-  );
+  render(<BaseImage src="/test.jpg" alt="Minimal image" />);
 
   const img = screen.getByAltText('Minimal image');
   expect(img).toBeInTheDocument();

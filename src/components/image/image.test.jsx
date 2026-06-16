@@ -5,12 +5,7 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('./baseImage.jsx', () => ({
   default: ({ alt, src, ...rest }) => (
-    <img
-      data-testid="mock-base-image"
-      src={src}
-      alt={alt || ''}
-      {...rest}
-    />
+    <img data-testid="mock-base-image" src={src} alt={alt || ''} {...rest} />
   ),
 }));
 

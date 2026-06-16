@@ -6,13 +6,7 @@ const NextImage = dynamic(() => import('next/image'));
 
 const Selfie = ({ src, ...rest }) => (
   <ImageWrapper {...rest}>
-    <Image
-      height={100}
-      width={100}
-      src={src}
-      alt="Selfie"
-      priority
-    />
+    <Image height={100} width={100} src={src} alt="Selfie" priority />
   </ImageWrapper>
 );
 

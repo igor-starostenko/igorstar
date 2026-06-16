@@ -20,7 +20,14 @@ vi.mock('next/router', () => ({
 
 // Mock schemaGenerator - returns object with @graph instead of array
 vi.mock('helpers/schemaGenerator.js', () => ({
-  default: ({ pathname, canonical, siteUrl, pageTitle, siteTitle, pageTitleFull }) => ({
+  default: ({
+    pathname,
+    canonical,
+    siteUrl,
+    pageTitle,
+    siteTitle,
+    pageTitleFull,
+  }) => ({
     '@context': 'https://schema.org',
     '@graph': [
       {
@@ -62,11 +69,15 @@ describe('SEO Component', () => {
   });
 
   test('renders with pageTitleFull without error', () => {
-    expect(() => render(<ConfigSEO pageTitle="My Page" pageTitleFull="Custom Title" />)).not.toThrow();
+    expect(() =>
+      render(<ConfigSEO pageTitle="My Page" pageTitleFull="Custom Title" />)
+    ).not.toThrow();
   });
 
   test('renders with imageUrl without error', () => {
-    expect(() => render(<ConfigSEO imageUrl="/custom-social.jpg" />)).not.toThrow();
+    expect(() =>
+      render(<ConfigSEO imageUrl="/custom-social.jpg" />)
+    ).not.toThrow();
   });
 
   test('uses canonical URL without error', () => {

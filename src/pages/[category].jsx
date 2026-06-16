@@ -5,9 +5,8 @@ const CategoryIndex = ({ page, posts }) => (
 );
 
 export const getStaticProps = async ({ params }) => {
-  const { getEntries, getAllEntries, parseItem } = await import(
-    'contentClient'
-  );
+  const { getEntries, getAllEntries, parseItem } =
+    await import('contentClient');
 
   const pages = await getEntries({
     content_type: 'page',

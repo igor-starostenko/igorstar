@@ -28,6 +28,6 @@ test('applies DateBase when isMobile is undefined', () => {
 });
 
 test('renders with default date when omitted', () => {
-  const { container } = render(<DateText date='2024-01-01' />);
+  const { container } = render(<DateText date="2024-01-01" />);
   expect(container.firstChild.tagName).toBe('SPAN');
 });

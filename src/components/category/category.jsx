@@ -8,7 +8,9 @@ import Head from 'components/head/head.jsx';
 import Filter from 'components/filter/filter.jsx';
 import Article from 'components/article/article.jsx';
 
-const Pagination = dynamic(() => import('components/pagination/pagination.jsx'));
+const Pagination = dynamic(
+  () => import('components/pagination/pagination.jsx')
+);
 
 const Category = ({ page, posts }) => {
   const pageSize = 10;
@@ -23,7 +25,9 @@ const Category = ({ page, posts }) => {
   useEffect(() => {
     const handleScrollHandler = () => {
       // To get page offset of last article
-      const lastRecordLoaded = document.querySelector('div > article:last-child');
+      const lastRecordLoaded = document.querySelector(
+        'div > article:last-child'
+      );
       if (lastRecordLoaded) {
         const lastRecordLoadedOffset =
           lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
@@ -101,13 +105,21 @@ Category.propTypes = {
         id: PropTypes.string.isRequired,
         createdAt: PropTypes.string,
         updatedAt: PropTypes.string,
+        layout: PropTypes.string,
+        draft: PropTypes.bool,
+        thumbnail: PropTypes.shape({
+          src: PropTypes.string.isRequired,
+          backupSrc: PropTypes.string,
+          alt: PropTypes.string.isRequired,
+          width: PropTypes.number.isRequired,
+          height: PropTypes.number.isRequired,
+        }),
+        category: PropTypes.string.isRequired,
+        path: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         date: PropTypes.string.isRequired,
-        layout: PropTypes.string.isRequired,
-        draft: PropTypes.bool.isRequired,
-        category: PropTypes.string.isRequired,
-        tags: PropTypes.arrayOf(PropTypes.string),
         description: PropTypes.string.isRequired,
+        tags: PropTypes.arrayOf(PropTypes.string),
         linkText: PropTypes.string,
       }).isRequired
     ),

@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 import Hashtags from 'components/hashtags/hashtags.jsx';
-import { Container, Card, SLink, ThumbWrapper, Thumb, Details } from './recommendations.css.js';
+import {
+  Container,
+  Card,
+  SLink,
+  ThumbWrapper,
+  Thumb,
+  Details,
+} from './recommendations.css.js';
 
 const Recommendations = ({ category, posts }) => (
   <Container>

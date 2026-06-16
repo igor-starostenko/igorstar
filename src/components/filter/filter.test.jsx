@@ -3,13 +3,19 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('next/link', () => ({
   __esModule: true,
-  default: ({ children, href, className }) => <a href={href} className={className}>{children}</a>,
+  default: ({ children, href, className }) => (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  ),
 }));
 
 import Filter from './filter.jsx';
 
 test('renders title', () => {
-  render(<Filter path="/" title="Test Title" displayCount={5} totalCount={10} />);
+  render(
+    <Filter path="/" title="Test Title" displayCount={5} totalCount={10} />
+  );
   expect(screen.getByText('Test Title').tagName).toBe('H1');
 });
 
@@ -19,7 +25,9 @@ test('renders filter categories', () => {
 });
 
 test('applies active class to current path', () => {
-  render(<Filter path="/travel" title="Test" displayCount={5} totalCount={10} />);
+  render(
+    <Filter path="/travel" title="Test" displayCount={5} totalCount={10} />
+  );
   const activeLink = screen.getByText('Travel');
   expect(activeLink).toHaveClass('active');
 });

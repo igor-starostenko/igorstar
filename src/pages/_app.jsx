@@ -2,7 +2,6 @@
 import { AnimatePresence } from 'framer-motion';
 import GlobalStyle from 'global.css.js';
 
- 
 const MyApp = ({ Component, pageProps, router }) => (
   <>
     <GlobalStyle />

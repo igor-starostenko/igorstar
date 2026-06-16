@@ -7,10 +7,10 @@ vi.mock('next/document', async (importOriginal) => {
     Document: class MockDocument {
       static async getInitialProps(ctx) {
         // Return mock initial props without calling the real method
-        return { 
-          html: '<html></html>', 
-          head: [], 
-          styles: <style /> 
+        return {
+          html: '<html></html>',
+          head: [],
+          styles: <style />,
         };
       }
     },
@@ -19,8 +19,12 @@ vi.mock('next/document', async (importOriginal) => {
 
 vi.mock('styled-components', () => ({
   ServerStyleSheet: class {
-    collectStyles(node) { return node; }
-    getStyleElement() { return <style data-testid="mock-styles">style</style>; }
+    collectStyles(node) {
+      return node;
+    }
+    getStyleElement() {
+      return <style data-testid="mock-styles">style</style>;
+    }
     seal() {}
   },
 }));

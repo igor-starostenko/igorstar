@@ -12,7 +12,9 @@ vi.mock('components/header/nav/nav.jsx', () => ({
 
 vi.mock('./header.css.js', () => ({
   __esModule: true,
-  Container: ({ children }) => <header data-testid="mock-container">{children}</header>,
+  Container: ({ children }) => (
+    <header data-testid="mock-container">{children}</header>
+  ),
   Logo: () => <div data-testid="mock-logo">Logo</div>,
 }));
 

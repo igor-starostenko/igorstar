@@ -4,9 +4,10 @@ import { render, screen } from '@testing-library/react';
 vi.mock('next/link', () => ({
   __esModule: true,
   default: ({ children, href }) => {
-    const hrefString = typeof href === 'object' && href.query
-      ? `?page=${href.query.page}`
-      : String(href);
+    const hrefString =
+      typeof href === 'object' && href.query
+        ? `?page=${href.query.page}`
+        : String(href);
     return <a href={hrefString}>{children}</a>;
   },
 }));

@@ -9,7 +9,9 @@ vi.mock('next/dynamic', () => ({
 
     if (modulePath.includes('carousel.jsx')) {
       // Carousel component - returns a simple wrapper
-      const CarouselMock = ({ children }) => <div data-testid="mock-carousel">{children}</div>;
+      const CarouselMock = ({ children }) => (
+        <div data-testid="mock-carousel">{children}</div>
+      );
       CarouselMock.displayName = 'CarouselMock';
       return CarouselMock;
     }
