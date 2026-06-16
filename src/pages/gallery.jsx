@@ -18,12 +18,6 @@ const GalleryPage = ({ page, gallery }) => (
         )}
       </div>
     </Box>
-    <style>{`
-      .react-photo-album--photo img {
-        max-width: 100% !important;
-        height: auto !important;
-      }
-    `}</style>
   </Layout>
 );
 
