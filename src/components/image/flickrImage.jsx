@@ -47,7 +47,7 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
     }
   });
 
-  const [error] = useState(!data);
+  const error = !data;
 
   if (isRaw === true) {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
