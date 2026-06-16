@@ -25,7 +25,7 @@ const renderNextImage = ({ alt, title, sizes }, { photo, width, height, index })
         alt={alt}
         title={title}
         sizes={sizes}
-        priority={index === 0}
+        priority={index <= 5}
         placeholder={'blurDataURL' in photo ? 'blur' : undefined}
       />
     </GalleryImageWrapper>

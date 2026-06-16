@@ -13,7 +13,6 @@ const BaseImage = ({
   backupSrc = '',
   fill,
   unoptimized,
-  priority,
   loading,
   width,
   height,
