@@ -9,7 +9,7 @@ import NextImage from 'next/image';
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
 /* Next.js Image renderer for react-photo-album */
-const renderNextImage = ({ alt, title, sizes }, { photo, width, height }) => {
+const renderNextImage = ({ alt, title, sizes }, { photo, width, height, index }) => {
   const src = typeof photo === 'string' ? photo : (photo.src ?? photo.url);
 
   return (
@@ -25,6 +25,7 @@ const renderNextImage = ({ alt, title, sizes }, { photo, width, height }) => {
         alt={alt}
         title={title}
         sizes={sizes}
+        priority={index === 0}
         placeholder={'blurDataURL' in photo ? 'blur' : undefined}
       />
     </GalleryImageWrapper>
