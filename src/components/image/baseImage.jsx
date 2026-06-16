@@ -15,8 +15,9 @@ const BaseImage = ({ alt, src, backupSrc = '', fill, unoptimized, priority, load
     // If backupSrc is empty/falsy, render nothing instead of broken image
     if (!backupSrc) return null;
     // Filter out Next.js-specific props that aren't valid on <img>
-    const { fill, unoptimized, priority, loading, width, height, ...domRest } = rest;
-    return <img src={backupSrc} alt={alt} {...domRest} />;
+    const { fill, unoptimized, priority, ...domRest } = rest;
+    // Pass through explicit dimensions and loading when available to preserve caller's sizing intent
+    return <img src={backupSrc} alt={alt} loading={loading} width={width} height={height} {...domRest} />;
   }
 
   // Next.js Image requires width/height unless using fill
