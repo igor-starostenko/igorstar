@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import BaseImage from './baseImage.jsx';
 import FlickrIcon from 'components/icons/flickrIcon.jsx';
@@ -12,64 +12,52 @@ import {
   ImageCopyright,
 } from './image.css.js';
 
-// Parse Flickr XML on server (using simple string parsing) or client (DOMParser)
-const parseFlickrXml = (xml) => {
-  try {
-    // Try DOMParser first (client)
-    if (typeof window !== 'undefined' && typeof DOMParser !== 'undefined') {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(xml, 'text/html');
-      const link = doc.querySelector('a');
+const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(false);
 
-      if (link) {
-        const href = link.href;
-        const title =
-          link.title || doc.querySelector('img')?.alt || 'Flickr image';
-        const img = doc.querySelector('img');
-        
-        if (href && title) {
+  useEffect(() => {
+    // Only run on client where DOMParser is available
+    if (typeof window !== 'undefined') {
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(xml, 'text/html');
+        const link = doc.querySelector('a');
+
+        if (link) {
+          const href = link.href;
+          const title =
+            link.title || doc.querySelector('img')?.alt || 'Flickr image';
+          const img = doc.querySelector('img');
           let src, width, height;
           if (img) {
             src = img.src;
             width = parseInt(img.width) || 424; // flickr default
             height = parseInt(img.height) || 640; // flickr default
           }
-          
-          if (src) {
-            return { href, title, src, width, height };
+
+          if (href && title && src) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setData({ href, title, src, width, height });
+          } else {
+            setError(true);
           }
+        } else {
+          setError(true);
         }
-      }
-    } else {
-      // Server-side: use simple string parsing
-      const hrefMatch = xml.match(/href=["']([^"']+)[\"']/);
-      const titleMatch = xml.match(/alt=["']([^"']+)[\"']/) || 
-                        xml.match(/title=["']([^"']+)[\"']/);
-      const imgMatch = xml.match(/src=["']([^"']+\.jpe?g)["']/) ||
-                      xml.match(/src=["']([^"']+\.png)["']/);
-      
-      if (hrefMatch && titleMatch) {
-        return {
-          href: hrefMatch[1],
-          title: titleMatch[1],
-          src: imgMatch ? imgMatch[1] : '',
-          width: 424,
-          height: 640,
-        };
+      } catch (_e) {
+        setError(true);
       }
     }
-  } catch {
-    // Fall through to null
-  }
-  return null;
-};
-
-const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
-  const data = useMemo(() => parseFlickrXml(xml), [xml]);
-  const error = !data;
+  }, [xml]);
 
   if (isRaw === true) {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
+  }
+
+  if (!data && !error) {
+    // Loading state - return null to avoid hydration mismatch
+    return null;
   }
 
   if (error || !data) {
