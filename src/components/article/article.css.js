@@ -47,15 +47,12 @@ export const Thumb = styled.div`
   }
 
   max-height: 41rem;
-  height: 60vw;
   margin: 0rem -3.9rem 0rem;
   ${MEDIA.TABLET`
     max-height: 36rem;
-    height: 55vw;
   `};
   ${MEDIA.PHONE`
     max-height: 24rem;
-    height: 50vw;
     margin: 0rem -2.9rem 0rem;
   `};
 `;
