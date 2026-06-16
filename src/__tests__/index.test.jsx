@@ -24,7 +24,9 @@ vi.mock('components/box/box.jsx', () => ({
 
 vi.mock('components/filter/filter.jsx', () => ({
   default: ({ path, title, displayCount, totalCount }) => (
-    <div data-testid="mock-filter">{title} ({displayCount}/{totalCount})</div>
+    <div data-testid="mock-filter">
+      {title} ({displayCount}/{totalCount})
+    </div>
   ),
 }));
 
@@ -34,41 +36,51 @@ vi.mock('components/article/article.jsx', () => ({
 
 vi.mock('components/pagination/pagination.jsx', () => ({
   default: ({ pageNum, totalPages }) => (
-    <div data-testid="mock-pagination">Page {pageNum} of {totalPages}</div>
+    <div data-testid="mock-pagination">
+      Page {pageNum} of {totalPages}
+    </div>
   ),
 }));
 
 vi.mock('components/head/head.jsx', () => ({
-  default: ({ pageTitle }) => <title data-testid="mock-head">{pageTitle}</title>,
+  default: ({ pageTitle }) => (
+    <title data-testid="mock-head">{pageTitle}</title>
+  ),
 }));
 
 import Category from 'components/category/category.jsx';
 
 test('renders Category with page and posts', () => {
-  const mockPage = { sys: { id: '1' }, fields: { title: 'Blog', description: '' } };
+  const mockPage = {
+    sys: { id: '1' },
+    fields: { title: 'Blog', description: '' },
+  };
   const mockPosts = {
     limit: 10,
     skip: 0,
     total: 25,
-    items: []
+    items: [],
   };
-  
+
   render(<Category page={mockPage} posts={mockPosts} />);
-  
+
   // The mock head renders <title> which may not be visible in DOM, so we check the filter
   expect(screen.getByTestId('mock-filter')).toBeInTheDocument();
 });
 
 test('renders Category with empty posts', () => {
-  const mockPage = { sys: { id: '1' }, fields: { title: 'Blog', description: '' } };
+  const mockPage = {
+    sys: { id: '1' },
+    fields: { title: 'Blog', description: '' },
+  };
   const mockPosts = {
     limit: 10,
     skip: 0,
     total: 0,
-    items: []
+    items: [],
   };
-  
+
   render(<Category page={mockPage} posts={mockPosts} />);
-  
+
   expect(screen.getByTestId('mock-filter')).toBeInTheDocument();
 });

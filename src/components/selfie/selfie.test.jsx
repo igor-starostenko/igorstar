@@ -3,7 +3,9 @@ import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('components/image/baseImage.jsx', () => ({
-  default: ({ src, alt }) => <img data-testid="mock-base-image" src={src} alt={alt} />,
+  default: ({ src, alt }) => (
+    <img data-testid="mock-base-image" src={src} alt={alt} />
+  ),
 }));
 
 import Selfie from './selfie.jsx';

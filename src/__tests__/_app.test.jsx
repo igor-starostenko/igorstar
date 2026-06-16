@@ -2,7 +2,9 @@ import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('framer-motion', () => ({
-  AnimatePresence: ({ children }) => <div data-testid="mock-animate">{children}</div>,
+  AnimatePresence: ({ children }) => (
+    <div data-testid="mock-animate">{children}</div>
+  ),
 }));
 
 vi.mock('global.css.js', () => ({
@@ -16,10 +18,10 @@ import MyApp from 'pages/_app.jsx';
 test('renders children within AnimatePresence and GlobalStyle', () => {
   const mockPageProps = { foo: 'bar' };
   render(
-    <MyApp 
-      Component={MockComponent} 
-      pageProps={mockPageProps} 
-      router={{ route: '/test' }} 
+    <MyApp
+      Component={MockComponent}
+      pageProps={mockPageProps}
+      router={{ route: '/test' }}
     />
   );
 
@@ -30,10 +32,10 @@ test('renders children within AnimatePresence and GlobalStyle', () => {
 test('renders multiple pages with different routes', () => {
   const mockPageProps = { foo: 'bar' };
   render(
-    <MyApp 
-      Component={MockComponent} 
-      pageProps={mockPageProps} 
-      router={{ route: '/another' }} 
+    <MyApp
+      Component={MockComponent}
+      pageProps={mockPageProps}
+      router={{ route: '/another' }}
     />
   );
 

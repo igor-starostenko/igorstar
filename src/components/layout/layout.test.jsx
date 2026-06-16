@@ -12,7 +12,9 @@ vi.mock('components/header/header.jsx', () => ({
 }));
 
 vi.mock('components/footer/footer.jsx', () => ({
-  default: ({ author, social }) => <footer data-testid="mock-footer">{author}</footer>,
+  default: ({ author, social }) => (
+    <footer data-testid="mock-footer">{author}</footer>
+  ),
 }));
 
 vi.mock('../../../site-config.cjs', () => ({

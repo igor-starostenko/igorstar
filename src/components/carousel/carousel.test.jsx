@@ -10,14 +10,18 @@ const mockViews = [
 
 test('renders modal overlay with close button', () => {
   const onClose = vi.fn();
-  render(<CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />);
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
+  );
 
   expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument();
 });
 
 test('renders current view image', () => {
   const onClose = vi.fn();
-  render(<CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />);
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
+  );
 
   const img = screen.getByAltText('A');
   expect(img).toBeInTheDocument();
@@ -26,7 +30,9 @@ test('renders current view image', () => {
 
 test('calls onClose when close button is clicked', () => {
   const onClose = vi.fn();
-  render(<CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />);
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
+  );
 
   fireEvent.click(screen.getByRole('button', { name: /close/i }));
   expect(onClose).toHaveBeenCalled();
@@ -34,7 +40,9 @@ test('calls onClose when close button is clicked', () => {
 
 test('renders navigation buttons when multiple views exist', () => {
   const onClose = vi.fn();
-  render(<CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />);
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
+  );
 
   expect(screen.getByRole('button', { name: /previous/i })).toBeInTheDocument();
   expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument();
@@ -42,7 +50,9 @@ test('renders navigation buttons when multiple views exist', () => {
 
 test('calls onClose when clicking on modal overlay (keyboard)', () => {
   const onClose = vi.fn();
-  render(<CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />);
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
+  );
 
   // Test keyboard handler (Escape key)
   const overlay = screen.getByRole('button', { name: /close/i }).closest('div');

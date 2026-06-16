@@ -8,7 +8,9 @@ import Head from 'components/head/head.jsx';
 import Filter from 'components/filter/filter.jsx';
 import Article from 'components/article/article.jsx';
 
-const Pagination = dynamic(() => import('components/pagination/pagination.jsx'));
+const Pagination = dynamic(
+  () => import('components/pagination/pagination.jsx')
+);
 
 const Category = ({ page, posts }) => {
   const pageSize = 10;
@@ -23,7 +25,9 @@ const Category = ({ page, posts }) => {
   useEffect(() => {
     const handleScrollHandler = () => {
       // To get page offset of last article
-      const lastRecordLoaded = document.querySelector('div > article:last-child');
+      const lastRecordLoaded = document.querySelector(
+        'div > article:last-child'
+      );
       if (lastRecordLoaded) {
         const lastRecordLoadedOffset =
           lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;

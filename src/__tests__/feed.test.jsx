@@ -7,7 +7,9 @@ vi.mock('components/layout/layout.jsx', () => ({
 
 vi.mock('components/box/box.jsx', () => ({
   default: ({ children, style }) => (
-    <div data-testid="mock-box" style={style}>{children}</div>
+    <div data-testid="mock-box" style={style}>
+      {children}
+    </div>
   ),
 }));
 
@@ -18,7 +20,9 @@ vi.mock('components/gallery/gallery.jsx', () => ({
 }));
 
 vi.mock('components/head/head.jsx', () => ({
-  default: ({ pageTitle }) => <title data-testid="mock-head">{pageTitle}</title>,
+  default: ({ pageTitle }) => (
+    <title data-testid="mock-head">{pageTitle}</title>
+  ),
 }));
 
 vi.mock('components/title/title.jsx', () => ({
@@ -28,7 +32,7 @@ vi.mock('components/title/title.jsx', () => ({
 import FeedPage from 'pages/feed.jsx';
 
 test('renders Feed with images', () => {
-  const mockProps = { 
+  const mockProps = {
     page: { title: 'Photo Feed' },
     feed: {
       limit: 10,
@@ -37,10 +41,10 @@ test('renders Feed with images', () => {
       images: [
         { sys: { id: '1' }, fields: {} },
         { sys: { id: '2' }, fields: {} },
-      ]
-    }
+      ],
+    },
   };
-  
+
   render(<FeedPage {...mockProps} />);
 
   // Use getAllByText since title appears multiple times
@@ -49,26 +53,26 @@ test('renders Feed with images', () => {
 });
 
 test('renders Feed with empty images', () => {
-  const mockProps = { 
+  const mockProps = {
     page: { title: 'Photo Feed' },
     feed: {
       limit: 10,
       skip: 0,
       total: 0,
-      images: []
-    }
+      images: [],
+    },
   };
-  
+
   render(<FeedPage {...mockProps} />);
 
   expect(screen.getByTestId('mock-box')).toBeInTheDocument();
 });
 
 test('renders Feed with empty page', () => {
-  const mockProps = { 
+  const mockProps = {
     page: {},
-    feed: { images: [] }
+    feed: { images: [] },
   };
-  
+
   expect(() => render(<FeedPage {...mockProps} />)).not.toThrow();
 });

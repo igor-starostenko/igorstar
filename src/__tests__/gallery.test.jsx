@@ -26,9 +26,7 @@ vi.mock('components/head/head.jsx', () => ({
 }));
 
 vi.mock('components/title/title.jsx', () => ({
-  default: ({ children }) => (
-    <h1 data-testid="mock-title">{children}</h1>
-  ),
+  default: ({ children }) => <h1 data-testid="mock-title">{children}</h1>,
 }));
 
 import GalleryPage from 'pages/gallery.jsx';

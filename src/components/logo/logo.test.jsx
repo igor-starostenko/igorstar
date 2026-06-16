@@ -4,7 +4,13 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('components/image/image.jsx', () => ({
   default: ({ src, width, height, alt }) => (
-    <img data-testid="mock-logo-image" src={src} width={width} height={height} alt={alt} />
+    <img
+      data-testid="mock-logo-image"
+      src={src}
+      width={width}
+      height={height}
+      alt={alt}
+    />
   ),
 }));
 

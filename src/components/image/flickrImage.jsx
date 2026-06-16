@@ -26,7 +26,8 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
 
         if (link) {
           const href = link.href;
-          const title = link.title || doc.querySelector('img')?.alt || 'Flickr image';
+          const title =
+            link.title || doc.querySelector('img')?.alt || 'Flickr image';
 
           const img = doc.querySelector('img');
           let src, width, height;

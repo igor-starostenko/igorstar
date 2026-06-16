@@ -10,7 +10,6 @@ vi.mock('components/hashtags/hashtags.jsx', () => ({
   default: ({ tags, isSmall }) => (
     <div data-testid="mock-hashtags" data-small={isSmall ? 'true' : 'false'}>
       {tags?.join(', ') || ''}
-
     </div>
   ),
 }));
@@ -22,10 +21,18 @@ vi.mock('components/image/baseImage.jsx', () => ({
 }));
 
 vi.mock('./recommendations.css.js', () => ({
-  Container: ({ children }) => <div data-testid="mock-container">{children}</div>,
+  Container: ({ children }) => (
+    <div data-testid="mock-container">{children}</div>
+  ),
   Card: ({ children }) => <div data-testid="mock-card">{children}</div>,
-  SLink: ({ children, href }) => <a data-testid="mock-link" href={href}>{children}</a>,
-  ThumbWrapper: ({ children }) => <div data-testid="mock-thumb-wrapper">{children}</div>,
+  SLink: ({ children, href }) => (
+    <a data-testid="mock-link" href={href}>
+      {children}
+    </a>
+  ),
+  ThumbWrapper: ({ children }) => (
+    <div data-testid="mock-thumb-wrapper">{children}</div>
+  ),
   Thumb: ({ src, backupSrc, fill, alt, ...rest }) => (
     <img data-testid="mock-thumb" src={src} alt={alt} {...rest} />
   ),

@@ -3,16 +3,13 @@ import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
-import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js'
+import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
 /* Next.js Image renderer for react-photo-album */
-const renderNextImage = (
-  { alt, title, sizes },
-  { photo, width, height }
-) => {
+const renderNextImage = ({ alt, title, sizes }, { photo, width, height }) => {
   const src = typeof photo === 'string' ? photo : (photo.src ?? photo.url);
 
   return (

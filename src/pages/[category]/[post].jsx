@@ -174,7 +174,10 @@ const options = {
         // Decode HTML entities in URI if needed (Contentful may encode them)
         const decodeUri = (uri) => {
           try {
-            return uri.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+            return uri
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&quot;/g, '"');
           } catch {
             return uri;
           }
