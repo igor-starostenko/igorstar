@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import BaseImage from './baseImage.jsx';
 import FlickrIcon from 'components/icons/flickrIcon.jsx';
@@ -12,12 +12,11 @@ import {
   ImageCopyright,
 } from './image.css.js';
 
-const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
-  // Extract data parsing outside useState to avoid cascading renders
-  const [data] = useState(() => {
-    if (typeof window === 'undefined') return null;
-    
-    try {
+// Parse Flickr XML on server (using simple string parsing)
+const parseFlickrXml = (xml) => {
+  try {
+    // Try DOMParser first (client)
+    if (typeof window !== 'undefined' && typeof DOMParser !== 'undefined') {
       const parser = new DOMParser();
       const doc = parser.parseFromString(xml, 'text/html');
       const link = doc.querySelector('a');
@@ -41,21 +40,38 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
           }
         }
       }
-      return null;
-    } catch {
-      return null;
+    } else {
+      // Server-side: use simple string parsing
+      // Extract href from <a data-flickr-embed="true" ... href="...">
+      const hrefMatch = xml.match(/href=["']([^"']+)["']/);
+      const titleMatch = xml.match(/alt=["']([^"']+)["']/) || 
+                        xml.match(/title=["']([^"']+)["']/);
+      const imgMatch = xml.match(/src=["']([^"']+\.jpe?g)["']/) ||
+                      xml.match(/src=["']([^"']+\.png)["']/);
+      
+      if (hrefMatch && titleMatch) {
+        return {
+          href: hrefMatch[1],
+          title: titleMatch[1],
+          src: imgMatch ? imgMatch[1] : '',
+          width: 424,
+          height: 640,
+        };
+      }
     }
-  });
+  } catch {
+    // Fall through to null
+  }
+  return null;
+};
 
+const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
+  // Compute parsed data on both server and client
+  const data = useMemo(() => parseFlickrXml(xml), [xml]);
   const error = !data;
 
   if (isRaw === true) {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
-  }
-
-  if (!data && !error) {
-    // Loading state - return null to avoid hydration mismatch
-    return null;
   }
 
   if (error || !data) {
