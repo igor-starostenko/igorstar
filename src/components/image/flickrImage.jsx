@@ -38,7 +38,6 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
           }
 
           if (href && title && src) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
             setData({ href, title, src, width, height });
           } else {
             setError(true);
