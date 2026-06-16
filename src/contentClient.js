@@ -4,10 +4,9 @@ const spaceId = process.env.CONTENTFUL_SPACE_ID;
 const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
 if (!spaceId || !accessToken) {
-  console.error('Missing Contentful credentials:');
-  console.error('  - CONTENTFUL_SPACE_ID');
-  console.error('  - CONTENTFUL_ACCESS_TOKEN');
-  process.exit(1);
+  throw new Error(
+    'Missing Contentful credentials: CONTENTFUL_SPACE_ID and CONTENTFUL_ACCESS_TOKEN'
+  );
 }
 
 const client = createClient({ space: spaceId, accessToken });
