@@ -8,7 +8,7 @@
     "dev": "next dev",
     "start": "next start",
     "format": "prettier --config ./.prettierrc --write src/**/*.js",
-    "lint": "eslint 'src/**/*.{js,jsx}'",
+    "lint": "eslint .",
     "build:analyze": "npm run build && npm run analyze",
     "build:dir": "mkdirp ./public/icons/ && mkdirp ./public/images/",
     "build:favicons": "node scripts/favicons.cjs",

@@ -10,7 +10,7 @@ const client = contentful.createClient({
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
 });
 
-/* eslint-disable no-console */
+ 
 const saveFile = (data, fileName) => {
   fs.writeFile(fileName, data, err => {
     if (err) {

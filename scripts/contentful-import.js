@@ -9,7 +9,7 @@ const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN || process.env.CONTENTFU
 
 const client = contentful.createClient({ space, accessToken });
 
-/* eslint-disable no-console */
+ 
 client
   .getSpace(space)
   .then(space => {
