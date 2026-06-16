@@ -4,7 +4,7 @@ export const GalleryContainer = styled.div`
   margin: ${(props) => props.$spacing}px;
   max-width: ${(props) => props.$containerWidth}px;
 
-  /* Override react-photo-album CSS to ensure valid position for Next.js...[truncated]
+  /* Override react-photo-album CSS to ensure valid position for Next.js Image */
   .react-photo-album--photo {
     position: relative !important;
   }
