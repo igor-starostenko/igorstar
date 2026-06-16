@@ -3,7 +3,7 @@ import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('next/link', () => ({
-  default: ({ _children, _href }) => <a>link</a>,
+  default: ({ children, href }) => <a href={href}>{children}</a>,
 }));
 
 vi.mock('next/dynamic', () => ({
@@ -22,8 +22,8 @@ vi.mock('@contentful/rich-text-types', () => ({
 }));
 
 vi.mock('@contentful/rich-text-react-renderer', () => ({
-  documentToReactComponents: (_node, _options) => (
-    <div data-testid="mock-rich-text">{"[object Object]"}</div>
+  documentToReactComponents: (node, _options) => (
+    <div data-testid="mock-rich-text">{String(node)}</div>
   ),
 }));
 

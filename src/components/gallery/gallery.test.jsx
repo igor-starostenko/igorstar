@@ -31,10 +31,10 @@ vi.mock('next/dynamic', () => ({
       const BaseNextImageMock = ({
         src,
         alt,
-        fill: _fill,
+        fill,
         sizes: _sizes,
         placeholder: _placeholder,
-        title: _title,
+        title,
         style,
       }) => {
         // Return a wrapper div that contains the Next.js Image element
