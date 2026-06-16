@@ -8,12 +8,6 @@ export const GalleryContainer = styled.div`
   .react-photo-album--photo {
     position: relative !important;
   }
-
-  /* Ensure Next.js Image fills container correctly */
-  .react-photo-album--photo img {
-    max-width: 100% !important;
-    height: auto !important;
-  }
 `;
 
 export const GalleryImageWrapper = styled.div`
