@@ -33,7 +33,7 @@ const Article = ({
               alt={image.alt}
               width={image.width}
               height={image.height}
-              loading="eager"
+              loading={index === 0 ? "eager" : "lazy"}
               priority={index === 0}
             />
           </Thumb>
