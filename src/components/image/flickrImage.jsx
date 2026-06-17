@@ -23,40 +23,44 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
   }
 
-  const { a: data } = parser.parse(xml);
+  try {
+    const { a: data } = parser.parse(xml);
 
-  if (!data) {
+    if (!data) {
+      return <span />;
+    }
+    const {
+      href,
+      title,
+      img: { src, width, height },
+    } = data;
+
+    return (
+      <ImageContainer>
+        <Link href={href} title={title}>
+          <BaseImage
+            unoptimized
+            src={src}
+            width={width}
+            height={height}
+            alt={title}
+            backupSrc={backupSrc}
+          />
+          <ImageFrame>
+            <ImageHeader>
+              <FlickrIcon />
+            </ImageHeader>
+            <ImageFooter>
+              <ImageTitle>{title}</ImageTitle>
+              <ImageCopyright>All rights reserved</ImageCopyright>
+            </ImageFooter>
+          </ImageFrame>
+        </Link>
+      </ImageContainer>
+    );
+  } catch {
     return <span />;
   }
-  const {
-    href,
-    title,
-    img: { src, width, height },
-  } = data;
-
-  return (
-    <ImageContainer>
-      <Link href={href} title={title}>
-        <BaseImage
-          unoptimized
-          src={src}
-          width={width}
-          height={height}
-          alt={title}
-          backupSrc={backupSrc}
-        />
-        <ImageFrame>
-          <ImageHeader>
-            <FlickrIcon />
-          </ImageHeader>
-          <ImageFooter>
-            <ImageTitle>{title}</ImageTitle>
-            <ImageCopyright>All rights reserved</ImageCopyright>
-          </ImageFooter>
-        </ImageFrame>
-      </Link>
-    </ImageContainer>
-  );
 };
 
 FlickrImage.propTypes = {

@@ -45,38 +45,33 @@ vi.mock('./image.css.js', () => ({
       {children}
     </div>
   ),
-  ImageHeader: ({ children }) => (
-    <div data-testid="mock-image-header">{children}</div>
-  ),
-  ImageFooter: ({ children }) => (
-    <div data-testid="mock-image-footer">{children}</div>
-  ),
-  ImageTitle: ({ children }) => (
-    <span data-testid="mock-image-title">{children}</span>
-  ),
-  ImageCopyright: ({ children }) => (
-    <span data-testid="mock-image-copyright">{children}</span>
-  ),
+  ImageHeader: ({ children }) => <div data-testid="mock-image-header">{children}</div>,
+  ImageFooter: ({ children }) => <div data-testid="mock-image-footer">{children}</div>,
+  ImageTitle: ({ children }) => <span data-testid="mock-image-title">{children}</span>,
+  ImageCopyright: ({ children }) => <span data-testid="mock-image-copyright">{children}</span>,
 }));
 
-vi.mock('xml2js', () => ({
-  parseStringSync: (xml) => {
-    if (xml.includes('error')) {
-      throw new Error('Parse error');
-    } else if (xml.includes('incomplete')) {
-      return { a: { href: 'https://flickr.com', title: 'Test' } };
-    }
-    return {
-      a: {
-        href: 'https://flickr.com/photo/123',
-        title: 'Test Photo',
-        img: {
-          src: '/test-photo.jpg',
-          width: 1920,
-          height: 1080,
+vi.mock('fast-xml-parser', () => ({
+  XMLParser: class {
+    constructor() {}
+    parse(xml) {
+      if (xml.includes('error')) {
+        throw new Error('Parse error');
+      } else if (xml.includes('incomplete')) {
+        return { a: { href: 'https://flickr.com', title: 'Test' } };
+      }
+      return {
+        a: {
+          href: 'https://flickr.com/photo/123',
+          title: 'Test Photo',
+          img: {
+            src: '/test-photo.jpg',
+            width: 1920,
+            height: 1080,
+          },
         },
-      },
-    };
+      };
+    }
   },
 }));
 
@@ -93,11 +88,7 @@ test('renders Flickr image with valid XML', () => {
 test('renders with isRaw=true', () => {
   const mockXml = '<xml>raw content</xml>';
 
-  render(
-    <FlickrImage xml={mockXml} isRaw={true}>
-      raw content
-    </FlickrImage>
-  );
+  render(<FlickrImage xml={mockXml} isRaw={true}>raw content</FlickrImage>);
 
   expect(screen.getByText('raw content')).toBeInTheDocument();
 });
@@ -131,9 +122,7 @@ test('uses ImageContainer as container for hover effects', () => {
 
   render(<FlickrImage xml={mockXml} />);
 
-  const container = document.querySelector(
-    '[data-testid="mock-image-container"]'
-  );
+  const container = document.querySelector('[data-testid="mock-image-container"]');
   expect(container).toBeInTheDocument();
 
   // Verify container has hover styles via CSS class
@@ -157,9 +146,7 @@ test('ImageFrame is visible on hover', () => {
 
   render(<FlickrImage xml={mockXml} />);
 
-  const container = document.querySelector(
-    '[data-testid="mock-image-container"]'
-  );
+  const container = document.querySelector('[data-testid="mock-image-container"]');
   const frame = document.querySelector('[data-testid="mock-image-frame"]');
 
   // Initially the frame should have opacity: 0 (hidden) via CSS
