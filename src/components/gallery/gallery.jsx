@@ -12,35 +12,25 @@ const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const renderNextImage = (
   { alt, title, sizes },
   { photo, width, height, index }
-) => {
-  const src = typeof photo === 'string' ? photo : (photo.src ?? photo.url);
-
-  return (
-    <GalleryImageWrapper
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-      }}
-    >
-      <NextImage
-        fill
-        src={src}
-        alt={alt}
-        title={title}
-        sizes={sizes}
-        priority={index <= 5}
-        placeholder={
-          typeof photo === 'object' && photo !== null && 'blurDataURL' in photo
-            ? 'blur'
-            : undefined
-        }
-        blurDataURL={
-          typeof photo === 'object' && photo !== null ? photo.blurDataURL : undefined
-        }
-      />
-    </GalleryImageWrapper>
-  );
-};
+) => (
+  <GalleryImageWrapper
+    style={{
+      width: `${width}px`,
+      height: `${height}px`,
+    }}
+  >
+    <NextImage
+      fill
+      src={photo.src ?? photo.url}
+      alt={alt}
+      title={title}
+      sizes={sizes}
+      priority={index <= 5}
+      placeholder={'blurDataURL' in photo ? 'blur' : undefined}
+      blurDataURL={photo.blurDataURL}
+    />
+  </GalleryImageWrapper>
+);
 
 // Map gallery photos to react-photo-album format
 const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
