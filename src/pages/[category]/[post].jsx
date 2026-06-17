@@ -10,7 +10,9 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Recommendations from 'components/recommendations/recommendations.jsx';
 
-const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'));
+const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'), {
+  ssr: false,
+});
 
 const FlickrImage = dynamic(() => import('components/image/flickrImage.jsx'));
 
