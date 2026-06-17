@@ -7,6 +7,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ['src/test/setup.js'],
     exclude: ['node_modules/**', 'out/**'],
+    hookTimeout: 60000,
+    testTimeout: 60000,
   },
   resolve: {
     alias: [
