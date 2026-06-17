@@ -12,7 +12,7 @@ const launchChromeAndRunLighthouse = (
   opts = { chromeFlags: ['--headless'] },
   config = null
 ) =>
-  chromeLauncher.launch({ chromeFlags: opts.chromeFlags }).then(chrome => {
+  chromeLauncher.launch({ chromeFlags: opts.chromeFlags, chromePath: '/usr/bin/chromium' }).then(chrome => {
     opts.port = chrome.port;
     return lighthouse(url, opts, config).then(lhr => {
       chrome.kill();
