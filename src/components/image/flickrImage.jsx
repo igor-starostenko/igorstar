@@ -28,8 +28,7 @@ const parseFlickrImage = (xml) => {
       },
     } = parser.parse(xml);
     return { href, title, src, width, height };
-  } catch (e) {
-    console.error(e);
+  } catch {
     return {};
   }
 };
