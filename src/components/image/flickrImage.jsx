@@ -18,49 +18,55 @@ const parser = new XMLParser({
   processEntities: false,
 });
 
+const parseFlickrImage = (xml) => {
+  try {
+    const {
+      a: {
+        href,
+        title,
+        img: { src, width, height },
+      },
+    } = parser.parse(xml);
+    return { href, title, src, width, height };
+  } catch (e) {
+    console.error(e);
+    return {};
+  }
+};
+
 const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
   if (isRaw === true) {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
   }
 
-  try {
-    const { a: data } = parser.parse(xml);
-
-    if (!data) {
-      return <span />;
-    }
-    const {
-      href,
-      title,
-      img: { src, width, height },
-    } = data;
-
-    return (
-      <ImageContainer>
-        <Link href={href} title={title}>
-          <BaseImage
-            unoptimized
-            src={src}
-            width={width}
-            height={height}
-            alt={title}
-            backupSrc={backupSrc}
-          />
-          <ImageFrame>
-            <ImageHeader>
-              <FlickrIcon />
-            </ImageHeader>
-            <ImageFooter>
-              <ImageTitle>{title}</ImageTitle>
-              <ImageCopyright>All rights reserved</ImageCopyright>
-            </ImageFooter>
-          </ImageFrame>
-        </Link>
-      </ImageContainer>
-    );
-  } catch {
+  const { href, title, src, width, height } = parseFlickrImage(xml);
+  if (!href || !src) {
     return <span />;
   }
+
+  return (
+    <ImageContainer>
+      <Link href={href} title={title}>
+        <BaseImage
+          unoptimized
+          src={src}
+          width={width}
+          height={height}
+          alt={title}
+          backupSrc={backupSrc}
+        />
+        <ImageFrame>
+          <ImageHeader>
+            <FlickrIcon />
+          </ImageHeader>
+          <ImageFooter>
+            <ImageTitle>{title}</ImageTitle>
+            <ImageCopyright>All rights reserved</ImageCopyright>
+          </ImageFooter>
+        </ImageFrame>
+      </Link>
+    </ImageContainer>
+  );
 };
 
 FlickrImage.propTypes = {
