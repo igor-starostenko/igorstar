@@ -7,7 +7,7 @@
     "analyze": "source-map-explorer .next/static/**/*.js",
     "dev": "next dev",
     "start": "next start",
-    "format": "prettier --config ./.prettierrc --write src/**/*.js",
+    "format": "prettier --config ./.prettierrc --write src/**/*.{js,jsx}",
     "lint": "eslint 'src/**/*.{js,jsx}'",
     "build:analyze": "npm run build && npm run analyze",
     "build:dir": "mkdirp ./public/icons/ && mkdirp ./public/images/",

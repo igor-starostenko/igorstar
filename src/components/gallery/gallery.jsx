@@ -9,7 +9,10 @@ import NextImage from 'next/image';
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
 /* Next.js Image renderer for react-photo-album */
-const renderNextImage = ({ alt, title, sizes }, { photo, width, height, index }) => {
+const renderNextImage = (
+  { alt, title, sizes },
+  { photo, width, height, index }
+) => {
   const src = typeof photo === 'string' ? photo : (photo.src ?? photo.url);
 
   return (

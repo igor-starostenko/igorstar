@@ -193,7 +193,15 @@ vi.mock('react-photo-album', () => ({
 
 // Mock next/image for direct usage in gallery.jsx
 vi.mock('next/image', () => ({
-  default: ({ src: _src, alt, fill: _fill, sizes: _sizes, placeholder: _placeholder, title: _title, style }) => {
+  default: ({
+    src: _src,
+    alt,
+    fill: _fill,
+    sizes: _sizes,
+    placeholder: _placeholder,
+    title: _title,
+    style,
+  }) => {
     // Return a wrapper div with an img element
     return (
       <div data-testid="mock-next-image" style={style}>
