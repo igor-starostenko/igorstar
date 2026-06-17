@@ -52,20 +52,17 @@ const SEO = ({
       <meta content="512" name="twitter:image:height" />
 
       {/* Schema.org JSON-LD - using @graph pattern to avoid Safari bug */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            schemaGenerator({
-              canonical: fullUrl,
-              siteUrl,
-              pageTitle,
-              siteTitle,
-              pageTitleFull,
-            })
-          ),
-        }}
-      />
+      <script type="application/ld+json">
+        {JSON.stringify(
+          schemaGenerator({
+            canonical: fullUrl,
+            siteUrl,
+            pageTitle,
+            siteTitle,
+            pageTitleFull,
+          })
+        )}
+      </script>
     </Head>
   );
 };
