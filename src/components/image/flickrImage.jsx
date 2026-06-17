@@ -27,7 +27,12 @@ const parseFlickrImage = (xml) => {
         img: { src, width, height },
       },
     } = parser.parse(xml);
-    return { href, title, src, width, height };
+
+    const w = Number(width);
+    const h = Number(height);
+    if (!Number.isFinite(w) || !Number.isFinite(h)) return {};
+
+    return { href, title, src, width: w, height: h };
   } catch {
     return {};
   }
