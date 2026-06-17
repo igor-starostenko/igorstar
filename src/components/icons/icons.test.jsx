@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 // Import the actual icon components
 import {

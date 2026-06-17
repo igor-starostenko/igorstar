@@ -34,6 +34,10 @@ export const Categories = styled.div`
   a:not(:first-child) {
     margin-left: 1.5rem;
   }
+
+  a.active {
+    font-weight: bold;
+  }
 `;
 
 export const Counter = styled.span`

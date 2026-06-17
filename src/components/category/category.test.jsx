@@ -9,8 +9,10 @@ vi.mock('next/router', () => ({
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: (loader) => {
-    const MockDynamic = ({ children }) => <div data-testid="mock-dynamic">{children}</div>;
+  default: (_loader) => {
+    const MockDynamic = ({ children }) => (
+      <div data-testid="mock-dynamic">{children}</div>
+    );
     return MockDynamic;
   },
 }));
@@ -21,16 +23,20 @@ vi.mock('components/layout/layout.jsx', () => ({
 
 vi.mock('components/box/box.jsx', () => ({
   default: ({ children, isMain }) => (
-    <div data-testid="mock-box" data-ismain={isMain ? 'true' : 'false'}>{children}</div>
+    <div data-testid="mock-box" data-ismain={isMain ? 'true' : 'false'}>
+      {children}
+    </div>
   ),
 }));
 
 vi.mock('components/head/head.jsx', () => ({
-  default: ({ pageTitle }) => <title data-testid="mock-head">{pageTitle}</title>,
+  default: ({ pageTitle }) => (
+    <title data-testid="mock-head">{pageTitle}</title>
+  ),
 }));
 
 vi.mock('components/filter/filter.jsx', () => ({
-  default: ({ path, title, displayCount, totalCount }) => (
+  default: ({ _path, title, displayCount, totalCount }) => (
     <div data-testid="mock-filter">
       {title} ({displayCount}/{totalCount})
     </div>
@@ -43,7 +49,9 @@ vi.mock('components/article/article.jsx', () => ({
 
 vi.mock('components/pagination/pagination.jsx', () => ({
   default: ({ pageNum, totalPages }) => (
-    <div data-testid="mock-pagination">Page {pageNum} of {totalPages}</div>
+    <div data-testid="mock-pagination">
+      Page {pageNum} of {totalPages}
+    </div>
   ),
 }));
 
@@ -91,7 +99,7 @@ test('renders with page and posts', () => {
   // Check for multiple elements with the same text using getAllByText
   const techPostsElements = screen.getAllByText(/Tech Posts/);
   expect(techPostsElements.length).toBeGreaterThan(0);
-  
+
   // Verify the filter shows correct count
   const filter = screen.getByTestId('mock-filter');
   expect(filter).toBeInTheDocument();
@@ -119,7 +127,7 @@ test('renders with empty posts', () => {
   // Check for multiple elements with the same text
   const techPostsElements = screen.getAllByText(/Tech Posts/);
   expect(techPostsElements.length).toBeGreaterThan(0);
-  
+
   // The filter shows "(0/0)" - verify the structure
   const filter = screen.getByTestId('mock-filter');
   expect(filter).toBeInTheDocument();

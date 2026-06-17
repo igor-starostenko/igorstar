@@ -20,9 +20,7 @@ const Filter = ({ path, title, displayCount, totalCount }) => (
           <Link
             key={href}
             href={href}
-            style={{
-              fontWeight: path === href ? 'bold' : 'inherit',
-            }}
+            className={path === href ? 'active' : ''}
           >
             {title}
           </Link>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
+import { XMLParser } from 'fast-xml-parser';
 import Link from 'next/link';
-import { parseStringSync } from 'xml2js';
 import BaseImage from './baseImage.jsx';
 import FlickrIcon from 'components/icons/flickrIcon.jsx';
 import {
@@ -12,42 +12,45 @@ import {
   ImageCopyright,
 } from './image.css.js';
 
-const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
-  let href, title, src, width, height;
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: '',
+  processEntities: false,
+});
 
+const parseFlickrImage = (xml) => {
   try {
-    const result = parseStringSync(
-      xml,
-      { ignoreAttrs: false, mergeAttrs: true, explicitArray: false }
-    );
-    
-    if (!result?.a) {
-      return <span />;
-    }
-    
-    const { a } = result;
-    href = a.href;
-    title = a.title;
-    if (a.img) {
-      src = a.img.src;
-      width = a.img.width;
-      height = a.img.height;
-    }
+    const {
+      a: {
+        href,
+        title,
+        img: { src, width, height },
+      },
+    } = parser.parse(xml);
+
+    const w = Number(width);
+    const h = Number(height);
+    if (!Number.isFinite(w) || !Number.isFinite(h)) return {};
+
+    return { href, title, src, width: w, height: h };
   } catch {
-    return <span />;
+    return {};
   }
+};
 
-  if (!href || !title || !src || !width || !height) {
-    return <span />;
-  }
-
+const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
   if (isRaw === true) {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
   }
 
+  const { href, title, src, width, height } = parseFlickrImage(xml);
+  if (!href || !src) {
+    return <span />;
+  }
+
   return (
-    <Link href={href} title={title}>
-      <ImageContainer>
+    <ImageContainer>
+      <Link href={href} title={title}>
         <BaseImage
           unoptimized
           src={src}
@@ -65,8 +68,8 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
             <ImageCopyright>All rights reserved</ImageCopyright>
           </ImageFooter>
         </ImageFrame>
-      </ImageContainer>
-    </Link>
+      </Link>
+    </ImageContainer>
   );
 };
 

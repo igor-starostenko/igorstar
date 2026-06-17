@@ -5,9 +5,8 @@ const CategoryIndex = ({ page, posts }) => (
 );
 
 export const getStaticProps = async ({ params }) => {
-  const { getEntries, getAllEntries, parseItem } = await import(
-    'contentClient'
-  );
+  const { getEntries, getAllEntries, parseItem } =
+    await import('contentClient');
 
   const pages = await getEntries({
     content_type: 'page',
@@ -27,8 +26,8 @@ export const getStaticProps = async ({ params }) => {
       page: pages.items[0] || {},
       posts: {
         ...posts,
-        /* eslint-disable no-unused-vars */
-        items: posts.items.map(({ thumbnail, images, ...fields }) => ({
+
+        items: posts.items.map(({ thumbnail, images: _images, ...fields }) => ({
           thumbnail: parseItem(thumbnail || {}),
           ...fields,
         })),

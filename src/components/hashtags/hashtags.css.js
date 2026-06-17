@@ -7,8 +7,8 @@ export const Container = styled.div`
 `;
 
 export const Tag = styled.span`
-  margin: ${({ isSmall }) =>
-    isSmall ? `2px 5px 2px 0px` : `0.5rem 10px 0.5rem 0px`};
+  margin: ${({ $isSmall }) =>
+    $isSmall ? `2px 5px 2px 0px` : `0.5rem 10px 0.5rem 0px`};
   padding: 5px;
   border-radius: 7px;
   color: ${colors.darkGrey};

@@ -1,4 +1,4 @@
-import BaseImage from 'components/image/image';
+import BaseImage from 'components/image/baseImage';
 
 const LogoSvg = (props) => (
   <BaseImage
@@ -7,6 +7,7 @@ const LogoSvg = (props) => (
     src="/logo.svg"
     query=""
     alt="logo"
+    priority
     {...props}
   />
 );

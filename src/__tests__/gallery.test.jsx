@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('components/layout/layout.jsx', () => ({
@@ -7,7 +7,9 @@ vi.mock('components/layout/layout.jsx', () => ({
 
 vi.mock('components/box/box.jsx', () => ({
   default: ({ children, style }) => (
-    <div data-testid="mock-box" style={style}>{children}</div>
+    <div data-testid="mock-box" style={style}>
+      {children}
+    </div>
   ),
 }));
 
@@ -18,17 +20,19 @@ vi.mock('components/gallery/gallery.jsx', () => ({
 }));
 
 vi.mock('components/head/head.jsx', () => ({
-  default: ({ pageTitle }) => <title data-testid="mock-head">{pageTitle}</title>,
+  default: ({ pageTitle }) => (
+    <title data-testid="mock-head">{pageTitle}</title>
+  ),
 }));
 
 vi.mock('components/title/title.jsx', () => ({
-  default: ({ children, as }) => <h1 data-testid="mock-title">{children}</h1>,
+  default: ({ children }) => <h1 data-testid="mock-title">{children}</h1>,
 }));
 
-import GalleryPage from './gallery.jsx';
+import GalleryPage from 'pages/gallery.jsx';
 
 test('renders Gallery with images', () => {
-  const mockProps = { 
+  const mockProps = {
     page: { title: 'Gallery' },
     gallery: {
       limit: 10,
@@ -38,26 +42,26 @@ test('renders Gallery with images', () => {
         { sys: { id: '1' }, fields: {} },
         { sys: { id: '2' }, fields: {} },
         { sys: { id: '3' }, fields: {} },
-      ]
-    }
+      ],
+    },
   };
-  
+
   render(<GalleryPage {...mockProps} />);
 
   expect(screen.getByText('3 photos')).toBeInTheDocument();
 });
 
 test('renders Gallery with empty images', () => {
-  const mockProps = { 
+  const mockProps = {
     page: { title: 'Gallery' },
     gallery: {
       limit: 10,
       skip: 0,
       total: 0,
-      images: []
-    }
+      images: [],
+    },
   };
-  
+
   render(<GalleryPage {...mockProps} />);
 
   // When images is empty, Gallery component isn't rendered, so check box instead
@@ -65,10 +69,10 @@ test('renders Gallery with empty images', () => {
 });
 
 test('renders Gallery with empty page', () => {
-  const mockProps = { 
+  const mockProps = {
     page: {},
-    gallery: { images: [] }
+    gallery: { images: [] },
   };
-  
+
   expect(() => render(<GalleryPage {...mockProps} />)).not.toThrow();
 });

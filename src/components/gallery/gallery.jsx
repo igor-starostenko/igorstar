@@ -1,114 +1,143 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
-import { ModalGateway } from 'react-images';
+import { RowsPhotoAlbum } from 'react-photo-album';
+import 'react-photo-album/rows.css';
+import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
+import NextImage from 'next/image';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
-const Image = dynamic(() => import('components/image/image.jsx'));
 
-/* To avoid 'useLayoutEffect does nothing on the server' warning */
-const PhotoGallery = dynamic(() => import('react-photo-gallery'), {
-  ssr: false,
-});
-
-/* Inspired with bushblade-knives-website
- * https://github.com/bushblade/bushblade-knives-website/blob/master/src/components/Gallery.js
- */
-
-const GalleryImage = ({ index, onClick, photo, margin }) => (
-  <Image
-    style={{ margin }}
-    onClick={(e) => onClick(e, { index, photo })}
-    key={photo.id}
-    src={photo.src}
-    backupSrc={photo.backupSrc}
-    alt={photo.description || photo.alt}
-    width={photo.width}
-    height={photo.height}
-    {...(index === 0 ? { priority: true } : {})}
-  />
+/* Next.js Image renderer for react-photo-album */
+const renderNextImage = (
+  { alt, title, sizes },
+  { photo, width, height, index }
+) => (
+  <GalleryImageWrapper
+    style={{
+      width: `${width}px`,
+      height: `${height}px`,
+    }}
+  >
+    <NextImage
+      fill
+      src={photo.src ?? photo.url}
+      alt={alt}
+      title={title}
+      sizes={sizes}
+      priority={index <= 5}
+      placeholder={'blurDataURL' in photo ? 'blur' : undefined}
+      blurDataURL={photo.blurDataURL}
+    />
+  </GalleryImageWrapper>
 );
 
-GalleryImage.propTypes = {
-  index: PropTypes.number.isRequired,
-  onClick: PropTypes.func,
-  photo: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    alt: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    backupSrc: PropTypes.string,
-    src: PropTypes.string.isRequired,
-  }).isRequired,
-  margin: PropTypes.number,
-};
+// Map gallery photos to react-photo-album format
+const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
+  photos.map((photo) => {
+    // Get original dimensions or use fallbacks
+    const originalWidth = photo.width || 1200;
+    const originalHeight = photo.height || 800;
 
-const createSortFunction = (orderBy) => (a, b) => {
-  if (a[orderBy] < b[orderBy]) {
-    return -1;
-  }
-  if (a[orderBy] > b[orderBy]) {
-    return 1;
-  }
-  return 0;
+    // Calculate aspect ratio from original dimensions
+    const aspectRatio = originalWidth / originalHeight;
+
+    // Use targetRowHeight as the height constraint, calculate proportional width
+    const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
+
+    return {
+      src: photo.src,
+      width: constrainedWidth,
+      height: targetRowHeight,
+      alt: photo.description || photo.alt || '',
+    };
+  });
+
+const createSortFunction = (orderBy) => {
+  if (!orderBy) return () => 0;
+
+  return (a, b) => {
+    if (a[orderBy] < b[orderBy]) return -1;
+    if (a[orderBy] > b[orderBy]) return 1;
+    return 0;
+  };
 };
 
 const orderArray = (array, orderBy, order) => {
-  if (!orderBy) {
-    return array;
-  }
+  if (!orderBy) return array;
 
   const direction = String(order).toLowerCase();
-  if (!['desc', 'asc'].includes(direction)) {
-    return array;
-  }
+  if (!['desc', 'asc'].includes(direction)) return array;
 
   const sortFun = createSortFunction(orderBy);
-
   array.sort(sortFun);
   return direction === 'desc' ? array.reverse() : array;
 };
 
-const Gallery = ({ photos, order, orderBy, ...rest }) => {
+const Gallery = ({
+  photos,
+  order,
+  orderBy,
+  targetRowHeight = 150,
+  spacing = 2,
+  containerWidth = 900,
+}) => {
   const [isOpen, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
 
   const images = useMemo(
-    () => orderArray(photos, orderBy, order),
+    () => orderArray([...photos], orderBy, order),
     [photos, order, orderBy]
   );
 
-  const imageClick = (_e, obj) => {
-    setCurrent(obj.index);
-    setOpen(true);
+  // Handle click on photo in PhotoAlbum (returns index)
+  const handlePhotoClick = (_event, arg) => {
+    // react-photo-album passes index/photo info in different ways:
+    // - _event.index (direct property on event)
+    // - arg.index (second parameter object)
+    // - arg directly as index number
+    const idx =
+      _event.index ??
+      _event.detail?.index ??
+      (typeof arg === 'object' && arg !== null ? arg.index : undefined) ??
+      (typeof arg === 'number' ? arg : undefined);
+    if (typeof idx === 'number' && idx >= 0) {
+      setCurrent(idx);
+      setOpen(true);
+    }
   };
+
+  const photoAlbumPhotos = useMemo(
+    () => mapToPhotoAlbumFormat(images, targetRowHeight),
+    [images, targetRowHeight]
+  );
 
   return (
     <div>
       {photos.length > 0 && (
-        <PhotoGallery
-          photos={images}
-          onClick={imageClick}
-          renderImage={GalleryImage}
-          targetRowHeight={250}
-          margin={1}
-          {...rest}
-        />
+        <GalleryContainer $spacing={spacing} $containerWidth={containerWidth}>
+          <RowsPhotoAlbum
+            photos={photoAlbumPhotos}
+            onClick={handlePhotoClick}
+            render={{ image: renderNextImage }}
+            targetRowHeight={targetRowHeight}
+            spacing={spacing}
+            padding={0}
+          />
+        </GalleryContainer>
       )}
 
-      <ModalGateway>
-        {isOpen ? (
-          <Carousel
-            onClose={() => {
-              setCurrent(0);
-              setOpen(false);
-            }}
-            views={images}
-            currentIndex={current}
-          />
-        ) : null}
-      </ModalGateway>
+      {isOpen && (
+        <Carousel
+          onClose={() => {
+            setCurrent(0);
+            setOpen(false);
+          }}
+          views={images}
+          currentIndex={current}
+          onIndexChange={setCurrent}
+        />
+      )}
     </div>
   );
 };
@@ -117,6 +146,9 @@ Gallery.propTypes = {
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
   order: PropTypes.string,
   orderBy: PropTypes.string,
+  targetRowHeight: PropTypes.number,
+  spacing: PropTypes.number,
+  containerWidth: PropTypes.number,
 };
 
 export default Gallery;

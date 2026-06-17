@@ -12,7 +12,9 @@ vi.mock('components/header/header.jsx', () => ({
 }));
 
 vi.mock('components/footer/footer.jsx', () => ({
-  default: ({ author, social }) => <footer data-testid="mock-footer">{author}</footer>,
+  default: ({ author, _social }) => (
+    <footer data-testid="mock-footer">{author}</footer>
+  ),
 }));
 
 vi.mock('../../../site-config.cjs', () => ({
@@ -25,6 +27,7 @@ vi.mock('../../../site-config.cjs', () => ({
 
 vi.mock('./layout.css.js', () => ({
   __esModule: true,
+  Container: ({ children }) => <div>{children}</div>,
   Content: ({ children }) => <main data-testid="mock-content">{children}</main>,
 }));
 

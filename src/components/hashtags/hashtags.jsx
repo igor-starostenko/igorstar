@@ -5,7 +5,7 @@ const Hashtags = ({ tags, isSmall }) =>
   tags.length > 0 ? (
     <Container>
       {tags.map((tag) => (
-        <Tag key={tag} isSmall={isSmall} data-testid="Tag">
+        <Tag key={tag} $isSmall={isSmall} data-testid="Tag">
           #{tag}
         </Tag>
       ))}

@@ -10,7 +10,6 @@ const appendSiteUrl = (siteUrl, imageUrl) => {
   return imageUrl.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
 };
 
-// Extends Head with addition page specific tags
 const SEO = ({
   siteTitle,
   siteTitleShort,
@@ -52,10 +51,10 @@ const SEO = ({
       <meta content="1024" name="twitter:image:width" />
       <meta content="512" name="twitter:image:height" />
 
+      {/* Schema.org JSON-LD - using @graph pattern to avoid Safari bug */}
       <script type="application/ld+json">
         {JSON.stringify(
           schemaGenerator({
-            pathname,
             canonical: fullUrl,
             siteUrl,
             pageTitle,

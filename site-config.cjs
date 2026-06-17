@@ -1,23 +1,23 @@
 const { resolve } = require('path');
 
-// Test configuration with non-personal data
 const config = {
   version: '2.5.0',
-  author: 'Test Author',
-  siteTitle: 'Blog Site',
-  siteTitleShort: 'Site',
-  siteDescription: 'Test description for blog content.',
-  siteUrl: 'https://example.com',
+  author: 'Igor Starostenko',
+  siteTitle: 'IgorStar: Blog',
+  siteTitleShort: 'IgorStar',
+  siteDescription: 'Travel, photography, data and software. Personal blog.',
+  siteUrl: 'https://igorstar.com',
   themeColor: '#000',
   backgroundColor: '#fff',
   pathPrefix: null,
   logo: resolve(__dirname, 'public/icon.png'),
   social: {
-    github: 'testuser',
-    fivehundredpx: 'testuser',
-    flickr: 'testuser',
-    linkedin: 'testuser',
-    youtube: 'testchannel',
+    github: 'igor-starostenko',
+    fivehundredpx: 'igorstar',
+    flickr: 'igor_star',
+    linkedin: 'igorstarostenko',
+    twitter: null,
+    youtube: 'UCo68YrHvGcKqNWrMb0kV-QA',
   },
 };
 

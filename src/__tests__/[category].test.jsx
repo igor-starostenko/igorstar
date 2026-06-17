@@ -15,8 +15,10 @@ vi.mock('components/layout/layout.jsx', () => ({
 }));
 
 vi.mock('components/filter/filter.jsx', () => ({
-  default: ({ path, title, displayCount, totalCount }) => (
-    <div data-testid="mock-filter">{title} ({displayCount}/{totalCount})</div>
+  default: ({ _path, title, displayCount, totalCount }) => (
+    <div data-testid="mock-filter">
+      {title} ({displayCount}/{totalCount})
+    </div>
   ),
 }));
 
@@ -26,59 +28,63 @@ vi.mock('components/article/article.jsx', () => ({
 
 vi.mock('components/pagination/pagination.jsx', () => ({
   default: ({ pageNum, totalPages }) => (
-    <div data-testid="mock-pagination">Page {pageNum} of {totalPages}</div>
+    <div data-testid="mock-pagination">
+      Page {pageNum} of {totalPages}
+    </div>
   ),
 }));
 
 vi.mock('components/box/box.jsx', () => ({
-  default: ({ children, isMain }) => (
+  default: ({ children, _isMain }) => (
     <div data-testid="mock-box">{children}</div>
   ),
 }));
 
 vi.mock('components/head/head.jsx', () => ({
-  default: ({ pageTitle }) => <title data-testid="mock-head">{pageTitle}</title>,
+  default: ({ pageTitle }) => (
+    <title data-testid="mock-head">{pageTitle}</title>
+  ),
 }));
 
-import CategoryIndex from './[category].jsx';
+import CategoryIndex from 'pages/[category].jsx';
 
 test('renders category page with posts', () => {
-  const mockProps = { 
+  const mockProps = {
     page: { title: 'Blog' },
     posts: {
       limit: 10,
       skip: 0,
       total: 25,
-      items: []
-    }
+      items: [],
+    },
   };
-  
+
   render(<CategoryIndex {...mockProps} />);
 
   expect(screen.getByText('Blog')).toBeInTheDocument();
 });
 
 test('renders with empty posts', () => {
-  const mockProps = { 
+  const mockProps = {
     page: { title: 'Blog' },
     posts: {
       limit: 10,
       skip: 0,
       total: 0,
-      items: []
-    }
+      items: [],
+    },
   };
-  
+
   render(<CategoryIndex {...mockProps} />);
 
   expect(screen.getByText('Posts: 0')).toBeInTheDocument();
 });
 
 test('handles missing page gracefully', () => {
-  const mockProps = { 
+  const mockProps = {
     page: {},
-    posts: { limit: 10, skip: 0, total: 25, items: [] }
+    posts: { limit: 10, skip: 0, total: 25, items: [] },
   };
-  
+
   expect(() => render(<CategoryIndex {...mockProps} />)).not.toThrow();
 });

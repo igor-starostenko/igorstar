@@ -7,7 +7,7 @@ vi.mock('next/link', () => ({
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: (loader) => {
+  default: (_loader) => {
     const MockDynamicComponent = ({ children, ...props }) => {
       const { isMobile, ...rest } = props;
       return (
@@ -33,7 +33,9 @@ vi.mock('components/image/image.jsx', () => ({
 }));
 
 vi.mock('components/hashtags/hashtags.jsx', () => ({
-  default: ({ tags }) => <div data-testid="mock-hashtags">{tags.join(', ')}</div>,
+  default: ({ tags }) => (
+    <div data-testid="mock-hashtags">{tags.join(', ')}</div>
+  ),
 }));
 
 vi.mock('./article.css.js', () => ({
@@ -41,7 +43,11 @@ vi.mock('./article.css.js', () => ({
   Card: ({ children }) => <div data-testid="mock-card">{children}</div>,
   SLink: ({ children, href }) => <a href={href}>{children}</a>,
   Row: ({ children }) => <div>{children}</div>,
-  Thumb: ({ children, style }) => <div data-testid="mock-thumb" style={style}>{children}</div>,
+  Thumb: ({ children, className }) => (
+    <div data-testid="mock-thumb" className={className}>
+      {children}
+    </div>
+  ),
   Title: ({ children }) => <h2>{children}</h2>,
   Description: ({ children }) => <p>{children}</p>,
 }));
@@ -69,10 +75,16 @@ test('renders article with all provided props', () => {
   render(<Article {...mockArticleProps} />);
 
   expect(screen.getByText('My Amazing Trip')).toBeInTheDocument();
-  expect(screen.getByText('A wonderful journey through the mountains.')).toBeInTheDocument();
-  expect(screen.getByTestId('mock-hashtags')).toHaveTextContent('travel, mountains');
+  expect(
+    screen.getByText('A wonderful journey through the mountains.')
+  ).toBeInTheDocument();
+  expect(screen.getByTestId('mock-hashtags')).toHaveTextContent(
+    'travel, mountains'
+  );
   expect(screen.getByTestId('mock-image')).toHaveAttribute('src', 'trip.jpg');
-  expect(screen.getAllByTestId('mock-dynamic-component')[0]).toBeInTheDocument();
+  expect(
+    screen.getAllByTestId('mock-dynamic-component')[0]
+  ).toBeInTheDocument();
 });
 
 test('renders link with custom text if provided', () => {
@@ -88,22 +100,28 @@ test('renders default link text if not provided', () => {
 
 test('applies priority to image if index is 0', () => {
   render(<Article {...mockArticleProps} index={0} />);
-  expect(screen.getByTestId('mock-image')).toHaveAttribute('data-priority', 'true');
+  expect(screen.getByTestId('mock-image')).toHaveAttribute(
+    'data-priority',
+    'true'
+  );
 });
 
 test('does not apply priority to image if index is not 0', () => {
   render(<Article {...mockArticleProps} index={1} />);
-  expect(screen.getByTestId('mock-image')).not.toHaveAttribute('data-priority', 'true');
+  expect(screen.getByTestId('mock-image')).not.toHaveAttribute(
+    'data-priority',
+    'true'
+  );
 });
 
 test('renders thumb with correct margin for index 0', () => {
   render(<Article {...mockArticleProps} index={0} />);
-  expect(screen.getByTestId('mock-thumb')).toHaveStyle({ marginTop: '0rem' });
+  expect(screen.getByTestId('mock-thumb')).toHaveClass('first');
 });
 
 test('renders thumb with correct margin for index > 0', () => {
   render(<Article {...mockArticleProps} index={1} />);
-  expect(screen.getByTestId('mock-thumb')).toHaveStyle({ marginTop: '5.5rem' });
+  expect(screen.getByTestId('mock-thumb')).not.toHaveClass('first');
 });
 
 test('renders image only if provided', () => {

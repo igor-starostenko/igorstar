@@ -26,17 +26,15 @@ const Article = ({
     <Card>
       {image && (
         <SLink href={href}>
-          <Thumb
-            style={{
-              marginTop: `${index === 0 ? 0 : 5.5}rem`,
-            }}
-          >
+          <Thumb className={index === 0 ? 'first' : ''}>
             <Image
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              fill
-              {...(index === 0 ? { priority: true } : {})}
+              width={image.width}
+              height={image.height}
+              loading="eager"
+              priority={index === 0}
             />
           </Thumb>
         </SLink>

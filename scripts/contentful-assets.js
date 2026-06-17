@@ -1,13 +1,19 @@
-const fs = require('fs');
-const fetch = require('node-fetch');
-const contentful = require('contentful');
-require('dotenv').config();
+import fs from 'fs';
+import { createClient } from 'contentful';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const imageDirectory = process.env.IMAGE_DIRECTORY || './public/images/';
-const replaceImages = parseInt(process.env.REPLACE_IMAGES || '0');
-const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
+const replaceImages = parseInt(process.env.REPLACE_IMAGES || '0', 10);
+const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100', 10);
 
-const client = contentful.createClient({
+if (!process.env.CONTENTFUL_SPACE_ID || !process.env.CONTENTFUL_ACCESS_TOKEN) {
+  console.log('Contentful credentials are not configured.');
+  process.exit(1);
+}
+
+const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID,
   accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
 });
@@ -19,7 +25,7 @@ const saveFile = async (i, url, name) => {
   }
 
   const response = await fetch(url);
-  const buffer = await response.buffer();
+  const buffer = Buffer.from(await response.arrayBuffer());
   fs.writeFile(path, buffer, () =>
     console.log(`${i + 1}. Saved ${url} into ${path}`)
   );

@@ -1,4 +1,4 @@
-export default {
+const config = {
   presets: [
     [
       "next/babel",
@@ -10,3 +10,5 @@ export default {
   ],
   plugins: ["styled-components"]
 };
+
+export default config;

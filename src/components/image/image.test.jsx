@@ -1,14 +1,11 @@
 import { test, expect, vi } from 'vitest';
+
+/* eslint-disable jsx-a11y/alt-text */
 import { render, screen } from '@testing-library/react';
 
 vi.mock('./baseImage.jsx', () => ({
-  default: (props) => (
-    <img
-      data-testid="mock-base-image"
-      src={props.src}
-      alt={props.alt}
-      {...props}
-    />
+  default: ({ alt, src, ...rest }) => (
+    <img data-testid="mock-base-image" src={src} alt={alt || ''} {...rest} />
   ),
 }));
 

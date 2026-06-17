@@ -6,8 +6,10 @@ vi.mock('next/link', () => ({
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: (loader) => {
-    const MockDynamic = ({ children }) => <div data-testid="mock-dynamic">{children}</div>;
+  default: (_loader) => {
+    const MockDynamic = ({ children }) => (
+      <div data-testid="mock-dynamic">{children}</div>
+    );
     return MockDynamic;
   },
 }));
@@ -19,11 +21,15 @@ vi.mock('@contentful/rich-text-types', () => ({
 }));
 
 vi.mock('@contentful/rich-text-react-renderer', () => ({
-  documentToReactComponents: (node, options) => <div data-testid="mock-rich-text">{String(node)}</div>,
+  documentToReactComponents: (node, _options) => (
+    <div data-testid="mock-rich-text">{String(node)}</div>
+  ),
 }));
 
 vi.mock('components/gallery/gallery.jsx', () => ({
-  default: ({ photos }) => <div data-testid="mock-gallery">{photos.length} photos</div>,
+  default: ({ photos }) => (
+    <div data-testid="mock-gallery">{photos.length} photos</div>
+  ),
 }));
 
 vi.mock('components/layout/layout.jsx', () => ({
@@ -49,12 +55,16 @@ vi.mock('components/date/date.jsx', () => ({
 
 vi.mock('components/recommendations/recommendations.jsx', () => ({
   default: ({ category, posts }) => (
-    <div data-testid="mock-recommendations">{category} | {posts.length}</div>
+    <div data-testid="mock-recommendations">
+      {category} | {posts.length}
+    </div>
   ),
 }));
 
 vi.mock('components/image/baseImage.jsx', () => ({
-  default: ({ src, alt }) => <img data-testid="mock-base-image" src={src} alt={alt} />,
+  default: ({ src, alt }) => (
+    <img data-testid="mock-base-image" src={src} alt={alt} />
+  ),
 }));
 
 vi.mock('components/image/flickrImage.jsx', () => ({
@@ -65,7 +75,7 @@ vi.mock('react-syntax-highlighter', () => ({
   default: ({ children }) => <pre data-testid="mock-code">{children}</pre>,
 }));
 
-import Post from './[post].jsx';
+import Post from '../pages/[category]/[post].jsx';
 
 const mockPost = {
   id: 'post-1',
@@ -84,11 +94,11 @@ const mockPost = {
 };
 
 test('renders post with all props', () => {
-  const mockProps = { 
+  const mockProps = {
     post: { ...mockPost, layout: 'default', draft: false },
-    recommendations: []
+    recommendations: [],
   };
-  
+
   render(<Post {...mockProps} />);
 
   // Use getAllByText since title appears multiple times (in head and h1)
@@ -105,22 +115,22 @@ test('renders with image gallery', () => {
     ],
   };
 
-  const mockProps = { 
+  const mockProps = {
     post: { ...mockPostWithImages, layout: 'default', draft: false },
-    recommendations: []
+    recommendations: [],
   };
-  
+
   render(<Post {...mockProps} />);
 
   expect(screen.getByTestId('mock-gallery')).toHaveTextContent('2 photos');
 });
 
 test('handles post without thumbnail', () => {
-  const mockProps = { 
+  const mockProps = {
     post: { ...mockPost, thumbnail: null, layout: 'default', draft: false },
-    recommendations: []
+    recommendations: [],
   };
-  
+
   render(<Post {...mockProps} />);
 
   // Use getAllByText since title appears multiple times
