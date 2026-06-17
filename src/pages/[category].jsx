@@ -27,7 +27,7 @@ export const getStaticProps = async ({ params }) => {
       posts: {
         ...posts,
 
-        items: posts.items.map(({ thumbnail, _images, ...fields }) => ({
+        items: posts.items.map(({ thumbnail, images: _images, ...fields }) => ({
           thumbnail: parseItem(thumbnail || {}),
           ...fields,
         })),
