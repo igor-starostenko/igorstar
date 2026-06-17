@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { XMLParser } from "fast-xml-parser";
 import Link from 'next/link';
 import BaseImage from './baseImage.jsx';
 import FlickrIcon from 'components/icons/flickrIcon.jsx';
@@ -12,58 +12,23 @@ import {
   ImageCopyright,
 } from './image.css.js';
 
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: "",
+  processEntities: false,
+});
+
 const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    // Only run on client where DOMParser is available
-    if (typeof window !== 'undefined') {
-      try {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(xml, 'text/html');
-        const link = doc.querySelector('a');
-
-        if (link) {
-          const href = link.href;
-          const title =
-            link.title || doc.querySelector('img')?.alt || 'Flickr image';
-          const img = doc.querySelector('img');
-          let src, width, height;
-          if (img) {
-            src = img.src;
-            width = parseInt(img.width) || 424; // flickr default
-            height = parseInt(img.height) || 640; // flickr default
-          }
-
-          if (href && title && src) {
-            setData({ href, title, src, width, height });
-          } else {
-            setError(true);
-          }
-        } else {
-          setError(true);
-        }
-      } catch (_e) {
-        setError(true);
-      }
-    }
-  }, [xml]);
-
   if (isRaw === true) {
     return <span dangerouslySetInnerHTML={{ __html: xml }} />;
   }
 
-  if (!data && !error) {
-    // Loading state - return null to avoid hydration mismatch
-    return null;
-  }
+  const { a : data } = parser.parse(xml);
 
-  if (error || !data) {
+  if (!data) {
     return <span />;
   }
-
-  const { href, title, src, width, height } = data;
+  const { href, title, img: { src, width, height } } = data;
 
   return (
     <ImageContainer>
