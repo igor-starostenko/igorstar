@@ -29,7 +29,14 @@ const renderNextImage = (
         title={title}
         sizes={sizes}
         priority={index <= 5}
-        placeholder={'blurDataURL' in photo ? 'blur' : undefined}
+        placeholder={
+          typeof photo === 'object' && photo !== null && 'blurDataURL' in photo
+            ? 'blur'
+            : undefined
+        }
+        blurDataURL={
+          typeof photo === 'object' && photo !== null ? photo.blurDataURL : undefined
+        }
       />
     </GalleryImageWrapper>
   );
