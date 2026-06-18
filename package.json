@@ -6,7 +6,7 @@
   "scripts": {
     "analyze": "source-map-explorer .next/static/**/*.js",
     "dev": "next dev",
-    "start": "next start",
+    "start": "serve out",
     "format": "prettier --config ./.prettierrc --write src/**/*.{js,jsx}",
     "lint": "eslint 'src/**/*.{js,jsx}'",
     "build:analyze": "npm run build && npm run analyze",
@@ -75,6 +75,7 @@
     "next-sitemap": "^4.2.3",
     "node-gyp": "^12.3.0",
     "prettier": "^3.8.3",
+    "serve": "^14.2.6",
     "source-map-explorer": "^2.5.3",
     "vitest": "^4.1.7",
     "webpack": "^5.107.2"
