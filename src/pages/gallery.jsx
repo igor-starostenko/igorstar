@@ -40,21 +40,42 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Gallery',
   });
+
   const { items, ...gallery } = await getAllEntries({
     content_type: 'gallery',
   });
+
+  // Pre-generate blurDataURLs for gallery images during data fetching
+  const { makeBlurDataURL } = await import('helpers/contentful');
+
+  const imagesWithBlurData = items
+    ? await Promise.all(
+        items.map(async ({ image, ...fields }) => {
+          const parsedImage = parseItem(image);
+
+          // Generate blurDataURL if image exists and is from Contentful
+          let blurDataURL = undefined;
+          if (parsedImage?.src) {
+            blurDataURL = await makeBlurDataURL(parsedImage.src);
+          }
+
+          // Only include blurDataURL if it has a valid value (Next.js requires serializable JSON)
+          const imageWithBlur = { ...parsedImage, ...fields };
+          if (blurDataURL) {
+            imageWithBlur.blurDataURL = blurDataURL;
+          }
+
+          return imageWithBlur;
+        })
+      )
+    : [];
 
   return {
     props: {
       page: pages.items[0] || {},
       gallery: {
         ...gallery,
-        images: items
-          ? items.map(({ image, ...fields }) => ({
-              ...fields,
-              ...parseItem(image),
-            }))
-          : [],
+        images: imagesWithBlurData,
       },
     },
   };

@@ -6,7 +6,7 @@ import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
 import { sizes as defaultSizes } from 'constants/imageConfig.js';
-import { addBlurDataURL, addContentfulParams } from 'helpers/contentful';
+import { addContentfulParams } from 'helpers/contentful';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -14,25 +14,30 @@ const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const renderNextImage = (
   { alt, title, sizes },
   { photo, width, height, index }
-) => (
-  <GalleryImageWrapper
-    style={{
-      width: `${width}px`,
-      height: `${height}px`,
-    }}
-  >
-    <NextImage
-      fill
-      src={photo.src ?? photo.url}
-      alt={alt}
-      title={title}
-      sizes={sizes}
-      priority={index <= 5}
-      placeholder={'blurDataURL' in photo ? 'blur' : undefined}
-      blurDataURL={photo.blurDataURL}
-    />
-  </GalleryImageWrapper>
-);
+) => {
+  // Only use blur placeholder if blurDataURL is truthy
+  const hasBlur = photo.blurDataURL && typeof photo.blurDataURL === 'string';
+
+  return (
+    <GalleryImageWrapper
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+      }}
+    >
+      <NextImage
+        fill
+        src={photo.src ?? photo.url}
+        alt={alt}
+        title={title}
+        sizes={sizes}
+        priority={index <= 5}
+        placeholder={hasBlur ? 'blur' : undefined}
+        blurDataURL={photo.blurDataURL}
+      />
+    </GalleryImageWrapper>
+  );
+};
 
 // Map gallery photos to react-photo-album format
 const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
@@ -55,8 +60,7 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       Math.round(targetRowHeight * resolutionMultiplier)
     );
 
-    // Generate blur placeholder for Contentful images
-    const blurDataURL = addBlurDataURL(photo.src);
+    // Note: blurDataURL is now pre-generated during data fetching and passed via props
 
     return {
       src: optimizedSrc || photo.src,
@@ -64,7 +68,7 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       height: targetRowHeight,
       sizes: defaultSizes,
       alt: photo.description || photo.alt || '',
-      blurDataURL,
+      blurDataURL: photo.blurDataURL,
     };
   });
 
