@@ -33,8 +33,16 @@ const Article = ({
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={Math.min(image.width, 800)}
-              height={Math.min(image.height, 450)}
+              width={
+                Math.round(
+                  image.width * Math.min(800 / image.width, 450 / image.height, 1)
+                )
+              }
+              height={
+                Math.round(
+                  image.height * Math.min(800 / image.width, 450 / image.height, 1)
+                )
+              }
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority={index === 0}
             />
