@@ -75,9 +75,9 @@ const BaseImage = ({
   if (width && height) {
     imageProps.width = width;
     imageProps.height = height;
-  } else if (!fill) {
-    // For fill mode, no width/height needed
-    // But for non-fill without dimensions, this would cause issues
+  } else if (fill) {
+    // For fill mode, add the fill prop
+    imageProps.fill = true;
   }
 
   // For fill mode, render SImage directly to preserve parent height inheritance
