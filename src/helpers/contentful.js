@@ -2,29 +2,22 @@
   https://www.contentful.com/developers/docs/references/images-api/#/reference
  */
 
-// Generate base64 blur placeholder for Contentful images
-// Fetches a tiny 12px version with low quality and returns as base64 data URL
-const makeBlurDataURL = async (src) => {
-  if (!src || !src.includes('images.ctfassets.net')) return undefined;
+// Generate a blur placeholder URL for Contentful images
+// Uses the same image but with very small dimensions and low quality
+const addBlurDataURL = (url) => {
+  if (!url || !url.includes('images.ctfassets.net')) return undefined;
 
   try {
-    // Fetch a tiny version of the image (12px, q=20 for low quality)
-    const tinySrc = src + '?w=12&q=20';
-    const res = await fetch(tinySrc);
-    
-    if (!res.ok) {
-      console.error('Failed to fetch blur placeholder:', tinySrc, res.status);
-      return undefined;
-    }
-    
-    const contentType = res.headers.get('content-type') || 'image/webp';
-    const arrayBuffer = await res.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    
-    return 'data:' + contentType + ';base64,' + buffer.toString('base64');
-  } catch (error) {
-    console.error('Failed to generate blur placeholder:', src, error.message);
-    return undefined;
+    const u = new URL(url);
+    // Create a tiny 20x20px blurred version
+    u.searchParams.set('w', '20');
+    u.searchParams.set('h', '20');
+    u.searchParams.set('q', '10');
+    return u.toString();
+  } catch {
+    // Fallback: append params without URL parsing
+    const separator = url.includes('?') ? '&' : '?';
+    return url + separator + 'w=20&h=20&q=10';
   }
 };
 
@@ -45,4 +38,4 @@ const addContentfulParams = (url, width, height) => {
   }
 };
 
-export { makeBlurDataURL, addContentfulParams };
+export { addBlurDataURL, addContentfulParams };
