@@ -84,7 +84,7 @@ yarn test
 
 # To run Lighthouse tests (customizable via SITE_URL env variable)
 # Default: uses siteUrl from site-config.cjs
-# Override: SITE_URL=http://localhost:3001 yarn test
+# Override: SITE_URL=http://localhost:3001 yarn test:lighthouse
 
 # To verify code style
 yarn lint
