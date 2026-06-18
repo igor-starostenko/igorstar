@@ -5,7 +5,7 @@ import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
-import { sizes as defaultSizes } from 'constants/breakpoints.js';
+import { sizes as defaultSizes } from 'constants/imageConfig.js';
 import { addContentfulParams } from 'helpers/contentfulParams';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
@@ -48,10 +48,11 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
 
     // Add Contentful image optimization params for better performance
+    const resolutionMultiplier = 2;
     const optimizedSrc = addContentfulParams(
       photo.src,
-      constrainedWidth,
-      targetRowHeight
+      Math.round(constrainedWidth * resolutionMultiplier),
+      Math.round(targetRowHeight * resolutionMultiplier)
     );
 
     return {
@@ -119,7 +120,7 @@ const Gallery = ({
 
   const photoAlbumPhotos = useMemo(
     () => mapToPhotoAlbumFormat(images, targetRowHeight, containerWidth),
-    [images, targetRowHeight]
+    [images, targetRowHeight, containerWidth]
   );
 
   return (

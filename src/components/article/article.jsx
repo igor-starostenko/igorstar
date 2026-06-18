@@ -3,7 +3,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import Image from 'components/image/image.jsx';
 import Hashtags from 'components/hashtags/hashtags.jsx';
-import { sizes as defaultSizes } from 'constants/breakpoints.js';
+import { sizes as defaultSizes } from 'constants/imageConfig.js';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {

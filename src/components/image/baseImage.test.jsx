@@ -29,6 +29,7 @@ vi.mock('./image.css.js', () => ({
 }));
 
 import BaseImage from './baseImage.jsx';
+import { imageQuality, imageFormat } from '../../constants/imageConfig.js';
 
 test('renders image with valid src', () => {
   render(<BaseImage src="/test.jpg" alt="Test image" />);
@@ -112,8 +113,7 @@ test('passes width and height props correctly', () => {
 });
 
 test('handles Contentful image URL with query params', () => {
-  const expectedSrc =
-    'https://images.ctfassets.net/abc123/xyz.jpg?w=800&q=75&h=600';
+  const expectedSrc = `https://images.ctfassets.net/abc123/xyz.jpg?w=800&q=${imageQuality}&fm=${imageFormat}&h=600`;
 
   render(
     <BaseImage
