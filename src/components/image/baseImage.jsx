@@ -9,10 +9,17 @@ const sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
  */
 const addContentfulParams = (url, width, height) => {
   if (!url || !width || !height) return url;
-  
-  const separator = url.includes('?') ? '&' : '?';
-  // Contentful's w and h params set max width/height
-  return `${url}${separator}w=${width}&h=${height}`;
+  if (!url.includes('images.ctfassets.net')) return url;
+
+  try {
+    const u = new URL(url);
+    u.searchParams.set('w', String(width));
+    u.searchParams.set('h', String(height));
+    return u.toString();
+  } catch {
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}w=${width}&h=${height}`;
+  }
 };
 
 const BaseImage = ({
