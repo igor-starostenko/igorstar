@@ -6,7 +6,7 @@ const config = {
   siteTitle: 'IgorStar: Blog',
   siteTitleShort: 'IgorStar',
   siteDescription: 'Travel, photography, data and software. Personal blog.',
-  siteUrl: 'https://igorstar.com',
+  siteUrl: 'http://localhost:3000',
   themeColor: '#000',
   backgroundColor: '#fff',
   pathPrefix: null,
