@@ -1,9 +1,6 @@
-// Generate base64 blur placeholder for Contentful images
-// Uses a small 20x20px blurred version of the original image
-
-import sharp from 'sharp';
-
-const BLUR_PLACEHOLDER = 'data:image/webp;base64,UklGRlQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA='; // A very small blurred placeholder
+/* For contentful query params see
+  https://www.contentful.com/developers/docs/references/images-api/#/reference
+ */
 
 // Add Contentful image optimization parameters (w, h)
 const addContentfulParams = (url, width, height) => {
@@ -22,14 +19,23 @@ const addContentfulParams = (url, width, height) => {
   }
 };
 
-// For now, use a static low-quality placeholder
-// In production, you would pre-generate base64 placeholders at build time
+// Generate a blur placeholder URL for Contentful images
+// Uses the same image but with very small dimensions and low quality
 const addBlurDataURL = (url) => {
   if (!url || !url.includes('images.ctfassets.net')) return undefined;
-  
-  // Return a URL-based placeholder that Next.js can use
-  // This creates a very small 20x20 version with low quality (q=10)
-  return `${url}?w=20&h=20&q=10`;
+
+  try {
+    const u = new URL(url);
+    // Create a tiny 20x20px blurred version
+    u.searchParams.set('w', '20');
+    u.searchParams.set('h', '20');
+    u.searchParams.set('q', '10');
+    return u.toString();
+  } catch {
+    // Fallback: append params without URL parsing
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}w=20&h=20&q=10`;
+  }
 };
 
 export { addBlurDataURL, addContentfulParams };
