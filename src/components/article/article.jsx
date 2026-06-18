@@ -5,7 +5,7 @@ import Image from 'components/image/image.jsx';
 import Hashtags from 'components/hashtags/hashtags.jsx';
 import { sizes as defaultSizes } from 'constants/imageConfig.js';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
-import { addBlurDataURL } from 'helpers/contentful';
+import { makeBlurDataURL } from 'helpers/contentful';
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
@@ -38,7 +38,7 @@ const Article = ({
     : { width: null, height: null };
 
   // Generate blur placeholder for Contentful images
-  const blurDataURL = image ? addBlurDataURL(image.src) : undefined;
+  const blurDataURL = image ? makeBlurDataURL(image.src) : undefined;
 
   return (
     <Card>
@@ -55,6 +55,7 @@ const Article = ({
               sizes={defaultSizes}
               priority={index === 0}
               blurDataURL={blurDataURL}
+              placeholder="blur"
             />
           </Thumb>
         </SLink>

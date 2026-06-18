@@ -6,7 +6,7 @@ import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
 import { sizes as defaultSizes } from 'constants/imageConfig.js';
-import { addContentfulParams, addBlurDataURL } from 'helpers/contentful';
+import { addContentfulParams, makeBlurDataURL } from 'helpers/contentful';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -56,7 +56,7 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     );
 
     // Generate blur placeholder for Contentful images
-    const blurDataURL = addBlurDataURL(photo.src);
+    const blurDataURL = makeBlurDataURL(photo.src);
 
     return {
       src: optimizedSrc || photo.src,
