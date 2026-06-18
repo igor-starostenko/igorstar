@@ -27,13 +27,15 @@ const Article = ({
       {image && (
         <SLink href={href}>
           <Thumb className={index === 0 ? 'first' : ''}>
+            {/* Calculate display-appropriate dimensions based on CSS max-height (~41rem/656px) */}
+            {/* Use 800x450 as max for thumbnails - larger than typical display needs but smaller than full resolution */}
             <Image
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={image.width}
-              height={image.height}
-              loading={index === 0 ? "eager" : "lazy"}
+              width={Math.min(image.width, 800)}
+              height={Math.min(image.height, 450)}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority={index === 0}
             />
           </Thumb>
