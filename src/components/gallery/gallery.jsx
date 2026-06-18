@@ -11,10 +11,17 @@ const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 /* Helper to add Contentful image optimization params */
 const addContentfulParams = (url, width, height) => {
   if (!url || !width || !height) return url;
-  
-  const separator = url.includes('?') ? '&' : '?';
-  // Contentful's w and h params set max width/height
-  return `${url}${separator}w=${width}&h=${height}`;
+  if (!url.includes('images.ctfassets.net')) return url;
+
+  try {
+    const u = new URL(url);
+    u.searchParams.set('w', String(width));
+    u.searchParams.set('h', String(height));
+    return u.toString();
+  } catch {
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}w=${width}&h=${height}`;
+  }
 };
 
 /* Next.js Image renderer for react-photo-album */
