@@ -7,6 +7,14 @@ const sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
 /* For contentful query params see
   https://www.contentful.com/developers/docs/references/images-api/#/reference
  */
+const addContentfulParams = (url, width, height) => {
+  if (!url || !width || !height) return url;
+  
+  const separator = url.includes('?') ? '&' : '?';
+  // Contentful's w and h params set max width/height
+  return `${url}${separator}w=${width}&h=${height}`;
+};
+
 const BaseImage = ({
   alt,
   src,
@@ -16,6 +24,7 @@ const BaseImage = ({
   loading,
   width,
   height,
+  sizes: customSizes,
   ...rest
 }) => {
   const [isError, setIsError] = useState(false);
@@ -42,19 +51,26 @@ const BaseImage = ({
   // Next.js Image requires width/height unless using fill
   // When fill is used, we don't need width/height but sizes is still required for optimization
   // Filter out props that should not be passed to DOM elements (fill, unoptimized are Next.js specific)
+  const optimizedSrc = !unoptimized && width && height
+    ? addContentfulParams(src, width, height)
+    : src;
+  
   const imageProps = {
-    src,
+    src: optimizedSrc,
     alt,
     loading,
     unoptimized,
+    sizes: customSizes || sizes,
     onError: () => setIsError(true),
-    ...(fill ? { fill, sizes } : {}),
   };
 
-  // For non-fill mode with explicit dimensions
+  // For non-fill mode with explicit dimensions, add width/height
   if (width && height) {
     imageProps.width = width;
     imageProps.height = height;
+  } else if (!fill) {
+    // For fill mode, no width/height needed
+    // But for non-fill without dimensions, this would cause issues
   }
 
   // For fill mode, render SImage directly to preserve parent height inheritance
