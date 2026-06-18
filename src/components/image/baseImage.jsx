@@ -1,27 +1,9 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SImage } from './image.css.js';
+import { addContentfulParams } from 'helpers/contentfulParams';
 
 const sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
-
-/* For contentful query params see
-  https://www.contentful.com/developers/docs/references/images-api/#/reference
- */
-const addContentfulParams = (url, width, height) => {
-  if (!url || !width || !height) return url;
-  if (!url.includes('images.ctfassets.net')) return url;
-
-  try {
-    const u = new URL(url);
-    u.searchParams.set('w', String(width));
-    u.searchParams.set('h', String(height));
-    return u.toString();
-  } catch {
-    // Fallback: just append params without URL parsing
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}w=${width}&h=${height}`;
-  }
-};
 
 const BaseImage = ({
   alt,

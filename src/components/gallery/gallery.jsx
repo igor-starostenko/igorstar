@@ -5,24 +5,9 @@ import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
+import { addContentfulParams } from 'helpers/contentfulParams';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
-
-/* Helper to add Contentful image optimization params */
-const addContentfulParams = (url, width, height) => {
-  if (!url || !width || !height) return url;
-  if (!url.includes('images.ctfassets.net')) return url;
-
-  try {
-    const u = new URL(url);
-    u.searchParams.set('w', String(width));
-    u.searchParams.set('h', String(height));
-    return u.toString();
-  } catch {
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}w=${width}&h=${height}`;
-  }
-};
 
 /* Next.js Image renderer for react-photo-album */
 const renderNextImage = (
