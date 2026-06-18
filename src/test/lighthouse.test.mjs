@@ -170,9 +170,12 @@ describe('Lighthouse Scores', () => {
       return;
     }
     const http2 = results.audits['uses-http2'];
-    if (http2) {
-      expect(http2.passed).toBe(true);
+    if (!http2) {
+      console.log('Skipping - uses-http2 audit not available');
+      return;
     }
+    // The uses-http2 audit uses 'score' property (1 = pass, 0 = fail)
+    expect(http2.score).toBe(1);
   });
 
   // SEO sub-metrics
