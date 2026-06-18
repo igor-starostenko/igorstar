@@ -41,10 +41,11 @@ const BaseImage = ({
   // Next.js Image requires width/height unless using fill
   // When fill is used, we don't need width/height but sizes is still required for optimization
   // Filter out props that should not be passed to DOM elements (fill, unoptimized are Next.js specific)
-  const optimizedSrc = !unoptimized && width && height
-    ? addContentfulParams(src, width, height)
-    : src;
-  
+  const optimizedSrc =
+    !unoptimized && width && height
+      ? addContentfulParams(src, width, height)
+      : src;
+
   const imageProps = {
     src: optimizedSrc,
     alt,

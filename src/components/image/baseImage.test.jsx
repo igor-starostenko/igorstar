@@ -112,7 +112,8 @@ test('passes width and height props correctly', () => {
 });
 
 test('handles Contentful image URL with query params', () => {
-  const expectedSrc = 'https://images.ctfassets.net/abc123/xyz.jpg?w=800&q=75&h=600';
+  const expectedSrc =
+    'https://images.ctfassets.net/abc123/xyz.jpg?w=800&q=75&h=600';
 
   render(
     <BaseImage
