@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SImage } from './image.css.js';
 import { sizes as defaultSizes } from 'constants/imageConfig.js';
-import { addContentfulParams } from 'helpers/contentful';
+import { makeBlurDataURL, addContentfulParams } from 'helpers/contentful';
 
 const BaseImage = ({
   alt,
@@ -14,8 +14,15 @@ const BaseImage = ({
   width,
   height,
   sizes,
+  placeholder,
+  blurDataURL,
   ...rest
 }) => {
+
+  // Generate blur placeholder if not provided and image is from Contentful
+  const generatedBlurDataURL = !blurDataURL && src?.includes('images.ctfassets.net')
+    ? makeBlurDataURL(src)
+    : undefined;
   const [isError, setIsError] = useState(false);
 
   if (isError) {
@@ -53,6 +60,15 @@ const BaseImage = ({
     sizes: sizes || defaultSizes,
     onError: () => setIsError(true),
   };
+
+  // Add blurDataURL if available (from prop or generated)
+  if ('blurDataURL' in rest) {
+    imageProps.blurDataURL = rest.blurDataURL;
+  } else if (generatedBlurDataURL) {
+    imageProps.blurDataURL = generatedBlurDataURL;
+  }
+
+
 
   // For non-fill mode with explicit dimensions, add width/height
   if (width && height) {
