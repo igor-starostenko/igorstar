@@ -9,6 +9,16 @@ const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
 
+// Calculate constrained dimensions for image display
+// Preserves aspect ratio while respecting max width/height constraints
+const calculateConstrainedDimensions = (width, height, maxWidth, maxHeight) => {
+  const scale = Math.min(maxWidth / width, maxHeight / height, 1);
+  return {
+    width: Math.round(width * scale),
+    height: Math.round(height * scale),
+  };
+};
+
 const Article = ({
   index,
   category,
@@ -21,6 +31,10 @@ const Article = ({
   linkText,
 }) => {
   const href = `/${category}/${path}`;
+  // Use 800x450 as max for thumbnails - larger than typical display needs but smaller than full resolution
+  const { width, height } = image
+    ? calculateConstrainedDimensions(image.width, image.height, 800, 450)
+    : { width: null, height: null };
 
   return (
     <Card>
@@ -28,21 +42,12 @@ const Article = ({
         <SLink href={href}>
           <Thumb className={index === 0 ? 'first' : ''}>
             {/* Calculate display-appropriate dimensions based on CSS max-height (~41rem/656px) */}
-            {/* Use 800x450 as max for thumbnails - larger than typical display needs but smaller than full resolution */}
             <Image
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={
-                Math.round(
-                  image.width * Math.min(800 / image.width, 450 / image.height, 1)
-                )
-              }
-              height={
-                Math.round(
-                  image.height * Math.min(800 / image.width, 450 / image.height, 1)
-                )
-              }
+              width={width}
+              height={height}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               priority={index === 0}
             />
