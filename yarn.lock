@@ -6665,6 +6665,7 @@ __metadata:
     next: "npm:^16.2.6"
     next-sitemap: "npm:^4.2.3"
     node-gyp: "npm:^12.3.0"
+    plaiceholder: "npm:^3.0.0"
     prettier: "npm:^3.8.3"
     prop-types: "npm:^15.6.2"
     react: "npm:^19.2.6"
@@ -9183,6 +9184,15 @@ __metadata:
   dependencies:
     find-up: "npm:^3.0.0"
   checksum: 10c0/902a3d0c1f8ac43b1795fa1ba6ffeb37dfd53c91469e969790f6ed5e29ff2bdc50b63ba6115dc056d2efb4a040aa2446d512b3804bdafdf302f734fb3ec21847
+  languageName: node
+  linkType: hard
+
+"plaiceholder@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "plaiceholder@npm:3.0.0"
+  peerDependencies:
+    sharp: ">= 0.30.6"
+  checksum: 10c0/b85879ac06f89f6229786237a9f64c920509d6cda7b0dfb8f984edb5c576b170c08bf401ab7e2be428694fd8978791e2ee8458d2cefa41f67f8c5935964a0639
   languageName: node
   linkType: hard
 
