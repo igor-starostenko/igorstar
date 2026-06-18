@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SImage } from './image.css.js';
 import { sizes as defaultSizes } from 'constants/imageConfig.js';
-import { addContentfulParams } from 'helpers/contentfulParams';
+import { addContentfulParams } from 'helpers/contentful';
 
 const BaseImage = ({
   alt,
