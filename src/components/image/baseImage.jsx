@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SImage } from './image.css.js';
+import { sizes as defaultSizes } from 'constants/breakpoints.js';
 import { addContentfulParams } from 'helpers/contentfulParams';
-
-const sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
 
 const BaseImage = ({
   alt,
@@ -14,7 +13,7 @@ const BaseImage = ({
   loading,
   width,
   height,
-  sizes: customSizes,
+  sizes,
   ...rest
 }) => {
   const [isError, setIsError] = useState(false);
@@ -24,7 +23,7 @@ const BaseImage = ({
     // If backupSrc is empty/falsy, render nothing instead of broken image
     if (!backupSrc) return null;
     // Filter out Next.js-specific props that aren't valid on <img>
-    const { fill, unoptimized, priority, ...domRest } = rest;
+    const { _fill, _unoptimized, _priority, ...domRest } = rest;
     // Pass through explicit dimensions and loading when available to preserve caller's sizing intent
     return (
       <img
@@ -51,7 +50,7 @@ const BaseImage = ({
     alt,
     loading,
     unoptimized,
-    sizes: customSizes || sizes,
+    sizes: sizes || defaultSizes,
     onError: () => setIsError(true),
   };
 

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import Image from 'components/image/image.jsx';
 import Hashtags from 'components/hashtags/hashtags.jsx';
+import { sizes as defaultSizes } from 'constants/breakpoints.js';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
@@ -31,9 +32,8 @@ const Article = ({
   linkText,
 }) => {
   const href = `/${category}/${path}`;
-  // Use 800x450 as max for thumbnails - larger than typical display needs but smaller than full resolution
   const { width, height } = image
-    ? calculateConstrainedDimensions(image.width, image.height, 800, 450)
+    ? calculateConstrainedDimensions(image.width, image.height, 1200, 800)
     : { width: null, height: null };
 
   return (
@@ -48,7 +48,7 @@ const Article = ({
               alt={image.alt}
               width={width}
               height={height}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes={defaultSizes}
               priority={index === 0}
             />
           </Thumb>

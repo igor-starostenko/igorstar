@@ -5,6 +5,7 @@ import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
+import { sizes as defaultSizes } from 'constants/breakpoints.js';
 import { addContentfulParams } from 'helpers/contentfulParams';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
@@ -12,7 +13,7 @@ const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 /* Next.js Image renderer for react-photo-album */
 const renderNextImage = (
   { alt, title, sizes },
-  { photo, width, height, index, containerWidth }
+  { photo, width, height, index }
 ) => (
   <GalleryImageWrapper
     style={{
@@ -25,12 +26,7 @@ const renderNextImage = (
       src={photo.src ?? photo.url}
       alt={alt}
       title={title}
-      sizes={
-        sizes ||
-        `(max-width: ${containerWidth || 900}px) 100vw, ${
-          containerWidth || 900
-        }px`
-      }
+      sizes={sizes}
       priority={index <= 5}
       placeholder={'blurDataURL' in photo ? 'blur' : undefined}
       blurDataURL={photo.blurDataURL}
@@ -62,6 +58,7 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       src: optimizedSrc || photo.src,
       width: constrainedWidth,
       height: targetRowHeight,
+      sizes: defaultSizes,
       alt: photo.description || photo.alt || '',
     };
   });
@@ -121,7 +118,7 @@ const Gallery = ({
   };
 
   const photoAlbumPhotos = useMemo(
-    () => mapToPhotoAlbumFormat(images, targetRowHeight),
+    () => mapToPhotoAlbumFormat(images, targetRowHeight, containerWidth),
     [images, targetRowHeight]
   );
 
