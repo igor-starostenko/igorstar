@@ -16,21 +16,27 @@ const launchChromeAndRunLighthouse = (
   config = null
 ) => {
   console.log('launchChromeAndRunLighthouse called with url:', url);
-  return chromeLauncher.launch({ chromeFlags: opts.chromeFlags, chromePath: '/usr/bin/chromium' })
+
+  const launchOptions = { chromeFlags: opts.chromeFlags };
+  if (process.env.CHROME_PATH) {
+    launchOptions.chromePath = process.env.CHROME_PATH;
+  }
+
+  return chromeLauncher
+    .launch(launchOptions)
     .then(chrome => {
       console.log('Chrome launched on port:', chrome.port);
       opts.port = chrome.port;
       return lighthouse(url, opts, config)
         .then(lhr => {
           console.log('Lighthouse completed');
-          chrome.kill();
           return lhr;
         })
         .catch(lhErr => {
           console.error('Lighthouse error:', lhErr.message);
-          chrome.kill();
           throw lhErr;
-        });
+        })
+        .finally(() => chrome.kill());
     })
     .catch(launchErr => {
       console.error('Chrome launch error:', launchErr.message);
