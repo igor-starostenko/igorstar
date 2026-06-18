@@ -8,10 +8,19 @@ import NextImage from 'next/image';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
+/* Helper to add Contentful image optimization params */
+const addContentfulParams = (url, width, height) => {
+  if (!url || !width || !height) return url;
+  
+  const separator = url.includes('?') ? '&' : '?';
+  // Contentful's w and h params set max width/height
+  return `${url}${separator}w=${width}&h=${height}`;
+};
+
 /* Next.js Image renderer for react-photo-album */
 const renderNextImage = (
   { alt, title, sizes },
-  { photo, width, height, index }
+  { photo, width, height, index, containerWidth }
 ) => (
   <GalleryImageWrapper
     style={{
@@ -24,7 +33,12 @@ const renderNextImage = (
       src={photo.src ?? photo.url}
       alt={alt}
       title={title}
-      sizes={sizes}
+      sizes={
+        sizes ||
+        `(max-width: ${containerWidth || 900}px) 100vw, ${
+          containerWidth || 900
+        }px`
+      }
       priority={index <= 5}
       placeholder={'blurDataURL' in photo ? 'blur' : undefined}
       blurDataURL={photo.blurDataURL}
@@ -45,8 +59,15 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     // Use targetRowHeight as the height constraint, calculate proportional width
     const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
 
+    // Add Contentful image optimization params for better performance
+    const optimizedSrc = addContentfulParams(
+      photo.src,
+      constrainedWidth,
+      targetRowHeight
+    );
+
     return {
-      src: photo.src,
+      src: optimizedSrc || photo.src,
       width: constrainedWidth,
       height: targetRowHeight,
       alt: photo.description || photo.alt || '',
