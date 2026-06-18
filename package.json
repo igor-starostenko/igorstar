@@ -14,7 +14,7 @@
     "build:favicons": "node scripts/favicons.cjs",
     "build:sitemap": "next-sitemap",
     "build:images": "npm run contentful:assets",
-    "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && npm run build:images && next export",
+    "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && npm run build:images",
     "contentful:assets": "node scripts/contentful-assets.js",
     "contentful:backup": "node scripts/contentful-backup.js",
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
