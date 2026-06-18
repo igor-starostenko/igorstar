@@ -17,6 +17,7 @@ const addContentfulParams = (url, width, height) => {
     u.searchParams.set('h', String(height));
     return u.toString();
   } catch {
+    // Fallback: just append params without URL parsing
     const separator = url.includes('?') ? '&' : '?';
     return `${url}${separator}w=${width}&h=${height}`;
   }
