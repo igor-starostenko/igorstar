@@ -36,41 +36,25 @@ const Article = ({
     ? calculateConstrainedDimensions(image.width, image.height, 1200, 800)
     : { width: null, height: null };
 
-  // Note: blurDataURL is now pre-generated in getStaticProps and passed via props
-
-  if (!image) {
-    // If no image is provided, render only the content without thumb/link
-    return (
-      <Card>
-        <Row>
-          <Title as="h2">{title}</Title>
-          <DateText isMobile={false} date={date} />
-        </Row>
-        <Hashtags tags={tags} />
-        <Description>{description}</Description>
-        <DateText isMobile={true} date={date} />
-      </Card>
-    );
-  }
-
   return (
     <Card>
-      <SLink href={href}>
-        <Thumb className={index === 0 ? 'first' : ''}>
-          {/* Calculate display-appropriate dimensions based on CSS max-height (~41rem/656px) */}
-          <Image
-            src={image.src}
-            backupSrc={image.backupSrc}
-            alt={image.alt}
-            width={width}
-            height={height}
-            sizes={defaultSizes}
-            priority={index === 0}
-            blurDataURL={image.blurDataURL}
-            placeholder="blur"
-          />
-        </Thumb>
-      </SLink>
+      {image && image.src && (
+        <SLink href={href}>
+          <Thumb className={index === 0 ? 'first' : ''}>
+            <Image
+              src={image.src}
+              backupSrc={image.backupSrc}
+              alt={image.alt}
+              width={width}
+              height={height}
+              sizes={defaultSizes}
+              priority={index === 0}
+              blurDataURL={image.blurDataURL}
+              placeholder="blur"
+            />
+          </Thumb>
+        </SLink>
+      )}
       <Row>
         <Title as="h2">{title}</Title>
         <DateText isMobile={false} date={date} />
