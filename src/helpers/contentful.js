@@ -25,9 +25,12 @@ export async function makeBlurDataURL(src) {
 
   try {
     // Use a tiny 12x12px with very low quality for minimal payload
-    const blurSrc = `${src}?w=12&h=12&q=10`;
+    const u = new URL(src);
+    u.searchParams.set('w', '12');
+    u.searchParams.set('h', '12');
+    u.searchParams.set('q', '10');
+    const blurSrc = u.toString();
     const response = await fetchWithTimeout(blurSrc, {}, 15000);
-
     if (!response.ok) {
       console.warn(
         `Failed to fetch blur placeholder (status ${response.status}): ${blurSrc}`
