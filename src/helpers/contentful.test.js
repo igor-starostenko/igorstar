@@ -302,7 +302,7 @@ describe('addBlurDataURLs', () => {
     expect(result[1].thumbnail).toBeNull();
   });
 
-  it('processes images in parallel', async () => {
+  it('processes all images (respects concurrency limit)', async () => {
     let fetchCount = 0;
     vi.stubGlobal(
       'fetch',
