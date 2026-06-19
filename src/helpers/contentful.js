@@ -89,10 +89,10 @@ export const addContentfulParams = (
     const separator = url.includes('?') ? '&' : '?';
     if (format) {
       result += separator + 'f=' + format;
-      separator = '&';
     }
     if (quality) {
-      result += separator + 'q=' + String(quality);
+      const nextSeparator = result.includes('?') ? '&' : '?';
+      result += nextSeparator + 'q=' + String(quality);
     }
     return result + separator + 'w=' + width + '&h=' + height;
   }
