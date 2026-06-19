@@ -62,8 +62,13 @@ export async function makeBlurDataURL(src) {
   }
 }
 
-// Add Contentful image optimization parameters (w, h)
-const addContentfulParams = (url, width, height) => {
+// Add Contentful image optimization parameters (w, h, f, q)
+export const addContentfulParams = (
+  url,
+  width,
+  height,
+  { format, quality } = {}
+) => {
   if (!url || !width || !height) return url;
   if (!url.includes('images.ctfassets.net')) return url;
 
@@ -71,11 +76,25 @@ const addContentfulParams = (url, width, height) => {
     const u = new URL(url);
     u.searchParams.set('w', String(width));
     u.searchParams.set('h', String(height));
+    if (format) {
+      u.searchParams.set('f', format);
+    }
+    if (quality) {
+      u.searchParams.set('q', String(quality));
+    }
     return u.toString();
   } catch {
     // Fallback: just append params without URL parsing
+    let result = url;
     const separator = url.includes('?') ? '&' : '?';
-    return url + separator + 'w=' + width + '&h=' + height;
+    if (format) {
+      result += separator + 'f=' + format;
+      separator = '&';
+    }
+    if (quality) {
+      result += separator + 'q=' + String(quality);
+    }
+    return result + separator + 'w=' + width + '&h=' + height;
   }
 };
 
@@ -131,8 +150,6 @@ export async function addBlurDataURLs(images = [], { path } = {}) {
 
   return results;
 }
-
-export { addContentfulParams };
 
 // Exported for testing only – clears the in-memory blur data URL cache
 export function clearBlurDataURLCache() {
