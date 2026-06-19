@@ -158,6 +158,16 @@ describe('addBlurDataURLs', () => {
   });
 
   it('skips images with existing blurDataURL', async () => {
+    const mockBuffer = Buffer.from('blur');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        arrayBuffer: vi.fn().mockResolvedValue(mockBuffer),
+        headers: { get: () => 'image/jpeg' },
+      })
+    );
+
     const images = [
       {
         src: 'https://images.ctfassets.net/123/image.jpg',
@@ -170,7 +180,8 @@ describe('addBlurDataURLs', () => {
 
     expect(result).toHaveLength(2);
     expect(result[0].blurDataURL).toBe('existing');
-    expect(result[1].blurDataURL).toBeNull();
+    expect(result[1].blurDataURL).toBe('data:image/jpeg;base64,Ymx1cg==');
+    expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 
   it('skips non-Contentful URLs', async () => {
