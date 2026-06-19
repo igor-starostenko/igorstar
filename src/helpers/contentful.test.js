@@ -44,6 +44,55 @@ describe('addContentfulParams', () => {
       'https://images.ctfassets.net/123/image.jpg?w=800&h=600#section'
     );
   });
+
+  it('adds format parameter', () => {
+    const url = 'https://images.ctfassets.net/123/image.jpg';
+    const result = addContentfulParams(url, 800, 600, { format: 'webp' });
+    expect(result).toBe(
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&f=webp'
+    );
+  });
+
+  it('adds quality parameter', () => {
+    const url = 'https://images.ctfassets.net/123/image.jpg';
+    const result = addContentfulParams(url, 800, 600, { quality: 80 });
+    expect(result).toBe(
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&q=80'
+    );
+  });
+
+  it('adds both format and quality parameters', () => {
+    const url = 'https://images.ctfassets.net/123/image.jpg';
+    const result = addContentfulParams(url, 800, 600, {
+      format: 'webp',
+      quality: 85,
+    });
+    expect(result).toBe(
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&f=webp&q=85'
+    );
+  });
+
+  it('adds format and quality to URL with existing query', () => {
+    const url = 'https://images.ctfassets.net/123/image.jpg?token=abc';
+    const result = addContentfulParams(url, 800, 600, {
+      format: 'png',
+      quality: 90,
+    });
+    expect(result).toBe(
+      'https://images.ctfassets.net/123/image.jpg?token=abc&w=800&h=600&f=png&q=90'
+    );
+  });
+
+  it('ignores empty format and quality values', () => {
+    const url = 'https://images.ctfassets.net/123/image.jpg';
+    const result = addContentfulParams(url, 800, 600, {
+      format: '',
+      quality: null,
+    });
+    expect(result).toBe(
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600'
+    );
+  });
 });
 
 describe('makeBlurDataURL', () => {
