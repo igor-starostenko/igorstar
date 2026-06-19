@@ -2,6 +2,8 @@
   https://www.contentful.com/developers/docs/references/images-api/#/reference
 */
 
+import { imageQuality, imageFormat } from '../constants/imageConfig.js';
+
 const BLUR_CONCURRENCY = 5;
 
 // Cache to avoid duplicate fetches for the same src
@@ -36,6 +38,7 @@ export async function makeBlurDataURL(src) {
     u.searchParams.set('w', '12');
     u.searchParams.set('h', '12');
     u.searchParams.set('q', '10');
+    u.searchParams.set('fm', imageFormat);
     const blurSrc = u.toString();
     const response = await fetchWithTimeout(blurSrc, {}, 15000);
     if (!response.ok) {
@@ -67,7 +70,7 @@ export const addContentfulParams = (
   url,
   width,
   height,
-  { format, quality } = {}
+  { format = imageFormat, quality = imageQuality } = {}
 ) => {
   if (!url || !width || !height) return url;
   if (!url.includes('images.ctfassets.net')) return url;
@@ -77,7 +80,7 @@ export const addContentfulParams = (
     u.searchParams.set('w', String(width));
     u.searchParams.set('h', String(height));
     if (format) {
-      u.searchParams.set('f', format);
+      u.searchParams.set('fm', format);
     }
     if (quality) {
       u.searchParams.set('q', String(quality));
@@ -88,7 +91,7 @@ export const addContentfulParams = (
     let result = url;
     const separator = url.includes('?') ? '&' : '?';
     if (format) {
-      result += separator + 'f=' + format;
+      result += separator + 'fm=' + format;
     }
     if (quality) {
       const nextSeparator = result.includes('?') ? '&' : '?';
