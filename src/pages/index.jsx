@@ -19,17 +19,39 @@ export const getStaticProps = async () => {
     limit: 1000, // 1000 is the max
   });
 
+  // Pre-generate blurDataURLs for thumbnails during data fetching
+  const { makeBlurDataURL } = await import('helpers/contentful');
+
+  const postsWithBlurData = {
+    ...posts,
+    items: await Promise.all(
+      posts.items.map(async ({ thumbnail, images: _images, ...fields }) => {
+        const parsedThumbnail = parseItem(thumbnail || {});
+
+        // Generate blurDataURL if thumbnail exists and is from Contentful
+        let blurDataURL = undefined;
+        if (parsedThumbnail?.src) {
+          blurDataURL = await makeBlurDataURL(parsedThumbnail.src);
+        }
+
+        // Only include blurDataURL if it has a valid value (Next.js requires serializable JSON)
+        const thumbnailWithBlur = { ...parsedThumbnail };
+        if (blurDataURL) {
+          thumbnailWithBlur.blurDataURL = blurDataURL;
+        }
+
+        return {
+          ...fields,
+          thumbnail: thumbnailWithBlur,
+        };
+      })
+    ),
+  };
+
   return {
     props: {
       page: pages.items[0] || {},
-      posts: {
-        ...posts,
-
-        items: posts.items.map(({ thumbnail, images: _images, ...fields }) => ({
-          thumbnail: parseItem(thumbnail || {}),
-          ...fields,
-        })),
-      },
+      posts: postsWithBlurData,
     },
   };
 };

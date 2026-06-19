@@ -5,7 +5,6 @@ import Image from 'components/image/image.jsx';
 import Hashtags from 'components/hashtags/hashtags.jsx';
 import { sizes as defaultSizes } from 'constants/imageConfig.js';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
-import { makeBlurDataURL } from 'helpers/contentful';
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
@@ -37,33 +36,43 @@ const Article = ({
     ? calculateConstrainedDimensions(image.width, image.height, 1200, 800)
     : { width: null, height: null };
 
-  // Generate blur placeholder for Contentful images
-  const blurDataURL = image ? makeBlurDataURL(image.src) : undefined;
+  // Note: blurDataURL is now pre-generated in getStaticProps and passed via props
+
+  if (!image) {
+    // If no image is provided, render only the content without thumb/link
+    return (
+      <Card>
+        <Row>
+          <Title as="h2">{title}</Title>
+          <DateText isMobile={false} date={date} />
+        </Row>
+        <Hashtags tags={tags} />
+        <Description>{description}</Description>
+        <DateText isMobile={true} date={date} />
+      </Card>
+    );
+  }
 
   return (
     <Card>
-      {image && (
-        <SLink href={href}>
-          <Thumb className={index === 0 ? 'first' : ''}>
-            {/* Calculate display-appropriate dimensions based on CSS max-height (~41rem/656px) */}
-            <Image
-              src={image.src}
-              backupSrc={image.backupSrc}
-              alt={image.alt}
-              width={width}
-              height={height}
-              sizes={defaultSizes}
-              priority={index === 0}
-              blurDataURL={blurDataURL}
-              placeholder="blur"
-            />
-          </Thumb>
-        </SLink>
-      )}
+      <SLink href={href}>
+        <Thumb className={index === 0 ? 'first' : ''}>
+          {/* Calculate display-appropriate dimensions based on CSS max-height (~41rem/656px) */}
+          <Image
+            src={image.src}
+            backupSrc={image.backupSrc}
+            alt={image.alt}
+            width={width}
+            height={height}
+            sizes={defaultSizes}
+            priority={index === 0}
+            blurDataURL={image.blurDataURL}
+            placeholder="blur"
+          />
+        </Thumb>
+      </SLink>
       <Row>
-        <SLink href={href}>
-          <Title as="h2">{title}</Title>
-        </SLink>
+        <Title as="h2">{title}</Title>
         <DateText isMobile={false} date={date} />
       </Row>
       <Hashtags tags={tags} />
@@ -87,6 +96,7 @@ Article.propTypes = {
     alt: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    blurDataURL: PropTypes.string,
   }),
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),

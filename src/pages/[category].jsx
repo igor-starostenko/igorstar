@@ -21,6 +21,18 @@ export const getStaticProps = async ({ params }) => {
     'fields.category[in]': params.category,
   });
 
+  // Generate blurDataURL for thumbnails during static generation
+  const { makeBlurDataURL } = await import('helpers/contentful');
+  const thumbUrls = posts.items
+    .map((post) => post.thumbnail?.src)
+    .filter(Boolean);
+  const blurDataUrls = {};
+  for (const url of thumbUrls) {
+    if (!blurDataUrls[url]) {
+      blurDataUrls[url] = (await makeBlurDataURL(url)) ?? null;
+    }
+  }
+
   return {
     props: {
       page: pages.items[0] || {},
@@ -28,7 +40,15 @@ export const getStaticProps = async ({ params }) => {
         ...posts,
 
         items: posts.items.map(({ thumbnail, images: _images, ...fields }) => ({
-          thumbnail: parseItem(thumbnail || {}),
+          thumbnail: thumbnail
+            ? {
+                ...parseItem(thumbnail || {}),
+                blurDataURL:
+                  thumbnail.src && blurDataUrls[thumbnail.src] !== undefined
+                    ? blurDataUrls[thumbnail.src]
+                    : null,
+              }
+            : null,
           ...fields,
         })),
       },

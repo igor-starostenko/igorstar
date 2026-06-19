@@ -293,17 +293,47 @@ export const getStaticProps = async ({ params }) => {
     ? calculateRowHeight(post.images.length)
     : 250;
 
+  // Generate blurDataURL for thumbnails during static generation
+  const { makeBlurDataURL } = await import('helpers/contentful');
+  const thumbUrls = [
+    ...(post.thumbnail?.src ? [post.thumbnail.src] : []),
+    ...recommendedPosts.map((rp) => rp.thumbnail?.src).filter(Boolean),
+  ];
+  const blurDataUrls = {};
+  for (const url of thumbUrls) {
+    if (!blurDataUrls[url]) {
+      blurDataUrls[url] = (await makeBlurDataURL(url)) ?? null;
+    }
+  }
+
   return {
     props: {
       post: {
         ...post,
-        thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
+        thumbnail: post.thumbnail
+          ? {
+              ...parseItem(post.thumbnail),
+              blurDataURL:
+                post.thumbnail.src &&
+                blurDataUrls[post.thumbnail.src] !== undefined
+                  ? blurDataUrls[post.thumbnail.src]
+                  : null,
+            }
+          : null,
         images: post.images ? post.images.map(parseItem) : [],
         targetRowHeight,
       },
-      recommendations: recommendedPosts.map((post) => ({
-        ...filterObject(post, suggestedPostProps),
-        thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
+      recommendations: recommendedPosts.map((rp) => ({
+        ...filterObject(rp, suggestedPostProps),
+        thumbnail: rp.thumbnail
+          ? {
+              ...parseItem(rp.thumbnail),
+              blurDataURL:
+                rp.thumbnail.src && blurDataUrls[rp.thumbnail.src] !== undefined
+                  ? blurDataUrls[rp.thumbnail.src]
+                  : null,
+            }
+          : null,
       })),
     },
   };

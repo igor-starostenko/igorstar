@@ -45,26 +45,50 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Photo Feed',
   });
+
   const { items, ...feed } = await getAllEntries({
     content_type: 'feed',
     order: '-fields.date',
     limit: 1000,
   });
 
+  // Pre-generate blurDataURLs for feed images during data fetching
+  const { makeBlurDataURL } = await import('helpers/contentful');
+
+  const imagesWithBlurData = items
+    ? await Promise.all(
+        items.map(
+          async ({ image, description, locationText, date, ...fields }) => {
+            const parsedImage = parseItem(image);
+
+            // Generate blurDataURL if image exists and is from Contentful
+            let blurDataURL = undefined;
+            if (parsedImage?.src) {
+              blurDataURL = await makeBlurDataURL(parsedImage.src);
+            }
+
+            // Only include blurDataURL if it has a valid value (Next.js requires serializable JSON)
+            const imageWithBlur = {
+              caption: formatCaption({ description, locationText, date }),
+              ...fields,
+              ...parsedImage,
+            };
+            if (blurDataURL) {
+              imageWithBlur.blurDataURL = blurDataURL;
+            }
+
+            return imageWithBlur;
+          }
+        )
+      )
+    : [];
+
   return {
     props: {
       page: pages.items[0] || {},
       feed: {
         ...feed,
-        images: items
-          ? items.map(
-              ({ image, description, locationText, date, ...fields }) => ({
-                caption: formatCaption({ description, locationText, date }),
-                ...fields,
-                ...parseItem(image),
-              })
-            )
-          : [],
+        images: imagesWithBlurData,
       },
     },
   };

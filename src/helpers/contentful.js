@@ -1,32 +1,54 @@
 /* For contentful query params see
   https://www.contentful.com/developers/docs/references/images-api/#/reference
- */
+*/
 
-// Generate base64 blur placeholder for Contentful images
-// Fetches a tiny 12px version with low quality and returns as base64 data URL
-const makeBlurDataURL = async (src) => {
+// Timeout helper for fetch requests
+const fetchWithTimeout = async (url, options = {}, timeout = 15000) => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    return response;
+  } finally {
+    clearTimeout(id);
+  }
+};
+
+// Generate a blur placeholder base64 data URL for Contentful images
+// Fetches a tiny 12x12px image with low quality and returns base64
+export async function makeBlurDataURL(src) {
   if (!src || !src.includes('images.ctfassets.net')) return undefined;
 
   try {
-    // Fetch a tiny version of the image (12px, q=20 for low quality)
-    const tinySrc = src + '?w=12&q=20';
-    const res = await fetch(tinySrc);
-    
-    if (!res.ok) {
-      console.error('Failed to fetch blur placeholder:', tinySrc, res.status);
+    // Use a tiny 12x12px with very low quality for minimal payload
+    const blurSrc = `${src}?w=12&h=12&q=10`;
+    const response = await fetchWithTimeout(blurSrc, {}, 15000);
+
+    if (!response.ok) {
+      console.warn(
+        `Failed to fetch blur placeholder (status ${response.status}): ${blurSrc}`
+      );
       return undefined;
     }
-    
-    const contentType = res.headers.get('content-type') || 'image/webp';
-    const arrayBuffer = await res.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    
-    return 'data:' + contentType + ';base64,' + buffer.toString('base64');
+
+    const buffer = await response.arrayBuffer();
+    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    const base64 = Buffer.from(buffer).toString('base64');
+
+    return `data:${contentType};base64,${base64}`;
   } catch (error) {
-    console.error('Failed to generate blur placeholder:', src, error.message);
+    if (error.name === 'AbortError') {
+      console.warn(`Timeout fetching blur placeholder: ${src}`);
+    } else {
+      console.warn(`Error generating blurDataURL for ${src}:`, error);
+    }
     return undefined;
   }
-};
+}
 
 // Add Contentful image optimization parameters (w, h)
 const addContentfulParams = (url, width, height) => {
@@ -45,4 +67,4 @@ const addContentfulParams = (url, width, height) => {
   }
 };
 
-export { makeBlurDataURL, addContentfulParams };
+export { addContentfulParams };
