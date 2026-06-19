@@ -2,18 +2,12 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
+import BaseImage from 'components/image/baseImage.jsx';
 
 export const Container = styled.div`
   margin-top: 7rem;
   padding-top: 4rem;
   border-top: 1px solid ${colors.lightGrey};
-`;
-
-export const Border = styled.div`
-  margin: 5px;
-  border: 1px solid ${colors.lightGrey};
-  color: ${colors.grey};
-  text-decoration: none;
 `;
 
 export const SLink = styled(Link)`
@@ -26,36 +20,44 @@ export const SLink = styled(Link)`
   }
 
   p {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     span {
       color: ${colors.secondary};
     }
   }
 `;
 
-export const Row = styled.div`
-  margin: 1rem;
-  min-height: 14rem;
+export const Card = styled.div`
+  margin: 5px;
+  padding: 0 1rem;
+  border: 1px solid ${colors.lightGrey};
+  color: ${colors.grey};
+  text-decoration: none;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+
+  ${MEDIA.PHONE`
+    gap: 0px;
+    flex-direction: column;
+  `};
 `;
 
-export const Thumb = styled.div`
+export const ThumbWrapper = styled.div`
+  flex: 0 0 30%;
+  margin: 2rem 0rem 0.5rem 0rem;
   position: relative;
-  width: 30%;
-  float: left;
-  margin: 0rem 1rem 0.5rem 0rem;
-  max-height: 14rem;
-  height: 40vw;
 
-  img {
-    object-fit: contain;
-  }
-
-  ${MEDIA.TABLET`
-    max-height: 12rem;
-    height: 30vw;
-  `};
   ${MEDIA.PHONE`
-    max-height: 8rem;
-    height: 19vw;
+    margin: 1rem 0rem 0rem 0rem;
   `};
+`;
+
+export const Thumb = styled(BaseImage)`
+  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
+  position: relative !important;
+`;
+
+export const Details = styled.div`
+  flex: 1;
 `;

@@ -1,10 +1,13 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+import withBundleAnalyzer from '@next/bundle-analyzer';
+import dotenv from 'dotenv';
+
+// Load .env file to make CONTENTFUL_* variables available at build time
+dotenv.config({ path: '.env', override: true });
 
 const next_config = {
+  output: 'export',
   images: {
-    loader: 'custom',
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -15,17 +18,9 @@ const next_config = {
         hostname: 'live.staticflickr.com',
       },
     ],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-  },
-  env: {
-    nextImageExportOptimizer_imageFolderPath: 'public/images',
-    nextImageExportOptimizer_exportFolderPath: 'out',
-    nextImageExportOptimizer_quality: 50,
-    nextImageExportOptimizer_storePicturesInWEBP: true,
-    nextImageExportOptimizer_generateAndUseBlurImages: true,
   },
   productionBrowserSourceMaps: true,
+  turbopack: {},
 };
 
-module.exports = withBundleAnalyzer(next_config);
+export default withBundleAnalyzer()(next_config);

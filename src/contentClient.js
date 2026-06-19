@@ -1,13 +1,15 @@
-const { createClient } = require('contentful');
-const { config } = require('dotenv');
-config();
+import { createClient } from 'contentful';
 
-const limit = parseInt(process.env.CONTENTFUL_LIMIT || '100');
+const spaceId = process.env.CONTENTFUL_SPACE_ID;
+const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID,
-  accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN,
-});
+if (!spaceId || !accessToken) {
+  throw new Error(
+    'Missing Contentful credentials: CONTENTFUL_SPACE_ID and CONTENTFUL_ACCESS_TOKEN'
+  );
+}
+
+const client = createClient({ space: spaceId, accessToken });
 
 const parseFields = (item) => {
   if (!item || !item.sys) {
@@ -23,11 +25,11 @@ const parseFields = (item) => {
   };
 };
 
-const parseImage = (id, title, file) => {
+const parseImage = (_id, title, file) => {
   const { width, height } = file.details.image;
   return {
-    src: `/images/${id}_${file.fileName}`,
-    backupSrc: `https:${file.url}`,
+    src: `https:${file.url}`,
+    backupSrc: null,
     alt: title,
     width,
     height,
@@ -47,7 +49,7 @@ const parseItem = (data) => {
 
 const getEntries = async (options) => {
   const response = await client.getEntries({
-    limit,
+    limit: parseInt(process.env.CONTENTFUL_LIMIT || '100'),
     ...options,
   });
   return {
@@ -60,10 +62,9 @@ const getEntries = async (options) => {
 
 const getAllEntries = async (options) => {
   let records = { items: [] };
-  // Ensure we load all records, regardless of the API limit
   while (records.total != 0 && records.items.length < (records.total || 1)) {
     let response = await getEntries({
-      ...options, // skip can't be overriden
+      ...options,
       skip: records.items.length,
     });
     records = { ...response, items: [...records.items, ...response.items] };
@@ -84,7 +85,7 @@ const getPostsPaths = async (options) => {
   }));
 };
 
-module.exports = {
+export {
   parseFields,
   parseImage,
   parseItem,
