@@ -300,26 +300,20 @@ export const getStaticProps = async ({ params }) => {
     props: {
       post: {
         ...post,
-        thumbnail: await addBlurDataURLs(
-          post.thumbnail ? [parseItem(post.thumbnail)] : []
-        ).then((result) => result[0] || null),
+        thumbnail: post.thumbnail
+          ? (await addBlurDataURLs([parseItem(post.thumbnail)]))[0] ?? null
+          : null,
         images: await addBlurDataURLs(
           post.images ? post.images.map(parseItem) : []
         ),
         targetRowHeight,
       },
-      recommendations: await Promise.all(
-        recommendedPosts.map(async (rp) => {
-          const thumbnail = rp.thumbnail
-            ? await addBlurDataURLs([parseItem(rp.thumbnail)]).then(
-                (result) => result[0] || null
-              )
-            : null;
-          return {
-            ...filterObject(rp, suggestedPostProps),
-            thumbnail,
-          };
-        })
+      recommendations: await addBlurDataURLs(
+        recommendedPosts.map((rp) => ({
+          ...filterObject(rp, suggestedPostProps),
+          thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
+        })),
+        { path: 'thumbnail' }
       ),
     },
   };
