@@ -40,31 +40,36 @@ FeedPage.propTypes = {
 export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } =
     await import('contentClient');
+  const { addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Photo Feed',
   });
+
   const { items, ...feed } = await getAllEntries({
     content_type: 'feed',
     order: '-fields.date',
     limit: 1000,
   });
 
+  // Parse images with caption and add blurDataURLs if not already set
+  const parsedImages = items
+    ? items.map(({ image, description, locationText, date, ...fields }) => ({
+        caption: formatCaption({ description, locationText, date }),
+        ...fields,
+        ...parseItem(image),
+      }))
+    : [];
+
+  const imagesWithBlurData = await addBlurDataURLs(parsedImages);
+
   return {
     props: {
       page: pages.items[0] || {},
       feed: {
         ...feed,
-        images: items
-          ? items.map(
-              ({ image, description, locationText, date, ...fields }) => ({
-                caption: formatCaption({ description, locationText, date }),
-                ...fields,
-                ...parseItem(image),
-              })
-            )
-          : [],
+        images: imagesWithBlurData,
       },
     },
   };

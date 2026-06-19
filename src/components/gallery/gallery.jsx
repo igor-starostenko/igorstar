@@ -5,6 +5,8 @@ import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
+import { sizes as defaultSizes } from 'constants/imageConfig.js';
+import { addContentfulParams } from 'helpers/contentful';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -26,7 +28,11 @@ const renderNextImage = (
       title={title}
       sizes={sizes}
       priority={index <= 5}
-      placeholder={'blurDataURL' in photo ? 'blur' : undefined}
+      placeholder={
+        photo.blurDataURL && typeof photo.blurDataURL === 'string'
+          ? 'blur'
+          : undefined
+      }
       blurDataURL={photo.blurDataURL}
     />
   </GalleryImageWrapper>
@@ -45,11 +51,29 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     // Use targetRowHeight as the height constraint, calculate proportional width
     const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
 
+    // Add Contentful image optimization params for better performance
+    const resolutionMultiplier = 2;
+    const requestedWidth = Math.min(
+      originalWidth,
+      Math.round(constrainedWidth * resolutionMultiplier)
+    );
+    const requestedHeight = Math.min(
+      originalHeight,
+      Math.round(targetRowHeight * resolutionMultiplier)
+    );
+    const optimizedSrc = addContentfulParams(
+      photo.src,
+      requestedWidth,
+      requestedHeight
+    );
+
     return {
-      src: photo.src,
+      src: optimizedSrc || photo.src,
       width: constrainedWidth,
       height: targetRowHeight,
+      sizes: defaultSizes,
       alt: photo.description || photo.alt || '',
+      blurDataURL: photo.blurDataURL,
     };
   });
 

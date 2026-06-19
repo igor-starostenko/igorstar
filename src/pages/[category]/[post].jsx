@@ -293,18 +293,28 @@ export const getStaticProps = async ({ params }) => {
     ? calculateRowHeight(post.images.length)
     : 250;
 
+  // Parse images and add blurDataURLs if not already set
+  const { addBlurDataURLs } = await import('helpers/contentful');
+
   return {
     props: {
       post: {
         ...post,
-        thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
-        images: post.images ? post.images.map(parseItem) : [],
+        thumbnail: post.thumbnail
+          ? ((await addBlurDataURLs([parseItem(post.thumbnail)]))[0] ?? null)
+          : null,
+        images: await addBlurDataURLs(
+          post.images ? post.images.map(parseItem) : []
+        ),
         targetRowHeight,
       },
-      recommendations: recommendedPosts.map((post) => ({
-        ...filterObject(post, suggestedPostProps),
-        thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
-      })),
+      recommendations: await addBlurDataURLs(
+        recommendedPosts.map((rp) => ({
+          ...filterObject(rp, suggestedPostProps),
+          thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
+        })),
+        { path: 'thumbnail' }
+      ),
     },
   };
 };

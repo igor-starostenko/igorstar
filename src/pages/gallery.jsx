@@ -35,26 +35,33 @@ export default GalleryPage;
 export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } =
     await import('contentClient');
+  const { addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Gallery',
   });
+
   const { items, ...gallery } = await getAllEntries({
     content_type: 'gallery',
   });
+
+  // Parse images and add blurDataURLs if not already set
+  const parsedImages = items
+    ? items.map(({ image, ...fields }) => ({
+        ...parseItem(image),
+        ...fields,
+      }))
+    : [];
+
+  const imagesWithBlurData = await addBlurDataURLs(parsedImages);
 
   return {
     props: {
       page: pages.items[0] || {},
       gallery: {
         ...gallery,
-        images: items
-          ? items.map(({ image, ...fields }) => ({
-              ...fields,
-              ...parseItem(image),
-            }))
-          : [],
+        images: imagesWithBlurData,
       },
     },
   };

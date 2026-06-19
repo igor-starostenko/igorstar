@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SImage } from './image.css.js';
+import { sizes as defaultSizes } from 'constants/imageConfig.js';
+import { addContentfulParams } from 'helpers/contentful';
 
-const sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
-
-/* For contentful query params see
-  https://www.contentful.com/developers/docs/references/images-api/#/reference
- */
 const BaseImage = ({
   alt,
   src,
@@ -16,6 +13,9 @@ const BaseImage = ({
   loading,
   width,
   height,
+  sizes,
+  placeholder,
+  blurDataURL,
   ...rest
 }) => {
   const [isError, setIsError] = useState(false);
@@ -25,7 +25,7 @@ const BaseImage = ({
     // If backupSrc is empty/falsy, render nothing instead of broken image
     if (!backupSrc) return null;
     // Filter out Next.js-specific props that aren't valid on <img>
-    const { fill, unoptimized, priority, ...domRest } = rest;
+    const { priority: _priority, ...domRest } = rest;
     // Pass through explicit dimensions and loading when available to preserve caller's sizing intent
     return (
       <img
@@ -42,19 +42,29 @@ const BaseImage = ({
   // Next.js Image requires width/height unless using fill
   // When fill is used, we don't need width/height but sizes is still required for optimization
   // Filter out props that should not be passed to DOM elements (fill, unoptimized are Next.js specific)
+  const optimizedSrc =
+    !unoptimized && width && height
+      ? addContentfulParams(src, width, height)
+      : src;
+
   const imageProps = {
-    src,
+    src: optimizedSrc,
     alt,
     loading,
     unoptimized,
+    sizes: sizes || defaultSizes,
     onError: () => setIsError(true),
-    ...(fill ? { fill, sizes } : {}),
+    placeholder,
+    blurDataURL,
   };
 
-  // For non-fill mode with explicit dimensions
+  // For non-fill mode with explicit dimensions, add width/height
   if (width && height) {
     imageProps.width = width;
     imageProps.height = height;
+  } else if (fill) {
+    // For fill mode, add the fill prop
+    imageProps.fill = true;
   }
 
   // For fill mode, render SImage directly to preserve parent height inheritance

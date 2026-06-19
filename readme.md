@@ -82,6 +82,12 @@ yarn start
 # To test
 yarn test
 
+# To run Lighthouse tests (customizable via `SITE_URL` env variable)
+yarn test:lighthouse
+
+# Default: uses `siteUrl` from [`site-config.cjs`](./site-config.cjs)
+# Override: `SITE_URL=http://localhost:3000 yarn test:lighthouse`
+
 # To verify code style
 yarn lint
 

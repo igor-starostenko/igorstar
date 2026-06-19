@@ -6,7 +6,7 @@
   "scripts": {
     "analyze": "source-map-explorer .next/static/**/*.js",
     "dev": "next dev",
-    "start": "next start",
+    "start": "serve out",
     "format": "prettier --config ./.prettierrc --write src/**/*.{js,jsx}",
     "lint": "eslint 'src/**/*.{js,jsx}'",
     "build:analyze": "npm run build && npm run analyze",
@@ -14,7 +14,7 @@
     "build:favicons": "node scripts/favicons.cjs",
     "build:sitemap": "next-sitemap",
     "build:images": "npm run contentful:assets",
-    "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && npm run build:images && next export",
+    "build": "npm run build:dir && npm run build:favicons && next build && npm run build:sitemap && npm run build:images",
     "contentful:assets": "node scripts/contentful-assets.js",
     "contentful:backup": "node scripts/contentful-backup.js",
     "contentful:export": "contentful space export --space-id $CONTENTFUL_SPACE_ID",
@@ -44,6 +44,7 @@
     "react-dom": "^19.2.6",
     "react-photo-album": "^3.6.0",
     "react-syntax-highlighter": "^16.1.1",
+    "serve": "^14.2.6",
     "styled-components": "^6.4.2"
   },
   "devDependencies": {

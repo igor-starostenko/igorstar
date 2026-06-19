@@ -29,6 +29,7 @@ vi.mock('./image.css.js', () => ({
 }));
 
 import BaseImage from './baseImage.jsx';
+import { imageQuality, imageFormat } from '../../constants/imageConfig.js';
 
 test('renders image with valid src', () => {
   render(<BaseImage src="/test.jpg" alt="Test image" />);
@@ -112,12 +113,11 @@ test('passes width and height props correctly', () => {
 });
 
 test('handles Contentful image URL with query params', () => {
-  const contentfulSrc =
-    'https://images.ctfassets.net/abc123/xyz.jpg?w=800&q=75';
+  const expectedSrc = `https://images.ctfassets.net/abc123/xyz.jpg?w=800&q=${imageQuality}&fm=${imageFormat}&h=600`;
 
   render(
     <BaseImage
-      src={contentfulSrc}
+      src={expectedSrc.replace('&h=600', '')}
       alt="Contentful image"
       width={800}
       height={600}
@@ -125,7 +125,7 @@ test('handles Contentful image URL with query params', () => {
   );
 
   const img = screen.getByAltText('Contentful image');
-  expect(img).toHaveAttribute('src', contentfulSrc);
+  expect(img).toHaveAttribute('src', expectedSrc);
   expect(img).toHaveAttribute('width', '800');
   expect(img).toHaveAttribute('height', '600');
 });

@@ -3,11 +3,22 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import Image from 'components/image/image.jsx';
 import Hashtags from 'components/hashtags/hashtags.jsx';
+import { sizes as defaultSizes } from 'constants/imageConfig.js';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
+
+// Calculate constrained dimensions for image display
+// Preserves aspect ratio while respecting max width/height constraints
+const calculateConstrainedDimensions = (width, height, maxWidth, maxHeight) => {
+  const scale = Math.min(maxWidth / width, maxHeight / height, 1);
+  return {
+    width: Math.round(width * scale),
+    height: Math.round(height * scale),
+  };
+};
 
 const Article = ({
   index,
@@ -21,28 +32,31 @@ const Article = ({
   linkText,
 }) => {
   const href = `/${category}/${path}`;
+  const { width, height } = image
+    ? calculateConstrainedDimensions(image.width, image.height, 1200, 800)
+    : { width: null, height: null };
 
   return (
     <Card>
-      {image && (
+      {image && image.src && (
         <SLink href={href}>
           <Thumb className={index === 0 ? 'first' : ''}>
             <Image
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={image.width}
-              height={image.height}
-              loading={index === 0 ? "eager" : "lazy"}
+              width={width}
+              height={height}
+              sizes={defaultSizes}
               priority={index === 0}
+              blurDataURL={image.blurDataURL}
+              placeholder={image.blurDataURL ? 'blur' : undefined}
             />
           </Thumb>
         </SLink>
       )}
       <Row>
-        <SLink href={href}>
-          <Title as="h2">{title}</Title>
-        </SLink>
+        <Title as="h2">{title}</Title>
         <DateText isMobile={false} date={date} />
       </Row>
       <Hashtags tags={tags} />
@@ -66,6 +80,7 @@ Article.propTypes = {
     alt: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    blurDataURL: PropTypes.string,
   }),
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),
