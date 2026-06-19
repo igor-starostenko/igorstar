@@ -306,34 +306,35 @@ export const getStaticProps = async ({ params }) => {
     }
   }
 
+  // Helper to add blurDataURL to an image object if not already set
+  const addBlurToImage = (img) => {
+    if (!img || img.blurDataURL !== undefined) return img;
+    const src = typeof img === 'object' ? img.src || img.url : null;
+    if (src && blurDataUrls[src] !== undefined) {
+      return { ...img, blurDataURL: blurDataUrls[src] };
+    }
+    return img;
+  };
+
+  // Helper to add blurDataURL to an array of images if not already set
+  const addBlurToImages = (images) =>
+    images ? images.map(addBlurToImage) : [];
+
   return {
     props: {
       post: {
         ...post,
-        thumbnail: post.thumbnail
-          ? {
-              ...parseItem(post.thumbnail),
-              blurDataURL:
-                post.thumbnail.src &&
-                blurDataUrls[post.thumbnail.src] !== undefined
-                  ? blurDataUrls[post.thumbnail.src]
-                  : null,
-            }
-          : null,
-        images: post.images ? post.images.map(parseItem) : [],
+        thumbnail: addBlurToImage(
+          post.thumbnail ? parseItem(post.thumbnail) : null
+        ),
+        images: addBlurToImages(post.images),
         targetRowHeight,
       },
       recommendations: recommendedPosts.map((rp) => ({
         ...filterObject(rp, suggestedPostProps),
-        thumbnail: rp.thumbnail
-          ? {
-              ...parseItem(rp.thumbnail),
-              blurDataURL:
-                rp.thumbnail.src && blurDataUrls[rp.thumbnail.src] !== undefined
-                  ? blurDataUrls[rp.thumbnail.src]
-                  : null,
-            }
-          : null,
+        thumbnail: addBlurToImage(
+          rp.thumbnail ? parseItem(rp.thumbnail) : null
+        ),
       })),
     },
   };

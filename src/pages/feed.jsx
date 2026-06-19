@@ -40,6 +40,7 @@ FeedPage.propTypes = {
 export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } =
     await import('contentClient');
+  const { addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getEntries({
     content_type: 'page',
@@ -52,36 +53,16 @@ export const getStaticProps = async () => {
     limit: 1000,
   });
 
-  // Pre-generate blurDataURLs for feed images during data fetching
-  const { makeBlurDataURL } = await import('helpers/contentful');
-
-  const imagesWithBlurData = items
-    ? await Promise.all(
-        items.map(
-          async ({ image, description, locationText, date, ...fields }) => {
-            const parsedImage = parseItem(image);
-
-            // Generate blurDataURL if image exists and is from Contentful
-            let blurDataURL = undefined;
-            if (parsedImage?.src) {
-              blurDataURL = await makeBlurDataURL(parsedImage.src);
-            }
-
-            // Only include blurDataURL if it has a valid value (Next.js requires serializable JSON)
-            const imageWithBlur = {
-              caption: formatCaption({ description, locationText, date }),
-              ...fields,
-              ...parsedImage,
-            };
-            if (blurDataURL) {
-              imageWithBlur.blurDataURL = blurDataURL;
-            }
-
-            return imageWithBlur;
-          }
-        )
-      )
+  // Parse images with caption and add blurDataURLs if not already set
+  const parsedImages = items
+    ? items.map(({ image, description, locationText, date, ...fields }) => ({
+        caption: formatCaption({ description, locationText, date }),
+        ...fields,
+        ...parseItem(image),
+      }))
     : [];
+
+  const imagesWithBlurData = await addBlurDataURLs(parsedImages);
 
   return {
     props: {

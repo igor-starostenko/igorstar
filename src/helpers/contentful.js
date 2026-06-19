@@ -67,4 +67,25 @@ const addContentfulParams = (url, width, height) => {
   }
 };
 
+// Add blurDataURL property to each image in an array if not already set
+export async function addBlurDataURLs(images = []) {
+  const result = [];
+
+  for (const image of images) {
+    // Only add blurDataURL if not already set and has a valid Contentful src
+    if (
+      image &&
+      !('blurDataURL' in image) &&
+      image.src?.includes('images.ctfassets.net')
+    ) {
+      const blurDataURL = await makeBlurDataURL(image.src);
+      result.push({ ...image, blurDataURL });
+    } else {
+      result.push(image);
+    }
+  }
+
+  return result;
+}
+
 export { addContentfulParams };

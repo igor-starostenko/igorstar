@@ -35,6 +35,7 @@ export default GalleryPage;
 export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } =
     await import('contentClient');
+  const { addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getEntries({
     content_type: 'page',
@@ -45,30 +46,15 @@ export const getStaticProps = async () => {
     content_type: 'gallery',
   });
 
-  // Pre-generate blurDataURLs for gallery images during data fetching
-  const { makeBlurDataURL } = await import('helpers/contentful');
-
-  const imagesWithBlurData = items
-    ? await Promise.all(
-        items.map(async ({ image, ...fields }) => {
-          const parsedImage = parseItem(image);
-
-          // Generate blurDataURL if image exists and is from Contentful
-          let blurDataURL = undefined;
-          if (parsedImage?.src) {
-            blurDataURL = await makeBlurDataURL(parsedImage.src);
-          }
-
-          // Only include blurDataURL if it has a valid value (Next.js requires serializable JSON)
-          const imageWithBlur = { ...parsedImage, ...fields };
-          if (blurDataURL) {
-            imageWithBlur.blurDataURL = blurDataURL;
-          }
-
-          return imageWithBlur;
-        })
-      )
+  // Parse images and add blurDataURLs if not already set
+  const parsedImages = items
+    ? items.map(({ image, ...fields }) => ({
+        ...parseItem(image),
+        ...fields,
+      }))
     : [];
+
+  const imagesWithBlurData = await addBlurDataURLs(parsedImages);
 
   return {
     props: {
