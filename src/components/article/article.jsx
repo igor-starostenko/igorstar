@@ -50,7 +50,7 @@ const Article = ({
               sizes={defaultSizes}
               priority={index === 0}
               blurDataURL={image.blurDataURL}
-              placeholder="blur"
+              placeholder={image.blurDataURL ? 'blur' : undefined}
             />
           </Thumb>
         </SLink>
