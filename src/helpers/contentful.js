@@ -4,13 +4,14 @@
 
 import { imageQuality, imageFormat } from '../constants/imageConfig.js';
 
-const BLUR_CONCURRENCY = 5;
+const BLUR_CONCURRENCY = 1;
+const CONTENTFUL_TIMEOUT = 15000;
 
 // Cache to avoid duplicate fetches for the same src
 const blurDataURLCache = new Map();
 
 // Timeout helper for fetch requests
-const fetchWithTimeout = async (url, options = {}, timeout = 15000) => {
+const fetchWithTimeout = async (url, options = {}, timeout = CONTENTFUL_TIMEOUT) => {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
 
@@ -26,21 +27,21 @@ const fetchWithTimeout = async (url, options = {}, timeout = 15000) => {
 };
 
 // Generate a blur placeholder base64 data URL for Contentful images
-// Fetches a tiny 12x12px image with low quality and returns base64
+// Fetches a tiny image with low quality and returns base64
 export async function makeBlurDataURL(src) {
   if (!src || !src.includes('images.ctfassets.net')) return undefined;
 
   if (blurDataURLCache.has(src)) return blurDataURLCache.get(src);
 
   try {
-    // Use a tiny 12x12px with very low quality for minimal payload
+    // Use a tiny 20x20px with very low quality for minimal payload
     const u = new URL(src);
     u.searchParams.set('w', '20');
     u.searchParams.set('h', '20');
     u.searchParams.set('q', '10');
     u.searchParams.set('fm', imageFormat);
     const blurSrc = u.toString();
-    const response = await fetchWithTimeout(blurSrc, {}, 15000);
+    const response = await fetchWithTimeout(blurSrc, {}, CONTENTFUL_TIMEOUT);
     if (!response.ok) {
       console.warn(
         `Failed to fetch blur placeholder (status ${response.status}): ${blurSrc}`
