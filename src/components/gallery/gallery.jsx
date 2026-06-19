@@ -61,7 +61,11 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       originalHeight,
       Math.round(targetRowHeight * resolutionMultiplier)
     );
-    const optimizedSrc = addContentfulParams(photo.src, requestedWidth, requestedHeight);
+    const optimizedSrc = addContentfulParams(
+      photo.src,
+      requestedWidth,
+      requestedHeight
+    );
 
     return {
       src: optimizedSrc || photo.src,

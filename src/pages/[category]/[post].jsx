@@ -301,7 +301,7 @@ export const getStaticProps = async ({ params }) => {
       post: {
         ...post,
         thumbnail: post.thumbnail
-          ? (await addBlurDataURLs([parseItem(post.thumbnail)]))[0] ?? null
+          ? ((await addBlurDataURLs([parseItem(post.thumbnail)]))[0] ?? null)
           : null,
         images: await addBlurDataURLs(
           post.images ? post.images.map(parseItem) : []
