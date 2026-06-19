@@ -11,7 +11,11 @@ const CONTENTFUL_TIMEOUT = 15000;
 const blurDataURLCache = new Map();
 
 // Timeout helper for fetch requests
-const fetchWithTimeout = async (url, options = {}, timeout = CONTENTFUL_TIMEOUT) => {
+const fetchWithTimeout = async (
+  url,
+  options = {},
+  timeout = CONTENTFUL_TIMEOUT
+) => {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
 
