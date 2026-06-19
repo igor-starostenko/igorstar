@@ -25,12 +25,7 @@ const BaseImage = ({
     // If backupSrc is empty/falsy, render nothing instead of broken image
     if (!backupSrc) return null;
     // Filter out Next.js-specific props that aren't valid on <img>
-    const {
-      fill: _fill,
-      unoptimized: _unoptimized,
-      priority: _priority,
-      ...domRest
-    } = rest;
+    const { priority: _priority, ...domRest } = rest;
     // Pass through explicit dimensions and loading when available to preserve caller's sizing intent
     return (
       <img
