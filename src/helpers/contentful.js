@@ -35,8 +35,8 @@ export async function makeBlurDataURL(src) {
   try {
     // Use a tiny 12x12px with very low quality for minimal payload
     const u = new URL(src);
-    u.searchParams.set('w', '12');
-    u.searchParams.set('h', '12');
+    u.searchParams.set('w', '20');
+    u.searchParams.set('h', '20');
     u.searchParams.set('q', '10');
     u.searchParams.set('fm', imageFormat);
     const blurSrc = u.toString();
