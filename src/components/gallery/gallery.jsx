@@ -14,30 +14,29 @@ const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 const renderNextImage = (
   { alt, title, sizes },
   { photo, width, height, index }
-) => {
-  // Only use blur placeholder if blurDataURL is truthy
-  const hasBlur = photo.blurDataURL && typeof photo.blurDataURL === 'string';
-
-  return (
-    <GalleryImageWrapper
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-      }}
-    >
-      <NextImage
-        fill
-        src={photo.src ?? photo.url}
-        alt={alt}
-        title={title}
-        sizes={sizes}
-        priority={index <= 5}
-        placeholder={hasBlur ? 'blur' : undefined}
-        blurDataURL={photo.blurDataURL}
-      />
-    </GalleryImageWrapper>
-  );
-};
+) => (
+  <GalleryImageWrapper
+    style={{
+      width: `${width}px`,
+      height: `${height}px`,
+    }}
+  >
+    <NextImage
+      fill
+      src={photo.src ?? photo.url}
+      alt={alt}
+      title={title}
+      sizes={sizes}
+      priority={index <= 5}
+      placeholder={
+        photo.blurDataURL && typeof photo.blurDataURL === 'string'
+          ? 'blur'
+          : undefined
+      }
+      blurDataURL={photo.blurDataURL}
+    />
+  </GalleryImageWrapper>
+);
 
 // Map gallery photos to react-photo-album format
 const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
@@ -59,8 +58,6 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       Math.round(constrainedWidth * resolutionMultiplier),
       Math.round(targetRowHeight * resolutionMultiplier)
     );
-
-    // Note: blurDataURL is now pre-generated during data fetching and passed via props
 
     return {
       src: optimizedSrc || photo.src,
