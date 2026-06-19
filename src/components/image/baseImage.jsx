@@ -54,12 +54,9 @@ const BaseImage = ({
     unoptimized,
     sizes: sizes || defaultSizes,
     onError: () => setIsError(true),
+    placeholder,
+    blurDataURL,
   };
-
-  // Add blurDataURL if available (from prop)
-  if (blurDataURL) {
-    imageProps.blurDataURL = blurDataURL;
-  }
 
   // For non-fill mode with explicit dimensions, add width/height
   if (width && height) {
