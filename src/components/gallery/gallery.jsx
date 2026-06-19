@@ -124,8 +124,8 @@ const Gallery = ({
   };
 
   const photoAlbumPhotos = useMemo(
-    () => mapToPhotoAlbumFormat(images, targetRowHeight, containerWidth),
-    [images, targetRowHeight, containerWidth]
+    () => mapToPhotoAlbumFormat(images, targetRowHeight),
+    [images, targetRowHeight]
   );
 
   return (
