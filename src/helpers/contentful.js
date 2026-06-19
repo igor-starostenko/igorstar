@@ -88,17 +88,22 @@ export const addContentfulParams = (
     }
     return u.toString();
   } catch {
-    // Fallback: just append params without URL parsing
-    let result = url;
-    const separator = url.includes('?') ? '&' : '?';
-    if (format) {
-      result += separator + 'fm=' + format;
+    // Fallback: update query string without relying on URL parsing
+    try {
+      const [beforeHash, hash] = String(url).split('#');
+      const [base, query = ''] = beforeHash.split('?');
+      const params = new URLSearchParams(query);
+
+      params.set('w', String(width));
+      params.set('h', String(height));
+      if (format) params.set('fm', format);
+      if (quality) params.set('q', String(quality));
+
+      const qs = params.toString();
+      return `${base}${qs ? `?${qs}` : ''}${hash ? `#${hash}` : ''}`;
+    } catch {
+      return url;
     }
-    if (quality) {
-      const nextSeparator = result.includes('?') ? '&' : '?';
-      result += nextSeparator + 'q=' + String(quality);
-    }
-    return result + separator + 'w=' + width + '&h=' + height;
   }
 };
 
