@@ -293,49 +293,34 @@ export const getStaticProps = async ({ params }) => {
     ? calculateRowHeight(post.images.length)
     : 250;
 
-  // Generate blurDataURL for thumbnails during static generation
-  const { makeBlurDataURL } = await import('helpers/contentful');
-  const thumbUrls = [
-    ...(post.thumbnail?.src ? [post.thumbnail.src] : []),
-    ...recommendedPosts.map((rp) => rp.thumbnail?.src).filter(Boolean),
-  ];
-  const blurDataUrls = {};
-  for (const url of thumbUrls) {
-    if (!blurDataUrls[url]) {
-      blurDataUrls[url] = (await makeBlurDataURL(url)) ?? null;
-    }
-  }
-
-  // Helper to add blurDataURL to an image object if not already set
-  const addBlurToImage = (img) => {
-    if (!img || img.blurDataURL !== undefined) return img;
-    const src = typeof img === 'object' ? img.src || img.url : null;
-    if (src && blurDataUrls[src] !== undefined) {
-      return { ...img, blurDataURL: blurDataUrls[src] };
-    }
-    return img;
-  };
-
-  // Helper to add blurDataURL to an array of images if not already set
-  const addBlurToImages = (images) =>
-    images ? images.map(addBlurToImage) : [];
+  // Parse images and add blurDataURLs if not already set
+  const { addBlurDataURLs } = await import('helpers/contentful');
 
   return {
     props: {
       post: {
         ...post,
-        thumbnail: addBlurToImage(
-          post.thumbnail ? parseItem(post.thumbnail) : null
+        thumbnail: await addBlurDataURLs(
+          post.thumbnail ? [parseItem(post.thumbnail)] : []
+        ).then((result) => result[0] || null),
+        images: await addBlurDataURLs(
+          post.images ? post.images.map(parseItem) : []
         ),
-        images: addBlurToImages(post.images),
         targetRowHeight,
       },
-      recommendations: recommendedPosts.map((rp) => ({
-        ...filterObject(rp, suggestedPostProps),
-        thumbnail: addBlurToImage(
-          rp.thumbnail ? parseItem(rp.thumbnail) : null
-        ),
-      })),
+      recommendations: await Promise.all(
+        recommendedPosts.map(async (rp) => {
+          const thumbnail = rp.thumbnail
+            ? await addBlurDataURLs([parseItem(rp.thumbnail)]).then(
+                (result) => result[0] || null
+              )
+            : null;
+          return {
+            ...filterObject(rp, suggestedPostProps),
+            thumbnail,
+          };
+        })
+      ),
     },
   };
 };
