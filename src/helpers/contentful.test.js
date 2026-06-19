@@ -185,15 +185,18 @@ describe('addBlurDataURLs', () => {
   });
 
   it('skips non-Contentful URLs', async () => {
+    vi.stubGlobal('fetch', vi.fn());
+
     const images = [
-      { src: 'https://images.ctfassets.net/123/image.jpg' },
       { src: 'https://example.com/image.jpg' },
+      { src: '/local/image.jpg' },
     ];
 
     const result = await addBlurDataURLs(images);
 
     expect(result[0].blurDataURL).toBeNull();
     expect(result[1].blurDataURL).toBeNull();
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 
   it('sets blurDataURL to null when fetch fails', async () => {
