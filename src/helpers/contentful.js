@@ -92,7 +92,7 @@ export async function addBlurDataURLs(images = [], { path } = {}) {
           !('blurDataURL' in image) &&
           image.src?.includes('images.ctfassets.net')
         ) {
-          const blurDataURL = await makeBlurDataURL(image.src);
+          const blurDataURL = (await makeBlurDataURL(image.src)) ?? null;
           current[lastKey] = { ...image, blurDataURL };
         }
 
@@ -105,7 +105,7 @@ export async function addBlurDataURLs(images = [], { path } = {}) {
         !('blurDataURL' in item) &&
         item.src?.includes('images.ctfassets.net')
       ) {
-        const blurDataURL = await makeBlurDataURL(item.src);
+        const blurDataURL = (await makeBlurDataURL(item.src)) ?? null;
         return { ...item, blurDataURL };
       }
       return item;
