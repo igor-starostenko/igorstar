@@ -68,19 +68,47 @@ const addContentfulParams = (url, width, height) => {
 };
 
 // Add blurDataURL property to each image in an array if not already set
-export async function addBlurDataURLs(images = []) {
+export async function addBlurDataURLs(images = [], { path } = {}) {
   return Promise.all(
-    images.map(async (image) => {
-      // Only add blurDataURL if not already set and has a valid Contentful src
-      if (
-        image &&
-        !('blurDataURL' in image) &&
-        image.src?.includes('images.ctfassets.net')
-      ) {
-        const blurDataURL = await makeBlurDataURL(image.src);
-        return { ...image, blurDataURL };
+    images.map(async (item) => {
+      // If path is provided, navigate to nested object and add blurDataURL there
+      if (path) {
+        const keys = path.split('.');
+        let current = item;
+
+        // Navigate to the nested object
+        for (let i = 0; i < keys.length - 1; i += 1) {
+          if (!current || !current[keys[i]]) return item;
+          current = current[keys[i]];
+        }
+
+        const lastKey = keys[keys.length - 1];
+        if (!current || !current[lastKey]) return item;
+
+        const image = current[lastKey];
+        // Only add blurDataURL if not already set and has a valid Contentful src
+        if (
+          image &&
+          !('blurDataURL' in image) &&
+          image.src?.includes('images.ctfassets.net')
+        ) {
+          const blurDataURL = await makeBlurDataURL(image.src);
+          current[lastKey] = { ...image, blurDataURL };
+        }
+
+        return item;
       }
-      return image;
+
+      // Direct array of image objects
+      if (
+        item &&
+        !('blurDataURL' in item) &&
+        item.src?.includes('images.ctfassets.net')
+      ) {
+        const blurDataURL = await makeBlurDataURL(item.src);
+        return { ...item, blurDataURL };
+      }
+      return item;
     })
   );
 }

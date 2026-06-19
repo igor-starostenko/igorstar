@@ -7,6 +7,7 @@ export default Index;
 export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } =
     await import('contentClient');
+  const { addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getEntries({
     content_type: 'page',
@@ -19,39 +20,27 @@ export const getStaticProps = async () => {
     limit: 1000, // 1000 is the max
   });
 
-  // Pre-generate blurDataURLs for thumbnails during data fetching
-  const { makeBlurDataURL } = await import('helpers/contentful');
-
-  const postsWithBlurData = {
+  // Parse posts and add blurDataURLs to nested thumbnail images
+  const parsedPosts = {
     ...posts,
-    items: await Promise.all(
-      posts.items.map(async ({ thumbnail, images: _images, ...fields }) => {
-        const parsedThumbnail = parseItem(thumbnail || {});
-
-        // Generate blurDataURL if thumbnail exists and is from Contentful
-        let blurDataURL = undefined;
-        if (parsedThumbnail?.src) {
-          blurDataURL = await makeBlurDataURL(parsedThumbnail.src);
-        }
-
-        // Only include blurDataURL if it has a valid value (Next.js requires serializable JSON)
-        const thumbnailWithBlur = { ...parsedThumbnail };
-        if (blurDataURL) {
-          thumbnailWithBlur.blurDataURL = blurDataURL;
-        }
-
-        return {
-          ...fields,
-          thumbnail: thumbnailWithBlur,
-        };
-      })
-    ),
+    items: posts.items.map(({ thumbnail, images: _images, ...fields }) => ({
+      thumbnail: thumbnail ? parseItem(thumbnail) : null,
+      ...fields,
+    })),
   };
+
+  // Add blurDataURLs to thumbnail.images in posts array
+  const postsWithBlurData = await addBlurDataURLs(parsedPosts.items, {
+    path: 'thumbnail',
+  });
 
   return {
     props: {
       page: pages.items[0] || {},
-      posts: postsWithBlurData,
+      posts: {
+        ...parsedPosts,
+        items: postsWithBlurData,
+      },
     },
   };
 };
