@@ -3,6 +3,7 @@ import {
   makeBlurDataURL,
   addBlurDataURLs,
   addContentfulParams,
+  clearBlurDataURLCache,
 } from 'helpers/contentful';
 
 describe('addContentfulParams', () => {
@@ -48,6 +49,7 @@ describe('addContentfulParams', () => {
 describe('makeBlurDataURL', () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    clearBlurDataURLCache();
   });
 
   it('returns undefined for non-Contentful URLs', () => {
@@ -129,6 +131,7 @@ describe('makeBlurDataURL', () => {
 describe('addBlurDataURLs', () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    clearBlurDataURLCache();
   });
 
   it('adds blurDataURL to Contentful images', async () => {

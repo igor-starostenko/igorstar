@@ -2,6 +2,11 @@
   https://www.contentful.com/developers/docs/references/images-api/#/reference
 */
 
+const BLUR_CONCURRENCY = 5;
+
+// Cache to avoid duplicate fetches for the same src
+const blurDataURLCache = new Map();
+
 // Timeout helper for fetch requests
 const fetchWithTimeout = async (url, options = {}, timeout = 15000) => {
   const controller = new AbortController();
@@ -23,6 +28,8 @@ const fetchWithTimeout = async (url, options = {}, timeout = 15000) => {
 export async function makeBlurDataURL(src) {
   if (!src || !src.includes('images.ctfassets.net')) return undefined;
 
+  if (blurDataURLCache.has(src)) return blurDataURLCache.get(src);
+
   try {
     // Use a tiny 12x12px with very low quality for minimal payload
     const u = new URL(src);
@@ -42,7 +49,9 @@ export async function makeBlurDataURL(src) {
     const contentType = response.headers.get('content-type') || 'image/jpeg';
     const base64 = Buffer.from(buffer).toString('base64');
 
-    return `data:${contentType};base64,${base64}`;
+    const dataURL = `data:${contentType};base64,${base64}`;
+    blurDataURLCache.set(src, dataURL);
+    return dataURL;
   } catch (error) {
     if (error.name === 'AbortError') {
       console.warn(`Timeout fetching blur placeholder: ${src}`);
@@ -72,44 +81,60 @@ const addContentfulParams = (url, width, height) => {
 
 // Add blurDataURL property to each image in an array if not already set
 export async function addBlurDataURLs(images = [], { path } = {}) {
-  return Promise.all(
-    images.map(async (item) => {
-      // If path is provided, navigate to nested object and add blurDataURL there
-      if (path) {
-        const keys = path.split('.');
-        let current = item;
+  const results = new Array(images.length);
 
-        // Navigate to the nested object
-        for (let i = 0; i < keys.length - 1; i += 1) {
-          if (!current || !current[keys[i]]) return item;
-          current = current[keys[i]];
+  for (let i = 0; i < images.length; i += BLUR_CONCURRENCY) {
+    const batch = images.slice(i, i + BLUR_CONCURRENCY);
+    const batchResults = await Promise.all(
+      batch.map(async (item) => {
+        // If path is provided, navigate to nested object and add blurDataURL there
+        if (path) {
+          const keys = path.split('.');
+          let current = item;
+
+          // Navigate to the nested object
+          for (let j = 0; j < keys.length - 1; j += 1) {
+            if (!current || !current[keys[j]]) return item;
+            current = current[keys[j]];
+          }
+
+          const lastKey = keys[keys.length - 1];
+          if (!current || !current[lastKey]) return item;
+
+          const image = current[lastKey];
+          // Only add blurDataURL if not already set
+          if (image && !('blurDataURL' in image)) {
+            const blurDataURL = image.src?.includes('images.ctfassets.net')
+              ? ((await makeBlurDataURL(image.src)) ?? null)
+              : null;
+            current[lastKey] = { ...image, blurDataURL };
+          }
+
+          return item;
         }
 
-        const lastKey = keys[keys.length - 1];
-        if (!current || !current[lastKey]) return item;
-
-        const image = current[lastKey];
-        // Only add blurDataURL if not already set
-        if (image && !('blurDataURL' in image)) {
-          const blurDataURL = image.src?.includes('images.ctfassets.net')
-            ? ((await makeBlurDataURL(image.src)) ?? null)
+        // Direct array of image objects
+        if (item && !('blurDataURL' in item)) {
+          const blurDataURL = item.src?.includes('images.ctfassets.net')
+            ? ((await makeBlurDataURL(item.src)) ?? null)
             : null;
-          current[lastKey] = { ...image, blurDataURL };
+          return { ...item, blurDataURL };
         }
-
         return item;
-      }
+      })
+    );
 
-      // Direct array of image objects
-      if (item && !('blurDataURL' in item)) {
-        const blurDataURL = item.src?.includes('images.ctfassets.net')
-          ? ((await makeBlurDataURL(item.src)) ?? null)
-          : null;
-        return { ...item, blurDataURL };
-      }
-      return item;
-    })
-  );
+    for (let k = 0; k < batchResults.length; k += 1) {
+      results[i + k] = batchResults[k];
+    }
+  }
+
+  return results;
 }
 
 export { addContentfulParams };
+
+// Exported for testing only – clears the in-memory blur data URL cache
+export function clearBlurDataURLCache() {
+  blurDataURLCache.clear();
+}
