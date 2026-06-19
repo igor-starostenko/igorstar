@@ -7,19 +7,19 @@ import {
 } from 'helpers/contentful';
 
 describe('addContentfulParams', () => {
-  it('adds w and h params to Contentful URL', () => {
+  it('adds w, h, fm, and q params to Contentful URL (defaults)', () => {
     const url = 'https://images.ctfassets.net/123/image.jpg';
     const result = addContentfulParams(url, 800, 600);
     expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600'
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=webp&q=30'
     );
   });
 
-  it('adds w and h params to URL with existing query', () => {
+  it('adds w, h, fm, and q params to URL with existing query (defaults)', () => {
     const url = 'https://images.ctfassets.net/123/image.jpg?token=abc';
     const result = addContentfulParams(url, 800, 600);
     expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?token=abc&w=800&h=600'
+      'https://images.ctfassets.net/123/image.jpg?token=abc&w=800&h=600&fm=webp&q=30'
     );
   });
 
@@ -41,15 +41,15 @@ describe('addContentfulParams', () => {
     const url = 'https://images.ctfassets.net/123/image.jpg#section';
     const result = addContentfulParams(url, 800, 600);
     expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600#section'
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=webp&q=30#section'
     );
   });
 
   it('adds format parameter', () => {
     const url = 'https://images.ctfassets.net/123/image.jpg';
-    const result = addContentfulParams(url, 800, 600, { format: 'webp' });
+    const result = addContentfulParams(url, 800, 600, { format: 'png' });
     expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&f=webp'
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=png&q=30'
     );
   });
 
@@ -57,18 +57,18 @@ describe('addContentfulParams', () => {
     const url = 'https://images.ctfassets.net/123/image.jpg';
     const result = addContentfulParams(url, 800, 600, { quality: 80 });
     expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&q=80'
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=webp&q=80'
     );
   });
 
   it('adds both format and quality parameters', () => {
     const url = 'https://images.ctfassets.net/123/image.jpg';
     const result = addContentfulParams(url, 800, 600, {
-      format: 'webp',
+      format: 'png',
       quality: 85,
     });
     expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&f=webp&q=85'
+      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=png&q=85'
     );
   });
 
@@ -79,7 +79,7 @@ describe('addContentfulParams', () => {
       quality: 90,
     });
     expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?token=abc&w=800&h=600&f=png&q=90'
+      'https://images.ctfassets.net/123/image.jpg?token=abc&w=800&h=600&fm=png&q=90'
     );
   });
 
