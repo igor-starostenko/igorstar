@@ -353,8 +353,5 @@ test('resets gallery state when photos prop changes (key behavior)', async () =>
   rerender(<Gallery key="post2" photos={photos2} />);
 
   // Gallery should be closed after photos change
-  await act(async () => {
-    // Wait for state reset to complete
-  });
   expect(screen.queryByTestId('mock-carousel')).not.toBeInTheDocument();
 });
