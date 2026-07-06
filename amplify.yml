@@ -3,8 +3,8 @@ frontend:
   phases:
     preBuild:
       commands:
-        - nvm install 24
-        - nvm use 24
+        - nvm install
+        - nvm use
         - corepack enable
     build:
       commands:
