@@ -3,10 +3,12 @@ frontend:
   phases:
     preBuild:
       commands:
-        - nvm install 17
+        - nvm install
+        - nvm use
+        - corepack enable
     build:
       commands:
-        - yarn install
+        - yarn install --immutable
         - yarn eslint src
         - yarn build
   artifacts:
@@ -15,5 +17,6 @@ frontend:
       - '**/*'
   cache:
     paths:
+      - .yarn/cache/**/*
       - node_modules/**/*
       - public/images/**/*

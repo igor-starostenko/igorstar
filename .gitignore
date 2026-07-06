@@ -1,6 +1,8 @@
 .DS_Store
 node_modules/
 .env
+coverage/
+analyze/
 
 # Logs
 logs
@@ -25,3 +27,8 @@ public/manifest.webmanifest
 public/sitemap.xml
 public/sitemap*.xml
 public/robots.txt
+.yarn/cache
+.yarn/install-state.gz
+
+# Claude settings (user-local)
+.claude/settings.local.json

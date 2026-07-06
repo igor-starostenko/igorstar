@@ -1,27 +1,22 @@
 import styled from 'styled-components';
-import ExportedImage from 'next-image-export-optimizer';
+import NextImage from 'next/image';
+
 import { colors } from 'constants/theme';
-import MEDIA from 'helpers/mediaTemplates';
+import MEDIA from 'helpers/mediaTemplates.js';
 
 export const ImageWrapper = styled.div`
-  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease-in-out;
-  border-radius: 2px;
-  overflow: hidden;
-  cursor: pointer;
+  position: relative;
+  width: fit-content;
+  margin: 0px auto;
   line-height: 0;
-  div {
-    transition: transform 2s;
-  }
-  :hover {
-    box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
-    div {
-      transform: scale(1.02);
-    }
+  box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
+
+  > a {
+    font-size: 0;
   }
 `;
 
-export const SImage = styled(ExportedImage)`
+export const SImage = styled(NextImage)`
   max-width: 100%;
   height: auto;
 `;
@@ -38,24 +33,6 @@ export const ImageFrame = styled.div`
   ${MEDIA.PHONE`
     opacity: 1;
   `}
-`;
-
-export const ImageContainer = styled.div`
-  position: relative;
-  width: fit-content;
-  margin: 0px auto;
-  line-height: 0;
-
-  > a {
-    font-size: 0;
-  }
-
-  :hover {
-    ${ImageFrame} {
-      opacity: 1;
-      cursor: pointer;
-    }
-  }
 `;
 
 export const ImageHeader = styled.div`
@@ -87,4 +64,23 @@ export const ImageCopyright = styled.span`
   bottom: 0px;
   right: 0px;
   font-size: 10px;
+`;
+
+export const ImageContainer = styled(ImageWrapper)`
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  img {
+    transition: transform 2s;
+  }
+
+  :hover {
+    ${ImageFrame} {
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    img {
+      transform: scale(1.02);
+    }
+  }
 `;
