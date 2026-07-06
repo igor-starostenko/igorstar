@@ -7,7 +7,7 @@ frontend:
         - nvm use 24
     build:
       commands:
-        - yarn install
+        - yarn install --immutable
         - yarn eslint src
         - yarn build
   artifacts:
@@ -16,5 +16,6 @@ frontend:
       - '**/*'
   cache:
     paths:
+      - .yarn/cache/**/*
       - node_modules/**/*
       - public/images/**/*
