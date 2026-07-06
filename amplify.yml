@@ -9,7 +9,7 @@ frontend:
         - npm -v
         - npm install -g corepack@latest
         - corepack enable
-        - corepack prepare yarn@4.9.1 --activate
+        - corepack prepare yarn@4.15.0 --activate
         - yarn -v
     build:
       commands:
