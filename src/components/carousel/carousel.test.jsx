@@ -61,3 +61,47 @@ test('calls onClose when clicking on modal overlay (keyboard)', () => {
   }
   expect(onClose).toHaveBeenCalled();
 });
+
+test('calls handleNext when clicking next button', () => {
+  const onClose = vi.fn();
+  const onIndexChange = vi.fn();
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={0}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+    />
+  );
+
+  fireEvent.click(screen.getByRole('button', { name: /next/i }));
+  expect(onIndexChange).toHaveBeenCalledWith(1);
+});
+
+test('calls handlePrev when clicking previous button', () => {
+  const onClose = vi.fn();
+  const onIndexChange = vi.fn();
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={1}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+    />
+  );
+
+  fireEvent.click(screen.getByRole('button', { name: /previous/i }));
+  expect(onIndexChange).toHaveBeenCalledWith(0);
+});
+
+test('calls onClose when clicking on modal content (keyboard)', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
+  );
+
+  // Test keyboard handler (Escape key)
+  const dialog = screen.getByRole('dialog');
+  fireEvent.keyDown(dialog, { key: 'Escape' });
+  expect(onClose).toHaveBeenCalled();
+});
