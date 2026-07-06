@@ -3,14 +3,9 @@ frontend:
   phases:
     preBuild:
       commands:
-        - nvm install 25.9.0
-        - nvm use 25.9.0
-        - node -v
-        - npm -v
-        - npm install -g corepack@latest
+        - nvm install
+        - nvm use
         - corepack enable
-        - corepack prepare yarn@4.15.0 --activate
-        - yarn -v
     build:
       commands:
         - yarn install --immutable
