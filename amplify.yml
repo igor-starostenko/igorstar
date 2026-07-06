@@ -5,6 +5,7 @@ frontend:
       commands:
         - nvm install 24
         - nvm use 24
+        - corepack enable
     build:
       commands:
         - yarn install --immutable
