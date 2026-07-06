@@ -51,15 +51,16 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
     touchEndX.current = null;
   }, [handlePrev, handleNext]);
 
-  // Handle click on modal to navigate
-  const handleModalClick = useCallback(
+  // Handle click to close or navigate
+  const handleClick = useCallback(
     (e) => {
-      // Don't trigger if clicking on the modal content itself
+      // Close modal if clicking directly on overlay
       if (e.target === e.currentTarget) {
         onClose();
         return;
       }
 
+      // Navigate based on click position within modal content
       const rect = e.currentTarget.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const modalWidth = rect.width;
@@ -75,6 +76,20 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
     },
     [onClose, handlePrev, handleNext]
   );
+
+  // Stop propagation on ModalContent clicks for buttons only
+  const handleContentClick = useCallback((e) => {
+    // If clicked on or inside a button, don't bubble - let the onClick handler fire
+    const isButton =
+      e.target.closest('button') !== null &&
+      (e.target.closest('button').getAttribute('aria-label') === 'Close' ||
+        e.target.closest('button').getAttribute('aria-label') ===
+          'Previous image' ||
+        e.target.closest('button').getAttribute('aria-label') === 'Next image');
+    if (isButton) {
+      e.stopPropagation();
+    }
+  }, []);
 
   useEffect(() => {
     const handleKeyDownHandler = (e) => {
@@ -92,11 +107,11 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   const altText = (view?.alt || view?.description) ?? '';
 
   return (
-    <ModalOverlay onClick={handleModalClick}>
+    <ModalOverlay onClick={handleClick}>
       <ModalContent
         role="dialog"
         aria-modal="true"
-        onClick={(e) => e.stopPropagation()}
+        onClick={handleContentClick} // Stop propagation for clicks
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
