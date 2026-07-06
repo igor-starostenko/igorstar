@@ -79,16 +79,8 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
 
   // Stop propagation on ModalContent clicks for buttons only
   const handleContentClick = useCallback((e) => {
-    // If clicked on or inside a button, don't bubble - let the onClick handler fire
-    const isButton =
-      e.target.closest('button') !== null &&
-      (e.target.closest('button').getAttribute('aria-label') === 'Close' ||
-        e.target.closest('button').getAttribute('aria-label') ===
-          'Previous image' ||
-        e.target.closest('button').getAttribute('aria-label') === 'Next image');
-    if (isButton) {
-      e.stopPropagation();
-    }
+    const button = e.target.closest('button');
+    if (button) e.stopPropagation();
   }, []);
 
   useEffect(() => {
