@@ -5,14 +5,15 @@ frontend:
       commands:
         - nvm install 25.9.0
         - nvm use 25.9.0
-        # Install missing system library for Node 25 on Amazon Linux
-        - yum update -y || true
-        - yum install -y libatomic || true
-        # Enable Corepack to get Yarn 4.x
+        - node -v
+        - npm -v
+        - npm install -g corepack@latest
         - corepack enable
+        - corepack prepare yarn@4.15.0 --activate
+        - yarn -v
     build:
       commands:
-        - yarn install
+        - yarn install --immutable
         - yarn eslint src
         - yarn build
   artifacts:
@@ -21,5 +22,6 @@ frontend:
       - '**/*'
   cache:
     paths:
+      - .yarn/cache/**/*
       - node_modules/**/*
       - public/images/**/*
