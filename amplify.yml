@@ -3,12 +3,8 @@ frontend:
   phases:
     preBuild:
       commands:
-        - nvm install 25.9.0
-        - nvm use 25.9.0
-        # Install missing system library for Node 25
-        - apt-get update && apt-get install -y libatomic1 || true
-        # Enable Corepack to get Yarn 4.x
-        - corepack enable
+        - nvm install 22
+        - nvm use 22
     build:
       commands:
         - yarn install
