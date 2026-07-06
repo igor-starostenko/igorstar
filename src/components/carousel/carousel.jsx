@@ -52,26 +52,29 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   }, [handlePrev, handleNext]);
 
   // Handle click on modal to navigate
-  const handleModalClick = useCallback((e) => {
-    // Don't trigger if clicking on the modal content itself
-    if (e.target === e.currentTarget) {
-      onClose();
-      return;
-    }
+  const handleModalClick = useCallback(
+    (e) => {
+      // Don't trigger if clicking on the modal content itself
+      if (e.target === e.currentTarget) {
+        onClose();
+        return;
+      }
 
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const modalWidth = rect.width;
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const modalWidth = rect.width;
 
-    // Click on left side (first 40%) - previous image
-    if (clickX < modalWidth * 0.4) {
-      handlePrev();
-    }
-    // Click on right side (last 40%) - next image
-    else if (clickX > modalWidth * 0.6) {
-      handleNext();
-    }
-  }, [onClose, handlePrev, handleNext]);
+      // Click on left side (first 40%) - previous image
+      if (clickX < modalWidth * 0.4) {
+        handlePrev();
+      }
+      // Click on right side (last 40%) - next image
+      else if (clickX > modalWidth * 0.6) {
+        handleNext();
+      }
+    },
+    [onClose, handlePrev, handleNext]
+  );
 
   useEffect(() => {
     const handleKeyDownHandler = (e) => {
