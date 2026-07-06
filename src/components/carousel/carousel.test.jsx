@@ -94,7 +94,7 @@ test('calls handlePrev when clicking previous button', () => {
   expect(onIndexChange).toHaveBeenCalledWith(0);
 });
 
-test('calls onClose when clicking on modal content (keyboard)', () => {
+test('calls onClose on Escape keydown', () => {
   const onClose = vi.fn();
   render(
     <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
