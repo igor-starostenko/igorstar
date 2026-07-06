@@ -214,6 +214,7 @@ const Post = ({ post, recommendations }) => {
         <div style={{ margin: '0 -4rem' }}>
           {images.length > 0 && (
             <Gallery
+              key={post.path}
               photos={images}
               order="asc"
               targetRowHeight={targetRowHeight}

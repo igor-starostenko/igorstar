@@ -62,7 +62,7 @@
     "chrome-launcher": "^0.14.2",
     "contentful-cli": "^4.0.1",
     "contentful-management": "^12.5.0",
-    "contentful-migration": "^4.5.9",
+    "contentful-migration": "^5.0.0",
     "core-js": "^3.19.1",
     "directory-named-webpack-plugin": "^4.0.0",
     "eslint": "^9.7.0",
