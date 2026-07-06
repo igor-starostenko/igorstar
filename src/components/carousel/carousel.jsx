@@ -61,10 +61,10 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
       }
 
       // Navigate based on click position within modal content
-      const rect = e.currentTarget.getBoundingClientRect();
+      const dialog = e.target.closest('[role="dialog"]');
+      const rect = (dialog ?? e.currentTarget).getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const modalWidth = rect.width;
-
       // Click on left side (first 40%) - previous image
       if (clickX < modalWidth * 0.4) {
         handlePrev();
