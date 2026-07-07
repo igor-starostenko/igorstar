@@ -16,4 +16,5 @@ RUN yarn build
 
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+# Default: run lighthouse tests
+CMD ["yarn", "test:lighthouse"]
