@@ -29,6 +29,8 @@ public/sitemap*.xml
 public/robots.txt
 .yarn/cache
 .yarn/install-state.gz
+/graphify-out/
 
 # Claude settings (user-local)
 .claude/settings.local.json
+
