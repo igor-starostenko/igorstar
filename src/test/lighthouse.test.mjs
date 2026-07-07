@@ -12,7 +12,7 @@ const targetUrl = process.env.SITE_URL || siteConfig.siteUrl;
 
 const launchChromeAndRunLighthouse = (
   url,
-  opts = { chromeFlags: ['--headless=new', '--no-sandbox'] },
+  opts = { chromeFlags: ['--headless=new', '--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] },
   config = null
 ) => {
   console.log('launchChromeAndRunLighthouse called with url:', url);
@@ -24,21 +24,21 @@ const launchChromeAndRunLighthouse = (
 
   return chromeLauncher
     .launch(launchOptions)
-    .then(chrome => {
+    .then((chrome) => {
       console.log('Chrome launched on port:', chrome.port);
       opts.port = chrome.port;
       return lighthouse(url, opts, config)
-        .then(lhr => {
+        .then((lhr) => {
           console.log('Lighthouse completed');
           return lhr;
         })
-        .catch(lhErr => {
+        .catch((lhErr) => {
           console.error('Lighthouse error:', lhErr.message);
           throw lhErr;
         })
         .finally(() => chrome.kill());
     })
-    .catch(launchErr => {
+    .catch((launchErr) => {
       console.error('Chrome launch error:', launchErr.message);
       throw launchErr;
     });
@@ -51,7 +51,7 @@ describe('Lighthouse Scores', () => {
       lhrData = await launchChromeAndRunLighthouse(targetUrl);
       results = {
         categories: lhrData.lhr.categories,
-        audits: lhrData.lhr.audits
+        audits: lhrData.lhr.audits,
       };
       chromeAvailable = true;
     } catch (e) {
