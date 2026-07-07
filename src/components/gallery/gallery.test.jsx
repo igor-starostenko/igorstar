@@ -327,3 +327,31 @@ test('renders gallery with single photo', async () => {
   const images = getGalleryImages();
   expect(images.length).toBe(1);
 });
+
+test('resets gallery state when photos prop changes (key behavior)', async () => {
+  const photos1 = [
+    { id: '1', src: '/a.jpg', alt: 'A image', width: 100, height: 200 },
+  ];
+  const photos2 = [
+    { id: '2', src: '/b.jpg', alt: 'B image', width: 200, height: 100 },
+  ];
+
+  const { rerender } = render(<Gallery photos={photos1} />);
+
+  // Open the gallery with the first photo
+  await act(async () => {
+    const images = getGalleryImages();
+    if (images.length > 0) {
+      fireEvent.click(images[0]);
+    }
+  });
+
+  // Verify carousel is open
+  expect(screen.getByTestId('mock-carousel')).toBeInTheDocument();
+
+  // Rerender with different photos (simulating navigation to new post)
+  rerender(<Gallery key="post2" photos={photos2} />);
+
+  // Gallery should be closed after photos change
+  expect(screen.queryByTestId('mock-carousel')).not.toBeInTheDocument();
+});

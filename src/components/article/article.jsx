@@ -56,7 +56,9 @@ const Article = ({
         </SLink>
       )}
       <Row>
-        <Title as="h2">{title}</Title>
+        <SLink href={href}>
+          <Title as="h2">{title}</Title>
+        </SLink>
         <DateText isMobile={false} date={date} />
       </Row>
       <Hashtags tags={tags} />

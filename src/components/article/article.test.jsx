@@ -135,3 +135,13 @@ test('constructs correct href for links', () => {
   const links = screen.getAllByRole('link');
   expect(links[0]).toHaveAttribute('href', '/travel/my-trip');
 });
+
+test('title is wrapped in link to post detail page', () => {
+  render(<Article {...mockArticleProps} />);
+
+  // Title should be inside an SLink (which renders as <a> in test)
+  const title = screen.getByText('My Amazing Trip');
+  const parentLink = title.closest('a');
+  expect(parentLink).toBeInTheDocument();
+  expect(parentLink).toHaveAttribute('href', '/travel/my-trip');
+});

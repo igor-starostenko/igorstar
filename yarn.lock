@@ -4627,19 +4627,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"contentful-management@npm:^11.72.2":
-  version: 11.76.0
-  resolution: "contentful-management@npm:11.76.0"
-  dependencies:
-    "@contentful/rich-text-types": "npm:^16.6.1"
-    axios: "npm:^1.15.0"
-    contentful-sdk-core: "npm:^9.4.4"
-    fast-copy: "npm:^3.0.0"
-    globals: "npm:^15.15.0"
-  checksum: 10c0/35cba851260d073e3a0836fbdd89a0c08f59e9ad94da3e51649fd676bf277d4f077d7d0daf67ebf35835c379a3db5e03e132c8dc167be5c918e09a3c441b66f0
-  languageName: node
-  linkType: hard
-
 "contentful-management@npm:^12.2.0, contentful-management@npm:^12.5.0":
   version: 12.5.0
   resolution: "contentful-management@npm:12.5.0"
@@ -4651,33 +4638,6 @@ __metadata:
     globals: "npm:^15.15.0"
     process: "npm:^0.11.10"
   checksum: 10c0/fc49adfb435d75bf2bd10120f7f9d4ccfa9c248208d6e5bbca8c0a79f84db828d62b843fabadd438d3977365ad7a5039022ba544400bd42a68df3ed76aed7889
-  languageName: node
-  linkType: hard
-
-"contentful-migration@npm:^4.5.9":
-  version: 4.32.0
-  resolution: "contentful-migration@npm:4.32.0"
-  dependencies:
-    "@hapi/hoek": "npm:^11.0.4"
-    axios: "npm:^1.13.5"
-    bluebird: "npm:^3.7.2"
-    callsites: "npm:^3.1.0"
-    cardinal: "npm:^2.1.1"
-    chalk: "npm:^4.0.0"
-    contentful-management: "npm:^11.72.2"
-    didyoumean2: "npm:^7.0.4"
-    https-proxy-agent: "npm:^5.0.0"
-    inquirer: "npm:^8.2.7"
-    joi: "npm:^17.4.0"
-    kind-of: "npm:^6.0.3"
-    listr2: "npm:^3.13.5"
-    lodash: "npm:^4.17.23"
-    p-throttle: "npm:^4.1.1"
-    uuid: "npm:^10.0.0"
-    yargs: "npm:^15.3.1"
-  bin:
-    contentful-migration: bin/contentful-migration
-  checksum: 10c0/2de032ff46194fac13067a9e8852b44cd6993e755f7a6f3eaf9d1b2f147e8186d2d5d0498d7b83e8fe83fabc70a9a3299cc3a3ae41a9097a83548ba4ae383065
   languageName: node
   linkType: hard
 
@@ -6804,7 +6764,7 @@ __metadata:
     contentful: "npm:^11.12.2"
     contentful-cli: "npm:^4.0.1"
     contentful-management: "npm:^12.5.0"
-    contentful-migration: "npm:^4.5.9"
+    contentful-migration: "npm:^5.0.0"
     core-js: "npm:^3.19.1"
     directory-named-webpack-plugin: "npm:^4.0.0"
     dotenv: "npm:^17.4.2"

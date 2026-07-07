@@ -1,0 +1,75 @@
+name: Lighthouse Audit
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL to audit (default: https://igorstar.com)'
+        required: false
+        default: 'https://igorstar.com'
+      thresholds:
+        description: 'Performance threshold (0-1, default: 0.9)'
+        required: false
+        default: '0.9'
+
+jobs:
+  lighthouse-audit:
+    name: Run Lighthouse Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run Lighthouse Audit
+        env:
+          URL: ${{ github.event.inputs.url }}
+          THRESHOLD: ${{ github.event.inputs.thresholds }}
+        run: |
+          echo "Auditing URL: ${URL:-https://igorstar.com}"
+          npx lighthouse "${URL:-https://igorstar.com}" \
+            --output=json \
+            --output-path=lighthouse-report.json \
+            --quiet \
+            --chrome-flags="--no-sandbox"
+
+      - name: Upload Lighthouse Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: lighthouse-report.json
+          retention-days: 7
+
+      - name: Display Performance Score
+        run: |
+          if [ -f lighthouse-report.json ]; then
+            echo "=== Lighthouse Performance Report ==="
+            cat lighthouse-report.json | jq -r '
+              .lhr.categories.performance.score as $perf |
+              "Performance Score: \($perf | . * 100 | floor)%"'
+          fi
+
+      - name: Check Performance Threshold
+        if: ${{ github.event.inputs.thresholds != '' }}
+        run: |
+          THRESHOLD=${{ github.event.inputs.thresholds }}
+          SCORE=$(cat lighthouse-report.json | jq -r '.lhr.categories.performance.score')
+          
+          echo "Threshold: ${THRESHOLD}"
+          echo "Score: ${SCORE}"
+          
+          if (( $(echo "$SCORE < $THRESHOLD" | bc -l) )); then
+            echo "::error::Performance score ($SCORE) is below threshold ($THRESHOLD)"
+            exit 1
+          else
+            echo "✓ Performance score meets threshold"
+          fi
