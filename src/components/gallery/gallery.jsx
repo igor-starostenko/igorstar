@@ -74,8 +74,8 @@ const orderArray = (array, orderBy, order) => {
   if (!['desc', 'asc'].includes(direction)) return array;
 
   const sortFun = createSortFunction(orderBy);
-  array.sort(sortFun);
-  return direction === 'desc' ? array.reverse() : array;
+  const sortedArray = [...array].sort(sortFun);
+  return direction === 'desc' ? sortedArray.reverse() : sortedArray;
 };
 
 const Gallery = ({
