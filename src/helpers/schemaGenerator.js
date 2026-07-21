@@ -19,6 +19,7 @@ const schemaGenerator = ({
 
   const graph = [websiteSchema, pageSchema];
 
+  // Use @graph pattern to avoid Safari bug with array root
   return {
     '@context': 'https://schema.org',
     '@graph': graph,
