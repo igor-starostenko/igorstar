@@ -1,8 +1,6 @@
-import styled from 'styled-components';
-import Link from 'next/link';
-import { colors } from 'constants/theme';
-import MEDIA from 'helpers/mediaTemplates';
-import BaseImage, { sizes } from 'components/image/baseImage.jsx';
+import PropTypes from 'prop-types';
+import Hashtags from 'components/hashtags/hashtags.jsx';
+import { sizes } from 'constants/imageConfig.js';
 
 export const Container = styled.div`
   margin-top: 7rem;

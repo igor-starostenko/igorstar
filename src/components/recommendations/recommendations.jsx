@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Hashtags from 'components/hashtags/hashtags.jsx';
-import { sizes } from 'constants/imageConfig.js';
+import { sizes, maxWidth, componentSizes } from 'constants/imageConfig.js';
 import {
   Container,
   Card,
@@ -48,14 +48,17 @@ Recommendations.propTypes = {
   posts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
-      description: PropTypes.string.isRequired,
       linkText: PropTypes.string,
-      thumbnail: PropTypes.object,
+      thumbnail: PropTypes.shape({
+        src: PropTypes.string,
+        alt: PropTypes.string,
+        backupSrc: PropTypes.string,
+      }),
     })
   ),
 };

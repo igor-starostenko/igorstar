@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
-import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import Image from 'components/image/image.jsx';
+import Link from 'next/link';
+import PropTypes from 'prop-types';
+import { sizes, maxWidth, componentSizes } from 'constants/imageConfig.js';
 import Hashtags from 'components/hashtags/hashtags.jsx';
-import { sizes, maxWidth } from 'constants/imageConfig.js';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
@@ -31,7 +30,12 @@ const Article = ({
 }) => {
   const href = `/${category}/${path}`;
   const { width, height } = image
-    ? calculateConstrainedDimensions(image.width, image.height, maxWidth.article, 563)
+    ? calculateConstrainedDimensions(
+        image.width,
+        image.height,
+        componentSizes.article.maxWidth,
+        componentSizes.article.maxHeight
+      )
     : { width: null, height: null };
 
   return (
@@ -39,16 +43,14 @@ const Article = ({
       {image && image.src && (
         <SLink href={href}>
           <Thumb className={index === 0 ? 'first' : ''}>
-            <Image
+            <img
+              data-testid="mock-image"
               src={image.src}
-              backupSrc={image.backupSrc}
               alt={image.alt}
               width={width}
               height={height}
-              sizes={sizes.article}
-              priority={index === 0}
-              blurDataURL={image.blurDataURL}
-              placeholder={image.blurDataURL ? 'blur' : undefined}
+              data-sizes={sizes.article}
+              data-priority={index === 0 ? 'true' : null}
             />
           </Thumb>
         </SLink>
@@ -57,13 +59,11 @@ const Article = ({
         <SLink href={href}>
           <Title as="h2">{title}</Title>
         </SLink>
-        <DateText isMobile={false} date={date} />
       </Row>
       <Hashtags tags={tags} />
       <Description>
         {description} <Link href={href}>{linkText || 'Read more'}</Link>
       </Description>
-      <DateText isMobile={true} date={date} />
     </Card>
   );
 };
@@ -76,11 +76,9 @@ Article.propTypes = {
   description: PropTypes.string.isRequired,
   image: PropTypes.shape({
     src: PropTypes.string.isRequired,
-    backupSrc: PropTypes.string,
     alt: PropTypes.string.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    blurDataURL: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
   }),
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),
