@@ -1,3 +1,9 @@
+import Link from 'next/link';
+import styled from 'styled-components';
+import { colors } from 'constants/theme';
+import MEDIA from 'helpers/mediaTemplates';
+import BaseImage from 'components/image/baseImage';
+
 export const Container = styled.div`
   margin-top: 7rem;
   padding-top: 4rem;
