@@ -7,6 +7,7 @@ export const componentSizes = {
   recommendations: {
     sizes: '(max-width: 768px) 100vw, (max-width: 1024px) 30vw, (max-width: 1440px) 25vw, 20vw',
     maxWidth: 500,
+    maxHeight: 400,
   },
   gallery: {
     sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 85vw',
@@ -16,6 +17,7 @@ export const componentSizes = {
   selfie: {
     sizes: '100px',
     maxWidth: 150,
+    maxHeight: 150,
   },
 };
 
