@@ -106,6 +106,10 @@ const Gallery = ({
     setCurrentPhoto(null);
   };
 
+  const handleIndexChange = (newIndex) => {
+    setCurrentPhoto(newIndex);
+  };
+
   return (
     <>
       <GalleryContainer>
@@ -120,6 +124,7 @@ const Gallery = ({
           views={mappedPhotos}
           currentIndex={currentPhoto}
           onClose={handleCloseModal}
+          onIndexChange={handleIndexChange}
         />
       )}
     </>
