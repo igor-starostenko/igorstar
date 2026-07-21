@@ -50,6 +50,7 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       height: targetRowHeight,
       sizes: componentSizes.gallery.sizes,
       alt: photo.description || photo.alt || '',
+      description: photo.description || '',
       blurDataURL: photo.blurDataURL,
     };
   });
