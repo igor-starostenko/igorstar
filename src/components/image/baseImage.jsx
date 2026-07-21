@@ -20,6 +20,7 @@ const BaseImage = ({
   if (isError) {
     if (!backupSrc) return null;
     const { priority: _priority, ...domRest } = rest;
+    // eslint-disable-next-line @next/next/no-img-element
     return (
       <img
         src={backupSrc}

@@ -1,13 +1,8 @@
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import PropTypes from 'prop-types';
-import { sizes, maxWidth, componentSizes } from 'constants/imageConfig.js';
 import Hashtags from 'components/hashtags/hashtags.jsx';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
-
-const DateText = dynamic(() => import('components/date/date.jsx'), {
-  ssr: false,
-});
+import { sizes, componentSizes } from 'constants/imageConfig.js';
+import PropTypes from 'prop-types';
 
 const calculateConstrainedDimensions = (width, height, maxWidth, maxHeight) => {
   const scale = Math.min(maxWidth / width, maxHeight / height, 1);
@@ -23,7 +18,6 @@ const Article = ({
   path,
   title,
   image = null,
-  date,
   description,
   tags = [],
   linkText,
@@ -80,7 +74,6 @@ Article.propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
   }),
-  date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),
   linkText: PropTypes.string,
 };

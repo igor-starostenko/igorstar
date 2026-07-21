@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Hashtags from 'components/hashtags/hashtags.jsx';
-import { sizes, maxWidth, componentSizes } from 'constants/imageConfig.js';
+import { sizes, componentSizes } from 'constants/imageConfig.js';
 import {
   Container,
   Card,

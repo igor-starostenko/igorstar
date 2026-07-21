@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types';
-import Hashtags from 'components/hashtags/hashtags.jsx';
-import { sizes } from 'constants/imageConfig.js';
+import { componentSizes } from 'constants/imageConfig.js';
 
 export const Container = styled.div`
   margin-top: 7rem;

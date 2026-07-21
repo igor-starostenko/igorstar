@@ -5,7 +5,7 @@ import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
-import { sizes, maxWidth, componentSizes } from 'constants/imageConfig.js';
+import { sizes, componentSizes } from 'constants/imageConfig.js';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -46,15 +46,6 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
 
     const resolutionMultiplier = 2;
     const maxGalleryWidth = Math.round(constrainedWidth * resolutionMultiplier);
-    const requestedWidth = Math.min(
-      originalWidth,
-      componentSizes.gallery.maxWidth,
-      maxGalleryWidth
-    );
-    const requestedHeight = Math.min(
-      originalHeight,
-      Math.round(targetRowHeight * resolutionMultiplier)
-    );
 
     return {
       src: photo.src,
