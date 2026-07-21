@@ -46,7 +46,7 @@ describe('Lighthouse Scores', () => {
         audits: lhrData.lhr.audits,
       };
       chromeAvailable = true;
-    } catch (e) {
+    } catch (_e) {
       console.log('Lighthouse test skipped - Chrome not available');
     }
   });

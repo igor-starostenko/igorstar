@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SImage } from './image.css.js';
@@ -20,7 +21,6 @@ const BaseImage = ({
   if (isError) {
     if (!backupSrc) return null;
     const { priority: _priority, ...domRest } = rest;
-    // eslint-disable-next-line @next/next/no-img-element
     return (
       <img
         src={backupSrc}

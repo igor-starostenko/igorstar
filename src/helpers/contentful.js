@@ -1,4 +1,4 @@
-import { imageQuality, imageFormat } from '../constants/imageConfig.js';
+import { imageFormat } from '../constants/imageConfig.js';
 
 const BLUR_CONCURRENCY = Number(process.env.BLUR_CONCURRENCY ?? 1);
 const CONTENTFUL_TIMEOUT = 15000;

@@ -44,9 +44,6 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     const aspectRatio = originalWidth / originalHeight;
     const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
 
-    const resolutionMultiplier = 2;
-    const maxGalleryWidth = Math.round(constrainedWidth * resolutionMultiplier);
-
     return {
       src: photo.src,
       width: constrainedWidth,
