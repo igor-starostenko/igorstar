@@ -5,7 +5,7 @@ import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
-import { sizes, componentSizes } from 'constants/imageConfig.js';
+import { componentSizes } from 'constants/imageConfig.js';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
@@ -51,7 +51,7 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       src: photo.src,
       width: constrainedWidth,
       height: targetRowHeight,
-      sizes: sizes.gallery,
+      sizes: componentSizes.gallery.sizes,
       alt: photo.description || photo.alt || '',
       blurDataURL: photo.blurDataURL,
     };

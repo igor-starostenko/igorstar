@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Hashtags from 'components/hashtags/hashtags.jsx';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
-import { sizes, componentSizes } from 'constants/imageConfig.js';
+import { componentSizes } from 'constants/imageConfig.js';
 import PropTypes from 'prop-types';
 
 const calculateConstrainedDimensions = (width, height, maxWidth, maxHeight) => {
@@ -43,7 +43,7 @@ const Article = ({
               alt={image.alt}
               width={width}
               height={height}
-              data-sizes={sizes.article}
+              data-sizes={componentSizes.article.sizes}
               data-priority={index === 0 ? 'true' : null}
             />
           </Thumb>
