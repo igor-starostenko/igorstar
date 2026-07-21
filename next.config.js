@@ -6,7 +6,7 @@ dotenv.config({ path: '.env', override: true });
 const next_config = {
   output: 'export',
   images: {
-    loaderFile: './src/lib/contentfulLoader.js',
+    loaderFile: './src/helpers/contentfulLoader.js',
     remotePatterns: [
       {
         protocol: 'https',
