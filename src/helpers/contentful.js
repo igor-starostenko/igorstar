@@ -52,41 +52,6 @@ export async function makeBlurDataURL(src) {
   }
 }
 
-export const addContentfulParams = (
-  url,
-  width,
-  height,
-  { format = imageFormat, quality = imageQuality } = {}
-) => {
-  if (!url || !width || !height) return url;
-  if (!url.includes('images.ctfassets.net')) return url;
-
-  try {
-    const u = new URL(url);
-    u.searchParams.set('w', String(width));
-    u.searchParams.set('h', String(height));
-    if (format) u.searchParams.set('fm', format);
-    if (quality) u.searchParams.set('q', String(quality));
-    return u.toString();
-  } catch {
-    try {
-      const [beforeHash, hash] = String(url).split('#');
-      const [base, query = ''] = beforeHash.split('?');
-      const params = new URLSearchParams(query);
-
-      params.set('w', String(width));
-      params.set('h', String(height));
-      if (format) params.set('fm', format);
-      if (quality) params.set('q', String(quality));
-
-      const qs = params.toString();
-      return `${base}${qs ? `?${qs}` : ''}${hash ? `#${hash}` : ''}`;
-    } catch {
-      return url;
-    }
-  }
-};
-
 export async function addBlurDataURLs(images = [], { path } = {}) {
   const results = new Array(images.length);
 
