@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
-import BaseImage from 'components/image/baseImage.jsx';
+import BaseImage, { sizes } from 'components/image/baseImage.jsx';
 
 export const Container = styled.div`
   margin-top: 7rem;
@@ -56,6 +56,8 @@ export const ThumbWrapper = styled.div`
 export const Thumb = styled(BaseImage)`
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
   position: relative !important;
+  width: 100%;
+  height: auto;
 `;
 
 export const Details = styled.div`

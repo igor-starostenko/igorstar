@@ -5,12 +5,10 @@ import { RowsPhotoAlbum } from 'react-photo-album';
 import 'react-photo-album/rows.css';
 import { GalleryContainer, GalleryImageWrapper } from './gallery.css.js';
 import NextImage from 'next/image';
-import { sizes as defaultSizes } from 'constants/imageConfig.js';
-import { addContentfulParams } from 'helpers/contentful';
+import { sizes, maxWidth } from 'constants/imageConfig.js';
 
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
-/* Next.js Image renderer for react-photo-album */
 const renderNextImage = (
   { alt, title, sizes },
   { photo, width, height, index }
@@ -38,40 +36,27 @@ const renderNextImage = (
   </GalleryImageWrapper>
 );
 
-// Map gallery photos to react-photo-album format
 const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
   photos.map((photo) => {
-    // Get original dimensions or use fallbacks
     const originalWidth = photo.width || 1200;
     const originalHeight = photo.height || 800;
 
-    // Calculate aspect ratio from original dimensions
     const aspectRatio = originalWidth / originalHeight;
-
-    // Use targetRowHeight as the height constraint, calculate proportional width
     const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
 
-    // Add Contentful image optimization params for better performance
     const resolutionMultiplier = 2;
-    const requestedWidth = Math.min(
-      originalWidth,
-      Math.round(constrainedWidth * resolutionMultiplier)
-    );
+    const maxGalleryWidth = Math.round(constrainedWidth * resolutionMultiplier);
+    const requestedWidth = Math.min(originalWidth, maxWidth.gallery, maxGalleryWidth);
     const requestedHeight = Math.min(
       originalHeight,
       Math.round(targetRowHeight * resolutionMultiplier)
     );
-    const optimizedSrc = addContentfulParams(
-      photo.src,
-      requestedWidth,
-      requestedHeight
-    );
 
     return {
-      src: optimizedSrc || photo.src,
+      src: photo.src,
       width: constrainedWidth,
       height: targetRowHeight,
-      sizes: defaultSizes,
+      sizes: sizes.gallery,
       alt: photo.description || photo.alt || '',
       blurDataURL: photo.blurDataURL,
     };
@@ -100,79 +85,65 @@ const orderArray = (array, orderBy, order) => {
 
 const Gallery = ({
   photos,
-  order,
   orderBy,
+  order = 'desc',
   targetRowHeight = 150,
-  spacing = 2,
-  containerWidth = 900,
 }) => {
-  const [isOpen, setOpen] = useState(false);
-  const [current, setCurrent] = useState(0);
+  const [currentPhoto, setCurrentPhoto] = useState(null);
 
-  const images = useMemo(
-    () => orderArray([...photos], orderBy, order),
-    [photos, order, orderBy]
+  const sortedPhotos = useMemo(
+    () => orderArray(photos, orderBy, order),
+    [photos, orderBy, order]
   );
 
-  // Handle click on photo in PhotoAlbum (returns index)
-  const handlePhotoClick = (_event, arg) => {
-    // react-photo-album passes index/photo info in different ways:
-    // - _event.index (direct property on event)
-    // - arg.index (second parameter object)
-    // - arg directly as index number
-    const idx =
-      _event.index ??
-      _event.detail?.index ??
-      (typeof arg === 'object' && arg !== null ? arg.index : undefined) ??
-      (typeof arg === 'number' ? arg : undefined);
-    if (typeof idx === 'number' && idx >= 0) {
-      setCurrent(idx);
-      setOpen(true);
-    }
+  const mappedPhotos = useMemo(
+    () => mapToPhotoAlbumFormat(sortedPhotos, targetRowHeight),
+    [sortedPhotos, targetRowHeight]
+  );
+
+  const handlePhotoClick = (photo) => {
+    setCurrentPhoto(photo);
   };
 
-  const photoAlbumPhotos = useMemo(
-    () => mapToPhotoAlbumFormat(images, targetRowHeight),
-    [images, targetRowHeight]
-  );
+  const handleCloseModal = () => {
+    setCurrentPhoto(null);
+  };
 
   return (
-    <div>
-      {photos.length > 0 && (
-        <GalleryContainer $spacing={spacing} $containerWidth={containerWidth}>
-          <RowsPhotoAlbum
-            photos={photoAlbumPhotos}
-            onClick={handlePhotoClick}
-            render={{ image: renderNextImage }}
-            targetRowHeight={targetRowHeight}
-            spacing={spacing}
-            padding={0}
-          />
-        </GalleryContainer>
-      )}
-
-      {isOpen && (
+    <>
+      <GalleryContainer>
+        <RowsPhotoAlbum
+          photos={mappedPhotos}
+          renderNextImage={renderNextImage}
+          onClick={handlePhotoClick}
+        />
+      </GalleryContainer>
+      {currentPhoto && (
         <Carousel
-          onClose={() => {
-            setCurrent(0);
-            setOpen(false);
-          }}
-          views={images}
-          currentIndex={current}
-          onIndexChange={setCurrent}
+          photos={mappedPhotos}
+          currentPhoto={currentPhoto}
+          onClose={handleCloseModal}
         />
       )}
-    </div>
+    </>
   );
 };
 
 Gallery.propTypes = {
-  photos: PropTypes.arrayOf(PropTypes.object).isRequired,
-  order: PropTypes.string,
+  photos: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string,
+      url: PropTypes.string,
+      width: PropTypes.number,
+      height: PropTypes.number,
+      blurDataURL: PropTypes.string,
+      description: PropTypes.string,
+      alt: PropTypes.string,
+    })
+  ),
   orderBy: PropTypes.string,
+  order: PropTypes.oneOf(['asc', 'desc']),
   targetRowHeight: PropTypes.number,
-  spacing: PropTypes.number,
-  containerWidth: PropTypes.number,
 };
 
 export default Gallery;

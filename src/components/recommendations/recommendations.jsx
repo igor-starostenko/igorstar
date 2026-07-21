@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Hashtags from 'components/hashtags/hashtags.jsx';
+import { sizes } from 'constants/imageConfig.js';
 import {
   Container,
   Card,
@@ -23,6 +24,7 @@ const Recommendations = ({ category, posts }) => (
                   backupSrc={post.thumbnail.backupSrc}
                   alt={post.thumbnail.alt || post.title}
                   fill
+                  sizes={sizes.recommendations}
                 />
               </ThumbWrapper>
             )}

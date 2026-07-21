@@ -49,10 +49,13 @@ describe('Lighthouse Scores', () => {
     console.log(`Auditing ${targetUrl}.\n`);
     try {
       lhrData = await launchChromeAndRunLighthouse(targetUrl);
+      console.log('Full LHR structure:', JSON.stringify(lhrData, null, 2).substring(0, 500));
       results = {
         categories: lhrData.lhr.categories,
         audits: lhrData.lhr.audits,
       };
+      console.log('Categories:', Object.keys(results.categories));
+      console.log('Performance category:', JSON.stringify(results.categories['performance'], null, 2).substring(0, 200));
       chromeAvailable = true;
     } catch (e) {
       console.error(e);

@@ -22,7 +22,6 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
     onIndexChange(newIndex);
   }, [currentIndex, views.length, onIndexChange]);
 
-  // Handle touch events for swipe
   const handleTouchStart = useCallback((e) => {
     touchStartX.current = e.touches[0].clientX;
   }, []);
@@ -35,49 +34,35 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
     if (touchStartX.current === null || touchEndX.current === null) return;
 
     const deltaX = touchStartX.current - touchEndX.current;
-    const minSwipeDistance = 50; // Minimum swipe distance in pixels
+    const minSwipeDistance = 50;
 
     if (Math.abs(deltaX) >= minSwipeDistance) {
-      if (deltaX > 0) {
-        // Swipe left - next image
-        handleNext();
-      } else {
-        // Swipe right - previous image
-        handlePrev();
-      }
+      if (deltaX > 0) handleNext();
+      else handlePrev();
     }
 
     touchStartX.current = null;
     touchEndX.current = null;
   }, [handlePrev, handleNext]);
 
-  // Handle click to close or navigate
   const handleClick = useCallback(
     (e) => {
-      // Close modal if clicking directly on overlay
       if (e.target === e.currentTarget) {
         onClose();
         return;
       }
 
-      // Navigate based on click position within modal content
       const dialog = e.target.closest('[role="dialog"]');
       const rect = (dialog ?? e.currentTarget).getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       const modalWidth = rect.width;
-      // Click on left side (first 40%) - previous image
-      if (clickX < modalWidth * 0.4) {
-        handlePrev();
-      }
-      // Click on right side (last 40%) - next image
-      else if (clickX > modalWidth * 0.6) {
-        handleNext();
-      }
+
+      if (clickX < modalWidth * 0.4) handlePrev();
+      else if (clickX > modalWidth * 0.6) handleNext();
     },
     [onClose, handlePrev, handleNext]
   );
 
-  // Stop propagation on ModalContent clicks for buttons only
   const handleContentClick = useCallback((e) => {
     const button = e.target.closest('button');
     if (button) e.stopPropagation();
@@ -103,7 +88,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
       <ModalContent
         role="dialog"
         aria-modal="true"
-        onClick={handleContentClick} // Stop propagation for clicks
+        onClick={handleContentClick}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}

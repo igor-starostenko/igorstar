@@ -21,10 +21,8 @@ const Category = ({ page, posts }) => {
     pageNum ? pageNum * pageSize : pageSize
   );
 
-  // Listen to scroll positions for loading more data on scroll
   useEffect(() => {
     const handleScrollHandler = () => {
-      // To get page offset of last article
       const lastRecordLoaded = document.querySelector(
         'div > article:last-child'
       );
@@ -32,7 +30,6 @@ const Category = ({ page, posts }) => {
         const lastRecordLoadedOffset =
           lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
         const pageOffset = window.pageYOffset + window.innerHeight;
-        // Detects when last record is in view
         if (pageOffset > lastRecordLoadedOffset) {
           if (displayCount < posts.total) {
             const newDisplayCount = displayCount + pageSize;
