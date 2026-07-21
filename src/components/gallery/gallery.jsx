@@ -39,7 +39,7 @@ const renderNextImage = (
 const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
   photos.map((photo) => {
     const originalWidth = photo.width || componentSizes.gallery.maxWidth;
-    const originalHeight = photo.height || (componentSizes.gallery.maxHeight ?? 800);
+    const originalHeight = photo.height || componentSizes.gallery.maxHeight;
 
     const aspectRatio = originalWidth / originalHeight;
     const constrainedWidth = Math.round(targetRowHeight * aspectRatio);

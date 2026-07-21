@@ -11,6 +11,7 @@ export const componentSizes = {
   gallery: {
     sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 85vw',
     maxWidth: 1200,
+    maxHeight: 800,
   },
   selfie: {
     sizes: '100px',
