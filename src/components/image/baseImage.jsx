@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { SImage } from './image.css.js';
+import NextImage from 'next/image';
 
 const BaseImage = ({
   alt,
@@ -14,6 +14,8 @@ const BaseImage = ({
   sizes,
   placeholder,
   blurDataURL,
+  priority = false,
+  unoptimized = !src.includes('images.ctfassets.net'),
   ...rest
 }) => {
   const [isError, setIsError] = useState(false);
@@ -22,12 +24,13 @@ const BaseImage = ({
     if (!backupSrc) return null;
     const { priority: _priority, ...domRest } = rest;
     return (
-      <img
+      <NextImage
         src={backupSrc}
         alt={alt}
         loading={loading}
         width={width}
         height={height}
+        unoptimized
         {...domRest}
       />
     );
@@ -38,6 +41,8 @@ const BaseImage = ({
     alt,
     loading,
     sizes,
+    priority,
+    unoptimized,
     onError: () => setIsError(true),
     placeholder,
     blurDataURL,
@@ -50,7 +55,7 @@ const BaseImage = ({
     imageProps.fill = true;
   }
 
-  return <SImage {...imageProps} {...rest} />;
+  return <NextImage {...imageProps} {...rest} />;
 };
 
 BaseImage.propTypes = {
