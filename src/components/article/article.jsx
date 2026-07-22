@@ -59,12 +59,13 @@ const Article = ({
         <SLink href={href}>
           <Title as="h2">{title}</Title>
         </SLink>
+        <DateText isMobile={false} date={date} />
       </Row>
-      <DateText date={date} />
       <Hashtags tags={tags} />
       <Description>
         {description} <Link href={href}>{linkText || 'Read more'}</Link>
       </Description>
+      <DateText isMobile={true} date={date} />
     </Card>
   );
 };
