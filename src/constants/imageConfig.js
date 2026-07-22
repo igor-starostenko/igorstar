@@ -1,8 +1,6 @@
 export const componentSizes = {
   article: {
     sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 778px',
-    maxWidth: 900,
-    maxHeight: 507,
   },
   recommendations: {
     sizes:
@@ -10,13 +8,13 @@ export const componentSizes = {
   },
   gallery: {
     sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 776px',
-    maxWidth: 1200,
-    maxHeight: 800,
+    width: 1200,
+    height: 800,
   },
   selfie: {
     sizes: '100px',
-    maxWidth: 100,
-    maxHeight: 100,
+    width: 100,
+    height: 100,
   },
 };
 
