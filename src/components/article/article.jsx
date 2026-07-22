@@ -1,7 +1,8 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Image from 'components/image/image.jsx';
 import PropTypes from 'prop-types';
-import { componentSizes } from 'constants/imageConfig.js';
+import { sizes, maxWidth, componentSizes } from 'constants/imageConfig.js';
 import Hashtags from 'components/hashtags/hashtags.jsx';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
 
@@ -33,8 +34,8 @@ const Article = ({
     ? calculateConstrainedDimensions(
         image.width,
         image.height,
-        componentSizes.article.maxWidth,
-        componentSizes.article.maxHeight
+        maxWidth.article,
+        563
       )
     : { width: null, height: null };
 
@@ -43,14 +44,16 @@ const Article = ({
       {image && image.src && (
         <SLink href={href}>
           <Thumb className={index === 0 ? 'first' : ''}>
-            <img
-              data-testid="mock-image"
+            <Image
               src={image.src}
+              backupSrc={image.backupSrc}
               alt={image.alt}
               width={width}
               height={height}
-              data-sizes={componentSizes.article.sizes}
-              data-priority={index === 0 ? 'true' : null}
+              sizes={sizes.article}
+              priority={index === 0}
+              blurDataURL={image.blurDataURL}
+              placeholder={image.blurDataURL ? 'blur' : undefined}
             />
           </Thumb>
         </SLink>
@@ -78,9 +81,11 @@ Article.propTypes = {
   description: PropTypes.string.isRequired,
   image: PropTypes.shape({
     src: PropTypes.string.isRequired,
+    backupSrc: PropTypes.string,
     alt: PropTypes.string.isRequired,
-    width: PropTypes.number,
-    height: PropTypes.number,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    blurDataURL: PropTypes.string,
   }),
   date: PropTypes.string.isRequired,
   tags: PropTypes.arrayOf(PropTypes.string),
