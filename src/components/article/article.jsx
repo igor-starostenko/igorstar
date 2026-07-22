@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'components/image/image.jsx';
 import PropTypes from 'prop-types';
-import { sizes, maxWidth, componentSizes } from 'constants/imageConfig.js';
+import { componentSizes } from 'constants/imageConfig.js';
 import Hashtags from 'components/hashtags/hashtags.jsx';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
 
@@ -34,8 +34,8 @@ const Article = ({
     ? calculateConstrainedDimensions(
         image.width,
         image.height,
-        maxWidth.article,
-        563
+        componentSizes.article.maxWidth,
+        componentSizes.article.maxHeight
       )
     : { width: null, height: null };
 
@@ -50,7 +50,7 @@ const Article = ({
               alt={image.alt}
               width={width}
               height={height}
-              sizes={sizes.article}
+              sizes={componentSizes.article.sizes}
               priority={index === 0}
               blurDataURL={image.blurDataURL}
               placeholder={image.blurDataURL ? 'blur' : undefined}
