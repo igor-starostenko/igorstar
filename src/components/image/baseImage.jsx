@@ -15,7 +15,7 @@ const BaseImage = ({
   placeholder,
   blurDataURL,
   priority = false,
-  unoptimized = !src.includes('images.ctfassets.net'),
+  unoptimized = true, // Default to unoptimized for static assets
   ...rest
 }) => {
   const [isError, setIsError] = useState(false);
@@ -28,8 +28,8 @@ const BaseImage = ({
         src={backupSrc}
         alt={alt}
         loading={loading}
-        width={width}
-        height={height}
+        width={width || 1}
+        height={height || 1}
         unoptimized
         {...domRest}
       />
@@ -48,11 +48,17 @@ const BaseImage = ({
     blurDataURL,
   };
 
+  // Next.js requires width/height OR fill for NextImage
+  // If no width/height provided, use a minimal default with unoptimized
   if (width && height) {
     imageProps.width = width;
     imageProps.height = height;
   } else if (fill) {
     imageProps.fill = true;
+  } else {
+    // Use minimal width/height with unoptimized when neither provided
+    imageProps.width = 1;
+    imageProps.height = 1;
   }
 
   return <NextImage {...imageProps} {...rest} />;
