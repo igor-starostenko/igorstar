@@ -13,6 +13,7 @@ const BaseImage = ({
   sizes,
   placeholder,
   blurDataURL,
+  unoptimized = !src.includes('images.ctfassets.net'),
   ...rest
 }) => {
   const [isError, setIsError] = useState(false);
@@ -37,6 +38,7 @@ const BaseImage = ({
     alt,
     loading,
     sizes,
+    unoptimized,
     onError: () => setIsError(true),
     placeholder,
     blurDataURL,
