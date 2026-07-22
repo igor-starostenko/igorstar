@@ -81,6 +81,8 @@ const Gallery = ({
   orderBy,
   order = 'desc',
   targetRowHeight = 150,
+  spacing = 2,
+  containerWidth = 900,
 }) => {
   const [currentPhoto, setCurrentPhoto] = useState(null);
 
@@ -112,7 +114,7 @@ const Gallery = ({
 
   return (
     <>
-      <GalleryContainer>
+      <GalleryContainer $spacing={spacing} $containerWidth={containerWidth}>
         <RowsPhotoAlbum
           photos={mappedPhotos}
           renderNextImage={renderNextImage}
@@ -146,6 +148,8 @@ Gallery.propTypes = {
   orderBy: PropTypes.string,
   order: PropTypes.oneOf(['asc', 'desc']),
   targetRowHeight: PropTypes.number,
+  spacing: PropTypes.number,
+  containerWidth: PropTypes.number,
 };
 
 export default Gallery;
