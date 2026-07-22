@@ -1,4 +1,9 @@
 export default function contentfulLoader({ src, width, quality }) {
+  // Only apply Contentful loader to images from images.ctfassets.net
+  if (!src.includes('images.ctfassets.net')) {
+    return src;
+  }
+
   try {
     const normalizedSrc = src.startsWith('//') ? `https:${src}` : src
     const url = new URL(normalizedSrc)
