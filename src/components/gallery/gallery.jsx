@@ -121,6 +121,7 @@ const Gallery = ({
           onClick={handlePhotoClick}
           spacing={spacing}
           padding={0}
+          targetRowHeight={targetRowHeight}
         />
       </GalleryContainer>
       {currentPhoto !== null && currentPhoto >= 0 && (
