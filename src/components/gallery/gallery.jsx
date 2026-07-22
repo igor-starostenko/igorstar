@@ -119,6 +119,9 @@ const Gallery = ({
           photos={mappedPhotos}
           renderNextImage={renderNextImage}
           onClick={handlePhotoClick}
+          spacing={spacing}
+          padding={0}
+          sizes={{ size: `calc(${containerWidth}px + ${spacing * 2}px)` }}
         />
       </GalleryContainer>
       {currentPhoto !== null && currentPhoto >= 0 && (
