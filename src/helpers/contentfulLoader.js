@@ -1,6 +1,10 @@
 import { imageQuality as defaultQuality } from 'constants/imageConfig.js';
 
-export default function contentfulLoader({ src, width, quality = defaultQuality }) {
+export default function contentfulLoader({
+  src,
+  width,
+  quality = defaultQuality,
+}) {
   // For Contentful images, apply optimization parameters
   if (src.includes('images.ctfassets.net')) {
     try {
