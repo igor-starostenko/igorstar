@@ -5,7 +5,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import BaseImage from './baseImage.jsx';
 
 test('renders image with valid src', () => {
-  render(<BaseImage src="/test.jpg" alt="Test image" width={100} height={100} />);
+  render(
+    <BaseImage src="/test.jpg" alt="Test image" width={100} height={100} />
+  );
   expect(screen.getByAltText('Test image')).toBeInTheDocument();
 });
 
@@ -33,7 +35,9 @@ test('falls back to backupSrc on error', () => {
 });
 
 test('accepts additional props', () => {
-  render(<BaseImage src="/test.jpg" alt="Test image" width={800} height={600} />);
+  render(
+    <BaseImage src="/test.jpg" alt="Test image" width={800} height={600} />
+  );
 
   const img = screen.getByAltText('Test image');
   expect(img).toHaveAttribute('width', '800');
@@ -42,7 +46,13 @@ test('accepts additional props', () => {
 
 test('error handler sets isError state', () => {
   render(
-    <BaseImage src="/error.jpg" alt="Error test" backupSrc="/fallback.jpg" width={100} height={100} />
+    <BaseImage
+      src="/error.jpg"
+      alt="Error test"
+      backupSrc="/fallback.jpg"
+      width={100}
+      height={100}
+    />
   );
 
   const imgElement = screen.getByAltText('Error test');
@@ -53,7 +63,15 @@ test('error handler sets isError state', () => {
 });
 
 test('does not add fill prop when fill is false (explicit false)', () => {
-  render(<BaseImage src="/test.jpg" alt="Test image" fill={false} width={100} height={100} />);
+  render(
+    <BaseImage
+      src="/test.jpg"
+      alt="Test image"
+      fill={false}
+      width={100}
+      height={100}
+    />
+  );
 
   const img = screen.getByAltText('Test image');
   expect(img).not.toHaveAttribute('fill');

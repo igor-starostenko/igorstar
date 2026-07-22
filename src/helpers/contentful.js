@@ -5,12 +5,19 @@ const CONTENTFUL_TIMEOUT = 15000;
 
 const blurDataURLCache = new Map();
 
-const fetchWithTimeout = async (url, options = {}, timeout = CONTENTFUL_TIMEOUT) => {
+const fetchWithTimeout = async (
+  url,
+  options = {},
+  timeout = CONTENTFUL_TIMEOUT
+) => {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
 
   try {
-    const response = await fetch(url, { ...options, signal: controller.signal });
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
     return response;
   } finally {
     clearTimeout(id);
@@ -31,7 +38,9 @@ export async function makeBlurDataURL(src) {
     const blurSrc = u.toString();
     const response = await fetchWithTimeout(blurSrc, {}, CONTENTFUL_TIMEOUT);
     if (!response.ok) {
-      console.warn(`Failed to fetch blur placeholder (status ${response.status}): ${blurSrc}`);
+      console.warn(
+        `Failed to fetch blur placeholder (status ${response.status}): ${blurSrc}`
+      );
       return undefined;
     }
 

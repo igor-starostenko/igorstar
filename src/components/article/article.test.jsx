@@ -18,7 +18,16 @@ vi.mock('next/dynamic', () => ({
 }));
 
 vi.mock('components/image/baseImage.jsx', () => ({
-  default: ({ src, alt, width, height, sizes, priority, blurDataURL, placeholder }) => (
+  default: ({
+    src,
+    alt,
+    width,
+    height,
+    sizes,
+    priority,
+    blurDataURL,
+    placeholder,
+  }) => (
     <img
       data-testid="mock-image"
       src={src}
@@ -42,7 +51,11 @@ vi.mock('components/hashtags/hashtags.jsx', () => ({
 vi.mock('./article.css.js', () => ({
   __esModule: true,
   Card: ({ children }) => <div data-testid="mock-card">{children}</div>,
-  SLink: ({ children, href }) => <a data-testid="mock-slink" href={href}>{children}</a>,
+  SLink: ({ children, href }) => (
+    <a data-testid="mock-slink" href={href}>
+      {children}
+    </a>
+  ),
   Row: ({ children }) => <div>{children}</div>,
   Thumb: ({ children, className }) => (
     <div data-testid="mock-thumb" className={className}>
@@ -138,6 +151,8 @@ test('title is wrapped in link to post detail page', () => {
   render(<Article {...mockArticleProps} />);
 
   const title = screen.getByText('My Amazing Trip');
-  const parentLink = title.closest('#mock-slink') || title.closest('a[data-testid="mock-slink"]');
+  const parentLink =
+    title.closest('#mock-slink') ||
+    title.closest('a[data-testid="mock-slink"]');
   expect(parentLink).toBeInTheDocument();
 });

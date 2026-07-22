@@ -15,7 +15,13 @@ vi.mock('components/hashtags/hashtags.jsx', () => ({
 
 vi.mock('components/image/baseImage.jsx', () => ({
   default: ({ src, alt, width, height }) => (
-    <img data-testid="mock-base-image" src={src} alt={alt} width={width} height={height} />
+    <img
+      data-testid="mock-base-image"
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+    />
   ),
 }));
 

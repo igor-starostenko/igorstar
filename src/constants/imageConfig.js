@@ -5,7 +5,8 @@ export const componentSizes = {
     maxHeight: 1312,
   },
   recommendations: {
-    sizes: '(max-width: 768px) 100vw, (max-width: 1024px) 30vw, (max-width: 1440px) 25vw, 200px',
+    sizes:
+      '(max-width: 768px) 100vw, (max-width: 1024px) 30vw, (max-width: 1440px) 25vw, 200px',
     maxWidth: 600,
     maxHeight: 400,
   },

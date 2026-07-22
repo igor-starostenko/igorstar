@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
-import BaseImage from 'components/image/baseImage';
+import BaseImage from 'components/image/baseImage.jsx';
 
 export const Container = styled.div`
   margin-top: 7rem;
