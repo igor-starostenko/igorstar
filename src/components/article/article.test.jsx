@@ -151,8 +151,7 @@ test('title is wrapped in link to post detail page', () => {
   render(<Article {...mockArticleProps} />);
 
   const title = screen.getByText('My Amazing Trip');
-  const parentLink =
-    title.closest('#mock-slink') ||
-    title.closest('a[data-testid="mock-slink"]');
+  const parentLink = title.closest('[data-testid="mock-slink"]');
   expect(parentLink).toBeInTheDocument();
+  expect(parentLink).toHaveAttribute('href', '/travel/my-trip');
 });
