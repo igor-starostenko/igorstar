@@ -87,8 +87,8 @@ test('passes width and height props correctly', () => {
   expect(img).toHaveAttribute('height', '600');
 });
 
-test('renders with only required props (no explicit width/height)', () => {
-  render(<BaseImage src="/logo.svg" alt="Minimal image" />);
+test('renders with fill prop (no explicit width/height)', () => {
+  render(<BaseImage src="/logo.svg" alt="Minimal image" fill />);
   const img = screen.getByAltText('Minimal image');
   expect(img).toBeInTheDocument();
   // Next.js Image may transform the src, so just check it has a src attribute
