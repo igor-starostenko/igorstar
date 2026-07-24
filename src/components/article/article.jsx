@@ -10,14 +10,6 @@ const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
 
-const calculateConstrainedDimensions = (width, height, maxWidth, maxHeight) => {
-  const scale = Math.min(maxWidth / width, maxHeight / height, 1);
-  return {
-    width: Math.round(width * scale),
-    height: Math.round(height * scale),
-  };
-};
-
 const Article = ({
   index,
   category,
@@ -30,14 +22,6 @@ const Article = ({
   linkText,
 }) => {
   const href = `/${category}/${path}`;
-  const { width, height } = image
-    ? calculateConstrainedDimensions(
-        image.width,
-        image.height,
-        componentSizes.article.maxWidth,
-        componentSizes.article.maxHeight
-      )
-    : { width: null, height: null };
 
   return (
     <Card>
@@ -48,8 +32,8 @@ const Article = ({
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={width}
-              height={height}
+              width={image.width}
+              height={image.height}
               sizes={componentSizes.article.sizes}
               priority={index === 0}
               blurDataURL={image.blurDataURL}

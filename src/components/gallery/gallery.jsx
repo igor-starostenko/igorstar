@@ -38,8 +38,8 @@ const renderNextImage = (
 
 const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
   photos.map((photo) => {
-    const originalWidth = photo.width || componentSizes.gallery.maxWidth;
-    const originalHeight = photo.height || componentSizes.gallery.maxHeight;
+    const originalWidth = photo.width || componentSizes.gallery.width;
+    const originalHeight = photo.height || componentSizes.gallery.height;
 
     const aspectRatio = originalWidth / originalHeight;
     const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
@@ -121,6 +121,7 @@ const Gallery = ({
           onClick={handlePhotoClick}
           spacing={spacing}
           padding={0}
+          targetRowHeight={targetRowHeight}
         />
       </GalleryContainer>
       {currentPhoto !== null && currentPhoto >= 0 && (
