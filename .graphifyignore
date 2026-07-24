@@ -1,0 +1,7 @@
+# Avoid images for models without vision support
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+

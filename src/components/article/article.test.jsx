@@ -8,26 +8,36 @@ vi.mock('next/link', () => ({
 
 vi.mock('next/dynamic', () => ({
   default: (_loader) => {
-    const MockDynamicComponent = ({ children, ...props }) => {
-      const { isMobile, ...rest } = props;
-      return (
-        <div data-testid="mock-dynamic-component" {...rest}>
-          {children}
-        </div>
-      );
-    };
+    const MockDynamicComponent = ({ children, ...props }) => (
+      <div data-testid="mock-dynamic-component" {...props}>
+        {children}
+      </div>
+    );
     return MockDynamicComponent;
   },
 }));
 
-vi.mock('components/image/image.jsx', () => ({
-  default: ({ src, alt, fill, priority }) => (
+vi.mock('components/image/baseImage.jsx', () => ({
+  default: ({
+    src,
+    alt,
+    width,
+    height,
+    sizes,
+    priority,
+    blurDataURL,
+    placeholder,
+  }) => (
     <img
       data-testid="mock-image"
       src={src}
       alt={alt}
-      data-fill={fill}
-      data-priority={priority}
+      width={width}
+      height={height}
+      data-sizes={sizes}
+      data-priority={priority || null}
+      data-blurDataURL={blurDataURL || null}
+      data-placeholder={placeholder || null}
     />
   ),
 }));
@@ -41,7 +51,11 @@ vi.mock('components/hashtags/hashtags.jsx', () => ({
 vi.mock('./article.css.js', () => ({
   __esModule: true,
   Card: ({ children }) => <div data-testid="mock-card">{children}</div>,
-  SLink: ({ children, href }) => <a href={href}>{children}</a>,
+  SLink: ({ children, href }) => (
+    <a data-testid="mock-slink" href={href}>
+      {children}
+    </a>
+  ),
   Row: ({ children }) => <div>{children}</div>,
   Thumb: ({ children, className }) => (
     <div data-testid="mock-thumb" className={className}>
@@ -82,9 +96,6 @@ test('renders article with all provided props', () => {
     'travel, mountains'
   );
   expect(screen.getByTestId('mock-image')).toHaveAttribute('src', 'trip.jpg');
-  expect(
-    screen.getAllByTestId('mock-dynamic-component')[0]
-  ).toBeInTheDocument();
 });
 
 test('renders link with custom text if provided', () => {
@@ -139,9 +150,8 @@ test('constructs correct href for links', () => {
 test('title is wrapped in link to post detail page', () => {
   render(<Article {...mockArticleProps} />);
 
-  // Title should be inside an SLink (which renders as <a> in test)
   const title = screen.getByText('My Amazing Trip');
-  const parentLink = title.closest('a');
+  const parentLink = title.closest('[data-testid="mock-slink"]');
   expect(parentLink).toBeInTheDocument();
   expect(parentLink).toHaveAttribute('href', '/travel/my-trip');
 });

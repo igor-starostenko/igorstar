@@ -1,24 +1,14 @@
-import PropTypes from 'prop-types';
-import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import Image from 'components/image/image.jsx';
+import PropTypes from 'prop-types';
+import { componentSizes } from 'constants/imageConfig.js';
 import Hashtags from 'components/hashtags/hashtags.jsx';
-import { sizes as defaultSizes } from 'constants/imageConfig.js';
 import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
-
-// Calculate constrained dimensions for image display
-// Preserves aspect ratio while respecting max width/height constraints
-const calculateConstrainedDimensions = (width, height, maxWidth, maxHeight) => {
-  const scale = Math.min(maxWidth / width, maxHeight / height, 1);
-  return {
-    width: Math.round(width * scale),
-    height: Math.round(height * scale),
-  };
-};
 
 const Article = ({
   index,
@@ -32,9 +22,6 @@ const Article = ({
   linkText,
 }) => {
   const href = `/${category}/${path}`;
-  const { width, height } = image
-    ? calculateConstrainedDimensions(image.width, image.height, 1200, 800)
-    : { width: null, height: null };
 
   return (
     <Card>
@@ -45,9 +32,9 @@ const Article = ({
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={width}
-              height={height}
-              sizes={defaultSizes}
+              width={image.width}
+              height={image.height}
+              sizes={componentSizes.article.sizes}
               priority={index === 0}
               blurDataURL={image.blurDataURL}
               placeholder={image.blurDataURL ? 'blur' : undefined}

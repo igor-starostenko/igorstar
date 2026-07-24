@@ -1,6 +1,4 @@
-// This does not support nested pages (level 2 and up)
-// If you're working with deeply nested pages, remove this or rework it.
-
+// Use @graph pattern to avoid Safari bug with array root
 const schemaGenerator = ({
   canonical,
   siteUrl,
@@ -8,7 +6,6 @@ const schemaGenerator = ({
   siteTitle,
   pageTitleFull,
 }) => {
-  // Use @graph pattern to avoid Safari bug with array root
   const websiteSchema = {
     '@type': 'WebSite',
     url: siteUrl,
@@ -21,7 +18,6 @@ const schemaGenerator = ({
     name: pageTitleFull,
   };
 
-  // Always include both WebSite and WebPage in @graph
   const graph = [websiteSchema, pageSchema];
 
   return {

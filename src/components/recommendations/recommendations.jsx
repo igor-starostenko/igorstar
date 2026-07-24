@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Hashtags from 'components/hashtags/hashtags.jsx';
+import { componentSizes } from 'constants/imageConfig.js';
 import {
   Container,
   Card,
@@ -16,13 +17,14 @@ const Recommendations = ({ category, posts }) => (
       {posts.map((post) => (
         <SLink href={`/${post.category}/${post.path}`} key={post.id}>
           <Card>
-            {post.thumbnail && (
+            {post.thumbnail?.src && (
               <ThumbWrapper>
                 <Thumb
                   src={post.thumbnail.src}
                   backupSrc={post.thumbnail.backupSrc}
                   alt={post.thumbnail.alt || post.title}
                   fill
+                  sizes={componentSizes.recommendations.sizes}
                 />
               </ThumbWrapper>
             )}
@@ -46,14 +48,17 @@ Recommendations.propTypes = {
   posts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
-      description: PropTypes.string.isRequired,
       linkText: PropTypes.string,
-      thumbnail: PropTypes.object,
+      thumbnail: PropTypes.shape({
+        src: PropTypes.string,
+        alt: PropTypes.string,
+        backupSrc: PropTypes.string,
+      }),
     })
   ),
 };
