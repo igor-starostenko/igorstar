@@ -17,7 +17,7 @@ const Recommendations = ({ category, posts }) => (
       {posts.map((post) => (
         <SLink href={`/${post.category}/${post.path}`} key={post.id}>
           <Card>
-            {post.thumbnail && (
+            {post.thumbnail?.src && (
               <ThumbWrapper>
                 <Thumb
                   src={post.thumbnail.src}
