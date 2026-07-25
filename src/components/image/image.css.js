@@ -6,7 +6,7 @@ import MEDIA from 'helpers/mediaTemplates.js';
 
 export const ImageWrapper = styled.div`
   position: relative;
-  width: fit-content;
+  width: 100%;
   margin: 0px auto;
   line-height: 0;
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
