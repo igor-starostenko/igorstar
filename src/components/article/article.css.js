@@ -33,15 +33,23 @@ export const Thumb = styled.div`
   cursor: pointer;
   line-height: 0;
 
+  > span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: clamp(20rem, 35vh, 41rem);
+    display: block;
+  }
+
   :hover {
     box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
-    div {
+    > span {
       transform: scale(1.02);
     }
   }
 
   margin: 0rem -3.9rem 0rem;
-  min-height: clamp(20rem, 35vh, 41rem);
 `;
 
 export const Title = styled.h3`
