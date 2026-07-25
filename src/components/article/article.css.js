@@ -35,7 +35,7 @@ export const Thumb = styled.div`
 
   img {
     height: auto;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 2s;
   }
   :hover {
