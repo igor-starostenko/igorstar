@@ -7,7 +7,6 @@ export const Container = styled.div`
   margin: 0 auto;
 
   ${MEDIA.PHONE`
-    padding: ${({ $isMain }) =>
-      $isMain ? `0rem 3rem 6rem 3rem` : `0rem 4rem 6rem 4rem`} ;
+    padding: 2rem 3rem 6rem 3rem;
   `}
 `;
