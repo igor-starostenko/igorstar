@@ -33,17 +33,8 @@ export const Thumb = styled.div`
   cursor: pointer;
   line-height: 0;
 
-  > div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-  }
-
   img {
-    width: 100%;
-    height: auto;
+    object-fit: cover;
     transition: transform 2s;
   }
   :hover {
@@ -54,6 +45,14 @@ export const Thumb = styled.div`
   }
 
   margin: 0rem -3.9rem 0rem;
+
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: clamp(20rem, 35vh, 41rem);
+  }
 `;
 
 export const Title = styled.h3`
