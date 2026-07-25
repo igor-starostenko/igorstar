@@ -4,6 +4,7 @@ import Box from 'components/box/box.jsx';
 import Gallery from 'components/gallery/gallery.jsx';
 import Head from 'components/head/head.jsx';
 import Title from 'components/title/title.jsx';
+import { ContentDetails } from 'components/layout/layout.css.js'
 
 const formatCaption = ({ description, locationText, date }) => {
   const day = date ? new Date(date).toDateString() : null;
@@ -16,14 +17,14 @@ const FeedPage = ({ page, feed }) => (
   <Layout>
     <Head pageTitle={page.title} />
     <Box>
-      <Title as="h1" size="large">
-        {page.title}
-      </Title>
-      <div style={{ margin: '0 -4rem' }}>
-        {feed.images.length > 0 && (
-          <Gallery photos={feed.images} targetRowHeight={250} />
-        )}
-      </div>
+      <ContentDetails>
+        <Title as="h1" size="large">
+          {page.title}
+        </Title>
+      </ContentDetails>
+      {feed.images.length > 0 && (
+        <Gallery photos={feed.images} targetRowHeight={250} />
+      )}
     </Box>
   </Layout>
 );

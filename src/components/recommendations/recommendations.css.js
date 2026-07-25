@@ -28,6 +28,7 @@ export const SLink = styled(Link)`
 `;
 
 export const Card = styled.div`
+  min-height: 17.3rem;
   margin: 5px;
   padding: 0 1rem;
   border: 1px solid ${colors.lightGrey};

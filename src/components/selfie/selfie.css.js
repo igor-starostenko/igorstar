@@ -1,16 +1,9 @@
 import styled from 'styled-components';
-import Box from 'components/box/box.jsx';
 import MEDIA from 'helpers/mediaTemplates.js';
 import BaseImage from 'components/image/baseImage.jsx';
 
 export const Image = styled(BaseImage)`
   border-radius: 50%;
   border: 2px solid powderblue !important;
-`;
-
-export const ImageWrapper = styled(Box)`
-  padding: 2rem 4rem 0rem 4rem;
-  ${MEDIA.PHONE`
-    padding: 2rem 3rem 0rem 3rem;
-  `}
+  margin-bottom: 1rem;
 `;

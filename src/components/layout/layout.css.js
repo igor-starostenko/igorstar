@@ -9,3 +9,8 @@ export const Content = styled.div`
   height: auto !important;
   height: 100%;
 `;
+
+export const ContentDetails = styled.div`
+  padding-left: 4rem;
+  padding-right: 4rem;
+`;

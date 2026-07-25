@@ -47,11 +47,6 @@ export const Thumb = styled.div`
   margin: 0rem;
 `;
 
-export const ArticleDetails = styled.div`
-  padding-left: 3rem;
-  padding-right: 3rem;
-`;
-
 export const Title = styled.h3`
   margin-bottom: 1rem;
   color: ${colors.black};

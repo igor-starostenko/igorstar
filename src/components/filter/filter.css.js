@@ -2,12 +2,6 @@ import styled from 'styled-components';
 import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
 
-export const Container = styled.div`
-  position: relative;
-  padding-left: 3rem;
-  padding-right: 3rem;
-`;
-
 export const TitleHeader = styled.div`
   display: inline-flex;
   align-items: baseline;
@@ -43,9 +37,8 @@ export const Categories = styled.div`
 `;
 
 export const Counter = styled.span`
-  position: absolute;
-  right: 5px;
-  bottom: 0px;
+  display: block;
+  text-align: right;
   color: ${colors.darkGrey};
   font-size: 1rem;
 `;

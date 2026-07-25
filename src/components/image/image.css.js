@@ -66,6 +66,10 @@ export const ImageCopyright = styled.span`
   font-size: 10px;
 `;
 
+export const FlickrContainer = styled.div`
+  padding: 1rem 0 1rem 0;
+`;
+
 export const ImageContainer = styled(ImageWrapper)`
   overflow: hidden;
   width: fit-content;
