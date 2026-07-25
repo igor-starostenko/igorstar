@@ -68,6 +68,7 @@ export const ImageCopyright = styled.span`
 
 export const ImageContainer = styled(ImageWrapper)`
   overflow: hidden;
+  width: fit-content;
   transition: all 0.2s ease-in-out;
   img {
     transition: transform 2s;
