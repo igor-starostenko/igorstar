@@ -4,6 +4,13 @@ import MEDIA from 'helpers/mediaTemplates';
 
 export const Container = styled.div`
   position: relative;
+  padding-left: 3rem;
+  padding-right: 3rem;
+
+  ${MEDIA.PHONE`
+    padding-left: 0;
+    padding-right: 0;
+  `}
 `;
 
 export const TitleHeader = styled.div`

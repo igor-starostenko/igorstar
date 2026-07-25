@@ -48,8 +48,8 @@ export const Thumb = styled.div`
 `;
 
 export const ArticleDetails = styled.div`
-  padding-left: 4rem;
-  padding-right: 4rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
 `;
 
 export const Title = styled.h3`
