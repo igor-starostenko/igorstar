@@ -50,7 +50,7 @@ export const ThumbWrapper = styled.div`
 
   ${MEDIA.PHONE`
     flex: 0 0 100%;
-    margin: 0rem 0rem 1rem 0rem;
+    margin: 1rem 0rem 0rem 0rem;
   `};
 `;
 
