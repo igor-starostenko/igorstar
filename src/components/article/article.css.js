@@ -33,13 +33,9 @@ export const Thumb = styled.div`
   cursor: pointer;
   line-height: 0;
 
-  img {
-    object-fit: cover;
-    transition: transform 2s;
-  }
   :hover {
     box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
-    img {
+    div {
       transform: scale(1.02);
     }
   }
