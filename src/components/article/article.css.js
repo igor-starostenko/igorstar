@@ -42,6 +42,8 @@ export const Thumb = styled.div`
   }
 
   img {
+    width: 100%;
+    height: auto;
     transition: transform 2s;
   }
   :hover {
@@ -51,7 +53,6 @@ export const Thumb = styled.div`
     }
   }
 
-  max-height: none;
   margin: 0rem -3.9rem 0rem;
 `;
 
