@@ -26,4 +26,5 @@ export const Container = styled.header`
 export const Logo = styled(LogoSvg)`
   width: clamp(7.5rem, 10vw, 10rem);
   height: auto;
+  align-self: center;
 `;
