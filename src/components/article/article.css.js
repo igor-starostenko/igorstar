@@ -35,7 +35,6 @@ export const Thumb = styled.div`
 
   img {
     height: auto;
-    object-fit: contain;
     transition: transform 2s;
   }
   :hover {
@@ -45,7 +44,7 @@ export const Thumb = styled.div`
     }
   }
 
-  max-height: clamp(20rem, 35vh, 41rem);
+  max-height: none;
   margin: 0rem -3.9rem 0rem;
 `;
 
