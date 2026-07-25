@@ -7,6 +7,6 @@ export const Container = styled.div`
   margin: 0 auto;
 
   ${MEDIA.PHONE`
-    padding: 2rem 3rem 6rem 3rem;
+    padding: 2rem 0 6rem 0;
   `}
 `;
