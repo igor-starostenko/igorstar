@@ -38,7 +38,7 @@ export const Thumb = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: clamp(20rem, 35vh, 41rem);
 
     img {
       object-fit: contain;
@@ -47,7 +47,7 @@ export const Thumb = styled.div`
 
   :hover {
     box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
-    img {
+    > div img {
       transform: scale(1.02);
     }
   }
