@@ -33,8 +33,15 @@ export const Thumb = styled.div`
   cursor: pointer;
   line-height: 0;
 
-  img {
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: auto;
+  }
+
+  img {
     transition: transform 2s;
   }
   :hover {

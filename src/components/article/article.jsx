@@ -32,6 +32,8 @@ const Article = ({
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
+              width={image.width}
+              height={image.height}
               sizes={componentSizes.article.sizes}
               priority={index === 0}
               blurDataURL={image.blurDataURL}
