@@ -4,7 +4,7 @@ import Image from 'components/image/image.jsx';
 import PropTypes from 'prop-types';
 import { componentSizes } from 'constants/imageConfig.js';
 import Hashtags from 'components/hashtags/hashtags.jsx';
-import { Card, SLink, Row, Thumb, Title, Description } from './article.css.js';
+import { Card, SLink, Row, Thumb, Title, Description, ArticleDetails } from './article.css.js';
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
@@ -42,17 +42,19 @@ const Article = ({
           </Thumb>
         </SLink>
       )}
-      <Row>
-        <SLink href={href}>
-          <Title as="h2">{title}</Title>
-        </SLink>
-        <DateText isMobile={false} date={date} />
-      </Row>
-      <Hashtags tags={tags} />
-      <Description>
-        {description} <Link href={href}>{linkText || 'Read more'}</Link>
-      </Description>
-      <DateText isMobile={true} date={date} />
+      <ArticleDetails>
+        <Row>
+          <SLink href={href}>
+            <Title as="h2">{title}</Title>
+          </SLink>
+          <DateText isMobile={false} date={date} />
+        </Row>
+        <Hashtags tags={tags} />
+        <Description>
+          {description} <Link href={href}>{linkText || 'Read more'}</Link>
+        </Description>
+        <DateText isMobile={true} date={date} />
+      </ArticleDetails>
     </Card>
   );
 };

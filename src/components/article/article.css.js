@@ -4,12 +4,13 @@ import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
 
 export const Card = styled.article`
+  max-width: 800px;
+  margin: 0 auto;
+
   &:first-child {
     margin-top: 19px;
   }
   padding-bottom: 39px;
-  padding-left: 7.8rem;
-  padding-right: 7.8rem;
   &:not(:last-child) {
     margin-bottom: 29px;
     border-bottom: 1px solid #e8e8e8;
@@ -47,6 +48,11 @@ export const Thumb = styled.div`
   }
 
   margin: 0rem;
+`;
+
+export const ArticleDetails = styled.div`
+  padding-left: 4rem;
+  padding-right: 4rem;
 `;
 
 export const Title = styled.h3`
