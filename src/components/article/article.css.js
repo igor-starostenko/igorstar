@@ -8,6 +8,8 @@ export const Card = styled.article`
     margin-top: 19px;
   }
   padding-bottom: 39px;
+  padding-left: 7.8rem;
+  padding-right: 7.8rem;
   &:not(:last-child) {
     margin-bottom: 29px;
     border-bottom: 1px solid #e8e8e8;
@@ -44,7 +46,7 @@ export const Thumb = styled.div`
     }
   }
 
-  margin: 0rem -3.9rem 0rem;
+  margin: 0rem;
 `;
 
 export const Title = styled.h3`
