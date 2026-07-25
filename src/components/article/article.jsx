@@ -34,6 +34,8 @@ const Article = ({
               alt={image.alt}
               width={image.width}
               height={image.height}
+              fill
+              objectFit="contain"
               sizes={componentSizes.article.sizes}
               priority={index === 0}
               blurDataURL={image.blurDataURL}
