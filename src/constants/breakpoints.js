@@ -1,7 +1,7 @@
 const breakpoints = {
-  DESKTOP: 992,
+  PHONE: 640,
   TABLET: 768,
-  PHONE: 428,
+  DESKTOP: 1024,
 };
 
 export default breakpoints;
