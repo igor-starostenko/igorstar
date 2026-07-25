@@ -4,9 +4,6 @@ import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates';
 
 export const Card = styled.article`
-  max-width: 800px;
-  margin: 0 auto;
-
   &:first-child {
     margin-top: 19px;
   }
