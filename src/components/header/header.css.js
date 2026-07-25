@@ -24,10 +24,6 @@ export const Container = styled.header`
 `;
 
 export const Logo = styled(LogoSvg)`
-  ${MEDIA.TABLET`
-    max-width: 90%;
-  `}
-  ${MEDIA.PHONE`
-    max-width: 75%;
-  `}
+  width: clamp(7.5rem, 10vw, 10rem);
+  height: auto;
 `;
