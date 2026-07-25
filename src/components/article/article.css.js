@@ -28,8 +28,6 @@ export const Thumb = styled.div`
   position: relative;
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease-in-out;
-  border-radius: 2px;
-  overflow: hidden;
   cursor: pointer;
   line-height: 0;
 
