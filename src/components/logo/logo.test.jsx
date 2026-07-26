@@ -1,6 +1,15 @@
 import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
+vi.mock('next/link', () => ({
+  __esModule: true,
+  default: ({ href, children, ...props }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}));
+
 vi.mock('components/image/baseImage', () => ({
   default: ({ width, height, src, alt }) => (
     <img
