@@ -21,7 +21,7 @@
     "test:lighthouse": "vitest run src/test/lighthouse.test.mjs",
     "test:helpers": "vitest run src/helpers/*.test.js",
     "test:components": "vitest run src/components/**/*.test.jsx",
-    "test": "vitest --exclude src/test/lighthouse.test.mjs --run"
+    "test": "vitest run --exclude src/test/lighthouse.test.mjs"
   },
   "greenkeeper": {
     "ignore": [

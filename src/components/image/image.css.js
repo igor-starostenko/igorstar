@@ -6,7 +6,7 @@ import MEDIA from 'helpers/mediaTemplates.js';
 
 export const ImageWrapper = styled.div`
   position: relative;
-  width: fit-content;
+  width: 100%;
   margin: 0px auto;
   line-height: 0;
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
@@ -66,8 +66,13 @@ export const ImageCopyright = styled.span`
   font-size: 10px;
 `;
 
+export const FlickrContainer = styled.div`
+  padding: 1rem 0 1rem 0;
+`;
+
 export const ImageContainer = styled(ImageWrapper)`
   overflow: hidden;
+  width: fit-content;
   transition: all 0.2s ease-in-out;
   img {
     transition: transform 2s;

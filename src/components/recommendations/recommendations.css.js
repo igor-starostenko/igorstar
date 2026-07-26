@@ -28,6 +28,7 @@ export const SLink = styled(Link)`
 `;
 
 export const Card = styled.div`
+  min-height: 17.3rem;
   margin: 5px;
   padding: 0 1rem;
   border: 1px solid ${colors.lightGrey};
@@ -49,6 +50,7 @@ export const ThumbWrapper = styled.div`
   position: relative;
 
   ${MEDIA.PHONE`
+    width: 100%;
     margin: 1rem 0rem 0rem 0rem;
   `};
 `;
@@ -57,7 +59,6 @@ export const Thumb = styled(BaseImage)`
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
   position: relative !important;
   width: 100%;
-  height: auto;
 `;
 
 export const Details = styled.div`

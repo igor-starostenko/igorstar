@@ -4,19 +4,20 @@ import Box from 'components/box/box.jsx';
 import Gallery from 'components/gallery/gallery.jsx';
 import Head from 'components/head/head.jsx';
 import Title from 'components/title/title.jsx';
+import { ContentDetails } from 'components/layout/layout.css.js';
 
 const GalleryPage = ({ page, gallery }) => (
   <Layout>
     <Head pageTitle={page.title} />
     <Box>
-      <Title as="h1" size="large">
-        {page.title}
-      </Title>
-      <div style={{ margin: '0 -4rem' }}>
-        {gallery.images.length > 0 && (
-          <Gallery photos={gallery.images} targetRowHeight={250} />
-        )}
-      </div>
+      <ContentDetails>
+        <Title as="h1" size="large">
+          {page.title}
+        </Title>
+      </ContentDetails>
+      {gallery.images.length > 0 && (
+        <Gallery photos={gallery.images} targetRowHeight={250} />
+      )}
     </Box>
   </Layout>
 );

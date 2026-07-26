@@ -4,6 +4,7 @@ import Link from 'next/link';
 import BaseImage from './baseImage.jsx';
 import FlickrIcon from 'components/icons/flickrIcon.jsx';
 import {
+  FlickrContainer,
   ImageContainer,
   ImageFrame,
   ImageHeader,
@@ -49,27 +50,29 @@ const FlickrImage = ({ xml, isRaw = false, backupSrc }) => {
   }
 
   return (
-    <ImageContainer>
-      <Link href={href} title={title}>
-        <BaseImage
-          unoptimized
-          src={src}
-          width={width}
-          height={height}
-          alt={title}
-          backupSrc={backupSrc}
-        />
-        <ImageFrame>
-          <ImageHeader>
-            <FlickrIcon />
-          </ImageHeader>
-          <ImageFooter>
-            <ImageTitle>{title}</ImageTitle>
-            <ImageCopyright>All rights reserved</ImageCopyright>
-          </ImageFooter>
-        </ImageFrame>
-      </Link>
-    </ImageContainer>
+    <FlickrContainer>
+      <ImageContainer>
+        <Link href={href} title={title}>
+          <BaseImage
+            unoptimized
+            src={src}
+            width={width}
+            height={height}
+            alt={title}
+            backupSrc={backupSrc}
+          />
+          <ImageFrame>
+            <ImageHeader>
+              <FlickrIcon />
+            </ImageHeader>
+            <ImageFooter>
+              <ImageTitle>{title}</ImageTitle>
+              <ImageCopyright>All rights reserved</ImageCopyright>
+            </ImageFooter>
+          </ImageFrame>
+        </Link>
+      </ImageContainer>
+    </FlickrContainer>
   );
 };
 

@@ -4,10 +4,10 @@ export const componentSizes = {
   },
   recommendations: {
     sizes:
-      '(max-width: 768px) 100vw, (max-width: 1024px) 30vw, (max-width: 1440px) 25vw, 200px',
+      '(max-width: 768px) 100vw, (max-width: 1024px) 30vw, (max-width: 1440px) 25vw, 528px',
   },
   gallery: {
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 776px',
+    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 796px',
     width: 1200,
     height: 800,
   },
