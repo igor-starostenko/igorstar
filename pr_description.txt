@@ -1,0 +1,39 @@
+v2.5.2 Release - Lighthouse Performance Auditing & Image Optimization
+
+This PR merges the develop branch into master for the v2.5.2 release.
+
+## Key Changes
+
+### Lighthouse Performance Auditing
+- Added GitHub Actions workflow for automated Lighthouse audits (.github/workflows/lighthouse.yml)
+- Configured CI/CD to run Lighthouse tests in Docker container (Dockerfile with CHROME_PATH, headless mode)
+- Added Lighthouse config for assert preset and filesystem output (lighthouserc.cjs)
+- Added test infrastructure for Lighthouse audits (src/test/lighthouse.test.mjs)
+
+### Image Optimization Improvements
+- Fixed Next.js Image component warnings for width/height mismatch
+- Resolved aspect ratio issues in Logo, Thumb components
+- Added proper objectFit instead of height auto for consistent sizing
+- Applied constrained thumbnail dimensions (800x450 max) in Article component
+
+### Dependency Updates
+- next: 16.2.6 → 16.2.11
+- vite: 8.0.14 → 8.1.5
+- form-data: 4.0.5 → 4.0.6 (security)
+- fast-uri: 3.1.2 → 3.1.4
+- js-yaml: 4.1.1 → 4.3.0
+- tar: 7.5.15 → 7.5.22 (security)
+- brace-expansion: 1.1.15 → 1.1.16
+
+### Documentation & Configuration
+- Updated AGENTS.md with graphify integration instructions
+- Added .gitattributes for graphify-out merge strategy
+- Updated .gitignore with graphify, claude, hermes directories
+
+### Testing Improvements
+- Added Chrome flags for ARM64 compatibility in Lighthouse tests
+- Suppressed console.warn in contentful helper tests
+- Added proper test mocks to avoid network errors
+
+## Notes
+The develop branch has diverged from master with 147 commits. This merge integrates all v2.5.x improvements into the stable release line.
