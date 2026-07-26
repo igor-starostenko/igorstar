@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import { colors } from 'constants/theme';
-import MEDIA from 'helpers/mediaTemplates';
 
 export const Card = styled.article`
   &:first-child {

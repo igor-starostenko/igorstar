@@ -6,7 +6,7 @@ const {
   selfie: { width, height, sizes },
 } = componentSizes;
 
-const Selfie = ({ src, ...rest }) => (
+const Selfie = ({ src }) => (
   <Image
     height={height}
     width={width}
