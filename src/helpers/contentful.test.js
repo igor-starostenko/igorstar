@@ -59,6 +59,8 @@ describe('makeBlurDataURL', () => {
   });
 
   it('handles fetch error gracefully', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -71,9 +73,16 @@ describe('makeBlurDataURL', () => {
     const result = await makeBlurDataURL(url);
 
     expect(result).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledOnce();
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to fetch blur placeholder (status 500):')
+    );
+    warnSpy.mockRestore();
   });
 
   it('handles non-OK response gracefully', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -86,6 +95,11 @@ describe('makeBlurDataURL', () => {
     const result = await makeBlurDataURL(url);
 
     expect(result).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledOnce();
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to fetch blur placeholder (status 404):')
+    );
+    warnSpy.mockRestore();
   });
 });
 
@@ -161,6 +175,8 @@ describe('addBlurDataURLs', () => {
   });
 
   it('sets blurDataURL to null when fetch fails', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -173,6 +189,11 @@ describe('addBlurDataURLs', () => {
     const result = await addBlurDataURLs(images);
 
     expect(result[0].blurDataURL).toBeNull();
+    expect(warnSpy).toHaveBeenCalledOnce();
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to fetch blur placeholder (status 503):')
+    );
+    warnSpy.mockRestore();
   });
 
   it('handles nested path for thumbnail in posts', async () => {
