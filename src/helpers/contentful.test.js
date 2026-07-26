@@ -5,15 +5,6 @@ import {
   clearBlurDataURLCache,
 } from 'helpers/contentful';
 
-// Suppress console.warn during tests to avoid stderr noise
-beforeAll(() => {
-  vi.spyOn(console, 'warn').mockImplementation(() => {});
-});
-
-afterAll(() => {
-  vi.restoreAllMocks();
-});
-
 describe('makeBlurDataURL', () => {
   beforeEach(() => {
     vi.resetAllMocks();
@@ -70,7 +61,10 @@ describe('makeBlurDataURL', () => {
   it('handles fetch error gracefully', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockRejectedValue(new Error('Network error'))
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+      })
     );
 
     const url = 'https://images.ctfassets.net/123/image.jpg';
@@ -169,7 +163,10 @@ describe('addBlurDataURLs', () => {
   it('sets blurDataURL to null when fetch fails', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockRejectedValue(new Error('Network error'))
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 503,
+      })
     );
 
     const images = [{ src: 'https://images.ctfassets.net/123/image.jpg' }];
