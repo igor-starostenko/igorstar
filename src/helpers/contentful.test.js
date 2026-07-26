@@ -11,10 +11,9 @@ describe('makeBlurDataURL', () => {
     clearBlurDataURLCache();
   });
 
-  it('returns undefined for non-Contentful URLs', () => {
-    expect(
-      makeBlurDataURL('https://example.com/image.jpg')
-    ).resolves.toBeUndefined();
+  it('returns undefined for non-Contentful URLs', async () => {
+    const result = await makeBlurDataURL('https://example.com/image.jpg');
+    expect(result).toBeUndefined();
   });
 
   it('returns undefined for null/empty URL', async () => {
