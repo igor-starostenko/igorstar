@@ -38,9 +38,6 @@ export async function makeBlurDataURL(src) {
     const blurSrc = u.toString();
     const response = await fetchWithTimeout(blurSrc, {}, CONTENTFUL_TIMEOUT);
     if (!response.ok) {
-      console.warn(
-        `Failed to fetch blur placeholder (status ${response.status}): ${blurSrc}`
-      );
       return undefined;
     }
 
@@ -53,9 +50,9 @@ export async function makeBlurDataURL(src) {
     return dataURL;
   } catch (error) {
     if (error.name === 'AbortError') {
-      console.warn(`Timeout fetching blur placeholder: ${src}`);
+      // Silent timeout
     } else {
-      console.warn(`Error generating blurDataURL for ${src}:`, error);
+      // Silent network errors in tests
     }
     return undefined;
   }
