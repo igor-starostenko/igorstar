@@ -5,6 +5,15 @@ import {
   clearBlurDataURLCache,
 } from 'helpers/contentful';
 
+// Suppress console.warn during tests to avoid stderr noise
+beforeAll(() => {
+  vi.spyOn(console, 'warn').mockImplementation(() => {});
+});
+
+afterAll(() => {
+  vi.restoreAllMocks();
+});
+
 describe('makeBlurDataURL', () => {
   beforeEach(() => {
     vi.resetAllMocks();
