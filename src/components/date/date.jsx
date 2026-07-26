@@ -11,15 +11,16 @@ const formatDate = (dateString) => {
 };
 
 const DateText = ({ date, isMobile, ...rest }) => {
+  const { isMobile: _isMobile, ...domRest } = rest;
   if (isMobile === false) {
-    return <DateMain {...rest}>— {formatDate(date)}</DateMain>;
+    return <DateMain {...domRest}>— {formatDate(date)}</DateMain>;
   }
 
   if (isMobile === true) {
-    return <DateMobile {...rest}>— {formatDate(date)}</DateMobile>;
+    return <DateMobile {...domRest}>— {formatDate(date)}</DateMobile>;
   }
 
-  return <DateBase {...rest}>{formatDate(date)}</DateBase>;
+  return <DateBase {...domRest}>{formatDate(date)}</DateBase>;
 };
 
 DateText.propTypes = {
