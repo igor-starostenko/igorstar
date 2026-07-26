@@ -25,8 +25,8 @@ test('renders logo with correct dimensions', () => {
   render(<LogoSvg />);
 
   const img = screen.getByAltText('logo');
-  expect(img).toHaveAttribute('width', '105');
-  expect(img).toHaveAttribute('height', '22');
+  expect(img).toHaveAttribute('width', '175');
+  expect(img).toHaveAttribute('height', '21');
 });
 
 test('renders logo with src="/logo.svg"', () => {

@@ -10,12 +10,20 @@ vi.mock('components/header/nav/nav.jsx', () => ({
   default: () => <nav data-testid="mock-nav">Nav Content</nav>,
 }));
 
+vi.mock('components/logo/logo.jsx', () => ({
+  __esModule: true,
+  default: ({ className }) => (
+    <a href="/" className={className} data-testid="mock-logo">
+      Logo
+    </a>
+  ),
+}));
+
 vi.mock('./header.css.js', () => ({
   __esModule: true,
   Container: ({ children }) => (
     <header data-testid="mock-container">{children}</header>
   ),
-  Logo: () => <div data-testid="mock-logo">Logo</div>,
 }));
 
 import Header from './header.jsx';

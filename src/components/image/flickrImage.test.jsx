@@ -30,15 +30,8 @@ vi.mock('components/image/baseImage.jsx', () => ({
 }));
 
 vi.mock('./image.css.js', () => ({
-  ImageContainer: ({ children }) => (
-    <div data-testid="mock-image-container" className="hover-shadow">
-      {children}
-    </div>
-  ),
   ImageWrapper: ({ children }) => (
-    <div data-testid="mock-image-wrapper" className="hover-shadow">
-      {children}
-    </div>
+    <div data-testid="mock-image-wrapper">{children}</div>
   ),
   ImageFrame: ({ children }) => (
     <div data-testid="mock-image-frame" className="hover-overlay">
@@ -56,6 +49,14 @@ vi.mock('./image.css.js', () => ({
   ),
   ImageCopyright: ({ children }) => (
     <span data-testid="mock-image-copyright">{children}</span>
+  ),
+  FlickrContainer: ({ children }) => (
+    <div data-testid="mock-flickr-container">{children}</div>
+  ),
+  ImageContainer: ({ children }) => (
+    <div data-testid="mock-image-container" className="hover-shadow">
+      {children}
+    </div>
   ),
 }));
 
