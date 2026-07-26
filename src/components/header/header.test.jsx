@@ -25,6 +25,9 @@ vi.mock('./header.css.js', () => ({
   Container: ({ children }) => (
     <header data-testid="mock-container">{children}</header>
   ),
+  LogoLink: ({ children, href, className }) => (
+    <a href={href} className={className}>{children}</a>
+  ),
 }));
 
 import Header from './header.jsx';

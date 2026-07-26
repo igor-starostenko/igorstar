@@ -1,6 +1,12 @@
 import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
+vi.mock('components/image/baseImage', () => ({
+  default: ({ width, height, src, alt }) => (
+    <img data-testid="mock-base-image" src={src} width={width} height={height} alt={alt} />
+  ),
+}));
+
 vi.mock('components/image/image.jsx', () => ({
   default: ({ src, width, height, alt }) => (
     <img
