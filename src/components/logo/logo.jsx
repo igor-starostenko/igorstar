@@ -1,15 +1,21 @@
+import { LogoLink } from 'components/header/header.css.js';
 import BaseImage from 'components/image/baseImage';
 
-const LogoSvg = (props) => (
-  <BaseImage
-    width={105}
-    height={22}
-    src="/logo.svg"
-    query=""
-    alt="logo"
-    priority
-    {...props}
-  />
+const width = 175;
+const height = 21;
+
+const Logo = (props) => (
+  <LogoLink href="/" $fixedHeight={height}>
+    <BaseImage
+      width={width}
+      height={height}
+      src="/logo.svg"
+      query=""
+      alt="logo"
+      priority
+      {...props}
+    />
+  </LogoLink>
 );
 
-export default LogoSvg;
+export default Logo;

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 import { colors } from 'constants/theme';
 import MEDIA from 'helpers/mediaTemplates.js';
@@ -8,9 +9,6 @@ export const Container = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 2rem 4rem;
-  ${MEDIA.PHONE`
-    padding: 2rem 3rem;
-  `}
 
   a {
     color: ${colors.grey};
@@ -23,7 +21,10 @@ export const Container = styled.header`
   }
 `;
 
-export const Logo = styled(LogoSvg)`
-  width: clamp(7.5rem, 10vw, 10rem);
-  height: 100%;
+export const LogoLink = styled(Link)`
+  height: ${(props) => props.$fixedHeight}px;
+
+  img {
+    height: ${(props) => props.$fixedHeight}px;
+  }
 `;
