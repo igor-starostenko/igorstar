@@ -5,15 +5,13 @@ const width = 175;
 const height = 21;
 
 const Logo = (props) => (
-  <LogoLink href="/" $fixedHeight={height}>
+  <LogoLink href="/">
     <BaseImage
-      width={width}
-      height={height}
+      fill
       src="/logo.svg"
       query=""
       alt="logo"
       priority
-      style={{ objectFit: 'contain' }}
       {...props}
     />
   </LogoLink>
