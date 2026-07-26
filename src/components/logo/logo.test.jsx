@@ -3,7 +3,13 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('components/image/baseImage', () => ({
   default: ({ width, height, src, alt }) => (
-    <img data-testid="mock-base-image" src={src} width={width} height={height} alt={alt} />
+    <img
+      data-testid="mock-base-image"
+      src={src}
+      width={width}
+      height={height}
+      alt={alt}
+    />
   ),
 }));
 

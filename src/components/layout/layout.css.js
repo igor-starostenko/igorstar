@@ -18,4 +18,4 @@ export const ContentDetails = styled.div`
 export const CategoryLabel = styled(ContentDetails)`
   padding-top: 1rem;
   padding-bottom: 2rem;
-`
+`;

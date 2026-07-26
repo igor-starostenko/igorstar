@@ -4,7 +4,7 @@ import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
 import { colors } from 'constants/theme.js';
-import { CategoryLabel, ContentDetails } from 'components/layout/layout.css.js'
+import { CategoryLabel, ContentDetails } from 'components/layout/layout.css.js';
 import Gallery from 'components/gallery/gallery.jsx';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
