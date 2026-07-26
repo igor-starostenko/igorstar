@@ -8,7 +8,7 @@ vi.mock('next/link', () => ({
 
 vi.mock('next/dynamic', () => ({
   default: (_loader) => {
-    const MockDynamicComponent = ({ children, ...props }) => (
+    const MockDynamicComponent = ({ children, isMobile, ...props }) => (
       <div data-testid="mock-dynamic-component" {...props}>
         {children}
       </div>
