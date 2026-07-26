@@ -1,5 +1,11 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+
+vi.mock('next/link', () => ({
+  __esModule: true,
+  default: ({ children, href }) => <a href={href}>{children}</a>,
+}));
 
 vi.mock('components/header/nav/nav.jsx', () => ({
   default: () => <nav data-testid="mock-nav">Nav Content</nav>,
