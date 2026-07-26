@@ -4,6 +4,7 @@ import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
 import { colors } from 'constants/theme.js';
+import { CategoryLabel, ContentDetails } from 'components/layout/layout.css.js'
 import Gallery from 'components/gallery/gallery.jsx';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
@@ -201,32 +202,31 @@ const Post = ({ post, recommendations }) => {
     <Layout>
       <Head pageTitle={post.title} imageUrl={imageUrl} />
       <Box>
-        <div
+        <CategoryLabel
           style={{
             color: colors.grey,
-            margin: '1rem 0rem 2rem 0rem',
           }}
         >
           <span>
             Category: <Link href={`/${post.category}`}>{post.category}</Link>
           </span>
-        </div>
-        <div style={{ margin: '0 -4rem' }}>
-          {images.length > 0 && (
-            <Gallery
-              key={post.path}
-              photos={images}
-              order="asc"
-              targetRowHeight={targetRowHeight}
-            />
-          )}
-        </div>
-        <h1>{post.title}</h1>
-        <div style={{ display: 'inline-flex' }}>
-          <DateText date={post.date} />
-        </div>
-        {documentToReactComponents(post.content, options)}
-        <Recommendations category={post.category} posts={recommendations} />
+        </CategoryLabel>
+        {images.length > 0 && (
+          <Gallery
+            key={post.path}
+            photos={images}
+            order="asc"
+            targetRowHeight={targetRowHeight}
+          />
+        )}
+        <ContentDetails>
+          <h1>{post.title}</h1>
+          <div style={{ display: 'inline-flex' }}>
+            <DateText date={post.date} />
+          </div>
+          {documentToReactComponents(post.content, options)}
+          <Recommendations category={post.category} posts={recommendations} />
+        </ContentDetails>
       </Box>
     </Layout>
   );
