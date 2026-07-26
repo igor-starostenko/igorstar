@@ -5,7 +5,7 @@ const width = 175;
 const height = 21;
 
 const Logo = (props) => (
-  <LogoLink href="/">
+  <LogoLink href="/" style={{ width, height }}>
     <BaseImage
       fill
       src="/logo.svg"
