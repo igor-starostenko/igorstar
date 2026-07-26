@@ -11,7 +11,7 @@ const formatDate = (dateString) => {
 };
 
 const DateText = ({ date, isMobile, ...rest }) => {
-  const { isMobile: _isMobile, ...domRest } = rest;
+  const domRest = rest;
   if (isMobile === false) {
     return <DateMain {...domRest}>— {formatDate(date)}</DateMain>;
   }
