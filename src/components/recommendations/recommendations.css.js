@@ -59,7 +59,6 @@ export const Thumb = styled(BaseImage)`
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
   position: relative !important;
   width: 100%;
-  height: auto;
 `;
 
 export const Details = styled.div`
