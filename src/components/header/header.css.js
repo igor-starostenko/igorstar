@@ -22,8 +22,10 @@ export const Container = styled.header`
 export const LogoLink = styled(Link)`
   display: inline-block;
   height: ${(props) => props.$fixedHeight}px;
+  width: auto;
 
   img {
     height: ${(props) => props.$fixedHeight}px;
+    width: auto;
   }
 `;
