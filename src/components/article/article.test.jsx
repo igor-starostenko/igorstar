@@ -34,9 +34,9 @@ vi.mock('components/image/baseImage.jsx', () => ({
       alt={alt}
       width={width}
       height={height}
-      data-sizes={sizes}
+      data-sizes={sizes || null}
       data-priority={priority || null}
-      data-blurDataURL={blurDataURL || null}
+      data-blurdataurl={blurDataURL || null}
       data-placeholder={placeholder || null}
     />
   ),
