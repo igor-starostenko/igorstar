@@ -1,9 +1,10 @@
 import { test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import Link from 'next/link';
 
 vi.mock('next/link', () => ({
   __esModule: true,
-  default: ({ children, href }) => <a href={href}>{children}</a>,
+  default: ({ children, href }) => <Link href={href}>{children}</Link>,
 }));
 
 vi.mock('components/header/nav/nav.jsx', () => ({
@@ -13,9 +14,9 @@ vi.mock('components/header/nav/nav.jsx', () => ({
 vi.mock('components/logo/logo.jsx', () => ({
   __esModule: true,
   default: ({ className }) => (
-    <a href="/" className={className} data-testid="mock-logo">
+    <Link href="/" className={className} data-testid="mock-logo">
       Logo
-    </a>
+    </Link>
   ),
 }));
 
