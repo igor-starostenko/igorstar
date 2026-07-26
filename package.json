@@ -21,7 +21,7 @@
     "test:lighthouse": "vitest run src/test/lighthouse.test.mjs",
     "test:helpers": "vitest run src/helpers/*.test.js",
     "test:components": "vitest run src/components/**/*.test.jsx",
-    "test": "node --max-old-space-size=8192 node_modules/vitest/vitest.mjs run --exclude src/test/lighthouse.test.mjs"
+    "test": "vitest run --exclude src/test/lighthouse.test.mjs"
   },
   "greenkeeper": {
     "ignore": [

@@ -11,12 +11,11 @@ vi.mock('next/link', () => ({
 }));
 
 vi.mock('components/image/baseImage', () => ({
-  default: ({ width, height, src, alt }) => (
+  default: ({ fill, src, alt }) => (
     <img
       data-testid="mock-base-image"
       src={src}
-      width={width}
-      height={height}
+      fill={fill}
       alt={alt}
     />
   ),
@@ -42,12 +41,10 @@ test('renders logo with default props', () => {
   expect(screen.getByAltText('logo')).toBeInTheDocument();
 });
 
-test('renders logo with correct dimensions', () => {
+test('renders logo with BaseImage', () => {
   render(<LogoSvg />);
 
-  const img = screen.getByAltText('logo');
-  expect(img).toHaveAttribute('width', '175');
-  expect(img).toHaveAttribute('height', '21');
+  expect(screen.getByTestId('mock-base-image')).toBeInTheDocument();
 });
 
 test('renders logo with src="/logo.svg"', () => {
