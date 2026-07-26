@@ -13,6 +13,7 @@ const Logo = (props) => (
       query=""
       alt="logo"
       priority
+      style={{ height: 'auto' }}
       {...props}
     />
   </LogoLink>
