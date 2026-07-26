@@ -13,9 +13,9 @@ const Logo = (props) => (
       query=""
       alt="logo"
       priority
+      style={{ objectFit: 'contain' }}
       {...props}
     />
   </LogoLink>
 );
-
 export default Logo;
