@@ -35,22 +35,12 @@ jobs:
 
       - name: Install Chrome
         run: |
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.asc | sudo gpg --dearmor -o /usr/share/keyrings/google-chrome-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome-keyring.gpg] https://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
           sudo apt-get update -y
           sudo apt-get install -y google-chrome-stable
 
-      - name: Run Lighthouse test against production
+      - name: Run Lighthouse test
         env:
-          SITE_URL: https://igorstar.com
-          THRESHOLD: ${{ github.event.inputs.thresholds || '0.9' }}
-        run: npm run test:lighthouse
-
-      - name: Upload Lighthouse Report (if failed)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-report
-          path: |
-            *.json
-          retention-days: 7
+          SITE_URL: ${{ github.event.inputs.url || 'https://igorstar.com' }}
+        run: yarn test:lighthouse
