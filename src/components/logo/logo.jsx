@@ -6,7 +6,7 @@ const height = 21;
 
 const Logo = (props) => (
   <LogoLink href="/" style={{ width, height }}>
-    <BaseImage fill src="/logo.svg" query="" alt="logo" priority {...props} />
+    <BaseImage fill src="/logo.svg" query="" alt="logo" preload {...props} />
   </LogoLink>
 );
 export default Logo;
