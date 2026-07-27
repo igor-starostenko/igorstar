@@ -24,7 +24,6 @@ vi.mock('components/image/baseImage.jsx', () => ({
     width,
     height,
     sizes,
-    preload,
     loading,
     blurDataURL,
     placeholder,
