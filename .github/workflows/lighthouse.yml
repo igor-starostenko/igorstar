@@ -11,11 +11,6 @@ on:
         description: 'Performance threshold (0-1, default: 0.9)'
         required: false
         default: '0.9'
-  pull_request:
-    paths:
-      - '**/*.js'
-      - '**/*.jsx'
-      - 'src/**/*'
 
 jobs:
   lighthouse-audit:
