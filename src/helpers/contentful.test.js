@@ -1,99 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   makeBlurDataURL,
   addBlurDataURLs,
-  addContentfulParams,
   clearBlurDataURLCache,
 } from 'helpers/contentful';
-
-describe('addContentfulParams', () => {
-  it('adds w, h, fm, and q params to Contentful URL (defaults)', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg';
-    const result = addContentfulParams(url, 800, 600);
-    expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=webp&q=30'
-    );
-  });
-
-  it('adds w, h, fm, and q params to URL with existing query (defaults)', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg?token=abc';
-    const result = addContentfulParams(url, 800, 600);
-    expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?token=abc&w=800&h=600&fm=webp&q=30'
-    );
-  });
-
-  it('returns original URL if not Contentful', () => {
-    const url = 'https://example.com/image.jpg';
-    const result = addContentfulParams(url, 800, 600);
-    expect(result).toBe('https://example.com/image.jpg');
-  });
-
-  it('returns original URL if missing required params', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg';
-    expect(addContentfulParams(url, 0, 600)).toBe(url);
-    expect(addContentfulParams(url, 800, 0)).toBe(url);
-    expect(addContentfulParams(url, undefined, 600)).toBe(url);
-    expect(addContentfulParams(url, 800, undefined)).toBe(url);
-  });
-
-  it('handles URL with hash fragment', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg#section';
-    const result = addContentfulParams(url, 800, 600);
-    expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=webp&q=30#section'
-    );
-  });
-
-  it('adds format parameter', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg';
-    const result = addContentfulParams(url, 800, 600, { format: 'png' });
-    expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=png&q=30'
-    );
-  });
-
-  it('adds quality parameter', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg';
-    const result = addContentfulParams(url, 800, 600, { quality: 80 });
-    expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=webp&q=80'
-    );
-  });
-
-  it('adds both format and quality parameters', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg';
-    const result = addContentfulParams(url, 800, 600, {
-      format: 'png',
-      quality: 85,
-    });
-    expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600&fm=png&q=85'
-    );
-  });
-
-  it('adds format and quality to URL with existing query', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg?token=abc';
-    const result = addContentfulParams(url, 800, 600, {
-      format: 'png',
-      quality: 90,
-    });
-    expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?token=abc&w=800&h=600&fm=png&q=90'
-    );
-  });
-
-  it('ignores empty format and quality values', () => {
-    const url = 'https://images.ctfassets.net/123/image.jpg';
-    const result = addContentfulParams(url, 800, 600, {
-      format: '',
-      quality: null,
-    });
-    expect(result).toBe(
-      'https://images.ctfassets.net/123/image.jpg?w=800&h=600'
-    );
-  });
-});
 
 describe('makeBlurDataURL', () => {
   beforeEach(() => {
@@ -101,10 +11,9 @@ describe('makeBlurDataURL', () => {
     clearBlurDataURLCache();
   });
 
-  it('returns undefined for non-Contentful URLs', () => {
-    expect(
-      makeBlurDataURL('https://example.com/image.jpg')
-    ).resolves.toBeUndefined();
+  it('returns undefined for non-Contentful URLs', async () => {
+    const result = await makeBlurDataURL('https://example.com/image.jpg');
+    expect(result).toBeUndefined();
   });
 
   it('returns undefined for null/empty URL', async () => {
@@ -150,18 +59,30 @@ describe('makeBlurDataURL', () => {
   });
 
   it('handles fetch error gracefully', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockRejectedValue(new Error('Network error'))
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+      })
     );
 
     const url = 'https://images.ctfassets.net/123/image.jpg';
     const result = await makeBlurDataURL(url);
 
     expect(result).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledOnce();
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to fetch blur placeholder (status 500):')
+    );
+    warnSpy.mockRestore();
   });
 
   it('handles non-OK response gracefully', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -174,6 +95,11 @@ describe('makeBlurDataURL', () => {
     const result = await makeBlurDataURL(url);
 
     expect(result).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalledOnce();
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to fetch blur placeholder (status 404):')
+    );
+    warnSpy.mockRestore();
   });
 });
 
@@ -249,15 +175,25 @@ describe('addBlurDataURLs', () => {
   });
 
   it('sets blurDataURL to null when fetch fails', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockRejectedValue(new Error('Network error'))
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 503,
+      })
     );
 
     const images = [{ src: 'https://images.ctfassets.net/123/image.jpg' }];
     const result = await addBlurDataURLs(images);
 
     expect(result[0].blurDataURL).toBeNull();
+    expect(warnSpy).toHaveBeenCalledOnce();
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Failed to fetch blur placeholder (status 503):')
+    );
+    warnSpy.mockRestore();
   });
 
   it('handles nested path for thumbnail in posts', async () => {

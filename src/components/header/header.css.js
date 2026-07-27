@@ -1,16 +1,12 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 import { colors } from 'constants/theme';
-import MEDIA from 'helpers/mediaTemplates.js';
-import LogoSvg from 'components/logo/logo.jsx';
 
 export const Container = styled.header`
   display: flex;
   justify-content: space-between;
-  align-items: stretch;
+  align-items: center;
   padding: 2rem 4rem;
-  ${MEDIA.PHONE`
-    padding: 2rem 3rem;
-  `}
 
   a {
     color: ${colors.grey};
@@ -23,11 +19,7 @@ export const Container = styled.header`
   }
 `;
 
-export const Logo = styled(LogoSvg)`
-  ${MEDIA.TABLET`
-    max-width: 90%;
-  `}
-  ${MEDIA.PHONE`
-    max-width: 75%;
-  `}
+export const LogoLink = styled(Link)`
+  display: inline-block;
+  position: relative;
 `;

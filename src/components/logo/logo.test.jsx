@@ -1,6 +1,26 @@
 import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
+vi.mock('next/link', () => ({
+  __esModule: true,
+  default: ({ href, children, ...props }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}));
+
+vi.mock('components/image/baseImage', () => ({
+  default: ({ fill, src, alt }) => (
+    <img
+      data-testid="mock-base-image"
+      src={src}
+      fill={fill}
+      alt={alt}
+    />
+  ),
+}));
+
 vi.mock('components/image/image.jsx', () => ({
   default: ({ src, width, height, alt }) => (
     <img
@@ -21,12 +41,10 @@ test('renders logo with default props', () => {
   expect(screen.getByAltText('logo')).toBeInTheDocument();
 });
 
-test('renders logo with correct dimensions', () => {
+test('renders logo with BaseImage', () => {
   render(<LogoSvg />);
 
-  const img = screen.getByAltText('logo');
-  expect(img).toHaveAttribute('width', '105');
-  expect(img).toHaveAttribute('height', '22');
+  expect(screen.getByTestId('mock-base-image')).toBeInTheDocument();
 });
 
 test('renders logo with src="/logo.svg"', () => {

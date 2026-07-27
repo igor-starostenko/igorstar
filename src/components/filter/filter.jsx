@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import Title from 'components/title/title.jsx';
-import { Container, TitleHeader, Categories, Counter } from './filter.css.js';
+import { TitleHeader, Categories, Counter } from './filter.css.js';
+import { ContentDetails } from 'components/layout/layout.css.js';
 
 const filters = [
   { title: 'All', href: '/' },
@@ -10,7 +11,7 @@ const filters = [
 ];
 
 const Filter = ({ path, title, displayCount, totalCount }) => (
-  <Container>
+  <ContentDetails>
     <TitleHeader>
       <Title as="h1" size="large">
         {title}
@@ -30,7 +31,7 @@ const Filter = ({ path, title, displayCount, totalCount }) => (
     <Counter>
       Loaded {displayCount} of {totalCount} posts
     </Counter>
-  </Container>
+  </ContentDetails>
 );
 
 Filter.propTypes = {

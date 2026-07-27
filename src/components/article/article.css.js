@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import { colors } from 'constants/theme';
-import MEDIA from 'helpers/mediaTemplates';
 
 export const Card = styled.article`
   &:first-child {
@@ -28,16 +27,15 @@ export const Thumb = styled.div`
   position: relative;
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease-in-out;
-  border-radius: 2px;
-  overflow: hidden;
   cursor: pointer;
   line-height: 0;
 
   img {
+    width: 100%;
     height: auto;
-    object-fit: cover;
     transition: transform 2s;
   }
+
   :hover {
     box-shadow: -2px 5px 8px 2px rgba(0, 0, 0, 0.3);
     img {
@@ -45,15 +43,7 @@ export const Thumb = styled.div`
     }
   }
 
-  max-height: 41rem;
-  margin: 0rem -3.9rem 0rem;
-  ${MEDIA.TABLET`
-    max-height: 36rem;
-  `};
-  ${MEDIA.PHONE`
-    max-height: 24rem;
-    margin: 0rem -2.9rem 0rem;
-  `};
+  margin: 0rem;
 `;
 
 export const Title = styled.h3`
