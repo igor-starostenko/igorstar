@@ -11,6 +11,11 @@ on:
         description: 'Performance threshold (0-1, default: 0.9)'
         required: false
         default: '0.9'
+  pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.jsx'
+      - 'src/**/*'
 
 jobs:
   lighthouse-audit:
@@ -24,52 +29,33 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version-file: '.nvmrc'
           cache: 'yarn'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
-      - name: Run Lighthouse Audit
-        env:
-          URL: ${{ github.event.inputs.url }}
-          THRESHOLD: ${{ github.event.inputs.thresholds }}
+      - name: Install Chrome
         run: |
-          echo "Auditing URL: ${URL:-https://igorstar.com}"
-          npx lighthouse "${URL:-https://igorstar.com}" \
-            --output=json \
-            --output-path=lighthouse-report.json \
-            --quiet \
-            --chrome-flags="--no-sandbox"
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update -y
+          sudo apt-get install -y google-chrome-stable
 
-      - name: Upload Lighthouse Report
+      - name: Run Lighthouse test against production
+        env:
+          SITE_URL: https://igorstar.com
+          THRESHOLD: ${{ github.event.inputs.thresholds || '0.9' }}
+        run: npm run test:lighthouse
+
+      - name: Upload Lighthouse Report (if failed)
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-report
-          path: lighthouse-report.json
+          path: |
+            *.json
           retention-days: 7
-
-      - name: Display Performance Score
-        run: |
-          if [ -f lighthouse-report.json ]; then
-            echo "=== Lighthouse Performance Report ==="
-            cat lighthouse-report.json | jq -r '
-              .lhr.categories.performance.score as $perf |
-              "Performance Score: \($perf | . * 100 | floor)%"'
-          fi
-
-      - name: Check Performance Threshold
-        if: ${{ github.event.inputs.thresholds != '' }}
-        run: |
-          THRESHOLD=${{ github.event.inputs.thresholds }}
-          SCORE=$(cat lighthouse-report.json | jq -r '.lhr.categories.performance.score')
-          
-          echo "Threshold: ${THRESHOLD}"
-          echo "Score: ${SCORE}"
-          
-          if (( $(echo "$SCORE < $THRESHOLD" | bc -l) )); then
-            echo "::error::Performance score ($SCORE) is below threshold ($THRESHOLD)"
-            exit 1
-          else
-            echo "✓ Performance score meets threshold"
-          fi
