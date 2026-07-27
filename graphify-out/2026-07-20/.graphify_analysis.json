@@ -1,0 +1,847 @@
+{
+  "communities": {
+    "0": [
+      ".agents_skills_amplify_workflow",
+      ".agents_skills_amplify_workflow_references_backend",
+      ".agents_skills_amplify_workflow_references_deploy",
+      ".agents_skills_amplify_workflow_references_frontend",
+      ".agents_skills_next_best_practices",
+      ".agents_skills_next_best_practices_async_patterns",
+      ".agents_skills_next_best_practices_bundling",
+      ".agents_skills_next_best_practices_data_patterns",
+      ".agents_skills_next_best_practices_directives",
+      ".agents_skills_next_best_practices_error_handling",
+      ".agents_skills_next_best_practices_file_conventions",
+      ".agents_skills_next_best_practices_font",
+      ".agents_skills_next_best_practices_functions",
+      ".agents_skills_next_best_practices_hydration_error",
+      ".agents_skills_next_best_practices_image",
+      ".agents_skills_next_best_practices_metadata",
+      ".agents_skills_next_best_practices_parallel_routes",
+      ".agents_skills_next_best_practices_route_handlers",
+      ".agents_skills_next_best_practices_rsc_boundaries",
+      ".agents_skills_next_best_practices_runtime_selection",
+      ".agents_skills_next_best_practices_scripts",
+      ".agents_skills_next_best_practices_self_hosting",
+      ".agents_skills_next_best_practices_suspense_boundaries",
+      ".agents_skills_next_cache_components",
+      ".agents_skills_next_upgrade",
+      ".github_workflows_codeql_analysis",
+      ".github_workflows_lighthouse",
+      ".github_workflows_test",
+      ".yarnrc",
+      "AGENTS",
+      "SKILL",
+      "amplify",
+      "readme"
+    ],
+    "1": [
+      "core_js",
+      "package",
+      "package_author",
+      "package_devdependencies_core_js",
+      "package_engines",
+      "package_engines_node",
+      "package_greenkeeper",
+      "package_greenkeeper_ignore",
+      "package_license",
+      "package_name",
+      "package_packagemanager",
+      "package_scripts",
+      "package_scripts_analyze",
+      "package_scripts_build",
+      "package_scripts_build_analyze",
+      "package_scripts_build_dir",
+      "package_scripts_build_favicons",
+      "package_scripts_build_images",
+      "package_scripts_build_sitemap",
+      "package_scripts_contentful_assets",
+      "package_scripts_contentful_backup",
+      "package_scripts_contentful_export",
+      "package_scripts_dev",
+      "package_scripts_format",
+      "package_scripts_lint",
+      "package_scripts_start",
+      "package_scripts_test",
+      "package_scripts_test_components",
+      "package_scripts_test_helpers",
+      "package_scripts_test_lighthouse",
+      "package_type"
+    ],
+    "2": [
+      "babel_plugin_styled_components",
+      "contentful",
+      "contentful_rich_text_react_renderer",
+      "dotenv",
+      "fast_xml_parser",
+      "framer_motion",
+      "next",
+      "package_dependencies",
+      "package_dependencies_babel_plugin_styled_components",
+      "package_dependencies_contentful",
+      "package_dependencies_contentful_rich_text_react_renderer",
+      "package_dependencies_dotenv",
+      "package_dependencies_fast_xml_parser",
+      "package_dependencies_framer_motion",
+      "package_dependencies_next",
+      "package_dependencies_prop_types",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_react_photo_album",
+      "package_dependencies_react_syntax_highlighter",
+      "package_dependencies_serve",
+      "package_dependencies_styled_components",
+      "prop_types",
+      "react",
+      "react_dom",
+      "react_photo_album",
+      "react_syntax_highlighter",
+      "serve",
+      "styled_components"
+    ],
+    "3": [
+      "src_components_footer_footer",
+      "src_components_footer_footer_css",
+      "src_components_footer_footer_css_container",
+      "src_components_footer_footer_css_copyright",
+      "src_components_footer_footer_css_social",
+      "src_components_footer_footer_footer",
+      "src_components_footer_footer_sociallink",
+      "src_components_footer_footer_test",
+      "src_components_footer_footer_test_validsocial",
+      "src_components_icons_fivehundredpxicon",
+      "src_components_icons_fivehundredpxicon_fivehundredpxicon",
+      "src_components_icons_flickricon",
+      "src_components_icons_flickricon_flickricon",
+      "src_components_icons_githubicon",
+      "src_components_icons_githubicon_githubicon",
+      "src_components_icons_icons_test",
+      "src_components_icons_index",
+      "src_components_icons_linkedinicon",
+      "src_components_icons_linkedinicon_linkedinicon",
+      "src_components_icons_twittericon",
+      "src_components_icons_twittericon_twittericon",
+      "src_components_icons_youtubeicon",
+      "src_components_icons_youtubeicon_youtubeicon",
+      "src_constants_theme",
+      "src_constants_theme_colors",
+      "src_global_css",
+      "src_global_css_globalstyle"
+    ],
+    "4": [
+      "src_components_image_baseimage",
+      "src_components_image_baseimage_baseimage",
+      "src_components_image_baseimage_test",
+      "src_components_image_flickrimage",
+      "src_components_image_flickrimage_flickrimage",
+      "src_components_image_flickrimage_parseflickrimage",
+      "src_components_image_flickrimage_parser",
+      "src_components_image_flickrimage_test",
+      "src_components_image_flickrimage_test_constructor",
+      "src_components_image_flickrimage_test_parse",
+      "src_components_image_image",
+      "src_components_image_image_css",
+      "src_components_image_image_css_imagecontainer",
+      "src_components_image_image_css_imagecopyright",
+      "src_components_image_image_css_imagefooter",
+      "src_components_image_image_css_imageframe",
+      "src_components_image_image_css_imageheader",
+      "src_components_image_image_css_imagetitle",
+      "src_components_image_image_css_imagewrapper",
+      "src_components_image_image_css_simage",
+      "src_components_image_image_image",
+      "src_components_image_image_test",
+      "src_components_image_image_test_mockprops"
+    ],
+    "5": [
+      "src_pages_category_post",
+      "src_pages_category_post_baseimage",
+      "src_pages_category_post_calculaterowheight",
+      "src_pages_category_post_datetext",
+      "src_pages_category_post_filterobject",
+      "src_pages_category_post_flickrimage",
+      "src_pages_category_post_getstaticpaths",
+      "src_pages_category_post_getstaticprops",
+      "src_pages_category_post_hasdivchild",
+      "src_pages_category_post_hasmultilinecode",
+      "src_pages_category_post_isflickrembed",
+      "src_pages_category_post_isflickrnode",
+      "src_pages_category_post_options",
+      "src_pages_category_post_post",
+      "src_pages_category_post_suggestedpostprops",
+      "src_pages_category_post_syntaxhighlighter",
+      "src_tests_post_test",
+      "src_tests_post_test_mockpost"
+    ],
+    "6": [
+      "src_components_article_article",
+      "src_components_article_article_article",
+      "src_components_article_article_calculateconstraineddimensions",
+      "src_components_article_article_css",
+      "src_components_article_article_css_card",
+      "src_components_article_article_css_description",
+      "src_components_article_article_css_row",
+      "src_components_article_article_css_slink",
+      "src_components_article_article_css_thumb",
+      "src_components_article_article_css_title",
+      "src_components_article_article_datetext",
+      "src_components_article_article_test",
+      "src_components_article_article_test_mockarticleprops"
+    ],
+    "7": [
+      "src_components_gallery_gallery",
+      "src_components_gallery_gallery_carousel",
+      "src_components_gallery_gallery_createsortfunction",
+      "src_components_gallery_gallery_css",
+      "src_components_gallery_gallery_css_gallerycontainer",
+      "src_components_gallery_gallery_css_galleryimagewrapper",
+      "src_components_gallery_gallery_gallery",
+      "src_components_gallery_gallery_maptophotoalbumformat",
+      "src_components_gallery_gallery_orderarray",
+      "src_components_gallery_gallery_rendernextimage",
+      "src_components_gallery_gallery_test",
+      "src_components_gallery_gallery_test_getgalleryimages",
+      "src_components_gallery_gallery_test_getunsortedphotos"
+    ],
+    "8": [
+      "agents_skills_next_best_practices_debug_tricks",
+      "debug_build_paths",
+      "get_errors",
+      "get_logs",
+      "get_page_metadata",
+      "get_project_metadata",
+      "get_routes",
+      "get_server_action_by_id",
+      "mcp_endpoint",
+      "next_devtools_mcp",
+      "next_js_16",
+      "next_js_dev_server"
+    ],
+    "9": [
+      "src_components_carousel_carousel",
+      "src_components_carousel_carousel_carouselmodal",
+      "src_components_carousel_carousel_css",
+      "src_components_carousel_carousel_css_closebutton",
+      "src_components_carousel_carousel_css_galleryimage",
+      "src_components_carousel_carousel_css_imagecontainer",
+      "src_components_carousel_carousel_css_modalcontent",
+      "src_components_carousel_carousel_css_modaloverlay",
+      "src_components_carousel_carousel_test",
+      "src_components_carousel_carousel_test_mockviews"
+    ],
+    "10": [
+      "src_components_recommendations_recommendations",
+      "src_components_recommendations_recommendations_css",
+      "src_components_recommendations_recommendations_css_card",
+      "src_components_recommendations_recommendations_css_container",
+      "src_components_recommendations_recommendations_css_details",
+      "src_components_recommendations_recommendations_css_slink",
+      "src_components_recommendations_recommendations_css_thumb",
+      "src_components_recommendations_recommendations_css_thumbwrapper",
+      "src_components_recommendations_recommendations_recommendations",
+      "src_components_recommendations_recommendations_test"
+    ],
+    "11": [
+      "src_components_title_title",
+      "src_components_title_title_css",
+      "src_components_title_title_css_text",
+      "src_components_title_title_test",
+      "src_components_title_title_title",
+      "src_constants_breakpoints",
+      "src_constants_breakpoints_breakpoints",
+      "src_helpers_mediatemplates",
+      "src_helpers_mediatemplates_media",
+      "src_helpers_mediatemplates_test"
+    ],
+    "12": [
+      "src_components_filter_filter",
+      "src_components_filter_filter_css",
+      "src_components_filter_filter_css_categories",
+      "src_components_filter_filter_css_container",
+      "src_components_filter_filter_css_counter",
+      "src_components_filter_filter_css_titleheader",
+      "src_components_filter_filter_filter",
+      "src_components_filter_filter_filters",
+      "src_components_filter_filter_test"
+    ],
+    "13": [
+      "src_constants_imageconfig",
+      "src_helpers_contentful",
+      "src_helpers_contentful_addblurdataurls",
+      "src_helpers_contentful_addcontentfulparams",
+      "src_helpers_contentful_blur_concurrency",
+      "src_helpers_contentful_blurdataurlcache",
+      "src_helpers_contentful_clearblurdataurlcache",
+      "src_helpers_contentful_fetchwithtimeout",
+      "src_helpers_contentful_makeblurdataurl"
+    ],
+    "14": [
+      "src_contentclient",
+      "src_contentclient_client",
+      "src_contentclient_getallentries",
+      "src_contentclient_getcategoriespaths",
+      "src_contentclient_getentries",
+      "src_contentclient_getpostspaths",
+      "src_contentclient_parsefields",
+      "src_contentclient_parseimage",
+      "src_contentclient_parseitem"
+    ],
+    "15": [
+      "src_components_date_date",
+      "src_components_date_date_css",
+      "src_components_date_date_css_datebase",
+      "src_components_date_date_css_datemain",
+      "src_components_date_date_css_datemobile",
+      "src_components_date_date_datetext",
+      "src_components_date_date_formatdate",
+      "src_components_date_date_test"
+    ],
+    "16": [
+      "src_components_layout_layout",
+      "src_components_layout_layout_css",
+      "src_components_layout_layout_css_container",
+      "src_components_layout_layout_css_content",
+      "src_components_layout_layout_layout",
+      "src_components_layout_layout_layoutwithconfig",
+      "src_components_layout_layout_test",
+      "src_components_layout_layout_test_mockconfig"
+    ],
+    "17": [
+      "eslint_config_next",
+      "package_devdependencies",
+      "package_devdependencies_eslint_config_next",
+      "package_devdependencies_testing_library_dom",
+      "package_devdependencies_testing_library_jest_dom",
+      "package_devdependencies_testing_library_react",
+      "testing_library_dom"
+    ],
+    "18": [
+      "scripts_contentful_assets",
+      "scripts_contentful_assets_client",
+      "scripts_contentful_assets_getallassets",
+      "scripts_contentful_assets_limit",
+      "scripts_contentful_assets_replaceimages",
+      "scripts_contentful_assets_saveallassets",
+      "scripts_contentful_assets_savefile"
+    ],
+    "19": [
+      "scripts_contentful_backup",
+      "scripts_contentful_backup_client",
+      "scripts_contentful_backup_contentful",
+      "scripts_contentful_backup_fs",
+      "scripts_contentful_backup_limit",
+      "scripts_contentful_backup_savefile"
+    ],
+    "20": [
+      "scripts_contentful_import",
+      "scripts_contentful_import_client",
+      "scripts_contentful_import_contentful",
+      "scripts_contentful_import_data",
+      "scripts_contentful_import_fs",
+      "scripts_contentful_import_json"
+    ],
+    "21": [
+      "src_components_hashtags_hashtags",
+      "src_components_hashtags_hashtags_css",
+      "src_components_hashtags_hashtags_css_container",
+      "src_components_hashtags_hashtags_css_tag",
+      "src_components_hashtags_hashtags_hashtags",
+      "src_components_hashtags_hashtags_test"
+    ],
+    "22": [
+      "src_components_header_header",
+      "src_components_header_header_css",
+      "src_components_header_header_css_container",
+      "src_components_header_header_css_logo",
+      "src_components_header_header_header",
+      "src_components_header_header_test"
+    ],
+    "23": [
+      "src_components_selfie_selfie",
+      "src_components_selfie_selfie_css",
+      "src_components_selfie_selfie_css_image",
+      "src_components_selfie_selfie_css_imagewrapper",
+      "src_components_selfie_selfie_selfie",
+      "src_components_selfie_selfie_test"
+    ],
+    "24": [
+      "src_components_box_box",
+      "src_components_box_box_box",
+      "src_components_box_box_css",
+      "src_components_box_box_css_container",
+      "src_components_box_box_test"
+    ],
+    "25": [
+      "src_components_head_head",
+      "src_components_head_head_appendsiteurl",
+      "src_components_head_head_configseo",
+      "src_components_head_head_seo",
+      "src_components_head_head_test"
+    ],
+    "26": [
+      "src_components_header_nav_nav",
+      "src_components_header_nav_nav_css",
+      "src_components_header_nav_nav_css_container",
+      "src_components_header_nav_nav_nav",
+      "src_components_header_nav_nav_test"
+    ],
+    "27": [
+      "src_components_pagination_pagination",
+      "src_components_pagination_pagination_css",
+      "src_components_pagination_pagination_css_row",
+      "src_components_pagination_pagination_pagination",
+      "src_components_pagination_pagination_test"
+    ],
+    "28": [
+      "src_tests_document_test",
+      "src_tests_document_test_collectstyles",
+      "src_tests_document_test_getinitialprops",
+      "src_tests_document_test_getstyleelement",
+      "src_tests_document_test_seal"
+    ],
+    "29": [
+      "src_components_category_category",
+      "src_components_category_category_category",
+      "src_components_category_category_pagination",
+      "src_components_category_category_test"
+    ],
+    "30": [
+      "src_helpers_schemagenerator",
+      "src_helpers_schemagenerator_schemagenerator",
+      "src_helpers_schemagenerator_test",
+      "src_helpers_schemagenerator_test_baseinput"
+    ],
+    "31": [
+      "src_pages_category",
+      "src_pages_category_categoryindex",
+      "src_pages_category_getstaticpaths",
+      "src_pages_category_getstaticprops"
+    ],
+    "32": [
+      "src_pages_document",
+      "src_pages_document_mydocument",
+      "src_pages_document_mydocument_getinitialprops",
+      "src_pages_document_mydocument_render"
+    ],
+    "33": [
+      "src_pages_feed",
+      "src_pages_feed_feedpage",
+      "src_pages_feed_formatcaption",
+      "src_pages_feed_getstaticprops"
+    ],
+    "34": [
+      "agents_skills_amplify_workflow_scripts_prereq_check",
+      "agents_skills_amplify_workflow_scripts_prereq_check_check",
+      "agents_skills_amplify_workflow_scripts_prereq_check_sh__entry"
+    ],
+    "35": [
+      "jsconfig",
+      "jsconfig_compileroptions",
+      "jsconfig_compileroptions_baseurl"
+    ],
+    "36": [
+      "src_components_logo_logo",
+      "src_components_logo_logo_logosvg",
+      "src_components_logo_logo_test"
+    ],
+    "37": [
+      "src_pages_about",
+      "src_pages_about_about",
+      "src_pages_about_getstaticprops"
+    ],
+    "38": [
+      "src_pages_gallery",
+      "src_pages_gallery_gallerypage",
+      "src_pages_gallery_getstaticprops"
+    ],
+    "39": [
+      "src_pages_index",
+      "src_pages_index_getstaticprops",
+      "src_pages_index_index"
+    ],
+    "40": [
+      "babel_config",
+      "babel_config_config"
+    ],
+    "41": [
+      "babel_core",
+      "package_devdependencies_babel_core"
+    ],
+    "42": [
+      "babel_plugin_transform_modules_commonjs",
+      "package_devdependencies_babel_plugin_transform_modules_commonjs"
+    ],
+    "43": [
+      "babel_preset_react",
+      "package_devdependencies_babel_preset_react"
+    ],
+    "44": [
+      "babel_register",
+      "package_devdependencies_babel_register"
+    ],
+    "45": [
+      "chrome_launcher",
+      "package_devdependencies_chrome_launcher"
+    ],
+    "46": [
+      "contentful_cli",
+      "package_devdependencies_contentful_cli"
+    ],
+    "47": [
+      "contentful_management",
+      "package_devdependencies_contentful_management"
+    ],
+    "48": [
+      "contentful_migration",
+      "package_devdependencies_contentful_migration"
+    ],
+    "49": [
+      "directory_named_webpack_plugin",
+      "package_devdependencies_directory_named_webpack_plugin"
+    ],
+    "50": [
+      "eslint",
+      "package_devdependencies_eslint"
+    ],
+    "51": [
+      "eslint_config_prettier",
+      "package_devdependencies_eslint_config_prettier"
+    ],
+    "52": [
+      "esm",
+      "package_devdependencies_esm"
+    ],
+    "53": [
+      "favicons",
+      "package_devdependencies_favicons"
+    ],
+    "54": [
+      "jsdom",
+      "package_devdependencies_jsdom"
+    ],
+    "55": [
+      "lighthouse",
+      "package_devdependencies_lighthouse"
+    ],
+    "56": [
+      "mkdirp",
+      "package_devdependencies_mkdirp"
+    ],
+    "57": [
+      "next_bundle_analyzer",
+      "package_devdependencies_next_bundle_analyzer"
+    ],
+    "58": [
+      "next_config",
+      "next_config_next_config"
+    ],
+    "59": [
+      "next_sitemap",
+      "package_devdependencies_next_sitemap"
+    ],
+    "60": [
+      "node_gyp",
+      "package_devdependencies_node_gyp"
+    ],
+    "61": [
+      "node_loader_babel",
+      "package_devdependencies_node_loader_babel"
+    ],
+    "62": [
+      "package_devdependencies_prettier",
+      "prettier"
+    ],
+    "63": [
+      "package_devdependencies_source_map_explorer",
+      "source_map_explorer"
+    ],
+    "64": [
+      "package_devdependencies_vitest",
+      "vitest"
+    ],
+    "65": [
+      "package_devdependencies_vitest_coverage_v8",
+      "vitest_coverage_v8"
+    ],
+    "66": [
+      "package_devdependencies_vitest_ui",
+      "vitest_ui"
+    ],
+    "67": [
+      "package_devdependencies_webpack",
+      "webpack"
+    ],
+    "68": [
+      "src_pages_404",
+      "src_pages_404_notfound"
+    ],
+    "69": [
+      "src_pages_app",
+      "src_pages_app_myapp"
+    ],
+    "70": [
+      "src_test_lighthouse_test",
+      "src_test_lighthouse_test_launchchromeandrunlighthouse"
+    ],
+    "71": [
+      "src_test_setup",
+      "src_test_setup_tobeinthedocument"
+    ],
+    "72": [
+      "src_tests_app_test",
+      "src_tests_app_test_mockcomponent"
+    ],
+    "73": [
+      "CLAUDE"
+    ],
+    "74": [
+      "customHttp"
+    ],
+    "75": [
+      "docker-compose"
+    ],
+    "76": [
+      "eslint_config"
+    ],
+    "77": [
+      "license"
+    ],
+    "78": [
+      "next_sitemap_config"
+    ],
+    "79": [
+      "public_logo"
+    ],
+    "80": [
+      "src_constants_transition"
+    ],
+    "81": [
+      "src_helpers_contentful_test"
+    ],
+    "82": [
+      "src_tests_404_test"
+    ],
+    "83": [
+      "src_tests_about_test"
+    ],
+    "84": [
+      "src_tests_category_test"
+    ],
+    "85": [
+      "src_tests_feed_test"
+    ],
+    "86": [
+      "src_tests_gallery_test"
+    ],
+    "87": [
+      "src_tests_index_test"
+    ],
+    "88": [
+      "vite_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.09659090909090909,
+    "1": 0.06451612903225806,
+    "2": 0.06896551724137931,
+    "3": 0.13675213675213677,
+    "4": 0.15019762845849802,
+    "5": 0.13725490196078433,
+    "6": 0.2564102564102564,
+    "7": 0.24358974358974358,
+    "8": 0.16666666666666666,
+    "9": 0.3333333333333333,
+    "10": 0.35555555555555557,
+    "11": 0.3111111111111111,
+    "12": 0.3611111111111111,
+    "13": 0.2777777777777778,
+    "14": 0.3888888888888889,
+    "15": 0.42857142857142855,
+    "16": 0.35714285714285715,
+    "17": 0.38095238095238093,
+    "18": 0.3333333333333333,
+    "19": 0.3333333333333333,
+    "20": 0.3333333333333333,
+    "21": 0.5333333333333333,
+    "22": 0.5333333333333333,
+    "23": 0.5333333333333333,
+    "24": 0.6,
+    "25": 0.6,
+    "26": 0.6,
+    "27": 0.6,
+    "28": 0.4,
+    "29": 0.6666666666666666,
+    "30": 0.6666666666666666,
+    "31": 0.5,
+    "32": 0.5,
+    "33": 0.6666666666666666,
+    "34": 1.0,
+    "35": 0.6666666666666666,
+    "36": 1.0,
+    "37": 0.6666666666666666,
+    "38": 0.6666666666666666,
+    "39": 0.6666666666666666,
+    "40": 1.0,
+    "41": 1.0,
+    "42": 1.0,
+    "43": 1.0,
+    "44": 1.0,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0,
+    "68": 1.0,
+    "69": 1.0,
+    "70": 1.0,
+    "71": 1.0,
+    "72": 1.0,
+    "73": 1.0,
+    "74": 1.0,
+    "75": 1.0,
+    "76": 1.0,
+    "77": 1.0,
+    "78": 1.0,
+    "79": 1.0,
+    "80": 1.0,
+    "81": 1.0,
+    "82": 1.0,
+    "83": 1.0,
+    "84": 1.0,
+    "85": 1.0,
+    "86": 1.0,
+    "87": 1.0,
+    "88": 1.0
+  },
+  "gods": [
+    {
+      "id": ".agents_skills_next_best_practices",
+      "label": "Next Best Practices Skill",
+      "degree": 20
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 19
+    },
+    {
+      "id": ".agents_skills_amplify_workflow",
+      "label": "Amplify Workflow Skill",
+      "degree": 11
+    },
+    {
+      "id": "mcp_endpoint",
+      "label": "MCP Endpoint",
+      "degree": 9
+    },
+    {
+      "id": "src_components_gallery_gallery_gallery",
+      "label": "Gallery()",
+      "degree": 5
+    },
+    {
+      "id": "src_contentclient_getentries",
+      "label": "getEntries()",
+      "degree": 5
+    },
+    {
+      "id": ".agents_skills_amplify_workflow_references_deploy",
+      "label": "Deploy Phase Reference",
+      "degree": 5
+    },
+    {
+      "id": ".agents_skills_next_best_practices_data_patterns",
+      "label": "Data Patterns Guide",
+      "degree": 5
+    },
+    {
+      "id": "AGENTS",
+      "label": "Agent Guidelines",
+      "degree": 5
+    },
+    {
+      "id": "src_components_icons_fivehundredpxicon_fivehundredpxicon",
+      "label": "FivehundredpxIcon()",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Tests Workflow",
+      "target": "Amplify Workflow Skill",
+      "source_files": [
+        ".github/workflows/test.yml",
+        ".agents/skills/amplify-workflow/SKILL.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `Tests Workflow` unexpectedly reaches hub `Amplify Workflow Skill`"
+    },
+    {
+      "source": "Amplify Configuration",
+      "target": "Deploy Phase Reference",
+      "source_files": [
+        "amplify.yml",
+        ".agents/skills/amplify-workflow/references/deploy.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `Amplify Configuration` unexpectedly reaches hub `Deploy Phase Reference`"
+    },
+    {
+      "source": "Amplify Workflow Skill",
+      "target": "Igorstar Skill",
+      "source_files": [
+        ".agents/skills/amplify-workflow/SKILL.md",
+        "SKILL.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `Igorstar Skill` unexpectedly reaches hub `Amplify Workflow Skill`"
+    },
+    {
+      "source": "Yarn Configuration",
+      "target": "Amplify Workflow Skill",
+      "source_files": [
+        ".yarnrc.yml",
+        ".agents/skills/amplify-workflow/SKILL.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "Project README",
+      "target": "Amplify Workflow Skill",
+      "source_files": [
+        "readme.md",
+        ".agents/skills/amplify-workflow/SKILL.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "cites",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

@@ -1,0 +1,1 @@
+{"nodes": [{"id": ".github_workflows_lighthouse", "label": "Lighthouse Audit Workflow", "file_type": "code", "source_file": ".github/workflows/lighthouse.yml"}], "edges": [], "hyperedges": []}
