@@ -17,6 +17,22 @@ vi.mock('next/dynamic', () => ({
   },
 }));
 
+vi.mock('hooks/useInfiniteScroll.jsx', () => ({
+  useInfiniteScroll: (items, batchSize = 20) => ({
+    items: items.slice(0, batchSize),
+    loadMore: vi.fn(),
+  }),
+}));
+
+vi.mock('components/infinite-scroll/InfiniteScroll.jsx', () => ({
+  default: ({ children }) => (
+    <div data-testid="mock-infinite-scroll">
+      {children}
+      <div data-testid="infinite-scroll-sentinel" />
+    </div>
+  ),
+}));
+
 vi.mock('components/layout/layout.jsx', () => ({
   default: ({ children }) => <div data-testid="mock-layout">{children}</div>,
 }));
