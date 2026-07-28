@@ -30,7 +30,7 @@ vi.mock('components/title/title.jsx', () => ({
 }));
 
 vi.mock('components/infinite-scroll/InfiniteScroll.jsx', () => ({
-  default: ({ children, hasMore, isLoading, loadMore }) => (
+  default: ({ children }) => (
     <div data-testid="mock-infinite-scroll">
       {children}
       <div data-testid="infinite-scroll-sentinel" />
@@ -38,7 +38,7 @@ vi.mock('components/infinite-scroll/InfiniteScroll.jsx', () => ({
   ),
 }));
 
-import FeedPage from 'pages/feed.jsx';
+import FeedPage from 'pages/feed/[page].jsx';
 
 test('renders Feed with images', () => {
   const mockProps = {

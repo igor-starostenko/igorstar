@@ -5,32 +5,36 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Title from 'components/title/title.jsx';
 import Gallery from 'components/gallery/gallery.jsx';
+import { ContentDetails } from 'components/layout/layout.css.js';
 
 const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
 
-// Pagination settings
-const IMAGES_PER_PAGE = 20;
-
 const GalleryPage = ({ page, gallery }) => {
-  const pageNum = parseInt(page.pageNum) || 1;
-  const startIndex = (pageNum - 1) * IMAGES_PER_PAGE;
-  const endIndex = startIndex + IMAGES_PER_PAGE;
+  const pageNum = parseInt(page.params?.page) || 1;
+  const pageSize = 10;
+
+  // Calculate which images to show on this page
+  const startIndex = (pageNum - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, gallery.images.length);
   const currentImages = gallery.images.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(gallery.total / IMAGES_PER_PAGE);
 
   return (
     <Layout>
       <Head pageTitle={page.title} />
       <Box>
-        <Title as="h1" size="large">
-          {page.title}
-        </Title>
-        {currentImages.length > 0 && (
-          <Gallery photos={currentImages} targetRowHeight={250} />
-        )}
-        <Pagination pageNum={pageNum} totalPages={totalPages} />
+        <ContentDetails>
+          <Title as="h1" size="large">
+            {page.title}
+          </Title>
+        </ContentDetails>
+        <div>
+          {currentImages.length > 0 && (
+            <Gallery photos={currentImages} targetRowHeight={250} />
+          )}
+        </div>
+        <Pagination pageNum={pageNum} totalPages={Math.ceil(gallery.total / pageSize)} />
       </Box>
     </Layout>
   );
@@ -46,9 +50,7 @@ GalleryPage.propTypes = {
   }).isRequired,
 };
 
-export default GalleryPage;
-
-// Generate paths for all pages statically
+// Generate paths for all pages statically (page 1 is /gallery, page 2+ are /gallery/page/N)
 export const getStaticPaths = async () => {
   const { getEntries } = await import('contentClient');
 
@@ -65,11 +67,11 @@ export const getStaticPaths = async () => {
     content_type: 'gallery',
   });
 
-  const totalPages = Math.ceil(gallery.total / IMAGES_PER_PAGE);
+  const totalPages = Math.ceil(gallery.total / 10);
   const paths = [];
 
   // Generate path for page 1 (root /gallery)
-  paths.push({ params: {} });
+  paths.push({ params: { page: '1' } });
 
   // Generate paths for subsequent pages (/gallery/page/2, etc.)
   for (let i = 2; i <= totalPages; i++) {
@@ -87,7 +89,7 @@ export const getStaticProps = async ({ params }) => {
   const { addBlurDataURLs } = await import('helpers/contentful');
 
   const pageNum = parseInt(params?.page) || 1;
-  const skip = (pageNum - 1) * IMAGES_PER_PAGE;
+  const skip = (pageNum - 1) * 10;
 
   const pages = await getEntries({
     content_type: 'page',
@@ -96,7 +98,7 @@ export const getStaticProps = async ({ params }) => {
 
   const galleryData = await getEntries({
     content_type: 'gallery',
-    limit: IMAGES_PER_PAGE,
+    limit: 10,
     skip,
   });
 
@@ -112,12 +114,15 @@ export const getStaticProps = async ({ params }) => {
 
   return {
     props: {
-      page: pages.items[0] || {},
+      page: {
+        ...pages.items[0],
+      },
       gallery: {
         images: imagesWithBlurData,
         total: galleryData.total,
       },
-      pageNum,
     },
   };
 };
+
+export default GalleryPage;

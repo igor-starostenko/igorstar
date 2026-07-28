@@ -5,13 +5,11 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Title from 'components/title/title.jsx';
 import Gallery from 'components/gallery/gallery.jsx';
+import { ContentDetails } from 'components/layout/layout.css.js';
 
 const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
-
-// Pagination settings
-const IMAGES_PER_PAGE = 20;
 
 const formatCaption = ({ description, locationText, date }) => {
   const day = date ? new Date(date).toDateString() : null;
@@ -21,23 +19,29 @@ const formatCaption = ({ description, locationText, date }) => {
 };
 
 const FeedPage = ({ page, feed }) => {
-  const pageNum = parseInt(page.pageNum) || 1;
-  const startIndex = (pageNum - 1) * IMAGES_PER_PAGE;
-  const endIndex = startIndex + IMAGES_PER_PAGE;
+  const pageNum = parseInt(page.params?.page) || 1;
+  const pageSize = 12;
+
+  // Calculate which images to show on this page
+  const startIndex = (pageNum - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, feed.images.length);
   const currentImages = feed.images.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(feed.total / IMAGES_PER_PAGE);
 
   return (
     <Layout>
       <Head pageTitle={page.title} />
       <Box>
-        <Title as="h1" size="large">
-          {page.title}
-        </Title>
-        {currentImages.length > 0 && (
-          <Gallery photos={currentImages} targetRowHeight={250} />
-        )}
-        <Pagination pageNum={pageNum} totalPages={totalPages} />
+        <ContentDetails>
+          <Title as="h1" size="large">
+            {page.title}
+          </Title>
+        </ContentDetails>
+        <div>
+          {currentImages.length > 0 && (
+            <Gallery photos={currentImages} targetRowHeight={250} />
+          )}
+        </div>
+        <Pagination pageNum={pageNum} totalPages={Math.ceil(feed.total / pageSize)} />
       </Box>
     </Layout>
   );
@@ -53,9 +57,7 @@ FeedPage.propTypes = {
   }).isRequired,
 };
 
-export default FeedPage;
-
-// Generate paths for all pages statically
+// Generate paths for all pages statically (page 1 is /feed, page 2+ are /feed/page/N)
 export const getStaticPaths = async () => {
   const { getEntries } = await import('contentClient');
 
@@ -73,11 +75,11 @@ export const getStaticPaths = async () => {
     order: '-fields.date',
   });
 
-  const totalPages = Math.ceil(feed.total / IMAGES_PER_PAGE);
+  const totalPages = Math.ceil(feed.total / 12);
   const paths = [];
 
   // Generate path for page 1 (root /feed)
-  paths.push({ params: {} });
+  paths.push({ params: { page: '1' } });
 
   // Generate paths for subsequent pages (/feed/page/2, etc.)
   for (let i = 2; i <= totalPages; i++) {
@@ -95,7 +97,7 @@ export const getStaticProps = async ({ params }) => {
   const { addBlurDataURLs } = await import('helpers/contentful');
 
   const pageNum = parseInt(params?.page) || 1;
-  const skip = (pageNum - 1) * IMAGES_PER_PAGE;
+  const skip = (pageNum - 1) * 12;
 
   const pages = await getEntries({
     content_type: 'page',
@@ -105,31 +107,32 @@ export const getStaticProps = async ({ params }) => {
   const feedData = await getEntries({
     content_type: 'feed',
     order: '-fields.date',
-    limit: IMAGES_PER_PAGE,
+    limit: 12,
     skip,
   });
 
   // Parse images with caption and add blurDataURLs if not already set
   const parsedImages = feedData.items
-    ? feedData.items.map(
-        ({ image, description, locationText, date, ...fields }) => ({
-          caption: formatCaption({ description, locationText, date }),
-          ...fields,
-          ...parseItem(image),
-        })
-      )
+    ? feedData.items.map(({ image, description, locationText, date, ...fields }) => ({
+        caption: formatCaption({ description, locationText, date }),
+        ...fields,
+        ...parseItem(image),
+      }))
     : [];
 
   const imagesWithBlurData = await addBlurDataURLs(parsedImages);
 
   return {
     props: {
-      page: pages.items[0] || {},
+      page: {
+        ...pages.items[0],
+      },
       feed: {
         images: imagesWithBlurData,
         total: feedData.total,
       },
-      pageNum,
     },
   };
 };
+
+export default FeedPage;

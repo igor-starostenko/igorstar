@@ -4,8 +4,8 @@ const Index = ({ page, posts }) => <Category page={page} posts={posts} />;
 
 export default Index;
 
-// Pagination settings
-const POSTS_PER_PAGE = 20;
+// Pagination settings (must match Category pageSize)
+const _POSTS_PER_PAGE = 5;
 
 export const getStaticProps = async () => {
   const { getEntries, parseItem } = await import('contentClient');

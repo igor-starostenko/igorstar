@@ -18,7 +18,7 @@ vi.mock('next/dynamic', () => ({
 }));
 
 vi.mock('hooks/useInfiniteScroll.jsx', () => ({
-  useInfiniteScroll: (items, batchSize = 20) => ({
+  useInfiniteScroll: (items, batchSize = 5) => ({
     items: items.slice(0, batchSize),
     loadMore: vi.fn(),
   }),
@@ -185,8 +185,8 @@ test('renders with pagination when more posts', () => {
 
   render(<Category {...mockProps} />);
 
-  // Verify the posts are displayed
-  expect(screen.getAllByTestId('mock-article').length).toBe(10);
+  // With batchSize=5, only first 5 posts are displayed initially
+  expect(screen.getAllByTestId('mock-article').length).toBe(5);
 });
 
 test('renders with no pagination when all posts shown', () => {
