@@ -1,50 +1,49 @@
+import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Filter from 'components/filter/filter.jsx';
 import Article from 'components/article/article.jsx';
-import { useInfiniteScroll } from 'hooks/useInfiniteScroll.jsx';
-import InfiniteScroll from 'components/infinite-scroll/InfiniteScroll.jsx';
+
+const Pagination = dynamic(() => import('components/pagination/pagination.jsx'));
 
 const Category = ({ page, posts }) => {
+  const router = useRouter();
+  const pageNum = parseInt(router.query.page) || 1;
   const pageSize = 20;
 
-  const { items: displayPosts, loadMore } = useInfiniteScroll(
-    posts.items,
-    pageSize
-  );
+  const startIndex = (pageNum - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentPosts = posts.items.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(posts.total / pageSize);
 
   return (
     <Layout>
       <Head pageTitle={page.title} />
       <Box isMain>
         <Filter
-          path={`/${page.slug}`}
+          path={router.asPath}
           title={page.title}
-          displayCount={displayPosts.length}
+          displayCount={currentPosts.length}
           totalCount={posts.total}
         />
-        <InfiniteScroll
-          hasMore={displayPosts.length < posts.total}
-          isLoading={false}
-          loadMore={loadMore}
-        >
-          {displayPosts.map((post, index) => (
-            <Article
-              key={post.id}
-              index={index}
-              image={post.thumbnail}
-              category={post.category}
-              path={post.path}
-              title={post.title}
-              date={post.date}
-              description={post.description}
-              tags={post.tags}
-              linkText={post.linkText}
-            />
-          ))}
-        </InfiniteScroll>
+        {currentPosts.map((post, index) => (
+          <Article
+            key={post.id}
+            index={index}
+            image={post.thumbnail}
+            category={post.category}
+            path={post.path}
+            title={post.title}
+            date={post.date}
+            description={post.description}
+            tags={post.tags}
+            linkText={post.linkText}
+          />
+        ))}
+        <Pagination pageNum={pageNum} totalPages={totalPages} />
       </Box>
     </Layout>
   );
