@@ -20,7 +20,7 @@ const formatCaption = ({ description, locationText, date }) => {
 };
 
 const FeedPage = ({ page, feed }) => {
-  const pageSize = 20;
+  const pageSize = 2*3*2;
 
   const { items: displayImages, loadMore } = useInfiniteScroll(
     feed.images,

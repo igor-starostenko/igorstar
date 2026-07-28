@@ -27,7 +27,7 @@ export const useInfiniteScroll = (allItems = [], batchSize = 20) => {
   // loadMore increments count by batchSize (or to end of array)
   const loadMore = useCallback(() => {
     if (isLoading) return;
-    
+
     setIsLoading(true);
     setVisibleCount((count) => {
       const newCount = Math.min(count + batchSize, allItems.length);

@@ -16,7 +16,7 @@ const _Pagination = dynamic(
 const Category = ({ page, posts }) => {
   const router = useRouter();
   const _pageNum = parseInt(router.query.page);
-  const pageSize = 20;
+  const pageSize = 3;
 
   const { items: displayPosts, loadMore } = useInfiniteScroll(
     posts.items,
