@@ -4,7 +4,7 @@
   "type": "module",
   "author": "Igor Starostenko <contact@igorstar.com>",
   "scripts": {
-    "analyze": "source-map-explorer .next/static/**/*.js",
+    "analyze": "next experimental-analyze",
     "dev": "next dev",
     "start": "serve out",
     "format": "prettier --config ./.prettierrc --write src/**/*.{js,jsx}",
