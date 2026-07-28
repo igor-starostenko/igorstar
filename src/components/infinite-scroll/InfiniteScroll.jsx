@@ -3,14 +3,6 @@ import PropTypes from 'prop-types';
 
 const InfiniteScroll = ({ children, hasMore, isLoading, loadMore }) => {
   const sentinelRef = useRef(null);
-  const triggeredRef = useRef(false);
-
-  // Reset triggered flag when loading starts
-  useEffect(() => {
-    if (!isLoading) {
-      triggeredRef.current = false;
-    }
-  }, [isLoading]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -21,13 +13,7 @@ const InfiniteScroll = ({ children, hasMore, isLoading, loadMore }) => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (
-          entry?.isIntersecting &&
-          hasMore &&
-          !isLoading &&
-          !triggeredRef.current
-        ) {
-          triggeredRef.current = true;
+        if (entry?.isIntersecting && hasMore && !isLoading) {
           loadMore();
         }
       },
