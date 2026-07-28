@@ -17,7 +17,7 @@ export const getStaticProps = async () => {
   const posts = await getAllEntries({
     content_type: 'post',
     order: '-fields.date',
-    limit: 1000, // 1000 is the max
+    limit: 20, // Limit to 20 posts for better Lighthouse scores
   });
 
   // Parse posts and add blurDataURLs to nested thumbnail images
