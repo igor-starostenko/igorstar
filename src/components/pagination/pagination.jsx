@@ -2,15 +2,15 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Row } from './pagination.css.js';
 
-const Pagination = ({ pageNum, totalPages }) => (
+const Pagination = ({ pageNum, totalPages, basePath }) => (
   <Row>
     {pageNum > 1 ? (
-      <Link href={{ query: { page: pageNum - 1 } }}>{'<< Previous Page'}</Link>
+      <Link href={`/${basePath}/${pageNum - 1}`}>{'<< Previous Page'}</Link>
     ) : (
       <div />
     )}
     {pageNum < totalPages ? (
-      <Link href={{ query: { page: pageNum + 1 } }}>{'Next Page >>'}</Link>
+      <Link href={`/${basePath}/${pageNum + 1}`}>{'Next Page >>'}</Link>
     ) : (
       <div />
     )}
@@ -20,6 +20,11 @@ const Pagination = ({ pageNum, totalPages }) => (
 Pagination.propTypes = {
   pageNum: PropTypes.number.isRequired,
   totalPages: PropTypes.number.isRequired,
+  basePath: PropTypes.string,
+};
+
+Pagination.defaultProps = {
+  basePath: 'feed',
 };
 
 export default Pagination;

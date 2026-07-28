@@ -41,7 +41,7 @@ const FeedPage = ({ page, feed }) => {
             <Gallery photos={currentImages} targetRowHeight={250} />
           )}
         </div>
-        <Pagination pageNum={pageNum} totalPages={Math.ceil(feed.total / pageSize)} />
+        <Pagination pageNum={pageNum} totalPages={Math.ceil(feed.total / pageSize)} basePath="feed" />
       </Box>
     </Layout>
   );

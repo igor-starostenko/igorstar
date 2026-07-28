@@ -34,7 +34,7 @@ const GalleryPage = ({ page, gallery }) => {
             <Gallery photos={currentImages} targetRowHeight={250} />
           )}
         </div>
-        <Pagination pageNum={pageNum} totalPages={Math.ceil(gallery.total / pageSize)} />
+        <Pagination pageNum={pageNum} totalPages={Math.ceil(gallery.total / pageSize)} basePath="gallery" />
       </Box>
     </Layout>
   );
