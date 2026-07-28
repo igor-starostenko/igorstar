@@ -5,20 +5,20 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Title from 'components/title/title.jsx';
 import Gallery from 'components/gallery/gallery.jsx';
-import { useInfiniteScroll } from 'hooks/useInfiniteScroll.jsx';
-import InfiniteScroll from 'components/infinite-scroll/InfiniteScroll.jsx';
 
-const _Pagination = dynamic(
+const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
 
-const GalleryPage = ({ page, gallery }) => {
-  const pageSize = 10;
+// Pagination settings
+const IMAGES_PER_PAGE = 20;
 
-  const { items: displayImages, loadMore } = useInfiniteScroll(
-    gallery.images,
-    pageSize
-  );
+const GalleryPage = ({ page, gallery }) => {
+  const pageNum = parseInt(page.pageNum) || 1;
+  const startIndex = (pageNum - 1) * IMAGES_PER_PAGE;
+  const endIndex = startIndex + IMAGES_PER_PAGE;
+  const currentImages = gallery.images.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(gallery.total / IMAGES_PER_PAGE);
 
   return (
     <Layout>
@@ -27,15 +27,10 @@ const GalleryPage = ({ page, gallery }) => {
         <Title as="h1" size="large">
           {page.title}
         </Title>
-        <InfiniteScroll
-          hasMore={displayImages.length < gallery.images.length}
-          isLoading={false}
-          loadMore={loadMore}
-        >
-          {displayImages.length > 0 && (
-            <Gallery photos={displayImages} targetRowHeight={250} />
-          )}
-        </InfiniteScroll>
+        {currentImages.length > 0 && (
+          <Gallery photos={currentImages} targetRowHeight={250} />
+        )}
+        <Pagination pageNum={pageNum} totalPages={totalPages} />
       </Box>
     </Layout>
   );
@@ -47,28 +42,67 @@ GalleryPage.propTypes = {
   }).isRequired,
   gallery: PropTypes.shape({
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
+    total: PropTypes.number.isRequired,
   }).isRequired,
 };
 
 export default GalleryPage;
 
-export const getStaticProps = async () => {
-  const { getEntries, getAllEntries, parseItem } =
-    await import('contentClient');
-  const { addBlurDataURLs } = await import('helpers/contentful');
+// Generate paths for all pages statically
+export const getStaticPaths = async () => {
+  const { getEntries } = await import('contentClient');
 
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Gallery',
   });
 
-  const { items, ...gallery } = await getAllEntries({
+  if (!pages.items.length) {
+    return { paths: [], fallback: false };
+  }
+
+  const gallery = await getEntries({
     content_type: 'gallery',
   });
 
+  const totalPages = Math.ceil(gallery.total / IMAGES_PER_PAGE);
+  const paths = [];
+
+  // Generate path for page 1 (root /gallery)
+  paths.push({ params: {} });
+
+  // Generate paths for subsequent pages (/gallery/page/2, etc.)
+  for (let i = 2; i <= totalPages; i++) {
+    paths.push({ params: { page: i.toString() } });
+  }
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
+  const { getEntries, parseItem } = await import('contentClient');
+  const { addBlurDataURLs } = await import('helpers/contentful');
+
+  const pageNum = parseInt(params?.page) || 1;
+  const skip = (pageNum - 1) * IMAGES_PER_PAGE;
+
+  const pages = await getEntries({
+    content_type: 'page',
+    'fields.title': 'Gallery',
+  });
+
+  const galleryData = await getEntries({
+    content_type: 'gallery',
+    limit: IMAGES_PER_PAGE,
+    skip,
+  });
+
   // Parse images and add blurDataURLs if not already set
-  const parsedImages = items
-    ? items.map(({ image, ...fields }) => ({
+  const parsedImages = galleryData.items
+    ? galleryData.items.map(({ image, ...fields }) => ({
         ...parseItem(image),
         ...fields,
       }))
@@ -80,9 +114,10 @@ export const getStaticProps = async () => {
     props: {
       page: pages.items[0] || {},
       gallery: {
-        ...gallery,
         images: imagesWithBlurData,
+        total: galleryData.total,
       },
+      pageNum,
     },
   };
 };

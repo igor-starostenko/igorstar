@@ -5,12 +5,13 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Title from 'components/title/title.jsx';
 import Gallery from 'components/gallery/gallery.jsx';
-import { useInfiniteScroll } from 'hooks/useInfiniteScroll.jsx';
-import InfiniteScroll from 'components/infinite-scroll/InfiniteScroll.jsx';
 
-const _Pagination = dynamic(
+const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
+
+// Pagination settings
+const IMAGES_PER_PAGE = 20;
 
 const formatCaption = ({ description, locationText, date }) => {
   const day = date ? new Date(date).toDateString() : null;
@@ -20,12 +21,11 @@ const formatCaption = ({ description, locationText, date }) => {
 };
 
 const FeedPage = ({ page, feed }) => {
-  const pageSize = 2*3*2;
-
-  const { items: displayImages, loadMore } = useInfiniteScroll(
-    feed.images,
-    pageSize
-  );
+  const pageNum = parseInt(page.pageNum) || 1;
+  const startIndex = (pageNum - 1) * IMAGES_PER_PAGE;
+  const endIndex = startIndex + IMAGES_PER_PAGE;
+  const currentImages = feed.images.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(feed.total / IMAGES_PER_PAGE);
 
   return (
     <Layout>
@@ -34,15 +34,10 @@ const FeedPage = ({ page, feed }) => {
         <Title as="h1" size="large">
           {page.title}
         </Title>
-        <InfiniteScroll
-          hasMore={displayImages.length < feed.images.length}
-          isLoading={false}
-          loadMore={loadMore}
-        >
-          {displayImages.length > 0 && (
-            <Gallery photos={displayImages} targetRowHeight={250} />
-          )}
-        </InfiniteScroll>
+        {currentImages.length > 0 && (
+          <Gallery photos={currentImages} targetRowHeight={250} />
+        )}
+        <Pagination pageNum={pageNum} totalPages={totalPages} />
       </Box>
     </Layout>
   );
@@ -54,32 +49,75 @@ FeedPage.propTypes = {
   }).isRequired,
   feed: PropTypes.shape({
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
+    total: PropTypes.number.isRequired,
   }).isRequired,
 };
 
-export const getStaticProps = async () => {
-  const { getEntries, getAllEntries, parseItem } =
-    await import('contentClient');
-  const { addBlurDataURLs } = await import('helpers/contentful');
+export default FeedPage;
+
+// Generate paths for all pages statically
+export const getStaticPaths = async () => {
+  const { getEntries } = await import('contentClient');
 
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Photo Feed',
   });
 
-  const { items, ...feed } = await getAllEntries({
+  if (!pages.items.length) {
+    return { paths: [], fallback: false };
+  }
+
+  const feed = await getEntries({
     content_type: 'feed',
     order: '-fields.date',
-    limit: 1000,
+  });
+
+  const totalPages = Math.ceil(feed.total / IMAGES_PER_PAGE);
+  const paths = [];
+
+  // Generate path for page 1 (root /feed)
+  paths.push({ params: {} });
+
+  // Generate paths for subsequent pages (/feed/page/2, etc.)
+  for (let i = 2; i <= totalPages; i++) {
+    paths.push({ params: { page: i.toString() } });
+  }
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
+  const { getEntries, parseItem } = await import('contentClient');
+  const { addBlurDataURLs } = await import('helpers/contentful');
+
+  const pageNum = parseInt(params?.page) || 1;
+  const skip = (pageNum - 1) * IMAGES_PER_PAGE;
+
+  const pages = await getEntries({
+    content_type: 'page',
+    'fields.title': 'Photo Feed',
+  });
+
+  const feedData = await getEntries({
+    content_type: 'feed',
+    order: '-fields.date',
+    limit: IMAGES_PER_PAGE,
+    skip,
   });
 
   // Parse images with caption and add blurDataURLs if not already set
-  const parsedImages = items
-    ? items.map(({ image, description, locationText, date, ...fields }) => ({
-        caption: formatCaption({ description, locationText, date }),
-        ...fields,
-        ...parseItem(image),
-      }))
+  const parsedImages = feedData.items
+    ? feedData.items.map(
+        ({ image, description, locationText, date, ...fields }) => ({
+          caption: formatCaption({ description, locationText, date }),
+          ...fields,
+          ...parseItem(image),
+        })
+      )
     : [];
 
   const imagesWithBlurData = await addBlurDataURLs(parsedImages);
@@ -88,11 +126,10 @@ export const getStaticProps = async () => {
     props: {
       page: pages.items[0] || {},
       feed: {
-        ...feed,
         images: imagesWithBlurData,
+        total: feedData.total,
       },
+      pageNum,
     },
   };
 };
-
-export default FeedPage;
