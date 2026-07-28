@@ -17,7 +17,7 @@ const GalleryPage = ({ page, gallery }) => {
 
   // Calculate which images to show on this page
   const startIndex = (pageNum - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, gallery.images.length);
+  const endIndex = Math.min(startIndex + pageSize, gallery.total);
   const currentImages = gallery.images.slice(startIndex, endIndex);
 
   return (
@@ -88,23 +88,21 @@ export const getStaticProps = async ({ params }) => {
   const { getEntries, parseItem } = await import('contentClient');
   const { addBlurDataURLs } = await import('helpers/contentful');
 
-  const pageNum = parseInt(params?.page) || 1;
-  const skip = (pageNum - 1) * 10;
+  const _pageNum = parseInt(params?.page) || 1;
 
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Gallery',
   });
 
-  const galleryData = await getEntries({
+  // Fetch all gallery images at build time, but only show pageSize on each page
+  const allGalleryData = await getEntries({
     content_type: 'gallery',
-    limit: 10,
-    skip,
   });
 
-  // Parse images and add blurDataURLs if not already set
-  const parsedImages = galleryData.items
-    ? galleryData.items.map(({ image, ...fields }) => ({
+  // Parse all images and add blurDataURLs if not already set
+  const parsedImages = allGalleryData.items
+    ? allGalleryData.items.map(({ image, ...fields }) => ({
         ...parseItem(image),
         ...fields,
       }))
@@ -119,7 +117,7 @@ export const getStaticProps = async ({ params }) => {
       },
       gallery: {
         images: imagesWithBlurData,
-        total: galleryData.total,
+        total: allGalleryData.total,
       },
     },
   };

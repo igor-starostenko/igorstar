@@ -24,7 +24,7 @@ const FeedPage = ({ page, feed }) => {
 
   // Calculate which images to show on this page
   const startIndex = (pageNum - 1) * pageSize;
-  const endIndex = Math.min(startIndex + pageSize, feed.images.length);
+  const endIndex = Math.min(startIndex + pageSize, feed.total);
   const currentImages = feed.images.slice(startIndex, endIndex);
 
   return (
@@ -96,24 +96,22 @@ export const getStaticProps = async ({ params }) => {
   const { getEntries, parseItem } = await import('contentClient');
   const { addBlurDataURLs } = await import('helpers/contentful');
 
-  const pageNum = parseInt(params?.page) || 1;
-  const skip = (pageNum - 1) * 12;
+  const _pageNum = parseInt(params?.page) || 1;
 
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Photo Feed',
   });
 
-  const feedData = await getEntries({
+  // Fetch all feed images at build time, but only show pageSize on each page
+  const allFeedData = await getEntries({
     content_type: 'feed',
     order: '-fields.date',
-    limit: 12,
-    skip,
   });
 
-  // Parse images with caption and add blurDataURLs if not already set
-  const parsedImages = feedData.items
-    ? feedData.items.map(({ image, description, locationText, date, ...fields }) => ({
+  // Parse all images with caption and add blurDataURLs if not already set
+  const parsedImages = allFeedData.items
+    ? allFeedData.items.map(({ image, description, locationText, date, ...fields }) => ({
         caption: formatCaption({ description, locationText, date }),
         ...fields,
         ...parseItem(image),
@@ -129,7 +127,7 @@ export const getStaticProps = async ({ params }) => {
       },
       feed: {
         images: imagesWithBlurData,
-        total: feedData.total,
+        total: allFeedData.total,
       },
     },
   };
