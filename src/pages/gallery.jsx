@@ -13,7 +13,7 @@ const _Pagination = dynamic(
 );
 
 const GalleryPage = ({ page, gallery }) => {
-  const pageSize = 20;
+  const pageSize = 10;
 
   const { items: displayImages, loadMore } = useInfiniteScroll(
     gallery.images,

@@ -41,4 +41,5 @@ export const Counter = styled.span`
   text-align: right;
   color: ${colors.darkGrey};
   font-size: 1rem;
+  padding-bottom: 19px;
 `;
