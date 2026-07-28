@@ -29,6 +29,15 @@ vi.mock('components/title/title.jsx', () => ({
   default: ({ children, _as }) => <h1 data-testid="mock-title">{children}</h1>,
 }));
 
+vi.mock('components/infinite-scroll/InfiniteScroll.jsx', () => ({
+  default: ({ children, hasMore, isLoading, loadMore }) => (
+    <div data-testid="mock-infinite-scroll">
+      {children}
+      <div data-testid="infinite-scroll-sentinel" />
+    </div>
+  ),
+}));
+
 import FeedPage from 'pages/feed.jsx';
 
 test('renders Feed with images', () => {
@@ -47,9 +56,9 @@ test('renders Feed with images', () => {
 
   render(<FeedPage {...mockProps} />);
 
-  // Use getAllByText since title appears multiple times
-  const titles = screen.getAllByText('Photo Feed');
-  expect(titles.length).toBeGreaterThan(0);
+  // Use getByText since title appears once in the actual page
+  const title = screen.getByText('Photo Feed');
+  expect(title).toBeInTheDocument();
 });
 
 test('renders Feed with empty images', () => {

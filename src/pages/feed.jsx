@@ -1,10 +1,16 @@
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
-import Gallery from 'components/gallery/gallery.jsx';
 import Head from 'components/head/head.jsx';
 import Title from 'components/title/title.jsx';
-import { ContentDetails } from 'components/layout/layout.css.js';
+import Gallery from 'components/gallery/gallery.jsx';
+import { useInfiniteScroll } from 'hooks/useInfiniteScroll.jsx';
+import InfiniteScroll from 'components/infinite-scroll/InfiniteScroll.jsx';
+
+const _Pagination = dynamic(
+  () => import('components/pagination/pagination.jsx')
+);
 
 const formatCaption = ({ description, locationText, date }) => {
   const day = date ? new Date(date).toDateString() : null;
@@ -13,21 +19,34 @@ const formatCaption = ({ description, locationText, date }) => {
   return `${description}${locationPrefix}${locationText}${dayPrefix}${day}`;
 };
 
-const FeedPage = ({ page, feed }) => (
-  <Layout>
-    <Head pageTitle={page.title} />
-    <Box>
-      <ContentDetails>
+const FeedPage = ({ page, feed }) => {
+  const pageSize = 20;
+
+  const { items: displayImages, loadMore } = useInfiniteScroll(
+    feed.images,
+    pageSize
+  );
+
+  return (
+    <Layout>
+      <Head pageTitle={page.title} />
+      <Box>
         <Title as="h1" size="large">
           {page.title}
         </Title>
-      </ContentDetails>
-      {feed.images.length > 0 && (
-        <Gallery photos={feed.images} targetRowHeight={250} />
-      )}
-    </Box>
-  </Layout>
-);
+        <InfiniteScroll
+          hasMore={displayImages.length < feed.images.length}
+          isLoading={false}
+          loadMore={loadMore}
+        >
+          {displayImages.length > 0 && (
+            <Gallery photos={displayImages} targetRowHeight={250} />
+          )}
+        </InfiniteScroll>
+      </Box>
+    </Layout>
+  );
+};
 
 FeedPage.propTypes = {
   page: PropTypes.shape({

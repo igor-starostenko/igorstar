@@ -29,6 +29,15 @@ vi.mock('components/title/title.jsx', () => ({
   default: ({ children }) => <h1 data-testid="mock-title">{children}</h1>,
 }));
 
+vi.mock('components/infinite-scroll/InfiniteScroll.jsx', () => ({
+  default: ({ children, hasMore, isLoading, loadMore }) => (
+    <div data-testid="mock-infinite-scroll">
+      {children}
+      <div data-testid="infinite-scroll-sentinel" />
+    </div>
+  ),
+}));
+
 import GalleryPage from 'pages/gallery.jsx';
 
 test('renders Gallery with images', () => {

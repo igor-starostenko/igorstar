@@ -1,26 +1,45 @@
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
-import Gallery from 'components/gallery/gallery.jsx';
 import Head from 'components/head/head.jsx';
 import Title from 'components/title/title.jsx';
-import { ContentDetails } from 'components/layout/layout.css.js';
+import Gallery from 'components/gallery/gallery.jsx';
+import { useInfiniteScroll } from 'hooks/useInfiniteScroll.jsx';
+import InfiniteScroll from 'components/infinite-scroll/InfiniteScroll.jsx';
 
-const GalleryPage = ({ page, gallery }) => (
-  <Layout>
-    <Head pageTitle={page.title} />
-    <Box>
-      <ContentDetails>
+const _Pagination = dynamic(
+  () => import('components/pagination/pagination.jsx')
+);
+
+const GalleryPage = ({ page, gallery }) => {
+  const pageSize = 20;
+
+  const { items: displayImages, loadMore } = useInfiniteScroll(
+    gallery.images,
+    pageSize
+  );
+
+  return (
+    <Layout>
+      <Head pageTitle={page.title} />
+      <Box>
         <Title as="h1" size="large">
           {page.title}
         </Title>
-      </ContentDetails>
-      {gallery.images.length > 0 && (
-        <Gallery photos={gallery.images} targetRowHeight={250} />
-      )}
-    </Box>
-  </Layout>
-);
+        <InfiniteScroll
+          hasMore={displayImages.length < gallery.images.length}
+          isLoading={false}
+          loadMore={loadMore}
+        >
+          {displayImages.length > 0 && (
+            <Gallery photos={displayImages} targetRowHeight={250} />
+          )}
+        </InfiniteScroll>
+      </Box>
+    </Layout>
+  );
+};
 
 GalleryPage.propTypes = {
   page: PropTypes.shape({
