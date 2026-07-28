@@ -42,38 +42,11 @@ const InfiniteScroll = ({ children, hasMore, isLoading, loadMore }) => {
   return (
     <>
       {children}
-
-      <div style={{ minHeight: '1px' }}>
-        {/* Sentinel for automatic loading */}
-        {hasMore && (
-          <div
-            ref={sentinelRef}
-            style={{ height: 1, width: '100%' }}
-            aria-hidden="true"
-          />
-        )}
-
-        {/* Manual fallback button when observer is unavailable or user prefers it */}
-        {hasMore && (
-          <button
-            onClick={loadMore}
-            disabled={isLoading}
-            style={{
-              display: 'block',
-              margin: '1rem auto',
-              padding: '0.75rem 1.5rem',
-              fontSize: '1rem',
-              backgroundColor: isLoading ? '#ccc' : '#0070f3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: isLoading ? 'not-allowed' : 'pointer',
-            }}
-          >
-            {isLoading ? 'Loading more...' : 'Load more'}
-          </button>
-        )}
-      </div>
+      <div
+        ref={sentinelRef}
+        style={{ height: 1, width: '100%' }}
+        aria-hidden="true"
+      />
     </>
   );
 };
