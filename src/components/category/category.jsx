@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
@@ -9,13 +7,7 @@ import Article from 'components/article/article.jsx';
 import { useInfiniteScroll } from 'hooks/useInfiniteScroll.jsx';
 import InfiniteScroll from 'components/infinite-scroll/InfiniteScroll.jsx';
 
-const _Pagination = dynamic(
-  () => import('components/pagination/pagination.jsx')
-);
-
 const Category = ({ page, posts }) => {
-  const router = useRouter();
-  const _pageNum = parseInt(router.query.page);
   const pageSize = 20;
 
   const { items: displayPosts, loadMore } = useInfiniteScroll(
@@ -28,7 +20,7 @@ const Category = ({ page, posts }) => {
       <Head pageTitle={page.title} />
       <Box isMain>
         <Filter
-          path={router.asPath}
+          path={`/${page.slug}`}
           title={page.title}
           displayCount={displayPosts.length}
           totalCount={posts.total}
