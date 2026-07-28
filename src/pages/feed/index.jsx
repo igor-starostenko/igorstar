@@ -5,7 +5,7 @@ export default function FeedRedirect() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/feed/page/1');
+    router.push('/feed/1');
   }, [router]);
 
   return <div>Loading...</div>;
