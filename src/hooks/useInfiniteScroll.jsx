@@ -13,6 +13,7 @@ import { useState, useMemo, useCallback } from 'react';
  */
 export const useInfiniteScroll = (allItems = [], batchSize = 20) => {
   const [visibleCount, setVisibleCount] = useState(batchSize);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Derive items from visible count to avoid stale state
   const items = useMemo(
@@ -25,18 +26,26 @@ export const useInfiniteScroll = (allItems = [], batchSize = 20) => {
 
   // loadMore increments count by batchSize (or to end of array)
   const loadMore = useCallback(() => {
-    setVisibleCount((count) => Math.min(count + batchSize, allItems.length));
-  }, [batchSize, allItems.length]);
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    setVisibleCount((count) => {
+      const newCount = Math.min(count + batchSize, allItems.length);
+      setIsLoading(false);
+      return newCount;
+    });
+  }, [batchSize, allItems.length, isLoading]);
 
   // reset to initial batch size
   const reset = useCallback(() => {
     setVisibleCount(batchSize);
+    setIsLoading(false);
   }, [batchSize]);
 
   return {
     items,
     hasMore,
-    isLoading: false, // Always false since data is pre-fetched
+    isLoading,
     loadMore,
     reset,
   };
