@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useInfiniteScroll } from 'hooks/useInfiniteScroll.jsx';
 import Layout from 'components/layout/layout.jsx';
@@ -7,10 +6,6 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Filter from 'components/filter/filter.jsx';
 import Article from 'components/article/article.jsx';
-
-const Pagination = dynamic(
-  () => import('components/pagination/pagination.jsx')
-);
 
 const Category = ({ page, posts }) => {
   const router = useRouter();
@@ -21,10 +16,6 @@ const Category = ({ page, posts }) => {
     posts.items,
     pageSize
   );
-
-  // Determine basePath from current route or default to feed/gallery based on context
-  const asPath = router.asPath || '';
-  const basePath = asPath.startsWith('/gallery') ? 'gallery' : 'feed';
 
   return (
     <Layout>
@@ -50,7 +41,6 @@ const Category = ({ page, posts }) => {
             linkText={post.linkText}
           />
         ))}
-        <Pagination pageNum={1} totalPages={Math.ceil(posts.total / pageSize)} basePath={basePath} />
       </Box>
     </Layout>
   );
