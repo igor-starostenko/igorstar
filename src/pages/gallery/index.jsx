@@ -5,7 +5,7 @@ export default function GalleryRedirect() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/gallery/1');
+    router.push({ pathname: '/gallery', query: { page: '1' } });
   }, [router]);
 
   return <div>Loading...</div>;

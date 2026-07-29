@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import { useInfiniteScroll } from 'hooks/useInfiniteScroll.jsx';
 import Layout from 'components/layout/layout.jsx';
@@ -7,8 +8,13 @@ import Head from 'components/head/head.jsx';
 import Filter from 'components/filter/filter.jsx';
 import Article from 'components/article/article.jsx';
 
+const Pagination = dynamic(
+  () => import('components/pagination/pagination.jsx')
+);
+
 const Category = ({ page, posts }) => {
   const router = useRouter();
+  const pageNum = parseInt(router.query.page) || 1;
   const pageSize = 5;
 
   // Use infinite scroll hook for scroll-based loading
@@ -41,6 +47,7 @@ const Category = ({ page, posts }) => {
             linkText={post.linkText}
           />
         ))}
+        <Pagination pageNum={pageNum} totalPages={Math.ceil(posts.total / pageSize)} basePath="category" />
       </Box>
     </Layout>
   );

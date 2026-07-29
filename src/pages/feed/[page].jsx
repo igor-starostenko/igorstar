@@ -18,8 +18,9 @@ const formatCaption = ({ description, locationText, date }) => {
   return `${description}${locationPrefix}${locationText}${dayPrefix}${day}`;
 };
 
-const FeedPage = ({ params, page, feed }) => {
-  const pageNum = parseInt(params.page) || 1;
+const FeedPage = ({ params, query, page, feed }) => {
+  // Support both path param (/feed/1) and query param (?page=1)
+  const pageNum = parseInt(params?.page || query?.page) || 1;
   const pageSize = 12;
 
   // Calculate which images to show on this page
@@ -41,7 +42,7 @@ const FeedPage = ({ params, page, feed }) => {
             <Gallery photos={currentImages} targetRowHeight={250} />
           )}
         </div>
-        <Pagination pageNum={pageNum} totalPages={Math.ceil(feed.total / pageSize)} basePath="feed" />
+        <Pagination pageNum={pageNum} totalPages={Math.ceil(feed.total / pageSize)} />
       </Box>
     </Layout>
   );
@@ -50,7 +51,10 @@ const FeedPage = ({ params, page, feed }) => {
 FeedPage.propTypes = {
   params: PropTypes.shape({
     page: PropTypes.string,
-  }).isRequired,
+  }),
+  query: PropTypes.shape({
+    page: PropTypes.string,
+  }),
   page: PropTypes.shape({
     title: PropTypes.string.isRequired,
   }).isRequired,
@@ -60,7 +64,7 @@ FeedPage.propTypes = {
   }).isRequired,
 };
 
-// Generate paths for all pages statically (page 1 is /feed, page 2+ are /feed/page/N)
+// Generate paths for all pages statically (page 1 is /feed, page 2+ are /feed/N)
 export const getStaticPaths = async () => {
   const { getEntries } = await import('contentClient');
 
@@ -84,7 +88,7 @@ export const getStaticPaths = async () => {
   // Generate path for page 1 (root /feed)
   paths.push({ params: { page: '1' } });
 
-  // Generate paths for subsequent pages (/feed/page/2, etc.)
+  // Generate paths for subsequent pages (/feed/2, /feed/3, etc.)
   for (let i = 2; i <= totalPages; i++) {
     paths.push({ params: { page: i.toString() } });
   }
@@ -99,7 +103,7 @@ export const getStaticProps = async ({ params }) => {
   const { getEntries, parseItem } = await import('contentClient');
   const { addBlurDataURLs } = await import('helpers/contentful');
 
-  const _pageNum = parseInt(params?.page) || 1;
+  _pageNum = parseInt(params?.page) || 1;
 
   const pages = await getEntries({
     content_type: 'page',
