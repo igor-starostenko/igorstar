@@ -42,6 +42,7 @@ import FeedPage from 'pages/feed/[page].jsx';
 
 test('renders Feed with images', () => {
   const mockProps = {
+    params: { page: '1' },
     page: { title: 'Photo Feed' },
     feed: {
       limit: 10,
@@ -63,6 +64,7 @@ test('renders Feed with images', () => {
 
 test('renders Feed with empty images', () => {
   const mockProps = {
+    params: { page: '1' },
     page: { title: 'Photo Feed' },
     feed: {
       limit: 10,
@@ -79,6 +81,7 @@ test('renders Feed with empty images', () => {
 
 test('renders Feed with empty page', () => {
   const mockProps = {
+    params: { page: '1' },
     page: {},
     feed: { images: [] },
   };

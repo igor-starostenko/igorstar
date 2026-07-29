@@ -42,6 +42,7 @@ import GalleryPage from 'pages/gallery/[page].jsx';
 
 test('renders Gallery with images', () => {
   const mockProps = {
+    params: { page: '1' },
     page: { title: 'Gallery' },
     gallery: {
       limit: 10,
@@ -62,6 +63,7 @@ test('renders Gallery with images', () => {
 
 test('renders Gallery with empty images', () => {
   const mockProps = {
+    params: { page: '1' },
     page: { title: 'Gallery' },
     gallery: {
       limit: 10,
@@ -79,6 +81,7 @@ test('renders Gallery with empty images', () => {
 
 test('renders Gallery with empty page', () => {
   const mockProps = {
+    params: { page: '1' },
     page: {},
     gallery: { images: [] },
   };

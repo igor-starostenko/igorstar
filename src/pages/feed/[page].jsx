@@ -18,8 +18,8 @@ const formatCaption = ({ description, locationText, date }) => {
   return `${description}${locationPrefix}${locationText}${dayPrefix}${day}`;
 };
 
-const FeedPage = ({ page, feed }) => {
-  const pageNum = parseInt(page.params?.page) || 1;
+const FeedPage = ({ params, page, feed }) => {
+  const pageNum = parseInt(params.page) || 1;
   const pageSize = 12;
 
   // Calculate which images to show on this page
@@ -48,6 +48,9 @@ const FeedPage = ({ page, feed }) => {
 };
 
 FeedPage.propTypes = {
+  params: PropTypes.shape({
+    page: PropTypes.string,
+  }).isRequired,
   page: PropTypes.shape({
     title: PropTypes.string.isRequired,
   }).isRequired,
@@ -122,6 +125,7 @@ export const getStaticProps = async ({ params }) => {
 
   return {
     props: {
+      params,
       page: {
         ...pages.items[0],
       },

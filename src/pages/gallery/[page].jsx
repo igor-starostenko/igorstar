@@ -11,8 +11,8 @@ const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
 
-const GalleryPage = ({ page, gallery }) => {
-  const pageNum = parseInt(page.params?.page) || 1;
+const GalleryPage = ({ params, page, gallery }) => {
+  const pageNum = parseInt(params.page) || 1;
   const pageSize = 10;
 
   // Calculate which images to show on this page
@@ -41,6 +41,9 @@ const GalleryPage = ({ page, gallery }) => {
 };
 
 GalleryPage.propTypes = {
+  params: PropTypes.shape({
+    page: PropTypes.string,
+  }).isRequired,
   page: PropTypes.shape({
     title: PropTypes.string.isRequired,
   }).isRequired,
@@ -112,6 +115,7 @@ export const getStaticProps = async ({ params }) => {
 
   return {
     props: {
+      params,
       page: {
         ...pages.items[0],
       },
