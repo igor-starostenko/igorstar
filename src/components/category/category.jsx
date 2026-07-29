@@ -22,6 +22,10 @@ const Category = ({ page, posts }) => {
     pageSize
   );
 
+  // Determine basePath from current route or default to feed/gallery based on context
+  const asPath = router.asPath || '';
+  const basePath = asPath.startsWith('/gallery') ? 'gallery' : 'feed';
+
   return (
     <Layout>
       <Head pageTitle={page.title} />
@@ -46,7 +50,7 @@ const Category = ({ page, posts }) => {
             linkText={post.linkText}
           />
         ))}
-        <Pagination pageNum={1} totalPages={Math.ceil(posts.total / pageSize)} />
+        <Pagination pageNum={1} totalPages={Math.ceil(posts.total / pageSize)} basePath={basePath} />
       </Box>
     </Layout>
   );
