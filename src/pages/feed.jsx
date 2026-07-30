@@ -1,81 +1,27 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/router';
+import PaginatedGallery from 'components/paginatedGallery.jsx';
 import PropTypes from 'prop-types';
-import dynamic from 'next/dynamic';
-import Layout from 'components/layout/layout.jsx';
-import Box from 'components/box/box.jsx';
-import Head from 'components/head/head.jsx';
-
-const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
-const Pagination = dynamic(
-  () => import('components/pagination/pagination.jsx')
-);
-
-const pageSize = 10;
-
-const formatCaption = ({ description, locationText, date }) => {
-  const day = date ? new Date(date).toDateString() : null;
-  const locationPrefix = description && locationText ? ' - ' : '';
-  const dayPrefix = (description || locationText) && day ? ', ' : '';
-  return `${description}${locationPrefix}${locationText}${dayPrefix}${day}`;
-};
 
 const FeedPage = ({ page, feed }) => {
-  const router = useRouter();
-  const totalPages = Math.ceil((feed.images?.length || 0) / pageSize);
-  const pageNum = parseInt(router.query.page) || 1;
-  const [displayCount, setDisplayCount] = useState(
-    pageNum ? pageNum * pageSize : pageSize
-  );
+  const formatCaption = ({ description, locationText, date }) => {
+    const day = date ? new Date(date).toDateString() : null;
+    const locationPrefix = description && locationText ? ' - ' : '';
+    const dayPrefix = (description || locationText) && day ? ', ' : '';
+    return `${description}${locationPrefix}${locationText}${dayPrefix}${day}`;
+  };
 
-  const images = feed.images || [];
+  const data = {
+    limit: feed.limit,
+    skip: feed.skip,
+    total: feed.total,
+    images: feed.images.map((img) => ({
+      caption: formatCaption({ ...img }),
+      src: img.src,
+      alt: img.alt || '',
+      blurDataURL: img.blurDataURL || undefined,
+    })),
+  };
 
-  // Only update displayCount on scroll if we haven't reached the end
-  const handleScroll = useCallback(() => {
-    if (displayCount >= feed.total) return;
-
-    const lastRecordLoaded = document.querySelector(
-      'div > div:last-child > div:last-child'
-    );
-    if (lastRecordLoaded) {
-      const lastRecordLoadedOffset =
-        lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
-      const pageOffset = window.pageYOffset + window.innerHeight;
-      if (pageOffset > lastRecordLoadedOffset) {
-        const newDisplayCount = Math.min(displayCount + pageSize, feed.total);
-        setDisplayCount(newDisplayCount);
-      }
-    }
-  }, [displayCount, feed.total]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
-
-  // startIndex is determined by the current page number
-  const startIndex = pageNum > 1 ? (pageNum - 1) * pageSize : 0;
-  // Show images from startIndex, up to displayCount items
-  const endIndex = Math.min(startIndex + displayCount, images.length);
-  const displayImages = images.slice(startIndex, endIndex);
-
-  return (
-    <Layout>
-      <Head pageTitle={page.title} />
-      <Box>
-        {displayImages.length > 0 && (
-          <Gallery photos={displayImages} targetRowHeight={250} />
-        )}
-        {pageNum < totalPages ? (
-          <Pagination pageNum={pageNum} totalPages={totalPages} />
-        ) : (
-          ''
-        )}
-      </Box>
-    </Layout>
-  );
+  return <PaginatedGallery title={page.title} data={data} />;
 };
 
 FeedPage.propTypes = {
@@ -124,7 +70,7 @@ export const getStaticProps = async () => {
 
             // Only include blurDataURL if it has a valid value
             const imageWithBlur = {
-              caption: formatCaption({ description, locationText, date }),
+              caption: null,
               ...fields,
               ...parsedImage,
             };

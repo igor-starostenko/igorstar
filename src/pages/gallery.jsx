@@ -1,77 +1,21 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/router';
+import PaginatedGallery from 'components/paginatedGallery.jsx';
 import PropTypes from 'prop-types';
-import dynamic from 'next/dynamic';
-import Layout from 'components/layout/layout.jsx';
-import Box from 'components/box/box.jsx';
-import Head from 'components/head/head.jsx';
-
-const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
-const Pagination = dynamic(
-  () => import('components/pagination/pagination.jsx')
-);
-
-const pageSize = 10;
 
 const GalleryPage = ({ page, gallery }) => {
-  const router = useRouter();
-  const totalPages = Math.ceil((gallery.images?.length || 0) / pageSize);
-  const pageNum = parseInt(router.query.page) || 1;
-  const [displayCount, setDisplayCount] = useState(
-    pageNum ? pageNum * pageSize : pageSize
-  );
+  // Parse images from Contentful response
+  const data = {
+    limit: gallery.limit,
+    skip: gallery.skip,
+    total: gallery.total,
+    images: gallery.images.map((img) => ({
+      caption: img.caption || '',
+      src: img.src,
+      alt: img.alt || '',
+      blurDataURL: img.blurDataURL || undefined,
+    })),
+  };
 
-  const images = gallery.images || [];
-
-  // Only update displayCount on scroll if we haven't reached the end
-  const handleScroll = useCallback(() => {
-    if (displayCount >= gallery.total) return;
-
-    const lastRecordLoaded = document.querySelector(
-      'div > div:last-child > div:last-child'
-    );
-    if (lastRecordLoaded) {
-      const lastRecordLoadedOffset =
-        lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
-      const pageOffset = window.pageYOffset + window.innerHeight;
-      if (pageOffset > lastRecordLoadedOffset) {
-        const newDisplayCount = Math.min(
-          displayCount + pageSize,
-          gallery.total
-        );
-        setDisplayCount(newDisplayCount);
-      }
-    }
-  }, [displayCount, gallery.total]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
-
-  // startIndex is determined by the current page number
-  const startIndex = pageNum > 1 ? (pageNum - 1) * pageSize : 0;
-  // Show images from startIndex, up to displayCount items
-  const endIndex = Math.min(startIndex + displayCount, images.length);
-  const displayImages = images.slice(startIndex, endIndex);
-
-  return (
-    <Layout>
-      <Head pageTitle={page.title} />
-      <Box>
-        {displayImages.length > 0 && (
-          <Gallery photos={displayImages} targetRowHeight={250} />
-        )}
-        {pageNum < totalPages ? (
-          <Pagination pageNum={pageNum} totalPages={totalPages} />
-        ) : (
-          ''
-        )}
-      </Box>
-    </Layout>
-  );
+  return <PaginatedGallery title={page.title} data={data} />;
 };
 
 GalleryPage.propTypes = {
