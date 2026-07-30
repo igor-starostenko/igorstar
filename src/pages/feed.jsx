@@ -1,4 +1,4 @@
-import PaginatedGallery from 'components/paginatedGallery.jsx';
+import PaginatedGallery from 'components/paginatedGallery/index.jsx';
 import PropTypes from 'prop-types';
 
 const FeedPage = ({ page, feed }) => {
