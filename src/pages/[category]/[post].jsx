@@ -17,7 +17,7 @@ const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'), {
 
 const FlickrImage = dynamic(() => import('components/image/flickrImage.jsx'));
 
-const BaseImage = dynamic(() => import('components/image/baseImage.jsx'));
+const BaseImage = dynamic(() => import('components/image/image.jsx'));
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
