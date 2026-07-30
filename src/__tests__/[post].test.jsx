@@ -61,7 +61,7 @@ vi.mock('components/recommendations/recommendations.jsx', () => ({
   ),
 }));
 
-vi.mock('components/image/baseImage.jsx', () => ({
+vi.mock('components/image/image.jsx', () => ({
   default: ({ src, alt }) => (
     <img data-testid="mock-base-image" src={src} alt={alt} />
   ),
