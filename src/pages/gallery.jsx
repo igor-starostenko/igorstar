@@ -6,7 +6,7 @@ import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 
-const Gallery = dynamic(() => import('components/imageGallery/gallery.jsx'));
+const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
 const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
