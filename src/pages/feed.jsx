@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
@@ -7,6 +6,7 @@ import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 
+const Gallery = dynamic(() => import('components/imageGallery/gallery.jsx'));
 const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
@@ -65,42 +65,9 @@ const FeedPage = ({ page, feed }) => {
     <Layout>
       <Head pageTitle={page.title} />
       <Box>
-        <div
-          style={{
-            margin: '0 -4rem',
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}
-        >
-          {displayImages.length > 0 && (
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-              }}
-            >
-              {displayImages.map((img, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: '32%',
-                    margin: '1%',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <Image
-                    src={img.src}
-                    alt={img.alt || ''}
-                    width={100}
-                    height={100}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {displayImages.length > 0 && (
+          <Gallery photos={displayImages} targetRowHeight={250} />
+        )}
         {pageNum < totalPages ? (
           <Pagination pageNum={pageNum} totalPages={totalPages} />
         ) : (
@@ -124,10 +91,9 @@ FeedPage.propTypes = {
 };
 
 export const getStaticProps = async () => {
-  const { getEntries, getAllEntries, parseItem } =
-    await import('contentClient');
+  const { getAllEntries, parseItem } = await import('contentClient');
 
-  const pages = await getEntries({
+  const pages = await getAllEntries({
     content_type: 'page',
     'fields.title': 'Photo Feed',
   });
