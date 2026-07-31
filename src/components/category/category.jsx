@@ -12,8 +12,7 @@ const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
 
-const Category = ({ page, posts }) => {
-  const pageSize = 10;
+const Category = ({ page, posts, pageSize=5 }) => {
   const totalPages = Math.ceil(posts.total / pageSize);
   const router = useRouter();
   const pageNum = parseInt(router.query.page);
@@ -87,6 +86,7 @@ const Category = ({ page, posts }) => {
 };
 
 Category.propTypes = {
+  pageSize: PropTypes.number.isRequired,
   page: PropTypes.shape({
     id: PropTypes.string.isRequired,
     createdAt: PropTypes.string,

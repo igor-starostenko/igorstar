@@ -11,25 +11,17 @@ const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
 
-const pageSize = 10;
-
-/** @param {Object} props
- *  @param {string} props.title - Page title
- *  @param {Object} props.data - Data object with limit, total, images
- */
-const PaginatedGallery = ({ title, data }) => {
+const PaginatedGallery = ({ title, total, images, pageSize, targetRowHeight }) => {
   const router = useRouter();
-  const totalPages = Math.ceil((data.images?.length || 0) / pageSize);
+  const totalPages = Math.ceil((images?.length || 0) / pageSize);
   const pageNum = parseInt(router.query.page) || 1;
   const [displayCount, setDisplayCount] = useState(
     pageNum ? pageNum * pageSize : pageSize
   );
 
-  const images = data.images || [];
-
   // Only update displayCount on scroll if we haven't reached the end
   const handleScroll = useCallback(() => {
-    if (displayCount >= data.total) return;
+    if (displayCount >= total) return;
 
     const lastRecordLoaded = document.querySelector(
       'div > div:last-child > div:last-child'
@@ -39,11 +31,11 @@ const PaginatedGallery = ({ title, data }) => {
         lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
       const pageOffset = window.pageYOffset + window.innerHeight;
       if (pageOffset > lastRecordLoadedOffset) {
-        const newDisplayCount = Math.min(displayCount + pageSize, data.total);
+        const newDisplayCount = Math.min(displayCount + pageSize, total);
         setDisplayCount(newDisplayCount);
       }
     }
-  }, [displayCount, data.total]);
+  }, [displayCount, total]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -63,7 +55,7 @@ const PaginatedGallery = ({ title, data }) => {
       <Head pageTitle={title} />
       <Box>
         {displayImages.length > 0 && (
-          <Gallery photos={displayImages} targetRowHeight={250} />
+          <Gallery photos={displayImages} targetRowHeight={targetRowHeight} />
         )}
         {pageNum < totalPages ? (
           <Pagination pageNum={pageNum} totalPages={totalPages} />
@@ -77,11 +69,9 @@ const PaginatedGallery = ({ title, data }) => {
 
 PaginatedGallery.propTypes = {
   title: PropTypes.string.isRequired,
-  data: PropTypes.shape({
-    limit: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  }).isRequired,
+  total: PropTypes.number.isRequired,
+  images: PropTypes.arrayOf(PropTypes.object).isRequired,
+  targetRowHeight: PropTypes.number.isRequired,
 };
 
 export default PaginatedGallery;

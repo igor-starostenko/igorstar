@@ -1,63 +1,32 @@
 import PaginatedGallery from 'components/paginatedGallery/paginatedGallery.jsx';
 import PropTypes from 'prop-types';
 
-const GalleryPage = ({ page, gallery }) => {
-  // Parse images from Contentful response
-  const data = {
-    limit: gallery.limit,
-    total: gallery.total,
-    images: gallery.images.map((img) => ({
-      caption: img.caption || '',
-      src: img.src,
-      alt: img.alt || '',
-      blurDataURL: img.blurDataURL || undefined,
-    })),
-  };
-
-  return <PaginatedGallery title={page.title} data={data} />;
-};
-
-GalleryPage.propTypes = {
-  page: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-  }).isRequired,
-  gallery: PropTypes.shape({
-    limit: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  }).isRequired,
-};
+const GalleryPage = (props) => <PaginatedGallery {...props} pageSize={10} targetRowHeight={300} />;
 
 export const getStaticProps = async () => {
-  const { getAllEntries, parseItem } = await import('contentClient');
+  const { getEntries, getAllEntries, parseItem } = await import('contentClient');
   const { addBlurDataURLs } = await import('helpers/contentful');
 
-  const pages = await getAllEntries({
+  const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Gallery',
   });
+  const { title } = pages.items[0];
 
-  const { items, ...gallery } = await getAllEntries({
+  const { items, total } = await getAllEntries({
     content_type: 'gallery',
   });
 
-  // Parse images and add blurDataURLs if not already set
   const parsedImages = items
-    ? items.map(({ image, ...fields }) => ({
-        ...parseItem(image),
-        ...fields,
-      }))
+    ? items.map((item) => parseItem(item.image))
     : [];
-
   const imagesWithBlurData = await addBlurDataURLs(parsedImages);
 
   return {
     props: {
-      page: pages.items[0] || {},
-      gallery: {
-        ...gallery,
-        images: imagesWithBlurData,
-      },
+      title,
+      total,
+      images: imagesWithBlurData,
     },
   };
 };
