@@ -16,9 +16,8 @@ const pageSize = 10;
 /** @param {Object} props
  *  @param {string} props.title - Page title
  *  @param {Object} props.data - Data object with limit, skip, total, images
- *  @param {Function} props.formatImage - Optional function to format images before rendering
  */
-const PaginatedGallery = ({ title, data, formatImage }) => {
+const PaginatedGallery = ({ title, data }) => {
   const router = useRouter();
   const totalPages = Math.ceil((data.images?.length || 0) / pageSize);
   const pageNum = parseInt(router.query.page) || 1;
@@ -59,11 +58,6 @@ const PaginatedGallery = ({ title, data, formatImage }) => {
   const endIndex = Math.min(startIndex + displayCount, images.length);
   const displayImages = images.slice(startIndex, endIndex);
 
-  // Apply optional formatting to images
-  const formattedImages = formatImage
-    ? displayImages.map(formatImage)
-    : displayImages;
-
   return (
     <Layout>
       <Head pageTitle={title} />
@@ -89,7 +83,6 @@ PaginatedGallery.propTypes = {
     total: PropTypes.number.isRequired,
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
   }).isRequired,
-  formatImage: PropTypes.func,
 };
 
 export default PaginatedGallery;
