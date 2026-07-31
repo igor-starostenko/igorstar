@@ -1,7 +1,8 @@
 import dynamic from 'next/dynamic';
-import PropTypes from 'prop-types';
+import { BLOCKS, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
+import PropTypes from 'prop-types';
 import { colors } from 'constants/theme.js';
 import { CategoryLabel, ContentDetails } from 'components/layout/layout.css.js';
 import Gallery from 'components/gallery/gallery.jsx';
@@ -14,6 +15,14 @@ const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
 
+const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'), {
+  ssr: false,
+});
+
+const FlickrImage = dynamic(() => import('components/image/flickrImage.jsx'));
+
+const BaseImage = dynamic(() => import('components/image/image.jsx'));
+
 const calculateRowHeight = (imageCount) => {
   let multiplier = 3;
   if (typeof window !== 'undefined') {
@@ -23,7 +32,123 @@ const calculateRowHeight = (imageCount) => {
   return height > 100 ? height : 100;
 };
 
-const _suggestedPostProps = [
+const hasDivChild = (children) => {
+  for (let i = 0; i < children.length; i += 1) {
+    if (children[i].type === 'div') {
+      return true;
+    }
+  }
+};
+
+const hasMultilineCode = (node) => {
+  return (
+    node.content.filter(
+      (content) =>
+        content.marks &&
+        content.value.includes('\n') &&
+        content.marks.filter(({ type }) => type === 'code').length > 0
+    ).length > 0
+  );
+};
+
+const isFlickrEmbed = ({ data }) => {
+  return (
+    data.uri.includes('data-flickr-embed') ||
+    data.uri.includes('class="flickr-embed"')
+  );
+};
+
+const isFlickrNode = (node) => {
+  const links = node.content.filter(({ nodeType }) => nodeType === 'hyperlink');
+
+  return links.filter(isFlickrEmbed).length > 0;
+};
+
+const options = {
+  renderMark: {
+    [MARKS.CODE]: (text) => {
+      const isMultiline = text.includes('\n');
+      if (!isMultiline) {
+        return (
+          <code
+            style={{
+              background: colors.lightestGrey,
+              padding: '5px',
+              borderRadius: '5px',
+            }}
+          >
+            {text}
+          </code>
+        );
+      }
+
+      return (
+        <SyntaxHighlighter showLineNumbers={isMultiline}>
+          {text}
+        </SyntaxHighlighter>
+      );
+    },
+  },
+  renderNode: {
+    [BLOCKS.EMBEDDED_ASSET]: (node) => {
+      const {
+        sys: { id },
+        fields: { description, file, title },
+      } = node.data.target;
+      const { width, height } = file.details.image;
+      const imageProps = {
+        style: { paddingTop: '2rem' },
+        src: `/images/${id}_${file.fileName}`,
+        backupSrc: `https:${file.url}`,
+        alt: title,
+        width,
+        height,
+      };
+
+      if (file.contentType.includes('image')) {
+        if (description && description.startsWith('http')) {
+          return (
+            <Link href={description}>
+              <BaseImage {...imageProps} />
+            </Link>
+          );
+        }
+        return <BaseImage {...imageProps} />;
+      }
+    },
+    [BLOCKS.EMBEDDED_ENTRY]: (node) => {
+      const { uri } = node.data.target.fields || {};
+      if (uri && uri.includes('data-flickr-embed')) {
+        return <FlickrImage xml={uri} />;
+      }
+    },
+    [BLOCKS.PARAGRAPH]: (node, children) => {
+      if (hasDivChild(children)) {
+        return <span>{children}</span>;
+      }
+
+      if (hasMultilineCode(node)) {
+        return <span>{children}</span>;
+      }
+
+      if (isFlickrNode(node)) {
+        return <span>{children}</span>;
+      }
+
+      return <p>{children}</p>;
+    },
+  },
+  renderInlineEntry: (node) => {
+    const { uri } = node.data.target.fields || {};
+    if (uri && uri.includes('data-flickr-embed')) {
+      return <FlickrImage xml={uri} />;
+    }
+
+    return null;
+  },
+};
+
+const suggestedPostProps = [
   'id',
   'title',
   'path',
@@ -35,7 +160,7 @@ const _suggestedPostProps = [
   'thumbnail',
 ];
 
-const _filterObject = (object, props) => {
+const filterObject = (object, props) => {
   if (!Array.isArray(props)) {
     return {};
   }
@@ -76,7 +201,7 @@ const Post = ({ post, recommendations }) => {
           <div style={{ display: 'inline-flex' }}>
             <DateText date={post.date} />
           </div>
-          {documentToReactComponents(post.content)}
+          {documentToReactComponents(post.content, options)}
           <Recommendations category={post.category} posts={recommendations} />
         </ContentDetails>
       </Box>
@@ -116,14 +241,10 @@ Post.propTypes = {
       path: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
+      tags: PropTypes.arrayOf(PropTypes.string),
       description: PropTypes.string.isRequired,
-      thumbnail: PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        alt: PropTypes.string.isRequired,
-        width: PropTypes.number.isRequired,
-        height: PropTypes.number.isRequired,
-        blurDataURL: PropTypes.string,
-      }),
+      linkText: PropTypes.string,
+      thumbnail: PropTypes.object,
     })
   ),
 };
@@ -134,7 +255,7 @@ export const getStaticProps = async ({ params }) => {
 
   const posts = await getAllEntries({
     content_type: 'post',
-    limit: 100,
+    limit: 100, // 1000 is the max,
     'fields.draft': false,
     'fields.category': params.category,
     order: '-fields.date',
@@ -157,38 +278,18 @@ export const getStaticProps = async ({ params }) => {
     ? calculateRowHeight(originalPost.images.length)
     : 250;
 
-  // Parse post data with only necessary props
-  const parsedPost = {
-    id: originalPost.id,
-    title: originalPost.title,
-    path: originalPost.path,
-    date: originalPost.date,
-    category: originalPost.category,
-    description: originalPost.description,
-    content: originalPost.content,
-    tags: originalPost.tags,
-    linkText: originalPost.linkText,
-  };
-
-  // Parse and add blurDataURLs to post thumbnail
+  // Parse images and add blurDataURLs if not already set
   const thumbnailWithBlur = originalPost.thumbnail
     ? ((await addBlurDataURLs([parseItem(originalPost.thumbnail)]))[0] ?? null)
     : null;
 
-  // Parse and add blurDataURLs to post images
   const imagesWithBlur = originalPost.images
     ? await addBlurDataURLs(originalPost.images.map(parseItem))
     : [];
 
-  // Parse recommended posts with only necessary props
   const parsedRecommendations = await addBlurDataURLs(
     recommendedPosts.map((rp) => ({
-      id: rp.id,
-      title: rp.title,
-      path: rp.path,
-      date: rp.date,
-      category: rp.category,
-      description: rp.description,
+      ...filterObject(rp, suggestedPostProps),
       thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
     })),
     { path: 'thumbnail' }
@@ -197,7 +298,7 @@ export const getStaticProps = async ({ params }) => {
   return {
     props: {
       post: {
-        ...parsedPost,
+        ...originalPost,
         thumbnail: thumbnailWithBlur,
         images: imagesWithBlur,
         targetRowHeight,
