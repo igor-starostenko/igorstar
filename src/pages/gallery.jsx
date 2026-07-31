@@ -5,7 +5,6 @@ const GalleryPage = ({ page, gallery }) => {
   // Parse images from Contentful response
   const data = {
     limit: gallery.limit,
-    skip: gallery.skip,
     total: gallery.total,
     images: gallery.images.map((img) => ({
       caption: img.caption || '',
@@ -24,7 +23,6 @@ GalleryPage.propTypes = {
   }).isRequired,
   gallery: PropTypes.shape({
     limit: PropTypes.number.isRequired,
-    skip: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
   }).isRequired,

@@ -15,7 +15,7 @@ const pageSize = 10;
 
 /** @param {Object} props
  *  @param {string} props.title - Page title
- *  @param {Object} props.data - Data object with limit, skip, total, images
+ *  @param {Object} props.data - Data object with limit, total, images
  */
 const PaginatedGallery = ({ title, data }) => {
   const router = useRouter();
@@ -62,8 +62,8 @@ const PaginatedGallery = ({ title, data }) => {
     <Layout>
       <Head pageTitle={title} />
       <Box>
-        {formattedImages.length > 0 && (
-          <Gallery photos={formattedImages} targetRowHeight={250} />
+        {displayImages.length > 0 && (
+          <Gallery photos={displayImages} targetRowHeight={250} />
         )}
         {pageNum < totalPages ? (
           <Pagination pageNum={pageNum} totalPages={totalPages} />
@@ -79,7 +79,6 @@ PaginatedGallery.propTypes = {
   title: PropTypes.string.isRequired,
   data: PropTypes.shape({
     limit: PropTypes.number.isRequired,
-    skip: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     images: PropTypes.arrayOf(PropTypes.object).isRequired,
   }).isRequired,
