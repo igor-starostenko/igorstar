@@ -60,6 +60,10 @@ const PaginatedGallery = ({ title, data, formatImage }) => {
 
   // startIndex is determined by the current page number
   const pageNum = Math.ceil(displayCount / pageSize) || 1;
+  
+  // Don't show pagination if we've loaded all items (reached the end)
+  const hasMoreItems = displayCount < data.total;
+  
   const startIndex = pageNum > 1 ? (pageNum - 1) * pageSize : 0;
   // Show images from startIndex, up to displayCount items
   const endIndex = Math.min(startIndex + displayCount, images.length);
@@ -77,7 +81,7 @@ const PaginatedGallery = ({ title, data, formatImage }) => {
         {formattedImages.length > 0 && (
           <Gallery photos={formattedImages} targetRowHeight={250} />
         )}
-        {pageNum < totalPages ? (
+        {hasMoreItems && pageNum < totalPages ? (
           <Pagination pageNum={pageNum} totalPages={totalPages} />
         ) : (
           ''
