@@ -21,11 +21,16 @@ const pageSize = 10;
 const PaginatedGallery = ({ title, data, formatImage }) => {
   const router = useRouter();
   const totalPages = Math.ceil((data.images?.length || 0) / pageSize);
-  const pageNum = parseInt(router.query.page) || 1;
-  const [displayCount, setDisplayCount] = useState(
-    pageNum ? pageNum * pageSize : pageSize
-  );
-
+  
+  // Initialize displayCount based on current page - use server-safe default
+  const [displayCount, setDisplayCount] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const pageNum = parseInt(router.query.page) || 1;
+      return pageNum * pageSize;
+    }
+    return pageSize; // Server-side default
+  });
+  
   const images = data.images || [];
 
   // Only update displayCount on scroll if we haven't reached the end
@@ -54,6 +59,7 @@ const PaginatedGallery = ({ title, data, formatImage }) => {
   }, [handleScroll]);
 
   // startIndex is determined by the current page number
+  const pageNum = Math.ceil(displayCount / pageSize) || 1;
   const startIndex = pageNum > 1 ? (pageNum - 1) * pageSize : 0;
   // Show images from startIndex, up to displayCount items
   const endIndex = Math.min(startIndex + displayCount, images.length);
