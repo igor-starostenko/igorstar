@@ -79,6 +79,12 @@ test('renders with page and posts', () => {
           category: 'tech',
           description: 'Test description 1',
           linkText: 'Read more',
+          thumbnail: {
+            src: '/thumb1.jpg',
+            alt: 'Test Post 1',
+            width: 300,
+            height: 200,
+          },
         },
         {
           id: 'post-2',
@@ -89,6 +95,12 @@ test('renders with page and posts', () => {
           category: 'tech',
           description: 'Test description 2',
           linkText: 'Read more',
+          thumbnail: {
+            src: '/thumb2.jpg',
+            alt: 'Test Post 2',
+            width: 300,
+            height: 200,
+          },
         },
       ],
     },
@@ -157,20 +169,28 @@ test('renders with pagination when more posts', () => {
       items: Array.from({ length: 10 }).map((_, i) => ({
         id: `post-${i}`,
         title: `Post ${i}`,
+        path: `post-${i}`,
         date: '2026-05-01',
         layout: 'default',
         draft: false,
         category: 'tech',
         description: `Description ${i}`,
+        tags: ['tag1'],
         linkText: 'Read more',
+        thumbnail: {
+          src: `/thumb${i}.jpg`,
+          alt: `Post ${i}`,
+          width: 300,
+          height: 200,
+        },
       })),
     },
   };
 
   render(<Category {...mockProps} />);
 
-  // Verify the posts are displayed
-  expect(screen.getAllByTestId('mock-article').length).toBe(10);
+  // Verify the posts are displayed (initial page shows 5)
+  expect(screen.getAllByTestId('mock-article').length).toBe(5);
 });
 
 test('renders with no pagination when all posts shown', () => {
@@ -194,6 +214,12 @@ test('renders with no pagination when all posts shown', () => {
         category: 'tech',
         description: `Description ${i}`,
         linkText: 'Read more',
+        thumbnail: {
+          src: `/thumb${i}.jpg`,
+          alt: `Post ${i}`,
+          width: 300,
+          height: 200,
+        },
       })),
     },
   };

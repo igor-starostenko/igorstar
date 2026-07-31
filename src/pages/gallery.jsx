@@ -1,5 +1,4 @@
 import PaginatedGallery from 'components/paginatedGallery/paginatedGallery.jsx';
-import PropTypes from 'prop-types';
 
 const GalleryPage = (props) => <PaginatedGallery {...props} pageSize={10} targetRowHeight={300} />;
 

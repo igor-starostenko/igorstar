@@ -20,51 +20,52 @@ vi.mock('components/head/head.jsx', () => ({
 }));
 
 vi.mock('next/router', () => ({
-  useRouter: vi.fn(() => ({ query: {} })),
+  useRouter: vi.fn(() => ({ query: {}, isReady: true })),
+}));
+
+vi.mock('components/paginatedGallery/paginatedGallery.jsx', () => ({
+  default: ({ title, total, images }) => (
+    <div data-testid="mock-paginated-gallery">
+      {title}-{total}-{images.length}
+    </div>
+  ),
 }));
 
 import GalleryPage from 'pages/gallery.jsx';
 
 test('renders Gallery with images', () => {
   const mockProps = {
-    page: { title: 'Gallery' },
-    gallery: {
-      limit: 10,
-      skip: 0,
-      total: 3,
-      images: [
-        { src: '/a.jpg', alt: 'A' },
-        { src: '/b.jpg', alt: 'B' },
-        { src: '/c.jpg', alt: 'C' },
-      ],
-    },
+    title: 'Gallery',
+    total: 3,
+    images: [
+      { src: '/a.jpg', alt: 'A' },
+      { src: '/b.jpg', alt: 'B' },
+      { src: '/c.jpg', alt: 'C' },
+    ],
   };
 
   render(<GalleryPage {...mockProps} />);
 
-  expect(screen.getByTestId('mock-layout')).toBeInTheDocument();
+  expect(screen.getByTestId('mock-paginated-gallery')).toBeInTheDocument();
 });
 
 test('renders Gallery with empty images', () => {
   const mockProps = {
-    page: { title: 'Gallery' },
-    gallery: {
-      limit: 10,
-      skip: 0,
-      total: 0,
-      images: [],
-    },
+    title: 'Gallery',
+    total: 0,
+    images: [],
   };
 
   render(<GalleryPage {...mockProps} />);
 
-  expect(screen.getByTestId('mock-layout')).toBeInTheDocument();
+  expect(screen.getByTestId('mock-paginated-gallery')).toBeInTheDocument();
 });
 
 test('renders Gallery with empty page', () => {
   const mockProps = {
-    page: {},
-    gallery: { images: [] },
+    title: '',
+    total: 0,
+    images: [],
   };
 
   expect(() => render(<GalleryPage {...mockProps} />)).not.toThrow();

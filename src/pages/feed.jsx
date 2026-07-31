@@ -1,10 +1,9 @@
 import PaginatedGallery from 'components/paginatedGallery/paginatedGallery.jsx';
-import PropTypes from 'prop-types';
 
 const FeedPage = (props) => <PaginatedGallery {...props} pageSize={18} targetRowHeight={260} />;
 
 export const getStaticProps = async () => {
-  const { getEntries, getAllEntries, parseItem } = await import('contentClient');
+  const { getAllEntries, parseItem } = await import('contentClient');
   const { addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getAllEntries({

@@ -20,50 +20,51 @@ vi.mock('components/head/head.jsx', () => ({
 }));
 
 vi.mock('next/router', () => ({
-  useRouter: vi.fn(() => ({ query: {} })),
+  useRouter: vi.fn(() => ({ query: {}, isReady: true })),
+}));
+
+vi.mock('components/paginatedGallery/paginatedGallery.jsx', () => ({
+  default: ({ title, total, images }) => (
+    <div data-testid="mock-paginated-gallery">
+      {title}-{total}-{images.length}
+    </div>
+  ),
 }));
 
 import FeedPage from 'pages/feed.jsx';
 
 test('renders Feed with images', () => {
   const mockProps = {
-    page: { title: 'Photo Feed' },
-    feed: {
-      limit: 10,
-      skip: 0,
-      total: 2,
-      images: [
-        { src: '/a.jpg', alt: 'A' },
-        { src: '/b.jpg', alt: 'B' },
-      ],
-    },
+    title: 'Photo Feed',
+    total: 2,
+    images: [
+      { src: '/a.jpg', alt: 'A' },
+      { src: '/b.jpg', alt: 'B' },
+    ],
   };
 
   render(<FeedPage {...mockProps} />);
 
-  expect(screen.getByTestId('mock-layout')).toBeInTheDocument();
+  expect(screen.getByTestId('mock-paginated-gallery')).toBeInTheDocument();
 });
 
 test('renders Feed with empty images', () => {
   const mockProps = {
-    page: { title: 'Photo Feed' },
-    feed: {
-      limit: 10,
-      skip: 0,
-      total: 0,
-      images: [],
-    },
+    title: 'Photo Feed',
+    total: 0,
+    images: [],
   };
 
   render(<FeedPage {...mockProps} />);
 
-  expect(screen.getByTestId('mock-layout')).toBeInTheDocument();
+  expect(screen.getByTestId('mock-paginated-gallery')).toBeInTheDocument();
 });
 
 test('renders Feed with empty page', () => {
   const mockProps = {
-    page: {},
-    feed: { images: [] },
+    title: '',
+    total: 0,
+    images: [],
   };
 
   expect(() => render(<FeedPage {...mockProps} />)).not.toThrow();
