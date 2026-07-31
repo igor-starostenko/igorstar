@@ -13,16 +13,10 @@ const Pagination = dynamic(
 
 const PaginatedGallery = ({ title, total, images, pageSize, targetRowHeight }) => {
   const router = useRouter();
+  const page = parseInt(router.query.page) || 1;
   const totalPages = Math.ceil((images?.length || 0) / pageSize);
 
-  // Initialize displayCount based on current page - use server-safe default
-  const [displayCount, setDisplayCount] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const pageNum = parseInt(router.query.page) || 1;
-      return pageNum * pageSize;
-    }
-    return pageSize; // Server-side default
-  });
+  const [displayCount=pageSize, setDisplayCount] = useState();
 
   // Only update displayCount on scroll if we haven't reached the end
   const handleScroll = useCallback(() => {
@@ -49,13 +43,12 @@ const PaginatedGallery = ({ title, total, images, pageSize, targetRowHeight }) =
     };
   }, [handleScroll]);
 
-  // startIndex is determined by the current page number
   const pageNum = Math.ceil(displayCount / pageSize) || 1;
 
   // Don't show pagination if we've loaded all items (reached the end)
-  const hasMoreItems = displayCount < data.total;
+  const hasMoreItems = displayCount < total;
 
-  const startIndex = pageNum > 1 ? (pageNum - 1) * pageSize : 0;
+  const startIndex = page > 1 ? (page - 1) * pageSize : 0;
   // Show images from startIndex, up to displayCount items
   const endIndex = Math.min(startIndex + displayCount, images.length);
   const displayImages = images.slice(startIndex, endIndex);
