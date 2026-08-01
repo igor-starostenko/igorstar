@@ -44,7 +44,11 @@ const parseItem = (data) => {
   }
 
   const { id, title, file, description } = item;
-  return { id, ...parseImage(title, file), ...(description != null ? { description } : {}) };
+  return {
+    id,
+    ...parseImage(title, file),
+    ...(description != null ? { description } : {}),
+  };
 };
 
 const getEntries = async (options) => {

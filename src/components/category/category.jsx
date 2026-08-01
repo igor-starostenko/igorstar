@@ -12,7 +12,7 @@ const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
 
-const Category = ({ page, posts, pageSize=5 }) => {
+const Category = ({ title, posts, pageSize = 5 }) => {
   const totalPages = Math.ceil(posts.total / pageSize);
   const router = useRouter();
   const pageNum = parseInt(router.query.page);
@@ -44,18 +44,18 @@ const Category = ({ page, posts, pageSize=5 }) => {
     return () => {
       window.removeEventListener('scroll', handleScrollHandler);
     };
-  }, [displayCount, posts]);
+  }, [displayCount, posts, pageSize]);
 
   const startIndex = pageNum ? pageNum * pageSize - pageSize : 0;
   const displayPosts = posts.items.slice(startIndex, startIndex + displayCount);
 
   return (
     <Layout>
-      <Head pageTitle={page.title} />
+      <Head pageTitle={title} />
       <Box isMain>
         <Filter
           path={router.asPath}
-          title={page.title}
+          title={title}
           displayCount={displayPosts.length}
           totalCount={posts.total}
         />
@@ -87,23 +87,12 @@ const Category = ({ page, posts, pageSize=5 }) => {
 
 Category.propTypes = {
   pageSize: PropTypes.number.isRequired,
-  page: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    createdAt: PropTypes.string,
-    updatedAt: PropTypes.string,
-    title: PropTypes.string.isRequired,
-  }).isRequired,
+  title: PropTypes.string.isRequired,
   posts: PropTypes.shape({
-    limit: PropTypes.number.isRequired,
-    skip: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     items: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
-        createdAt: PropTypes.string,
-        updatedAt: PropTypes.string,
-        layout: PropTypes.string,
-        draft: PropTypes.bool,
         thumbnail: PropTypes.shape({
           src: PropTypes.string.isRequired,
           backupSrc: PropTypes.string,

@@ -1,5 +1,6 @@
-import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
+import dynamic from 'next/dynamic';
+import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
 import { colors } from 'constants/theme.js';
@@ -9,6 +10,14 @@ import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Recommendations from 'components/recommendations/recommendations.jsx';
+
+const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'), {
+  ssr: false,
+});
+
+const FlickrImage = dynamic(() => import('components/image/flickrImage.jsx'));
+
+const BaseImage = dynamic(() => import('components/image/baseImage.jsx'));
 
 const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
@@ -23,36 +32,161 @@ const calculateRowHeight = (imageCount) => {
   return height > 100 ? height : 100;
 };
 
-const _suggestedPostProps = [
-  'id',
-  'title',
-  'path',
-  'date',
-  'category',
-  'tags',
-  'description',
-  'linkText',
-  'thumbnail',
-];
-
-const _filterObject = (object, props) => {
-  if (!Array.isArray(props)) {
-    return {};
+const hasDivChild = (children) => {
+  for (let i = 0; i < children.length; i += 1) {
+    if (children[i].type === 'div') {
+      return true;
+    }
   }
-
-  return props
-    .filter((property) => property in object)
-    .map((property) => ({ [property]: object[property] }))
-    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
 };
 
-const Post = ({ post, recommendations }) => {
-  const { images, thumbnail } = post;
+const hasMultilineCode = (node) => {
+  return (
+    node.content.filter(
+      (content) =>
+        content.marks &&
+        content.value.includes('\n') &&
+        content.marks.filter(({ type }) => type === 'code').length > 0
+    ).length > 0
+  );
+};
+
+const isFlickrEmbed = ({ data }) => {
+  return (
+    data.uri.includes('data-flickr-embed') ||
+    data.uri.includes('class="flickr-embed"')
+  );
+};
+
+const isFlickrNode = (node) => {
+  const links = node.content.filter(({ nodeType }) => nodeType === 'hyperlink');
+
+  return links.filter(isFlickrEmbed).length > 0;
+};
+
+const options = {
+  renderMark: {
+    [MARKS.CODE]: (text) => {
+      const isMultiline = text.includes('\n');
+      if (!isMultiline) {
+        return (
+          <code
+            style={{
+              background: colors.lightestGrey,
+              padding: '5px',
+              borderRadius: '5px',
+            }}
+          >
+            {text}
+          </code>
+        );
+      }
+
+      return (
+        <SyntaxHighlighter showLineNumbers={isMultiline}>
+          {text}
+        </SyntaxHighlighter>
+      );
+    },
+  },
+  renderNode: {
+    [BLOCKS.EMBEDDED_ASSET]: (node) => {
+      const {
+        sys: { id },
+        fields: { description, file, title },
+      } = node.data.target;
+      const { width, height } = file.details.image;
+      const imageProps = {
+        style: { paddingTop: '2rem' },
+        src: `/images/${id}_${file.fileName}`,
+        backupSrc: `https:${file.url}`,
+        alt: title,
+        width,
+        height,
+      };
+
+      if (file.contentType.includes('image')) {
+        if (description && description.startsWith('http')) {
+          return (
+            <Link href={description}>
+              <BaseImage {...imageProps} />
+            </Link>
+          );
+        }
+        return <BaseImage {...imageProps} />;
+      }
+    },
+    [BLOCKS.EMBEDDED_ENTRY]: (node) => {
+      const { uri } = node.data.target.fields || {};
+      if (uri && uri.includes('data-flickr-embed')) {
+        return <FlickrImage xml={uri} />;
+      }
+    },
+    [BLOCKS.PARAGRAPH]: (node, children) => {
+      if (hasDivChild(children)) {
+        return <span>{children}</span>;
+      } else if (hasMultilineCode(node)) {
+        return <div>{children}</div>;
+      } else if (isFlickrNode(node)) {
+        return <div>{children}</div>;
+      } else {
+        return <p>{children}</p>;
+      }
+    },
+    [INLINES.HYPERLINK]: (node) => {
+      if (
+        node.data.uri.includes('youtube.com/embed') ||
+        node.data.uri.includes('youtube-nocookie.com/embed')
+      ) {
+        return (
+          <div className="youtube-container">
+            <iframe
+              title={node.content[0].value}
+              className="youtube-video"
+              src={node.data.uri}
+              frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        );
+      } else if (isFlickrEmbed(node)) {
+        // Decode HTML entities in URI if needed (Contentful may encode them)
+        const decodeUri = (uri) => {
+          try {
+            return uri
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&quot;/g, '"');
+          } catch {
+            return uri;
+          }
+        };
+        const xml = decodeUri(node.data.uri);
+        return <FlickrImage xml={xml} />;
+      } else {
+        return <Link href={node.data.uri}>{node.content[0].value}</Link>;
+      }
+    },
+  },
+};
+
+const Post = ({
+  title,
+  date,
+  category,
+  path,
+  content,
+  targetRowHeight,
+  images,
+  thumbnail,
+  recommendations,
+}) => {
   const imageUrl = thumbnail ? thumbnail.src : null;
 
   return (
     <Layout>
-      <Head pageTitle={post.title} imageUrl={imageUrl} />
+      <Head pageTitle={title} imageUrl={imageUrl} />
       <Box>
         <CategoryLabel
           style={{
@@ -60,24 +194,24 @@ const Post = ({ post, recommendations }) => {
           }}
         >
           <span>
-            Category: <Link href={`/${post.category}`}>{post.category}</Link>
+            Category: <Link href={`/${category}`}>{category}</Link>
           </span>
         </CategoryLabel>
         {images.length > 0 && (
           <Gallery
-            key={post.path}
+            key={path}
             photos={images}
             order="asc"
-            targetRowHeight={post.targetRowHeight}
+            targetRowHeight={targetRowHeight}
           />
         )}
         <ContentDetails>
-          <h1>{post.title}</h1>
+          <h1>{title}</h1>
           <div style={{ display: 'inline-flex' }}>
-            <DateText date={post.date} />
+            <DateText date={date} />
           </div>
-          {documentToReactComponents(post.content)}
-          <Recommendations category={post.category} posts={recommendations} />
+          {documentToReactComponents(content, options)}
+          <Recommendations category={category} posts={recommendations} />
         </ContentDetails>
       </Box>
     </Layout>
@@ -85,52 +219,48 @@ const Post = ({ post, recommendations }) => {
 };
 
 Post.propTypes = {
-  post: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    path: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    content: PropTypes.object.isRequired,
-    thumbnail: PropTypes.shape({
+  id: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  content: PropTypes.object.isRequired,
+  thumbnail: PropTypes.shape({
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    blurDataURL: PropTypes.string,
+  }),
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
       src: PropTypes.string.isRequired,
-      alt: PropTypes.string.isRequired,
       width: PropTypes.number.isRequired,
       height: PropTypes.number.isRequired,
+      alt: PropTypes.string,
+      description: PropTypes.string,
       blurDataURL: PropTypes.string,
-    }),
-    images: PropTypes.arrayOf(
-      PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        alt: PropTypes.string,
-        blurDataURL: PropTypes.string,
-      })
-    ).isRequired,
-    targetRowHeight: PropTypes.number.isRequired,
-  }).isRequired,
+    })
+  ).isRequired,
+  targetRowHeight: PropTypes.number.isRequired,
   recommendations: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      tags: PropTypes.arrayOf(PropTypes.string),
       description: PropTypes.string.isRequired,
-      thumbnail: PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        alt: PropTypes.string.isRequired,
-        width: PropTypes.number.isRequired,
-        height: PropTypes.number.isRequired,
-        blurDataURL: PropTypes.string,
-      }),
+      linkText: PropTypes.string,
+      thumbnail: PropTypes.object,
     })
   ),
 };
 
 export const getStaticProps = async ({ params }) => {
   const { getAllEntries, parseItem } = await import('contentClient');
-  const { addBlurDataURLs } = await import('helpers/contentful');
+  const { filterObject, addBlurDataURLs } = await import('helpers/contentful');
 
   const posts = await getAllEntries({
     content_type: 'post',
@@ -144,51 +274,39 @@ export const getStaticProps = async ({ params }) => {
   const nextPostIndex = postIndex === 0 ? postIndex + 2 : postIndex - 1;
   const previousPostIndex =
     postIndex === posts.total - 1 ? postIndex - 2 : postIndex + 1;
-  const originalPost = posts.items[postIndex] || {};
+  const post = posts.items[postIndex] || {};
   const recommendedPosts = (
-    originalPost.recommendations && originalPost.recommendations.length > 0
-      ? originalPost.recommendations.map((path) =>
+    post.recommendations && post.recommendations.length > 0
+      ? post.recommendations.map((path) =>
           posts.items.find((post) => post.path === path)
         )
       : [posts.items[nextPostIndex] || {}, posts.items[previousPostIndex] || {}]
   ).filter((post) => post !== undefined && post !== null);
 
-  const targetRowHeight = originalPost.images
-    ? calculateRowHeight(originalPost.images.length)
+  const targetRowHeight = post.images
+    ? calculateRowHeight(post.images.length)
     : 250;
 
-  // Parse post data with only necessary props
-  const parsedPost = {
-    id: originalPost.id,
-    title: originalPost.title,
-    path: originalPost.path,
-    date: originalPost.date,
-    category: originalPost.category,
-    description: originalPost.description,
-    content: originalPost.content,
-    tags: originalPost.tags,
-    linkText: originalPost.linkText,
-  };
-
-  // Parse and add blurDataURLs to post thumbnail
-  const thumbnailWithBlur = originalPost.thumbnail
-    ? ((await addBlurDataURLs([parseItem(originalPost.thumbnail)]))[0] ?? null)
+  const thumbnailWithBlur = post.thumbnail
+    ? ((await addBlurDataURLs([parseItem(post.thumbnail)]))[0] ?? null)
     : null;
 
-  // Parse and add blurDataURLs to post images
-  const imagesWithBlur = originalPost.images
-    ? await addBlurDataURLs(originalPost.images.map(parseItem))
+  const imagesWithBlur = post.images
+    ? await addBlurDataURLs(post.images.map(parseItem))
     : [];
 
-  // Parse recommended posts with only necessary props
   const parsedRecommendations = await addBlurDataURLs(
     recommendedPosts.map((rp) => ({
-      id: rp.id,
-      title: rp.title,
-      path: rp.path,
-      date: rp.date,
-      category: rp.category,
-      description: rp.description,
+      ...filterObject(rp, [
+        'id',
+        'date',
+        'title',
+        'category',
+        'path',
+        'tags',
+        'description',
+        'linkText',
+      ]),
       thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
     })),
     { path: 'thumbnail' }
@@ -196,12 +314,10 @@ export const getStaticProps = async ({ params }) => {
 
   return {
     props: {
-      post: {
-        ...parsedPost,
-        thumbnail: thumbnailWithBlur,
-        images: imagesWithBlur,
-        targetRowHeight,
-      },
+      ...filterObject(post, ['title', 'date', 'category', 'path', 'content']),
+      targetRowHeight,
+      thumbnail: thumbnailWithBlur,
+      images: imagesWithBlur,
       recommendations: parsedRecommendations,
     },
   };
