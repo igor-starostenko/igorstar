@@ -44,7 +44,7 @@ const Category = ({ title, posts, pageSize = 5 }) => {
     return () => {
       window.removeEventListener('scroll', handleScrollHandler);
     };
-  }, [displayCount, posts]);
+  }, [displayCount, posts, pageSize]);
 
   const startIndex = pageNum ? pageNum * pageSize - pageSize : 0;
   const displayPosts = posts.items.slice(startIndex, startIndex + displayCount);

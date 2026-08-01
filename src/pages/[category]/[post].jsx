@@ -32,29 +32,6 @@ const calculateRowHeight = (imageCount) => {
   return height > 100 ? height : 100;
 };
 
-const suggestedPostProps = [
-  'id',
-  'title',
-  'path',
-  'date',
-  'category',
-  'tags',
-  'description',
-  'linkText',
-  'thumbnail',
-];
-
-const filterObject = (object, props) => {
-  if (!Array.isArray(props)) {
-    return {};
-  }
-
-  return props
-    .filter((property) => property in object)
-    .map((property) => ({ [property]: object[property] }))
-    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
-};
-
 const hasDivChild = (children) => {
   for (let i = 0; i < children.length; i += 1) {
     if (children[i].type === 'div') {

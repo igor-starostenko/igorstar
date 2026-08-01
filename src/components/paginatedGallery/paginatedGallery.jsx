@@ -40,7 +40,7 @@ const PaginatedGallery = ({
         setDisplayCount(newDisplayCount);
       }
     }
-  }, [displayCount, total]);
+  }, [displayCount, total, pageSize]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
