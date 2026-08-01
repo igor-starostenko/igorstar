@@ -219,7 +219,7 @@ const Post = ({
 };
 
 Post.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   title: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
