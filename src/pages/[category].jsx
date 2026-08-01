@@ -67,7 +67,7 @@ export const getStaticProps = async ({ params }) => {
       thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
     })),
     { path: 'images' }
-  );
+    { path: 'thumbnail' }
 
   return {
     props: {
