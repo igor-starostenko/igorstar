@@ -179,17 +179,6 @@ const options = {
   },
 };
 
-const filterObject = (object, props) => {
-  if (!Array.isArray(props)) {
-    return {};
-  }
-
-  return props
-    .filter((property) => property in object)
-    .map((property) => ({ [property]: object[property] }))
-    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
-};
-
 const Post = ({
   title,
   date,
@@ -279,7 +268,7 @@ Post.propTypes = {
 
 export const getStaticProps = async ({ params }) => {
   const { getAllEntries, parseItem } = await import('contentClient');
-  const { addBlurDataURLs } = await import('helpers/contentful');
+  const { filterObject, addBlurDataURLs } = await import('helpers/contentful');
 
   const posts = await getAllEntries({
     content_type: 'post',

@@ -6,20 +6,21 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Selfie from 'components/selfie/selfie.jsx';
 
-const About = ({ page }) => (
+const About = ({ title, content }) => (
   <Layout>
-    <Head pageTitle={page.title} />
+    <Head pageTitle={title} />
     <ContentDetails>
       <Box>
         <Selfie src="/selfie.webp" />
-        {documentToReactComponents(page.content)}
+        {documentToReactComponents(content)}
       </Box>
     </ContentDetails>
   </Layout>
 );
 
 About.propTypes = {
-  page: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
+  content: PropTypes.object.isRequired,
 };
 
 export default About;
@@ -31,16 +32,12 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'About',
   });
-
-  const page = pages.items[0];
-
-  if (!page) {
-    return { notFound: true };
-  }
+  const { title, content } = pages.items[0];
 
   return {
     props: {
-      page,
+      title,
+      content,
     },
   };
 };
