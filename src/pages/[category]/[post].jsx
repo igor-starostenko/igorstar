@@ -1,8 +1,8 @@
+import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
-import PropTypes from 'prop-types';
 import { colors } from 'constants/theme.js';
 import { CategoryLabel, ContentDetails } from 'components/layout/layout.css.js';
 import Gallery from 'components/gallery/gallery.jsx';
@@ -10,10 +10,6 @@ import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Recommendations from 'components/recommendations/recommendations.jsx';
-
-const DateText = dynamic(() => import('components/date/date.jsx'), {
-  ssr: false,
-});
 
 const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'), {
   ssr: false,
@@ -23,6 +19,10 @@ const FlickrImage = dynamic(() => import('components/image/flickrImage.jsx'));
 
 const BaseImage = dynamic(() => import('components/image/image.jsx'));
 
+const DateText = dynamic(() => import('components/date/date.jsx'), {
+  ssr: false,
+});
+
 const calculateRowHeight = (imageCount) => {
   let multiplier = 3;
   if (typeof window !== 'undefined') {
@@ -30,6 +30,29 @@ const calculateRowHeight = (imageCount) => {
   }
   const height = 300 * (1 - (multiplier * imageCount) / 100);
   return height > 100 ? height : 100;
+};
+
+const suggestedPostProps = [
+  'id',
+  'title',
+  'path',
+  'date',
+  'category',
+  'tags',
+  'description',
+  'linkText',
+  'thumbnail',
+];
+
+const filterObject = (object, props) => {
+  if (!Array.isArray(props)) {
+    return {};
+  }
+
+  return props
+    .filter((property) => property in object)
+    .map((property) => ({ [property]: object[property] }))
+    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
 };
 
 const hasDivChild = (children) => {
@@ -62,17 +85,6 @@ const isFlickrNode = (node) => {
   const links = node.content.filter(({ nodeType }) => nodeType === 'hyperlink');
 
   return links.filter(isFlickrEmbed).length > 0;
-};
-
-const decodeUri = (uri) => {
-  try {
-    return uri
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"');
-  } catch {
-    return uri;
-  }
 };
 
 const options = {
@@ -135,7 +147,7 @@ const options = {
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
       if (hasDivChild(children)) {
-        return <div>{children}</div>;
+        return <span>{children}</span>;
       } else if (hasMultilineCode(node)) {
         return <div>{children}</div>;
       } else if (isFlickrNode(node)) {
@@ -162,6 +174,17 @@ const options = {
           </div>
         );
       } else if (isFlickrEmbed(node)) {
+        // Decode HTML entities in URI if needed (Contentful may encode them)
+        const decodeUri = (uri) => {
+          try {
+            return uri
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&quot;/g, '"');
+          } catch {
+            return uri;
+          }
+        };
         const xml = decodeUri(node.data.uri);
         return <FlickrImage xml={xml} />;
       } else {
@@ -169,41 +192,10 @@ const options = {
       }
     },
   },
-  renderInlineEntry: (node) => {
-    const { uri } = node.data.target.fields || {};
-    if (uri && uri.includes('data-flickr-embed')) {
-      return <FlickrImage xml={uri} />;
-    }
-
-    return null;
-  },
-};
-
-const suggestedPostProps = [
-  'id',
-  'title',
-  'path',
-  'date',
-  'category',
-  'tags',
-  'description',
-  'linkText',
-  'thumbnail',
-];
-
-const filterObject = (object, props) => {
-  if (!Array.isArray(props)) {
-    return {};
-  }
-
-  return props
-    .filter((property) => property in object)
-    .map((property) => ({ [property]: object[property] }))
-    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
 };
 
 const Post = ({ post, recommendations }) => {
-  const { images, thumbnail } = post;
+  const { images, thumbnail, targetRowHeight } = post;
   const imageUrl = thumbnail ? thumbnail.src : null;
 
   return (
@@ -224,7 +216,7 @@ const Post = ({ post, recommendations }) => {
             key={post.path}
             photos={images}
             order="asc"
-            targetRowHeight={post.targetRowHeight}
+            targetRowHeight={targetRowHeight}
           />
         )}
         <ContentDetails>
@@ -243,26 +235,20 @@ const Post = ({ post, recommendations }) => {
 Post.propTypes = {
   post: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    createdAt: PropTypes.string,
+    updatedAt: PropTypes.string,
     title: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
+    layout: PropTypes.string.isRequired,
+    draft: PropTypes.bool.isRequired,
     category: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.string.isRequired,
+    linkText: PropTypes.string,
     content: PropTypes.object.isRequired,
-    thumbnail: PropTypes.shape({
-      src: PropTypes.string.isRequired,
-      alt: PropTypes.string.isRequired,
-      width: PropTypes.number.isRequired,
-      height: PropTypes.number.isRequired,
-      blurDataURL: PropTypes.string,
-    }),
-    images: PropTypes.arrayOf(
-      PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        alt: PropTypes.string,
-        blurDataURL: PropTypes.string,
-      })
-    ).isRequired,
+    thumbnail: PropTypes.object,
+    images: PropTypes.arrayOf(PropTypes.object).isRequired,
     targetRowHeight: PropTypes.number.isRequired,
   }).isRequired,
   recommendations: PropTypes.arrayOf(
@@ -282,7 +268,6 @@ Post.propTypes = {
 
 export const getStaticProps = async ({ params }) => {
   const { getAllEntries, parseItem } = await import('contentClient');
-  const { addBlurDataURLs } = await import('helpers/contentful');
 
   const posts = await getAllEntries({
     content_type: 'post',
@@ -296,45 +281,41 @@ export const getStaticProps = async ({ params }) => {
   const nextPostIndex = postIndex === 0 ? postIndex + 2 : postIndex - 1;
   const previousPostIndex =
     postIndex === posts.total - 1 ? postIndex - 2 : postIndex + 1;
-  const originalPost = posts.items[postIndex] || {};
+  const post = posts.items[postIndex] || {};
   const recommendedPosts = (
-    originalPost.recommendations && originalPost.recommendations.length > 0
-      ? originalPost.recommendations.map((path) =>
+    post.recommendations && post.recommendations.length > 0
+      ? post.recommendations.map((path) =>
           posts.items.find((post) => post.path === path)
         )
       : [posts.items[nextPostIndex] || {}, posts.items[previousPostIndex] || {}]
   ).filter((post) => post !== undefined && post !== null);
 
-  const targetRowHeight = originalPost.images
-    ? calculateRowHeight(originalPost.images.length)
+  const targetRowHeight = post.images
+    ? calculateRowHeight(post.images.length)
     : 250;
 
   // Parse images and add blurDataURLs if not already set
-  const thumbnailWithBlur = originalPost.thumbnail
-    ? ((await addBlurDataURLs([parseItem(originalPost.thumbnail)]))[0] ?? null)
-    : null;
-
-  const imagesWithBlur = originalPost.images
-    ? await addBlurDataURLs(originalPost.images.map(parseItem))
-    : [];
-
-  const parsedRecommendations = await addBlurDataURLs(
-    recommendedPosts.map((rp) => ({
-      ...filterObject(rp, suggestedPostProps),
-      thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
-    })),
-    { path: 'thumbnail' }
-  );
+  const { addBlurDataURLs } = await import('helpers/contentful');
 
   return {
     props: {
       post: {
-        ...originalPost,
-        thumbnail: thumbnailWithBlur,
-        images: imagesWithBlur,
+        ...post,
+        thumbnail: post.thumbnail
+          ? ((await addBlurDataURLs([parseItem(post.thumbnail)]))[0] ?? null)
+          : null,
+        images: await addBlurDataURLs(
+          post.images ? post.images.map(parseItem) : []
+        ),
         targetRowHeight,
       },
-      recommendations: parsedRecommendations,
+      recommendations: await addBlurDataURLs(
+        recommendedPosts.map((rp) => ({
+          ...filterObject(rp, suggestedPostProps),
+          thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
+        })),
+        { path: 'thumbnail' }
+      ),
     },
   };
 };
