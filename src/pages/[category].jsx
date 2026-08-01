@@ -1,47 +1,80 @@
 import Category from 'components/category/category.jsx';
+import PropTypes from 'prop-types';
 
-const CategoryIndex = ({ page, posts }) => (
-  <Category page={page} posts={posts} />
+const CategoryIndex = ({ title, posts }) => (
+  <Category title={title} posts={posts} />
 );
+
+CategoryIndex.propTypes = {
+  title: PropTypes.string.isRequired,
+  posts: PropTypes.shape({
+    total: PropTypes.number.isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        path: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+        category: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        thumbnail: PropTypes.shape({
+          src: PropTypes.string.isRequired,
+          alt: PropTypes.string.isRequired,
+          width: PropTypes.number.isRequired,
+          height: PropTypes.number.isRequired,
+          blurDataURL: PropTypes.string,
+        }),
+        tags: PropTypes.arrayOf(PropTypes.string),
+        linkText: PropTypes.string,
+      }).isRequired
+    ).isRequired,
+  }).isRequired,
+};
 
 export const getStaticProps = async ({ params }) => {
   const { getEntries, getAllEntries, parseItem } =
     await import('contentClient');
-  const { addBlurDataURLs } = await import('helpers/contentful');
+  const { filterObject, addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Blog',
   });
+  const page = pages.items?.[0];
+  if (!page) return { notFound: true };
+  const { title } = page;
 
   const posts = await getAllEntries({
     content_type: 'post',
     order: '-fields.date',
-    limit: 1000, // 1000 is the max,
+    limit: 1000,
     'fields.draft': false,
     'fields.category[in]': params.category,
   });
 
-  // Parse posts and add blurDataURLs to nested thumbnail images
-  const parsedPosts = {
-    ...posts,
-    items: posts.items.map(({ thumbnail, images: _images, ...fields }) => ({
-      thumbnail: thumbnail ? parseItem(thumbnail) : null,
-      ...fields,
+  const finalPosts = await addBlurDataURLs(
+    posts.items.map((post) => ({
+      ...filterObject(post, [
+        'id',
+        'title',
+        'path',
+        'date',
+        'category',
+        'tags',
+        'description',
+        'linkText',
+      ]),
+      thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
     })),
-  };
-
-  // Add blurDataURLs to thumbnail.images in posts array
-  const postsWithBlurData = await addBlurDataURLs(parsedPosts.items, {
-    path: 'thumbnail',
-  });
+    { path: 'thumbnail' }
+  );
 
   return {
     props: {
-      page: pages.items[0] || {},
+      title,
       posts: {
-        ...parsedPosts,
-        items: postsWithBlurData,
+        total: posts.total,
+        items: finalPosts,
       },
     },
   };

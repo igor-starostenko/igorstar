@@ -1,37 +1,8 @@
-import PropTypes from 'prop-types';
-import Layout from 'components/layout/layout.jsx';
-import Box from 'components/box/box.jsx';
-import Gallery from 'components/gallery/gallery.jsx';
-import Head from 'components/head/head.jsx';
-import Title from 'components/title/title.jsx';
-import { ContentDetails } from 'components/layout/layout.css.js';
+import PaginatedGallery from 'components/paginatedGallery/paginatedGallery.jsx';
 
-const GalleryPage = ({ page, gallery }) => (
-  <Layout>
-    <Head pageTitle={page.title} />
-    <Box>
-      <ContentDetails>
-        <Title as="h1" size="large">
-          {page.title}
-        </Title>
-      </ContentDetails>
-      {gallery.images.length > 0 && (
-        <Gallery photos={gallery.images} targetRowHeight={250} />
-      )}
-    </Box>
-  </Layout>
+const GalleryPage = (props) => (
+  <PaginatedGallery {...props} pageSize={10} targetRowHeight={300} />
 );
-
-GalleryPage.propTypes = {
-  page: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-  }).isRequired,
-  gallery: PropTypes.shape({
-    images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  }).isRequired,
-};
-
-export default GalleryPage;
 
 export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } =
@@ -42,28 +13,24 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Gallery',
   });
+  const page = pages.items?.[0];
+  if (!page) return { notFound: true };
+  const { title } = page;
 
-  const { items, ...gallery } = await getAllEntries({
+  const { items, total } = await getAllEntries({
     content_type: 'gallery',
   });
 
-  // Parse images and add blurDataURLs if not already set
-  const parsedImages = items
-    ? items.map(({ image, ...fields }) => ({
-        ...parseItem(image),
-        ...fields,
-      }))
-    : [];
-
+  const parsedImages = items ? items.map((item) => parseItem(item.image)) : [];
   const imagesWithBlurData = await addBlurDataURLs(parsedImages);
 
   return {
     props: {
-      page: pages.items[0] || {},
-      gallery: {
-        ...gallery,
-        images: imagesWithBlurData,
-      },
+      title,
+      total,
+      images: imagesWithBlurData,
     },
   };
 };
+
+export default GalleryPage;

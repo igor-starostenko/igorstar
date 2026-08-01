@@ -25,7 +25,7 @@ const parseFields = (item) => {
   };
 };
 
-const parseImage = (_id, title, file) => {
+const parseImage = (title, file) => {
   const { width, height } = file.details.image;
   return {
     src: `https:${file.url}`,
@@ -43,8 +43,12 @@ const parseItem = (data) => {
     return null;
   }
 
-  const { id, title, file, ...fields } = item;
-  return { id, ...fields, ...parseImage(id, title, file) };
+  const { id, title, file, description } = item;
+  return {
+    id,
+    ...parseImage(title, file),
+    ...(description != null ? { description } : {}),
+  };
 };
 
 const getEntries = async (options) => {

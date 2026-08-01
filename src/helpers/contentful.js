@@ -3,6 +3,17 @@ import { imageFormat } from '../constants/imageConfig.js';
 const BLUR_CONCURRENCY = Number(process.env.BLUR_CONCURRENCY ?? 1);
 const CONTENTFUL_TIMEOUT = 15000;
 
+export const filterObject = (object, props) => {
+  if (!Array.isArray(props)) {
+    return {};
+  }
+
+  return props
+    .filter((property) => property in object)
+    .map((property) => ({ [property]: object[property] }))
+    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
+};
+
 const blurDataURLCache = new Map();
 
 const fetchWithTimeout = async (
