@@ -11,85 +11,43 @@ import Head from 'components/head/head.jsx';
 const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
-// Helper function to fetch a page of entries with Contentful
-const fetchPage = async (contentType, pageSize, skip) => {
-  const { getEntries } = await import('contentClient');
-  
-  let options = { content_type: contentType, limit: pageSize, skip };
-  
-  if (contentType === 'feed') {
-    options = { ...options, order: '-fields.date' };
-  }
+// Helper to return empty array for preloaded data (InfiniteScroll expects async)
+const getEmptyResult = () => Promise.resolve({ items: [], total: 0 });
 
-  const result = await getEntries(options);
-  
-  // Map items to the image format expected by the gallery
-  const images = result.items.map((item) => {
-    if (contentType === 'gallery') {
-      return item.image;
-    } else {
-      // feed content type has image field directly
-      return item;
-    }
-  });
-
-  return {
-    items: images,
-    total: result.total
-  };
-};
-
-const PaginatedGallery = ({ title, contentType, pageSize, targetRowHeight }) => {
+const PaginatedGallery = ({
+  title,
+  total,
+  images,
+  pageSize,
+  targetRowHeight,
+}) => {
   const router = useRouter();
   const page = parseInt(router.query.page) || 1;
-  
+
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const [allPhotos, setAllPhotos] = useState([]);
-  
+
   // Initial offset for the current page
   const initialOffset = (page - 1) * pageSize;
-  
+
   // Initial photos for this page
-  const [initialPhotos, setInitialPhotos] = useState([]);
-  const [isLoadingInitial, setIsLoadingInitial] = useState(true);
+  const initialPhotos = images.slice(initialOffset, initialOffset + pageSize);
 
-  // Fetch initial page photos on mount
-  useEffect(() => {
-    if (initialOffset > 0) {
-      fetchPage(contentType, pageSize, initialOffset).then((result) => {
-        setInitialPhotos(result.items);
-        setIsLoadingInitial(false);
-      });
-    } else {
-      setIsLoadingInitial(false);
-    }
-  }, [initialOffset, contentType, pageSize]);
-
+  // Fetch callback for InfiniteScroll - returns empty after initial page
   const fetchPhotos = useCallback(async (index) => {
-    try {
-      // Skip if we're still in the initial page's photos
-      if (index < initialOffset) {
-        return [];
-      }
-      
-      // Check if this is a page we've already loaded (from initial photos)
-      if (index < initialOffset + pageSize) {
-        // Already loaded as initial photos
-        return [];
-      }
-      
-      const result = await fetchPage(contentType, pageSize, index);
-      
-      if (result.items.length === 0) {
-        return null; // Signal end of stream
-      }
-      
-      return result.items;
-    } catch (error) {
-      console.error('Error fetching photos:', error);
-      return null;
+    // Only load the first page from preloaded data
+    if (index < initialOffset) {
+      return [];
     }
-  }, [contentType, pageSize, initialOffset]);
+
+    // If we're within the first page range, return empty (already loaded)
+    if (index < initialOffset + pageSize) {
+      return [];
+    }
+
+    // Beyond first page - no more data (all preloaded)
+    return null;
+  }, [initialOffset, pageSize]);
 
   const handlePhotoClick = useCallback(({ photos, index }) => {
     if (index >= 0) {
@@ -102,30 +60,23 @@ const PaginatedGallery = ({ title, contentType, pageSize, targetRowHeight }) => 
     setCurrentPhoto(null);
   }, []);
 
-  // Initial photos for InfiniteScroll
-  const infScrPhotos = initialOffset > 0 ? initialPhotos : [];
-
   return (
     <Layout>
       <Head pageTitle={title} />
       <Box>
-        {isLoadingInitial ? (
-          <div>Loading...</div>
-        ) : (
-          <InfiniteScroll
-            photos={infScrPhotos}
-            fetch={fetchPhotos}
-            onClick={handlePhotoClick}
-            finished={<p>All photos loaded</p>}
-          >
-            <RowsPhotoAlbum
-              targetRowHeight={targetRowHeight}
-              spacing={2}
-              padding={0}
-            />
-          </InfiniteScroll>
-        )}
-        
+        <InfiniteScroll
+          photos={initialPhotos}
+          fetch={fetchPhotos}
+          onClick={handlePhotoClick}
+          finished={<p>All photos loaded</p>}
+        >
+          <RowsPhotoAlbum
+            targetRowHeight={targetRowHeight}
+            spacing={2}
+            padding={0}
+          />
+        </InfiniteScroll>
+
         {currentPhoto !== null && currentPhoto >= 0 && (
           <Carousel
             views={allPhotos}
@@ -140,7 +91,8 @@ const PaginatedGallery = ({ title, contentType, pageSize, targetRowHeight }) => 
 
 PaginatedGallery.propTypes = {
   title: PropTypes.string.isRequired,
-  contentType: PropTypes.string.isRequired,
+  total: PropTypes.number.isRequired,
+  images: PropTypes.arrayOf(PropTypes.object).isRequired,
   pageSize: PropTypes.number.isRequired,
   targetRowHeight: PropTypes.number.isRequired,
 };
