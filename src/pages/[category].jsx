@@ -1,8 +1,8 @@
 import Category from 'components/category/category.jsx';
 import PropTypes from 'prop-types';
 
-const CategoryIndex = ({ page, posts }) => (
-  <Category page={page} posts={posts} />
+const CategoryIndex = ({ title, posts }) => (
+  <Category title={title} posts={posts} />
 );
 
 CategoryIndex.propTypes = {
