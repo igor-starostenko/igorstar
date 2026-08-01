@@ -40,7 +40,9 @@ export const getStaticProps = async ({ params }) => {
     content_type: 'page',
     'fields.title': 'Blog',
   });
-  const { title } = pages.items[0];
+  const page = pages.items?.[0];
+  if (!page) return { notFound: true };
+  const { title } = page;
 
   const posts = await getAllEntries({
     content_type: 'post',
