@@ -30,9 +30,7 @@ vi.mock('components/box/box.jsx', () => ({
 }));
 
 vi.mock('components/head/head.jsx', () => ({
-  default: ({ pageTitle }) => (
-    <div data-testid="mock-head">{pageTitle}</div>
-  ),
+  default: ({ pageTitle }) => <div data-testid="mock-head">{pageTitle}</div>,
 }));
 
 vi.mock('components/filter/filter.jsx', () => ({

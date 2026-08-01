@@ -83,6 +83,7 @@ PaginatedGallery.propTypes = {
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
+  pageSize: PropTypes.number.isRequired,
   targetRowHeight: PropTypes.number.isRequired,
 };
 
