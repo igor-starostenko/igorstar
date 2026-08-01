@@ -12,7 +12,9 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Photo Feed',
   });
-  const { title } = pages.items[0];
+  const page = pages.items?.[0];
+  if (!page) return { notFound: true };
+  const { title } = page;
 
   const { items, total } = await getAllEntries({
     content_type: 'feed',
