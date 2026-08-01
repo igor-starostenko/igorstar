@@ -11,12 +11,18 @@ const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
 
-const PaginatedGallery = ({ title, total, images, pageSize, targetRowHeight }) => {
+const PaginatedGallery = ({
+  title,
+  total,
+  images,
+  pageSize,
+  targetRowHeight,
+}) => {
   const router = useRouter();
   const page = parseInt(router.query.page) || 1;
   const totalPages = Math.ceil((images?.length || 0) / pageSize);
 
-  const [displayCount=pageSize, setDisplayCount] = useState();
+  const [displayCount = pageSize, setDisplayCount] = useState();
 
   // Only update displayCount on scroll if we haven't reached the end
   const handleScroll = useCallback(() => {

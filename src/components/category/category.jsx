@@ -12,7 +12,7 @@ const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
 );
 
-const Category = ({ page, posts, pageSize=5 }) => {
+const Category = ({ page, posts, pageSize = 5 }) => {
   const totalPages = Math.ceil(posts.total / pageSize);
   const router = useRouter();
   const pageNum = parseInt(router.query.page);

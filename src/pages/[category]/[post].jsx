@@ -21,7 +21,7 @@ const SyntaxHighlighter = dynamic(() => import('react-syntax-highlighter'), {
 
 const FlickrImage = dynamic(() => import('components/image/flickrImage.jsx'));
 
-const BaseImage = dynamic(() => import('components/image/image.jsx'));
+const BaseImage = dynamic(() => import('components/image/baseImage.jsx'));
 
 const calculateRowHeight = (imageCount) => {
   let multiplier = 3;
@@ -135,7 +135,7 @@ const options = {
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
       if (hasDivChild(children)) {
-        return <div>{children}</div>;
+        return <span>{children}</span>;
       } else if (hasMultilineCode(node)) {
         return <div>{children}</div>;
       } else if (isFlickrNode(node)) {
@@ -179,18 +179,6 @@ const options = {
   },
 };
 
-const suggestedPostProps = [
-  'id',
-  'title',
-  'path',
-  'date',
-  'category',
-  'tags',
-  'description',
-  'linkText',
-  'thumbnail',
-];
-
 const filterObject = (object, props) => {
   if (!Array.isArray(props)) {
     return {};
@@ -202,13 +190,22 @@ const filterObject = (object, props) => {
     .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
 };
 
-const Post = ({ post, recommendations }) => {
-  const { images, thumbnail } = post;
+const Post = ({
+  title,
+  date,
+  category,
+  path,
+  content,
+  targetRowHeight,
+  images,
+  thumbnail,
+  recommendations,
+}) => {
   const imageUrl = thumbnail ? thumbnail.src : null;
 
   return (
     <Layout>
-      <Head pageTitle={post.title} imageUrl={imageUrl} />
+      <Head pageTitle={title} imageUrl={imageUrl} />
       <Box>
         <CategoryLabel
           style={{
@@ -216,24 +213,24 @@ const Post = ({ post, recommendations }) => {
           }}
         >
           <span>
-            Category: <Link href={`/${post.category}`}>{post.category}</Link>
+            Category: <Link href={`/${category}`}>{category}</Link>
           </span>
         </CategoryLabel>
         {images.length > 0 && (
           <Gallery
-            key={post.path}
+            key={path}
             photos={images}
             order="asc"
-            targetRowHeight={post.targetRowHeight}
+            targetRowHeight={targetRowHeight}
           />
         )}
         <ContentDetails>
-          <h1>{post.title}</h1>
+          <h1>{title}</h1>
           <div style={{ display: 'inline-flex' }}>
-            <DateText date={post.date} />
+            <DateText date={date} />
           </div>
-          {documentToReactComponents(post.content, options)}
-          <Recommendations category={post.category} posts={recommendations} />
+          {documentToReactComponents(content, options)}
+          <Recommendations category={category} posts={recommendations} />
         </ContentDetails>
       </Box>
     </Layout>
@@ -241,37 +238,37 @@ const Post = ({ post, recommendations }) => {
 };
 
 Post.propTypes = {
-  post: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    path: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    content: PropTypes.object.isRequired,
-    thumbnail: PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  content: PropTypes.object.isRequired,
+  thumbnail: PropTypes.shape({
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    blurDataURL: PropTypes.string,
+  }),
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
       src: PropTypes.string.isRequired,
-      alt: PropTypes.string.isRequired,
       width: PropTypes.number.isRequired,
       height: PropTypes.number.isRequired,
+      alt: PropTypes.string,
+      description: PropTypes.string,
       blurDataURL: PropTypes.string,
-    }),
-    images: PropTypes.arrayOf(
-      PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        alt: PropTypes.string,
-        blurDataURL: PropTypes.string,
-      })
-    ).isRequired,
-    targetRowHeight: PropTypes.number.isRequired,
-  }).isRequired,
+    })
+  ).isRequired,
+  targetRowHeight: PropTypes.number.isRequired,
   recommendations: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
       tags: PropTypes.arrayOf(PropTypes.string),
       description: PropTypes.string.isRequired,
       linkText: PropTypes.string,
@@ -286,7 +283,7 @@ export const getStaticProps = async ({ params }) => {
 
   const posts = await getAllEntries({
     content_type: 'post',
-    limit: 100, // 1000 is the max,
+    limit: 100,
     'fields.draft': false,
     'fields.category': params.category,
     order: '-fields.date',
@@ -320,7 +317,16 @@ export const getStaticProps = async ({ params }) => {
 
   const parsedRecommendations = await addBlurDataURLs(
     recommendedPosts.map((rp) => ({
-      ...filterObject(rp, suggestedPostProps),
+      ...filterObject(rp, [
+        'id',
+        'date',
+        'title',
+        'category',
+        'path',
+        'tags',
+        'description',
+        'linkText',
+      ]),
       thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
     })),
     { path: 'thumbnail' }
@@ -328,12 +334,16 @@ export const getStaticProps = async ({ params }) => {
 
   return {
     props: {
-      post: {
-        ...originalPost,
-        thumbnail: thumbnailWithBlur,
-        images: imagesWithBlur,
-        targetRowHeight,
-      },
+      ...filterObject(originalPost, [
+        'title',
+        'date',
+        'category',
+        'path',
+        'content',
+      ]),
+      targetRowHeight,
+      thumbnail: thumbnailWithBlur,
+      images: imagesWithBlur,
       recommendations: parsedRecommendations,
     },
   };

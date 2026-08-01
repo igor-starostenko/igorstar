@@ -1,6 +1,8 @@
 import PaginatedGallery from 'components/paginatedGallery/paginatedGallery.jsx';
 
-const FeedPage = (props) => <PaginatedGallery {...props} pageSize={18} targetRowHeight={260} />;
+const FeedPage = (props) => (
+  <PaginatedGallery {...props} pageSize={18} targetRowHeight={260} />
+);
 
 export const getStaticProps = async () => {
   const { getAllEntries, parseItem } = await import('contentClient');
@@ -17,9 +19,7 @@ export const getStaticProps = async () => {
     order: '-fields.date',
   });
 
-  const parsedImages = items
-    ? items.map((item) => parseItem(item.image))
-    : [];
+  const parsedImages = items ? items.map((item) => parseItem(item.image)) : [];
   const imagesWithBlurData = await addBlurDataURLs(parsedImages);
 
   return {

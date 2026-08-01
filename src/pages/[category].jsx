@@ -102,9 +102,7 @@ export const getStaticProps = async ({ params }) => {
   const finalPosts = await addBlurDataURLs(
     parsedPosts.items.map((post) => ({
       ...filterObject(post, suggestedPostProps),
-      images: post.images
-        ? post.images.map((img) => parseItem(img))
-        : [],
+      images: post.images ? post.images.map((img) => parseItem(img)) : [],
     })),
     { path: 'images' }
   );
