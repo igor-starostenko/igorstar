@@ -15,7 +15,7 @@ export const getStaticProps = async () => {
   });
   const page = pages.items?.[0];
   if (!page) return { notFound: true };
-  const { title } = pages;
+  const { title } = page;
 
   const { items, total } = await getAllEntries({
     content_type: 'gallery',
