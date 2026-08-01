@@ -31,7 +31,7 @@ vi.mock('components/box/box.jsx', () => ({
 
 vi.mock('components/head/head.jsx', () => ({
   default: ({ pageTitle }) => (
-    <title data-testid="mock-head">{pageTitle}</title>
+    <div data-testid="mock-head">{pageTitle}</div>
   ),
 }));
 
@@ -59,12 +59,7 @@ import Category from './category.jsx';
 
 test('renders with page and posts', () => {
   const mockProps = {
-    page: {
-      id: 'page-1',
-      title: 'Tech Posts',
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-    },
+    title: 'Tech Posts',
     posts: {
       limit: 10,
       skip: 0,
@@ -120,12 +115,7 @@ test('renders with page and posts', () => {
 
 test('renders with empty posts', () => {
   const mockProps = {
-    page: {
-      id: 'page-1',
-      title: 'Tech Posts',
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-    },
+    title: 'Tech Posts',
     posts: {
       limit: 10,
       skip: 0,
@@ -147,7 +137,7 @@ test('renders with empty posts', () => {
 
 test('handles missing page gracefully', () => {
   const mockProps = {
-    page: {},
+    title: 'Tech Posts',
     posts: { limit: 10, skip: 0, total: 25, items: [] },
   };
 
@@ -156,12 +146,7 @@ test('handles missing page gracefully', () => {
 
 test('renders with pagination when more posts', () => {
   const mockProps = {
-    page: {
-      id: 'page-1',
-      title: 'Tech Posts',
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-    },
+    title: 'Tech Posts',
     posts: {
       limit: 10,
       skip: 0,
@@ -195,12 +180,7 @@ test('renders with pagination when more posts', () => {
 
 test('renders with no pagination when all posts shown', () => {
   const mockProps = {
-    page: {
-      id: 'page-1',
-      title: 'Tech Posts',
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-    },
+    title: 'Tech Posts',
     posts: {
       limit: 10,
       skip: 0,
