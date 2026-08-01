@@ -19,14 +19,11 @@ const PaginatedGallery = ({
   targetRowHeight,
 }) => {
   const router = useRouter();
-  const page = Number.parseInt(router.query.page, 10) || 1;
+  const page = parseInt(router.query.page) || 1;
   const totalPages = Math.ceil((images?.length || 0) / pageSize);
 
-  const [displayCount, setDisplayCount] = useState(page * pageSize);
+  const [displayCount = pageSize, setDisplayCount] = useState();
 
-  useEffect(() => {
-    setDisplayCount(page * pageSize);
-  }, [page, pageSize]);
   // Only update displayCount on scroll if we haven't reached the end
   const handleScroll = useCallback(() => {
     if (displayCount >= total) return;
