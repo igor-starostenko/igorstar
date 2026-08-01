@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { BLOCKS, MARKS } from '@contentful/rich-text-types';
+import { BLOCKS, INLINES, MARKS } from '@contentful/rich-text-types';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
@@ -64,6 +64,17 @@ const isFlickrNode = (node) => {
   return links.filter(isFlickrEmbed).length > 0;
 };
 
+const decodeUri = (uri) => {
+  try {
+    return uri
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"');
+  } catch {
+    return uri;
+  }
+};
+
 const options = {
   renderMark: {
     [MARKS.CODE]: (text) => {
@@ -124,18 +135,38 @@ const options = {
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
       if (hasDivChild(children)) {
-        return <span>{children}</span>;
+        return <div>{children}</div>;
+      } else if (hasMultilineCode(node)) {
+        return <div>{children}</div>;
+      } else if (isFlickrNode(node)) {
+        return <div>{children}</div>;
+      } else {
+        return <p>{children}</p>;
       }
-
-      if (hasMultilineCode(node)) {
-        return <span>{children}</span>;
+    },
+    [INLINES.HYPERLINK]: (node) => {
+      if (
+        node.data.uri.includes('youtube.com/embed') ||
+        node.data.uri.includes('youtube-nocookie.com/embed')
+      ) {
+        return (
+          <div className="youtube-container">
+            <iframe
+              title={node.content[0].value}
+              className="youtube-video"
+              src={node.data.uri}
+              frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        );
+      } else if (isFlickrEmbed(node)) {
+        const xml = decodeUri(node.data.uri);
+        return <FlickrImage xml={xml} />;
+      } else {
+        return <Link href={node.data.uri}>{node.content[0].value}</Link>;
       }
-
-      if (isFlickrNode(node)) {
-        return <span>{children}</span>;
-      }
-
-      return <p>{children}</p>;
     },
   },
   renderInlineEntry: (node) => {
