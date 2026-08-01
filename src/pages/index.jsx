@@ -1,6 +1,6 @@
 import Category from 'components/category/category.jsx';
 
-const Index = ({ page, posts }) => <Category page={page} posts={posts} />;
+const Index = ({ title, posts }) => <Category title={title} posts={posts} />;
 
 export default Index;
 
@@ -13,6 +13,9 @@ export const getStaticProps = async () => {
     content_type: 'page',
     'fields.title': 'Blog',
   });
+  const page = pages.items?.[0];
+  if (!page) return { notFound: true };
+  const { title } = page;
 
   const posts = await getAllEntries({
     content_type: 'post',
@@ -36,7 +39,7 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      page: pages.items[0] || {},
+      title,
       posts: {
         ...parsedPosts,
         items: postsWithBlurData,
