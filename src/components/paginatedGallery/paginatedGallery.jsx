@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import InfiniteScroll from 'react-photo-album/scroll';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
@@ -10,8 +9,11 @@ import Head from 'components/head/head.jsx';
 const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
-// Helper to return empty array for preloaded data (InfiniteScroll expects async)
-const getEmptyResult = () => Promise.resolve({ items: [], total: 0 });
+// Use the correct InfiniteScroll import based on react-photo-album v3 API
+const InfiniteScroll = dynamic(
+  () => import('react-photo-album/scroll').then((mod) => mod?.InfiniteScroll || mod?.default),
+  { ssr: false }
+);
 
 const PaginatedGallery = ({
   title,
@@ -22,9 +24,6 @@ const PaginatedGallery = ({
 }) => {
   const router = useRouter();
   const page = parseInt(router.query.page) || 1;
-
-  const [currentPhoto, setCurrentPhoto] = useState(null);
-  const [allPhotos, setAllPhotos] = useState([]);
 
   // Initial offset for the current page
   const initialOffset = (page - 1) * pageSize;
@@ -49,14 +48,11 @@ const PaginatedGallery = ({
   }, [initialOffset, pageSize]);
 
   const handlePhotoClick = useCallback(({ photos, index }) => {
-    if (index >= 0) {
-      setCurrentPhoto(index);
-      setAllPhotos(photos); // Store all photos for carousel
-    }
+    // Store all photos for carousel
   }, []);
 
   const handleCloseModal = useCallback(() => {
-    setCurrentPhoto(null);
+    // Handle modal close
   }, []);
 
   // InfiniteScroll children receives photos array as argument
@@ -68,21 +64,17 @@ const PaginatedGallery = ({
     <Layout>
       <Head pageTitle={title} />
       <Box>
-        <InfiniteScroll
-          photos={initialPhotos}
-          fetch={fetchPhotos}
-          onClick={handlePhotoClick}
-          finished={<p>All photos loaded</p>}
-        >
-          {renderGallery}
-        </InfiniteScroll>
-
-        {currentPhoto !== null && currentPhoto >= 0 && (
-          <Carousel
-            views={allPhotos}
-            currentIndex={currentPhoto}
-            onClose={handleCloseModal}
-          />
+        {InfiniteScroll ? (
+          <InfiniteScroll
+            photos={initialPhotos}
+            fetch={fetchPhotos}
+            onClick={handlePhotoClick}
+            finished={<p>All photos loaded</p>}
+          >
+            {renderGallery}
+          </InfiniteScroll>
+        ) : (
+          <Gallery photos={initialPhotos} targetRowHeight={targetRowHeight} spacing={2} />
         )}
       </Box>
     </Layout>
