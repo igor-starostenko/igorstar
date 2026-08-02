@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import InfiniteScroll from 'react-photo-album/scroll';
-import { RowsPhotoAlbum } from 'react-photo-album';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
@@ -60,6 +59,11 @@ const PaginatedGallery = ({
     setCurrentPhoto(null);
   }, []);
 
+  // InfiniteScroll children receives photos array as argument
+  const renderGallery = (photos) => (
+    <Gallery photos={photos} targetRowHeight={targetRowHeight} spacing={2} />
+  );
+
   return (
     <Layout>
       <Head pageTitle={title} />
@@ -70,11 +74,7 @@ const PaginatedGallery = ({
           onClick={handlePhotoClick}
           finished={<p>All photos loaded</p>}
         >
-          <RowsPhotoAlbum
-            targetRowHeight={targetRowHeight}
-            spacing={2}
-            padding={0}
-          />
+          {renderGallery}
         </InfiniteScroll>
 
         {currentPhoto !== null && currentPhoto >= 0 && (
