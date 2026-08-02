@@ -12,7 +12,7 @@ const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 // Import InfiniteScroll from react-photo-album/scroll (v3 default export)
 const InfiniteScroll = dynamic(
   () => import('react-photo-album/scroll'),
-  { ssr: false }
+  { ssr: false, loading: () => <div>Loading...</div> }
 );
 
 const PaginatedGallery = ({
@@ -64,18 +64,14 @@ const PaginatedGallery = ({
     <Layout>
       <Head pageTitle={title} />
       <Box>
-        {InfiniteScroll ? (
-          <InfiniteScroll
-            photos={initialPhotos}
-            fetch={fetchPhotos}
-            onClick={handlePhotoClick}
-            finished={<p>All photos loaded</p>}
-          >
-            {renderGallery}
-          </InfiniteScroll>
-        ) : (
-          <Gallery photos={initialPhotos} targetRowHeight={targetRowHeight} spacing={2} />
-        )}
+        <InfiniteScroll
+          photos={initialPhotos}
+          fetch={fetchPhotos}
+          onClick={handlePhotoClick}
+          finished={<p>All photos loaded</p>}
+        >
+          {renderGallery}
+        </InfiniteScroll>
       </Box>
     </Layout>
   );
