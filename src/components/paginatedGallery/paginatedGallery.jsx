@@ -1,18 +1,30 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import { RowsPhotoAlbum } from 'react-photo-album';
+import 'react-photo-album/rows.css';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 
-const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
-// Import InfiniteScroll from react-photo-album/scroll (v3 default export)
-const InfiniteScroll = dynamic(() => import('react-photo-album/scroll'), {
-  ssr: false,
-});
+// Helper to map photos to expected format
+const mapToPhotoFormat = (photos, targetRowHeight) =>
+  photos.map((photo) => {
+    const originalWidth = photo.width || 800;
+    const originalHeight = photo.height || 600;
+    const aspectRatio = originalWidth / originalHeight;
+    const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
+
+    return {
+      src: photo.src,
+      width: constrainedWidth,
+      height: targetRowHeight,
+      alt: photo.description || photo.alt || '',
+    };
+  });
 
 const PaginatedGallery = ({
   title,
@@ -30,48 +42,46 @@ const PaginatedGallery = ({
   // Initial photos for this page
   const initialPhotos = images.slice(initialOffset, initialOffset + pageSize);
 
-  // Fetch callback for InfiniteScroll - returns empty after initial page
+  // Map photos to expected format
+  const mappedPhotos = mapToPhotoFormat(initialPhotos, targetRowHeight);
+
+  // Fetch callback - returns empty after initial page
   const fetchPhotos = useCallback(async (index) => {
-    // Only load the first page from preloaded data
-    if (index < initialOffset) {
-      return [];
-    }
+    // All data is preloaded, return empty for any fetch request
+    return [];
+  }, []);
 
-    // If we're within the first page range, return empty (already loaded)
-    if (index < initialOffset + pageSize) {
-      return [];
-    }
-
-    // Beyond first page - no more data (all preloaded)
-    return null;
-  }, [initialOffset, pageSize]);
+  const [allPhotos, setAllPhotos] = useState([]);
 
   const handlePhotoClick = useCallback(({ photos, index }) => {
-    // Store all photos for carousel
+    if (index >= 0) {
+      setAllPhotos(photos);
+    }
   }, []);
 
   const handleCloseModal = useCallback(() => {
-    // Handle modal close
+    setAllPhotos([]);
   }, []);
-
-  // InfiniteScroll children receives photos array as argument
-  const renderGallery = (photos) => (
-    <Gallery photos={photos} targetRowHeight={targetRowHeight} spacing={2} />
-  );
 
   return (
     <Layout>
       <Head pageTitle={title} />
       <Box>
-        <InfiniteScroll
-          photos={initialPhotos}
-          fetch={fetchPhotos}
+        <RowsPhotoAlbum
+          photos={mappedPhotos}
+          targetRowHeight={targetRowHeight}
+          spacing={2}
+          padding={0}
           onClick={handlePhotoClick}
-          finished={<p>All photos loaded</p>}
-        >
-          {renderGallery}
-        </InfiniteScroll>
+        />
       </Box>
+      {allPhotos.length > 0 && (
+        <Carousel
+          views={allPhotos}
+          currentIndex={0}
+          onClose={handleCloseModal}
+        />
+      )}
     </Layout>
   );
 };
