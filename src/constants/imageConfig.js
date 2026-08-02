@@ -7,7 +7,10 @@ export const componentSizes = {
       '(max-width: 768px) 100vw, (max-width: 1024px) 30vw, (max-width: 1440px) 25vw, 528px',
   },
   gallery: {
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 900px',
+    size: "796px",
+    sizes: [
+      { viewport: "(max-width: 800px)", size: "calc(100vw - 4px)" },
+    ],
     width: 1200,
     height: 800,
   },

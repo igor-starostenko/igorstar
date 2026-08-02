@@ -48,7 +48,6 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       src: photo.src,
       width: constrainedWidth,
       height: targetRowHeight,
-      sizes: componentSizes.gallery.sizes,
       alt: photo.description || photo.alt || '',
       description: photo.description || '',
       blurDataURL: photo.blurDataURL,
@@ -121,6 +120,10 @@ const Gallery = ({
           onClick={handlePhotoClick}
           spacing={spacing}
           padding={0}
+          sizes={{
+            size: componentSizes.gallery.size,
+            sizes: componentSizes.gallery.sizes,
+          }}
           targetRowHeight={targetRowHeight}
         />
       </GalleryContainer>
