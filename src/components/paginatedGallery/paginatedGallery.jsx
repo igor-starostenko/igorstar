@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
@@ -22,32 +22,39 @@ const PaginatedGallery = ({
   const page = parseInt(router.query.page) || 1;
   const totalPages = Math.ceil((images?.length || 0) / pageSize);
 
-  const [displayCount = pageSize, setDisplayCount] = useState();
+  const [displayCount, setDisplayCount] = useState(pageSize);
+  const lastItemRef = useRef(null);
 
   // Only update displayCount on scroll if we haven't reached the end
-  const handleScroll = useCallback(() => {
-    if (displayCount >= total) return;
-
-    const lastRecordLoaded = document.querySelector(
-      'div > div:last-child > div:last-child'
-    );
-    if (lastRecordLoaded) {
-      const lastRecordLoadedOffset =
-        lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
-      const pageOffset = window.pageYOffset + window.innerHeight;
-      if (pageOffset > lastRecordLoadedOffset) {
-        const newDisplayCount = Math.min(displayCount + pageSize, total);
-        setDisplayCount(newDisplayCount);
-      }
-    }
-  }, [displayCount, total, pageSize]);
+  const handleIntersection = useCallback(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && displayCount < total) {
+          const newDisplayCount = Math.min(displayCount + pageSize, total);
+          setDisplayCount(newDisplayCount);
+        }
+      });
+    },
+    [displayCount, total, pageSize]
+  );
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.1,
+    });
+
+    const element = lastItemRef.current;
+    if (element) {
+      observer.observe(element);
+    }
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      if (element) {
+        observer.unobserve(element);
+      }
+      observer.disconnect();
     };
-  }, [handleScroll]);
+  }, [handleIntersection]);
 
   const pageNum = Math.ceil(displayCount / pageSize) || 1;
 
@@ -71,6 +78,8 @@ const PaginatedGallery = ({
         ) : (
           ''
         )}
+        {/* Sentinel element for IntersectionObserver */}
+        {hasMoreItems && <div ref={lastItemRef} />}
       </Box>
     </Layout>
   );
