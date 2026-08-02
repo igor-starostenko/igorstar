@@ -6,6 +6,7 @@ import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 
+const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
 // Helper to map photos to expected format
@@ -115,13 +116,18 @@ const PaginatedGallery = ({
     setAllPhotos([]);
   }, []);
 
-  // Calculate total mapped photos
-  const totalMappedPhotos = Math.min(currentPhotos.length, total);
-
+  // Render Gallery with all loaded photos
   return (
     <Layout>
       <Head pageTitle={title} />
       <Box>
+        {currentPhotos.length > 0 && (
+          <Gallery
+            photos={currentPhotos}
+            targetRowHeight={targetRowHeight}
+            spacing={2}
+          />
+        )}
         <div style={{ minHeight: '20px' }} ref={observerRef} />
       </Box>
       {allPhotos.length > 0 && (
