@@ -38,6 +38,7 @@ const Category = ({ title, posts, pageSize = 5 }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
       threshold: 0.1,
+      rootMargin: '200px 0px 200px 0px',
     });
 
     const element = lastItemRef.current;
