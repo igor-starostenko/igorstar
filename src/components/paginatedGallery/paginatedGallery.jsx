@@ -9,9 +9,9 @@ import Head from 'components/head/head.jsx';
 const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
 const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
-// Use the correct InfiniteScroll import based on react-photo-album v3 API
+// Import InfiniteScroll from react-photo-album/scroll (v3 default export)
 const InfiniteScroll = dynamic(
-  () => import('react-photo-album/scroll').then((mod) => mod?.InfiniteScroll || mod?.default),
+  () => import('react-photo-album/scroll'),
   { ssr: false }
 );
 
