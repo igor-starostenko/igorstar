@@ -21,6 +21,26 @@ const Category = ({ title, posts, pageSize = 5 }) => {
   );
   const lastItemRef = useRef(null);
 
+  // Preserve scroll position when displayCount changes
+  useEffect(() => {
+    const previousScrollPosition = window.scrollY;
+    
+    // Use requestAnimationFrame to restore position after DOM update
+    const animationFrameId = requestAnimationFrame(() => {
+      // Only scroll if we're close to the bottom (within 200px)
+      const distanceFromBottom = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+      
+      if (distanceFromBottom < 200) {
+        // Restore to maintain visual position
+        window.scrollTo(0, previousScrollPosition);
+      }
+    });
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [displayCount]);
+
   const handleIntersection = useCallback(
     (entries) => {
       entries.forEach((entry) => {
