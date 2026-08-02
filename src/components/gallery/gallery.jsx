@@ -81,7 +81,7 @@ const Gallery = ({
   order = 'desc',
   targetRowHeight = 150,
   spacing = 2,
-  containerWidth = 900,
+  containerWidth = componentSizes.gallery.width,
 }) => {
   const [currentPhoto, setCurrentPhoto] = useState(null);
 
@@ -120,6 +120,7 @@ const Gallery = ({
           onClick={handlePhotoClick}
           spacing={spacing}
           padding={0}
+          defaultContainerWidth={componentSizes.gallery.width}
           sizes={{
             size: componentSizes.gallery.size,
             sizes: componentSizes.gallery.sizes,

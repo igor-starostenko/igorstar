@@ -11,8 +11,8 @@ export const componentSizes = {
     sizes: [
       { viewport: "(max-width: 800px)", size: "calc(100vw - 4px)" },
     ],
-    width: 1200,
-    height: 800,
+    width: 796,
+    height: 300,
   },
   selfie: {
     sizes: '100px',
