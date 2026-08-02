@@ -25,26 +25,6 @@ const PaginatedGallery = ({
   const [displayCount, setDisplayCount] = useState(pageSize);
   const lastItemRef = useRef(null);
 
-  // Preserve scroll position when displayCount changes
-  useEffect(() => {
-    const previousScrollPosition = window.scrollY;
-    
-    // Use requestAnimationFrame to restore position after DOM update
-    const animationFrameId = requestAnimationFrame(() => {
-      // Only scroll if we're close to the bottom (within 200px)
-      const distanceFromBottom = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
-      
-      if (distanceFromBottom < 200) {
-        // Restore to maintain visual position
-        window.scrollTo(0, previousScrollPosition);
-      }
-    });
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [displayCount]);
-
   // Only update displayCount on scroll if we haven't reached the end
   const handleIntersection = useCallback(
     (entries) => {
