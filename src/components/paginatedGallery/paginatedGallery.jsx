@@ -1,9 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import { RowsPhotoAlbum } from 'react-photo-album';
-import 'react-photo-album/rows.css';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
@@ -26,6 +24,37 @@ const mapToPhotoFormat = (photos, targetRowHeight) =>
     };
   });
 
+// Custom hook for infinite scroll
+const useInfiniteScroll = (callback, pageSize) => {
+  const observerRef = useRef(null);
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    if (!observerRef.current) return;
+
+    const options = {
+      root: null,
+      rootMargin: '200px',
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+        callback();
+      }
+    }, options);
+
+    observer.observe(observerRef.current);
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [callback, hasMore]);
+
+  return { observerRef, setHasMore };
+};
+
 const PaginatedGallery = ({
   title,
   total,
@@ -36,20 +65,43 @@ const PaginatedGallery = ({
   const router = useRouter();
   const page = parseInt(router.query.page) || 1;
 
-  // Initial offset for the current page
-  const initialOffset = (page - 1) * pageSize;
+  // Current page of photos
+  const [currentPhotos, setCurrentPhotos] = useState([]);
 
-  // Initial photos for this page
-  const initialPhotos = images.slice(initialOffset, initialOffset + pageSize);
+  // Track loaded pages to avoid duplicates
+  const [loadedPages, setLoadedPages] = useState(new Set([page]));
 
-  // Map photos to expected format
-  const mappedPhotos = mapToPhotoFormat(initialPhotos, targetRowHeight);
+  // Load initial page
+  useEffect(() => {
+    const initialOffset = (page - 1) * pageSize;
+    const pagePhotos = images.slice(initialOffset, initialOffset + pageSize);
+    setCurrentPhotos(mapToPhotoFormat(pagePhotos, targetRowHeight));
+  }, [page, images, pageSize, targetRowHeight]);
 
-  // Fetch callback - returns empty after initial page
-  const fetchPhotos = useCallback(async (index) => {
-    // All data is preloaded, return empty for any fetch request
-    return [];
-  }, []);
+  // Check if there are more pages
+  const hasMore = page * pageSize < total;
+
+  // Load next page when scrolled to bottom
+  const loadMore = useCallback(() => {
+    if (!hasMore) return;
+
+    const nextPage = Math.floor(currentPhotos.length / pageSize) + 1;
+    if (loadedPages.has(nextPage)) return;
+
+    const offset = (nextPage - 1) * pageSize;
+    const pagePhotos = images.slice(offset, offset + pageSize);
+    
+    if (pagePhotos.length > 0) {
+      setCurrentPhotos((prev) => [
+        ...prev,
+        ...mapToPhotoFormat(pagePhotos, targetRowHeight),
+      ]);
+      setLoadedPages((prev) => new Set(prev).add(nextPage));
+    }
+  }, [hasMore, currentPhotos.length, pageSize, loadedPages, images, targetRowHeight]);
+
+  // Intersection observer for infinite scroll
+  const { observerRef } = useInfiniteScroll(loadMore, pageSize);
 
   const [allPhotos, setAllPhotos] = useState([]);
 
@@ -63,17 +115,14 @@ const PaginatedGallery = ({
     setAllPhotos([]);
   }, []);
 
+  // Calculate total mapped photos
+  const totalMappedPhotos = Math.min(currentPhotos.length, total);
+
   return (
     <Layout>
       <Head pageTitle={title} />
       <Box>
-        <RowsPhotoAlbum
-          photos={mappedPhotos}
-          targetRowHeight={targetRowHeight}
-          spacing={2}
-          padding={0}
-          onClick={handlePhotoClick}
-        />
+        <div style={{ minHeight: '20px' }} ref={observerRef} />
       </Box>
       {allPhotos.length > 0 && (
         <Carousel
