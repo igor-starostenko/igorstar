@@ -11,7 +11,7 @@ const Carousel = dynamic(() => import('components/carousel/carousel.jsx'));
 
 // Import InfiniteScroll from react-photo-album/scroll (v3 default export)
 const InfiniteScroll = dynamic(
-  () => import('react-photo-album/scroll'),
+  () => import('react-photo-album/scroll').then((mod) => mod?.default || mod),
   { ssr: false, loading: () => <div>Loading...</div> }
 );
 
