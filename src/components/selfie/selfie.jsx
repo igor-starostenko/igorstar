@@ -13,7 +13,7 @@ const Selfie = ({ src }) => (
     sizes={sizes}
     src={src}
     alt="Selfie"
-    priority
+    preload
   />
 );
 

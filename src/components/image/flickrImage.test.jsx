@@ -19,7 +19,7 @@ vi.mock('components/image/baseImage.jsx', () => ({
     alt,
     backupSrc,
     unoptimized,
-    priority,
+    preload,
     loading,
     width,
     height,

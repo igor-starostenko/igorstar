@@ -1,4 +1,4 @@
-import { test, expect, vi } from 'vitest';
+import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('components/layout/layout.jsx', () => ({
@@ -13,65 +13,59 @@ vi.mock('components/box/box.jsx', () => ({
   ),
 }));
 
-vi.mock('components/gallery/gallery.jsx', () => ({
-  default: ({ photos }) => (
-    <div data-testid="mock-gallery">{photos.length} photos</div>
-  ),
-}));
-
 vi.mock('components/head/head.jsx', () => ({
   default: ({ pageTitle }) => (
     <title data-testid="mock-head">{pageTitle}</title>
   ),
 }));
 
-vi.mock('components/title/title.jsx', () => ({
-  default: ({ children }) => <h1 data-testid="mock-title">{children}</h1>,
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(() => ({ query: {}, isReady: true })),
+}));
+
+vi.mock('components/paginatedGallery/paginatedGallery.jsx', () => ({
+  default: ({ title, total, images }) => (
+    <div data-testid="mock-paginated-gallery">
+      {title}-{total}-{images.length}
+    </div>
+  ),
 }));
 
 import GalleryPage from 'pages/gallery.jsx';
 
 test('renders Gallery with images', () => {
   const mockProps = {
-    page: { title: 'Gallery' },
-    gallery: {
-      limit: 10,
-      skip: 0,
-      total: 3,
-      images: [
-        { sys: { id: '1' }, fields: {} },
-        { sys: { id: '2' }, fields: {} },
-        { sys: { id: '3' }, fields: {} },
-      ],
-    },
+    title: 'Gallery',
+    total: 3,
+    images: [
+      { src: '/a.jpg', alt: 'A' },
+      { src: '/b.jpg', alt: 'B' },
+      { src: '/c.jpg', alt: 'C' },
+    ],
   };
 
   render(<GalleryPage {...mockProps} />);
 
-  expect(screen.getByText('3 photos')).toBeInTheDocument();
+  expect(screen.getByTestId('mock-paginated-gallery')).toBeInTheDocument();
 });
 
 test('renders Gallery with empty images', () => {
   const mockProps = {
-    page: { title: 'Gallery' },
-    gallery: {
-      limit: 10,
-      skip: 0,
-      total: 0,
-      images: [],
-    },
+    title: 'Gallery',
+    total: 0,
+    images: [],
   };
 
   render(<GalleryPage {...mockProps} />);
 
-  // When images is empty, Gallery component isn't rendered, so check box instead
-  expect(screen.getByTestId('mock-box')).toBeInTheDocument();
+  expect(screen.getByTestId('mock-paginated-gallery')).toBeInTheDocument();
 });
 
 test('renders Gallery with empty page', () => {
   const mockProps = {
-    page: {},
-    gallery: { images: [] },
+    title: '',
+    total: 0,
+    images: [],
   };
 
   expect(() => render(<GalleryPage {...mockProps} />)).not.toThrow();

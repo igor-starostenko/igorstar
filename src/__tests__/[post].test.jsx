@@ -61,7 +61,7 @@ vi.mock('components/recommendations/recommendations.jsx', () => ({
   ),
 }));
 
-vi.mock('components/image/baseImage.jsx', () => ({
+vi.mock('components/image/image.jsx', () => ({
   default: ({ src, alt }) => (
     <img data-testid="mock-base-image" src={src} alt={alt} />
   ),
@@ -95,7 +95,7 @@ const mockPost = {
 
 test('renders post with all props', () => {
   const mockProps = {
-    post: { ...mockPost, layout: 'default', draft: false },
+    ...mockPost,
     recommendations: [],
   };
 
@@ -110,13 +110,13 @@ test('renders with image gallery', () => {
   const mockPostWithImages = {
     ...mockPost,
     images: [
-      { src: '/img1.jpg', alt: 'Image 1' },
-      { src: '/img2.jpg', alt: 'Image 2' },
+      { src: '/img1.jpg', alt: 'Image 1', width: 300, height: 200 },
+      { src: '/img2.jpg', alt: 'Image 2', width: 300, height: 200 },
     ],
   };
 
   const mockProps = {
-    post: { ...mockPostWithImages, layout: 'default', draft: false },
+    ...mockPostWithImages,
     recommendations: [],
   };
 
@@ -127,7 +127,8 @@ test('renders with image gallery', () => {
 
 test('handles post without thumbnail', () => {
   const mockProps = {
-    post: { ...mockPost, thumbnail: null, layout: 'default', draft: false },
+    ...mockPost,
+    thumbnail: null,
     recommendations: [],
   };
 

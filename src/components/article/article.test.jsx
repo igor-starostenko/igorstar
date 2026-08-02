@@ -24,7 +24,7 @@ vi.mock('components/image/baseImage.jsx', () => ({
     width,
     height,
     sizes,
-    priority,
+    loading,
     blurDataURL,
     placeholder,
   }) => (
@@ -35,7 +35,7 @@ vi.mock('components/image/baseImage.jsx', () => ({
       width={width}
       height={height}
       data-sizes={sizes || null}
-      data-priority={priority || null}
+      data-loading={loading || null}
       data-blurdataurl={blurDataURL || null}
       data-placeholder={placeholder || null}
     />
@@ -109,19 +109,19 @@ test('renders default link text if not provided', () => {
   expect(screen.getByText('Read more')).toBeInTheDocument();
 });
 
-test('applies priority to image if index is 0', () => {
+test('applies eager loading to image if index is 0', () => {
   render(<Article {...mockArticleProps} index={0} />);
   expect(screen.getByTestId('mock-image')).toHaveAttribute(
-    'data-priority',
-    'true'
+    'data-loading',
+    'eager'
   );
 });
 
-test('does not apply priority to image if index is not 0', () => {
+test('applies lazy loading to image if index is not 0', () => {
   render(<Article {...mockArticleProps} index={1} />);
-  expect(screen.getByTestId('mock-image')).not.toHaveAttribute(
-    'data-priority',
-    'true'
+  expect(screen.getByTestId('mock-image')).toHaveAttribute(
+    'data-loading',
+    'lazy'
   );
 });
 

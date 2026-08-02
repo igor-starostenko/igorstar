@@ -36,7 +36,6 @@ const Article = ({
               width={image.width}
               height={image.height}
               sizes={componentSizes.article.sizes}
-              priority={index === 0}
               loading={index === 0 ? 'eager' : 'lazy'}
               blurDataURL={image.blurDataURL}
               placeholder={image.blurDataURL ? 'blur' : undefined}

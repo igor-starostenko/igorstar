@@ -32,29 +32,6 @@ const calculateRowHeight = (imageCount) => {
   return height > 100 ? height : 100;
 };
 
-const suggestedPostProps = [
-  'id',
-  'title',
-  'path',
-  'date',
-  'category',
-  'tags',
-  'description',
-  'linkText',
-  'thumbnail',
-];
-
-const filterObject = (object, props) => {
-  if (!Array.isArray(props)) {
-    return {};
-  }
-
-  return props
-    .filter((property) => property in object)
-    .map((property) => ({ [property]: object[property] }))
-    .reduce((accumulator, current) => ({ ...accumulator, ...current }), {});
-};
-
 const hasDivChild = (children) => {
   for (let i = 0; i < children.length; i += 1) {
     if (children[i].type === 'div') {
@@ -194,13 +171,22 @@ const options = {
   },
 };
 
-const Post = ({ post, recommendations }) => {
-  const { images, thumbnail, targetRowHeight } = post;
+const Post = ({
+  title,
+  date,
+  category,
+  path,
+  content,
+  targetRowHeight,
+  images,
+  thumbnail,
+  recommendations,
+}) => {
   const imageUrl = thumbnail ? thumbnail.src : null;
 
   return (
     <Layout>
-      <Head pageTitle={post.title} imageUrl={imageUrl} />
+      <Head pageTitle={title} imageUrl={imageUrl} />
       <Box>
         <CategoryLabel
           style={{
@@ -208,24 +194,24 @@ const Post = ({ post, recommendations }) => {
           }}
         >
           <span>
-            Category: <Link href={`/${post.category}`}>{post.category}</Link>
+            Category: <Link href={`/${category}`}>{category}</Link>
           </span>
         </CategoryLabel>
         {images.length > 0 && (
           <Gallery
-            key={post.path}
+            key={path}
             photos={images}
             order="asc"
             targetRowHeight={targetRowHeight}
           />
         )}
         <ContentDetails>
-          <h1>{post.title}</h1>
+          <h1>{title}</h1>
           <div style={{ display: 'inline-flex' }}>
-            <DateText date={post.date} />
+            <DateText date={date} />
           </div>
-          {documentToReactComponents(post.content, options)}
-          <Recommendations category={post.category} posts={recommendations} />
+          {documentToReactComponents(content, options)}
+          <Recommendations category={category} posts={recommendations} />
         </ContentDetails>
       </Box>
     </Layout>
@@ -233,31 +219,37 @@ const Post = ({ post, recommendations }) => {
 };
 
 Post.propTypes = {
-  post: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    createdAt: PropTypes.string,
-    updatedAt: PropTypes.string,
-    title: PropTypes.string.isRequired,
-    path: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    layout: PropTypes.string.isRequired,
-    draft: PropTypes.bool.isRequired,
-    category: PropTypes.string.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.string),
-    description: PropTypes.string.isRequired,
-    linkText: PropTypes.string,
-    content: PropTypes.object.isRequired,
-    thumbnail: PropTypes.object,
-    images: PropTypes.arrayOf(PropTypes.object).isRequired,
-    targetRowHeight: PropTypes.number.isRequired,
-  }).isRequired,
+  id: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  content: PropTypes.object.isRequired,
+  thumbnail: PropTypes.shape({
+    src: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    blurDataURL: PropTypes.string,
+  }),
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string.isRequired,
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+      alt: PropTypes.string,
+      description: PropTypes.string,
+      blurDataURL: PropTypes.string,
+    })
+  ).isRequired,
+  targetRowHeight: PropTypes.number.isRequired,
   recommendations: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      path: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
       category: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
       tags: PropTypes.arrayOf(PropTypes.string),
       description: PropTypes.string.isRequired,
       linkText: PropTypes.string,
@@ -268,10 +260,11 @@ Post.propTypes = {
 
 export const getStaticProps = async ({ params }) => {
   const { getAllEntries, parseItem } = await import('contentClient');
+  const { filterObject, addBlurDataURLs } = await import('helpers/contentful');
 
   const posts = await getAllEntries({
     content_type: 'post',
-    limit: 100, // 1000 is the max,
+    limit: 100,
     'fields.draft': false,
     'fields.category': params.category,
     order: '-fields.date',
@@ -294,28 +287,38 @@ export const getStaticProps = async ({ params }) => {
     ? calculateRowHeight(post.images.length)
     : 250;
 
-  // Parse images and add blurDataURLs if not already set
-  const { addBlurDataURLs } = await import('helpers/contentful');
+  const thumbnailWithBlur = post.thumbnail
+    ? ((await addBlurDataURLs([parseItem(post.thumbnail)]))[0] ?? null)
+    : null;
+
+  const imagesWithBlur = post.images
+    ? await addBlurDataURLs(post.images.map(parseItem))
+    : [];
+
+  const parsedRecommendations = await addBlurDataURLs(
+    recommendedPosts.map((rp) => ({
+      ...filterObject(rp, [
+        'id',
+        'date',
+        'title',
+        'category',
+        'path',
+        'tags',
+        'description',
+        'linkText',
+      ]),
+      thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
+    })),
+    { path: 'thumbnail' }
+  );
 
   return {
     props: {
-      post: {
-        ...post,
-        thumbnail: post.thumbnail
-          ? ((await addBlurDataURLs([parseItem(post.thumbnail)]))[0] ?? null)
-          : null,
-        images: await addBlurDataURLs(
-          post.images ? post.images.map(parseItem) : []
-        ),
-        targetRowHeight,
-      },
-      recommendations: await addBlurDataURLs(
-        recommendedPosts.map((rp) => ({
-          ...filterObject(rp, suggestedPostProps),
-          thumbnail: rp.thumbnail ? parseItem(rp.thumbnail) : null,
-        })),
-        { path: 'thumbnail' }
-      ),
+      ...filterObject(post, ['title', 'date', 'category', 'path', 'content']),
+      targetRowHeight,
+      thumbnail: thumbnailWithBlur,
+      images: imagesWithBlur,
+      recommendations: parsedRecommendations,
     },
   };
 };

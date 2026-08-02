@@ -30,9 +30,7 @@ vi.mock('components/box/box.jsx', () => ({
 }));
 
 vi.mock('components/head/head.jsx', () => ({
-  default: ({ pageTitle }) => (
-    <title data-testid="mock-head">{pageTitle}</title>
-  ),
+  default: ({ pageTitle }) => <div data-testid="mock-head">{pageTitle}</div>,
 }));
 
 vi.mock('components/filter/filter.jsx', () => ({
@@ -59,12 +57,7 @@ import Category from './category.jsx';
 
 test('renders with page and posts', () => {
   const mockProps = {
-    page: {
-      id: 'page-1',
-      title: 'Tech Posts',
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-    },
+    title: 'Tech Posts',
     posts: {
       limit: 10,
       skip: 0,
@@ -79,6 +72,12 @@ test('renders with page and posts', () => {
           category: 'tech',
           description: 'Test description 1',
           linkText: 'Read more',
+          thumbnail: {
+            src: '/thumb1.jpg',
+            alt: 'Test Post 1',
+            width: 300,
+            height: 200,
+          },
         },
         {
           id: 'post-2',
@@ -89,6 +88,12 @@ test('renders with page and posts', () => {
           category: 'tech',
           description: 'Test description 2',
           linkText: 'Read more',
+          thumbnail: {
+            src: '/thumb2.jpg',
+            alt: 'Test Post 2',
+            width: 300,
+            height: 200,
+          },
         },
       ],
     },
@@ -108,12 +113,7 @@ test('renders with page and posts', () => {
 
 test('renders with empty posts', () => {
   const mockProps = {
-    page: {
-      id: 'page-1',
-      title: 'Tech Posts',
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-    },
+    title: 'Tech Posts',
     posts: {
       limit: 10,
       skip: 0,
@@ -135,7 +135,7 @@ test('renders with empty posts', () => {
 
 test('handles missing page gracefully', () => {
   const mockProps = {
-    page: {},
+    title: 'Tech Posts',
     posts: { limit: 10, skip: 0, total: 25, items: [] },
   };
 
@@ -144,12 +144,7 @@ test('handles missing page gracefully', () => {
 
 test('renders with pagination when more posts', () => {
   const mockProps = {
-    page: {
-      id: 'page-1',
-      title: 'Tech Posts',
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-    },
+    title: 'Tech Posts',
     posts: {
       limit: 10,
       skip: 0,
@@ -157,30 +152,33 @@ test('renders with pagination when more posts', () => {
       items: Array.from({ length: 10 }).map((_, i) => ({
         id: `post-${i}`,
         title: `Post ${i}`,
+        path: `post-${i}`,
         date: '2026-05-01',
         layout: 'default',
         draft: false,
         category: 'tech',
         description: `Description ${i}`,
+        tags: ['tag1'],
         linkText: 'Read more',
+        thumbnail: {
+          src: `/thumb${i}.jpg`,
+          alt: `Post ${i}`,
+          width: 300,
+          height: 200,
+        },
       })),
     },
   };
 
   render(<Category {...mockProps} />);
 
-  // Verify the posts are displayed
-  expect(screen.getAllByTestId('mock-article').length).toBe(10);
+  // Verify the posts are displayed (initial page shows 5)
+  expect(screen.getAllByTestId('mock-article').length).toBe(5);
 });
 
 test('renders with no pagination when all posts shown', () => {
   const mockProps = {
-    page: {
-      id: 'page-1',
-      title: 'Tech Posts',
-      createdAt: '2026-01-01',
-      updatedAt: '2026-01-01',
-    },
+    title: 'Tech Posts',
     posts: {
       limit: 10,
       skip: 0,
@@ -194,6 +192,12 @@ test('renders with no pagination when all posts shown', () => {
         category: 'tech',
         description: `Description ${i}`,
         linkText: 'Read more',
+        thumbnail: {
+          src: `/thumb${i}.jpg`,
+          alt: `Post ${i}`,
+          width: 300,
+          height: 200,
+        },
       })),
     },
   };

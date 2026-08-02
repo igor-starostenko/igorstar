@@ -20,7 +20,7 @@ const BaseImage = ({
 
   if (isError) {
     if (!backupSrc) return null;
-    const { priority: _priority, ...domRest } = rest;
+    const { priority: _priority, preload: _preload, ...domRest } = rest;
     /* eslint-disable @next/next/no-img-element */
     return (
       <img
