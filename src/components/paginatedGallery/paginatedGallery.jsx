@@ -41,7 +41,7 @@ const PaginatedGallery = ({
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
       threshold: 0.1,
-      rootMargin: '200px 0px 200px 0px',
+      rootMargin: '0px 0px 1800px 0px',
     });
 
     const element = lastItemRef.current;

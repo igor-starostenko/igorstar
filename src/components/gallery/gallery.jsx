@@ -120,7 +120,6 @@ const Gallery = ({
           onClick={handlePhotoClick}
           spacing={spacing}
           padding={0}
-          defaultContainerWidth={componentSizes.gallery.width}
           sizes={{
             size: componentSizes.gallery.size,
             sizes: componentSizes.gallery.sizes,
