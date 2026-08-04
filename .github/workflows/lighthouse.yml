@@ -1,16 +1,8 @@
 name: Lighthouse Audit
 
 on:
-  pull_request:
-    paths:
-      - '**/*.js'
-      - '**/*.jsx'
-      - '**/*.css'
-      - '**/*.html'
-      - 'lighthouserc.cjs'
-      - '.nvmrc'
-      - 'package.json'
-      - 'yarn.lock'
+  schedule:
+    - cron: '0 8 * * *' # Daily at 8:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -41,13 +33,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y google-chrome-stable
 
-      - name: Build static site
-        run: yarn build
-        env:
-          CONTENTFUL_SPACE_ID: ${{ secrets.CONTENTFUL_SPACE_ID }}
-          CONTENTFUL_ACCESS_TOKEN: ${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
-
       - name: Run Lighthouse CI
         env:
           CHROME_PATH: /usr/bin/google-chrome
-        run: npx lhci autorun --collect.numberOfRuns=1
+        run: npx lhci autorun --collect.numberofRuns=1
