@@ -13,7 +13,7 @@ const Layout = ({ config, children }) => {
     <Container>
       <motion.div
         key="header"
-        initial={{ y: -100 }}
+        initial={false}
         animate={{ y: 0 }}
         exit={{ y: -100 }}
         transition={{ duration: timeout }}
@@ -23,7 +23,7 @@ const Layout = ({ config, children }) => {
 
       <motion.div
         key="content"
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: timeout }}
