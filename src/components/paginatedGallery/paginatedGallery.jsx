@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
+import PropTypes from 'prop-types';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
