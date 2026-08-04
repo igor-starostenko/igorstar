@@ -82,8 +82,6 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   const view = views[currentIndex];
   const src = view?.src ?? '';
   const altText = (view?.alt || view?.description) ?? '';
-  const width = view?.width ?? 1920;
-  const height = view?.height ?? 1080;
 
   return (
     <ModalOverlay onClick={handleClick}>
@@ -100,12 +98,11 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
         </CloseButton>
         <ImageContainer>
           <NextImage
+            fill
             src={src}
             alt={altText}
-            width={width}
-            height={height}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-            style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+            style={{ objectFit: 'contain' }}
             loading="eager"
             quality={75}
           />

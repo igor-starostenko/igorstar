@@ -34,10 +34,11 @@ export const CloseButton = styled.button`
 `;
 
 export const ImageContainer = styled.div`
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  position: relative;
 `;
 
 export const GalleryImage = styled.img`
