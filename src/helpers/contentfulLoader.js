@@ -1,10 +1,14 @@
 import { imageQuality as defaultQuality } from 'constants/imageConfig.js';
 
 // Maximum width for Contentful images.
-// Article listing thumbnails display at most 778px wide (from sizes attribute).
-// Article page gallery images display at most 528px wide (from sizes attribute).
-// Capping at 828 (closest deviceSize) prevents downloading oversized images.
-const MAX_IMAGE_WIDTH = 750;
+// Prevents downloading the full 3840px source (which can be 200KB+) while
+// still allowing sufficient resolution for high-DPI screens.
+// - Article thumbnails: sizes attribute limits requests to ~778px at 1x DPR,
+//   ~1556px at 2x DPR. The 1920 cap doesn't affect these.
+// - Gallery panoramas: can render at 1200px+ width at 300px row height with
+//   4:1 aspect ratio. At 2x DPR, they need up to ~2400px — capped at 1920,
+//   which is close enough to avoid visible blurriness on most screens.
+const MAX_IMAGE_WIDTH = 1920;
 
 export default function contentfulLoader({
   src,
