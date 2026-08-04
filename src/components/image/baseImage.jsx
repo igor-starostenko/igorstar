@@ -14,6 +14,7 @@ const BaseImage = ({
   placeholder,
   blurDataURL,
   unoptimized = !src.includes('images.ctfassets.net'),
+  quality,
   ...rest
 }) => {
   const [isError, setIsError] = useState(false);
@@ -44,6 +45,10 @@ const BaseImage = ({
     placeholder,
     blurDataURL,
   };
+
+  if (quality !== undefined) {
+    imageProps.quality = quality;
+  }
 
   if (width && height) {
     imageProps.width = width;
