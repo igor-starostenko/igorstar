@@ -13,7 +13,7 @@ module.exports = {
   ci: {
     collect: {
       url: pages.map((p) => `${siteConfig.siteUrl}${p}`),
-      numberOfRuns: 1,
+      numberofRuns: 1,
       chromePath: process.env.CHROME_PATH || '/usr/bin/chromium',
       settings: {
         chromeFlags: '--no-sandbox --disable-dev-shm-usage --disable-gpu --headless=new',
