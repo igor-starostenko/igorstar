@@ -22,5 +22,5 @@ export const componentSizes = {
 };
 
 export const defaultSizes = componentSizes.article.sizes;
-export const imageQuality = 20;
+export const imageQuality = 40;
 export const imageFormat = 'webp';
