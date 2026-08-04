@@ -1,14 +1,13 @@
 import { imageQuality as defaultQuality } from 'constants/imageConfig.js';
 
-// Maximum width for Contentful images.
-// Prevents downloading the full 3840px source (which can be 200KB+) while
-// still allowing sufficient resolution for high-DPI screens.
-// - Article thumbnails: sizes attribute limits requests to ~778px at 1x DPR,
-//   ~1556px at 2x DPR. The 1920 cap doesn't affect these.
-// - Gallery panoramas: can render at 1200px+ width at 300px row height with
-//   4:1 aspect ratio. At 2x DPR, they need up to ~2400px — capped at 1920,
-//   which is close enough to avoid visible blurriness on most screens.
-const MAX_IMAGE_WIDTH = 1920;
+// Contentful image loader.
+// Image dimensions are controlled by:
+// 1. The `sizes` attribute on each NextImage component (primary mechanism)
+// 2. `deviceSizes` in next.config.js (limits max width to 3840)
+// No additional cap is needed in the loader — Next.js calculates the
+// appropriate width from `sizes` + device DPR and picks the closest
+// `deviceSize`. The `sizes` attribute ensures thumbnails only request
+// ~1556px (2x DPR of 778px display), not 3840px.
 
 export default function contentfulLoader({
   src,
@@ -20,9 +19,8 @@ export default function contentfulLoader({
     try {
       const normalizedSrc = src.startsWith('//') ? `https:${src}` : src;
       const url = new URL(normalizedSrc);
-      // Cap the width to avoid downloading oversized images for thumbnails
-      const effectiveWidth = Math.min(width, MAX_IMAGE_WIDTH);
-      url.searchParams.set('w', String(effectiveWidth));
+      // Pass through the width requested by Next.js (based on sizes + DPR)
+      url.searchParams.set('w', String(width));
       url.searchParams.set('q', String(quality));
       url.searchParams.set('fm', 'webp');
       return url.toString();
