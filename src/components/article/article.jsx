@@ -11,6 +11,12 @@ const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
 
+// Maximum dimensions for thumbnail images rendered in article listings.
+// The original images are often 2560x1440, but the display size is at most
+// 778px wide (see componentSizes.article.sizes). Constraining dimensions
+// prevents Next.js Image from generating oversized srcset entries.
+const MAX_THUMBNAIL_WIDTH = 800;
+
 const Article = ({
   index,
   category,
@@ -24,6 +30,16 @@ const Article = ({
 }) => {
   const href = `/${category}/${path}`;
 
+  // Constrain thumbnail dimensions to reduce image file size while
+  // preserving aspect ratio
+  const constrainedWidth = image
+    ? Math.min(image.width, MAX_THUMBNAIL_WIDTH)
+    : null;
+  const constrainedHeight =
+    image && constrainedWidth
+      ? Math.round((constrainedWidth / image.width) * image.height)
+      : null;
+
   return (
     <Card>
       {image && image.src && (
@@ -33,10 +49,12 @@ const Article = ({
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={image.width}
-              height={image.height}
+              width={constrainedWidth}
+              height={constrainedHeight}
               sizes={componentSizes.article.sizes}
               loading={index === 0 ? 'eager' : 'lazy'}
+              priority={index === 0}
+              quality={30}
               blurDataURL={image.blurDataURL}
               placeholder={image.blurDataURL ? 'blur' : undefined}
             />
