@@ -1,11 +1,10 @@
 import { useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import NextImage from 'next/image';
 import {
   ModalOverlay,
   ModalContent,
+  ModalImage,
   CloseButton,
-  ImageContainer,
 } from './carousel.css.js';
 
 const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
@@ -96,17 +95,14 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
         <CloseButton onClick={onClose} aria-label="Close">
           &times;
         </CloseButton>
-        <ImageContainer>
-          <NextImage
-            fill
-            src={src}
-            alt={altText}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-            style={{ objectFit: 'contain' }}
-            loading="eager"
-            quality={75}
-          />
-        </ImageContainer>
+        <ModalImage
+          fill
+          src={src}
+          alt={altText}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+          loading="eager"
+          quality={75}
+        />
         {views.length > 1 && (
           <>
             <CloseButton
