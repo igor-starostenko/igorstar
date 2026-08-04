@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
+import useIntersectionObserver from 'hooks/useIntersectionObserver';
 
 const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
 const Pagination = dynamic(
@@ -25,37 +26,20 @@ const PaginatedGallery = ({
   const [displayCount, setDisplayCount] = useState(pageSize);
   const lastItemRef = useRef(null);
 
-  // Only update displayCount on scroll if we haven't reached the end
   const handleIntersection = useCallback(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && displayCount < total) {
-          const newDisplayCount = Math.min(displayCount + pageSize, total);
-          setDisplayCount(newDisplayCount);
-        }
-      });
+    (entry) => {
+      if (entry.isIntersecting && displayCount < total) {
+        const newDisplayCount = Math.min(displayCount + pageSize, total);
+        setDisplayCount(newDisplayCount);
+      }
     },
     [displayCount, total, pageSize]
   );
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.1,
-      rootMargin: '0px 0px 1800px 0px',
-    });
-
-    const element = lastItemRef.current;
-    if (element) {
-      observer.observe(element);
-    }
-
-    return () => {
-      if (element) {
-        observer.unobserve(element);
-      }
-      observer.disconnect();
-    };
-  }, [handleIntersection]);
+  useIntersectionObserver(lastItemRef, handleIntersection, {
+    threshold: 0.1,
+    rootMargin: '0px 0px 1800px 0px',
+  });
 
   const pageNum = Math.ceil(displayCount / pageSize) || 1;
 

@@ -26,7 +26,7 @@ const renderNextImage = (
       title={title}
       sizes={sizes}
       loading={index === 0 ? 'eager' : 'lazy'}
-      priority={index === 0}
+      preload={index === 0}
       quality={30}
       placeholder={
         photo.blurDataURL && typeof photo.blurDataURL === 'string'

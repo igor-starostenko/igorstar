@@ -50,7 +50,7 @@ const Article = ({
               height={constrainedHeight}
               sizes={componentSizes.article.sizes}
               loading={index === 0 ? 'eager' : 'lazy'}
-              priority={index === 0}
+              preload={index === 0}
               quality={30}
               blurDataURL={image.blurDataURL}
               placeholder={image.blurDataURL ? 'blur' : undefined}
