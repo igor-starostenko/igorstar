@@ -7,7 +7,7 @@ export default Index;
 export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } =
     await import('contentClient');
-  const { addBlurDataURLs } = await import('helpers/contentful');
+  const { filterObject, addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getEntries({
     content_type: 'page',
@@ -23,16 +23,28 @@ export const getStaticProps = async () => {
     limit: 1000, // 1000 is the max
   });
 
-  // Parse posts and add blurDataURLs to nested thumbnail images
+  // Strip heavy fields (content, recommendations, images, layout, draft, etc.)
+  // that are only needed on individual post pages, not on the listing page.
+  // This reduces __NEXT_DATA__ from ~151KB to ~52KB by removing the full
+  // rich text content bodies which are never used by the Article component.
   const parsedPosts = {
     ...posts,
-    items: posts.items.map(({ thumbnail, images: _images, ...fields }) => ({
-      thumbnail: thumbnail ? parseItem(thumbnail) : null,
-      ...fields,
+    items: posts.items.map((post) => ({
+      ...filterObject(post, [
+        'id',
+        'title',
+        'path',
+        'date',
+        'category',
+        'tags',
+        'description',
+        'linkText',
+      ]),
+      thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
     })),
   };
 
-  // Add blurDataURLs to thumbnail.images in posts array
+  // Add blurDataURLs to thumbnail images for the blur-up placeholder effect
   const postsWithBlurData = await addBlurDataURLs(parsedPosts.items, {
     path: 'thumbnail',
   });
