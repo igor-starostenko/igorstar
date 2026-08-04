@@ -9,11 +9,6 @@ export const GalleryContainer = styled.div`
     position: relative !important;
   }
 
-  /* Ensure gallery images don't overflow their containers */
-  .react-photo-album--photo img {
-    max-width: 100% !important;
-    height: auto !important;
-  }
 `;
 
 export const GalleryImageWrapper = styled.div`
