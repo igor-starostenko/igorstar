@@ -96,12 +96,9 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
           &times;
         </CloseButton>
         <ModalImage
-          fill
           src={src}
           alt={altText}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
           loading="eager"
-          quality={75}
         />
         {views.length > 1 && (
           <>

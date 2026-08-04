@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import BaseImage from 'components/image/baseImage.jsx';
 
 export const ModalOverlay = styled.div`
   position: fixed;

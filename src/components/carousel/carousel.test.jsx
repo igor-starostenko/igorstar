@@ -1,11 +1,6 @@
 import { test, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-// Mock next/image before importing components that use it
-vi.mock('next/image', () => ({
-  default: ({ src, alt, ..._rest }) => <img src={src} alt={alt || ''} />,
-}));
-
 import CarouselModal from './carousel.jsx';
 
 const mockViews = [
