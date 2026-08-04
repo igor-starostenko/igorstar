@@ -14,7 +14,7 @@ module.exports = {
     collect: {
       url: pages.map((p) => `${siteConfig.siteUrl}${p}`),
       numberofRuns: 1,
-      chromePath: process.env.CHROME_PATH || '/usr/bin/chromium',
+      chromePath: process.env.CHROME_PATH || '/usr/bin/google-chrome',
       settings: {
         chromeFlags: '--no-sandbox --disable-dev-shm-usage --disable-gpu --headless=new',
       },

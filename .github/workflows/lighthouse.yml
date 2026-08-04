@@ -1,8 +1,6 @@
 name: Lighthouse Audit
 
 on:
-  schedule:
-    - cron: '0 8 * * *' # Daily at 8:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -34,6 +32,4 @@ jobs:
           sudo apt-get install -y google-chrome-stable
 
       - name: Run Lighthouse CI
-        env:
-          CHROME_PATH: /usr/bin/google-chrome
-        run: npx lhci autorun --collect.numberofRuns=1
+        run: yarn lhci:audit

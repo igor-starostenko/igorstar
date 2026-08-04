@@ -23,10 +23,7 @@ export const getStaticProps = async () => {
     limit: 1000, // 1000 is the max
   });
 
-  // Strip heavy fields (content, recommendations, images, layout, draft, etc.)
-  // that are only needed on individual post pages, not on the listing page.
-  // This reduces __NEXT_DATA__ from ~151KB to ~52KB by removing the full
-  // rich text content bodies which are never used by the Article component.
+  // Strip fields not needed on listing page to reduce __NEXT_DATA__ size
   const parsedPosts = {
     ...posts,
     items: posts.items.map((post) => ({
@@ -44,7 +41,7 @@ export const getStaticProps = async () => {
     })),
   };
 
-  // Add blurDataURLs to thumbnail images for the blur-up placeholder effect
+  // Add blurDataURLs for blur-up placeholders
   const postsWithBlurData = await addBlurDataURLs(parsedPosts.items, {
     path: 'thumbnail',
   });

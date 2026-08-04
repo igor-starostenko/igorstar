@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
@@ -7,6 +7,7 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Filter from 'components/filter/filter.jsx';
 import Article from 'components/article/article.jsx';
+import useIntersectionObserver from 'hooks/useIntersectionObserver';
 
 const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
@@ -22,37 +23,20 @@ const Category = ({ title, posts, pageSize = 5 }) => {
   const lastItemRef = useRef(null);
 
   const handleIntersection = useCallback(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && displayCount < posts.total) {
-          const newDisplayCount = displayCount + pageSize;
-          setDisplayCount(
-            newDisplayCount > posts.total ? posts.total : newDisplayCount
-          );
-        }
-      });
+    (entry) => {
+      if (entry.isIntersecting && displayCount < posts.total) {
+        const newDisplayCount = displayCount + pageSize;
+        setDisplayCount(
+          newDisplayCount > posts.total ? posts.total : newDisplayCount
+        );
+      }
     },
     [displayCount, posts.total, pageSize]
   );
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.1,
-      rootMargin: '200px 0px 200px 0px',
-    });
-
-    const element = lastItemRef.current;
-    if (element) {
-      observer.observe(element);
-    }
-
-    return () => {
-      if (element) {
-        observer.unobserve(element);
-      }
-      observer.disconnect();
-    };
-  }, [handleIntersection]);
+  useIntersectionObserver(lastItemRef, handleIntersection, {
+    rootMargin: '200px 0px 200px 0px',
+  });
 
   const startIndex = pageNum ? pageNum * pageSize - pageSize : 0;
   const displayPosts = posts.items.slice(startIndex, startIndex + displayCount);
