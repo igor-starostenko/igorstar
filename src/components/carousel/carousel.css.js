@@ -36,7 +36,7 @@ export const CloseButton = styled.button`
 `;
 
 export const ModalImageContainer = styled.div`
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
 `;
