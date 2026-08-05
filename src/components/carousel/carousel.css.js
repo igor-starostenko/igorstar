@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import BaseImage from 'components/image/baseImage.jsx';
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -33,7 +34,10 @@ export const CloseButton = styled.button`
   z-index: 101;
 `;
 
-export const ModalImage = styled.img`
+export const ModalImageContainer = styled.div`
+`;
+
+export const ModalImage = styled(BaseImage)`
   max-width: 100%;
   max-height: 90vh;
   object-fit: contain;

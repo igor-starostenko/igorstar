@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   ModalOverlay,
   ModalContent,
+  ModalImageContainer,
   ModalImage,
   CloseButton,
 } from './carousel.css.js';
@@ -95,11 +96,16 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
         <CloseButton onClick={onClose} aria-label="Close">
           &times;
         </CloseButton>
-        <ModalImage
-          src={src}
-          alt={altText}
-          loading="eager"
-        />
+        <ModalImageContainer>
+          <ModalImage
+            fill
+            src={src}
+            alt={altText}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+            quality={75}
+            loading="eager"
+          />
+        </ModalImageContainer>
         {views.length > 1 && (
           <>
             <CloseButton
