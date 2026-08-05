@@ -11,8 +11,6 @@ const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
 
-// Display is ~778px at desktop, ~100vw on mobile.
-// The `sizes` attribute drives srcSet selection — no width cap needed.
 const Article = ({
   index,
   category,

@@ -1,5 +1,4 @@
-const siteConfig = require('./site-config.cjs');
-
+// LHCI configuration for auditing the locally-built static site.
 const pages = [
   '/',
   '/about.html',
@@ -12,8 +11,9 @@ const pages = [
 module.exports = {
   ci: {
     collect: {
-      url: pages.map((p) => `${siteConfig.siteUrl}${p}`),
-      numberofRuns: 1,
+      numberOfRuns: 1,
+      staticDistDir: './out',
+      url: pages.map((p) => `http://localhost${p}`),
       chromePath: process.env.CHROME_PATH || '/usr/bin/google-chrome',
       settings: {
         chromeFlags: '--no-sandbox --disable-dev-shm-usage --disable-gpu --headless=new',
