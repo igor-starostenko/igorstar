@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { componentSizes } from 'constants/imageConfig.js';
 import {
   ModalOverlay,
   ModalContent,
@@ -101,7 +102,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             fill
             src={src}
             alt={altText}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+            sizes={componentSizes.carousel.sizes}
             style={{ objectFit: 'contain' }}
             quality={75}
             loading="eager"

@@ -2,6 +2,9 @@ export const componentSizes = {
   article: {
     sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 778px',
   },
+  carousel: {
+    sizes: '(max-width: 768px) 100vw, 100vw',
+  },
   recommendations: {
     sizes:
       '(max-width: 768px) 100vw, (max-width: 1024px) 30vw, (max-width: 1440px) 25vw, 528px',
