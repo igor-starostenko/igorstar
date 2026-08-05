@@ -46,3 +46,12 @@ export const ModalImage = styled(BaseImage)`
   height: 100%;
   object-fit: contain;
 `;
+
+export const Description = styled.p`
+  margin-top: 16px;
+  max-width: 90%;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.4;
+`;

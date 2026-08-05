@@ -7,6 +7,7 @@ import {
   ModalImageContainer,
   ModalImage,
   CloseButton,
+  Description,
 } from './carousel.css.js';
 
 const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
@@ -83,6 +84,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   const view = views[currentIndex];
   const src = view?.src ?? '';
   const altText = (view?.alt || view?.description) ?? '';
+  const description = view?.description ?? '';
 
   return (
     <ModalOverlay onClick={handleClick}>
@@ -108,6 +110,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             loading="eager"
           />
         </ModalImageContainer>
+        {description && <Description>{description}</Description>}
         {views.length > 1 && (
           <>
             <CloseButton
