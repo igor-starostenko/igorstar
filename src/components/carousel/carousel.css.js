@@ -16,7 +16,8 @@ export const ModalOverlay = styled.div`
 
 export const ModalContent = styled.div`
   max-width: 90%;
-  max-height: 90%;
+  max-height: 90vh;
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,10 +36,13 @@ export const CloseButton = styled.button`
 `;
 
 export const ModalImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
 export const ModalImage = styled(BaseImage)`
   max-width: 100%;
-  max-height: 90vh;
+  height: 100%;
   object-fit: contain;
 `;
