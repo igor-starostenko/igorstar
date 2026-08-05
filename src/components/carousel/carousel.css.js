@@ -21,6 +21,7 @@ export const ModalContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 `;
 
 export const CloseButton = styled.button`
