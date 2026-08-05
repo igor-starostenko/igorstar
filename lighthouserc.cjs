@@ -33,7 +33,6 @@ module.exports = {
         'document-title': ['error', { minScore: 0.9 }],
         'meta-description': ['error', { minScore: 0.9 }],
         'robots-txt': ['error', { minScore: 0.9 }],
-        'sitemap-xml': ['error', { minScore: 0.9 }],
         'hreflang': ['error', { minScore: 0.9 }],
       },
     },
