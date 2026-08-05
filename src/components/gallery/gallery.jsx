@@ -25,7 +25,9 @@ const renderNextImage = (
       alt={alt}
       title={title}
       sizes={sizes}
-      loading={index <= 5 ? 'eager' : 'lazy'}
+      loading={index === 0 ? 'eager' : 'lazy'}
+      preload={index === 0}
+      quality={30}
       placeholder={
         photo.blurDataURL && typeof photo.blurDataURL === 'string'
           ? 'blur'
@@ -48,7 +50,6 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       src: photo.src,
       width: constrainedWidth,
       height: targetRowHeight,
-      sizes: componentSizes.gallery.sizes,
       alt: photo.description || photo.alt || '',
       description: photo.description || '',
       blurDataURL: photo.blurDataURL,
@@ -57,7 +58,6 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
 
 const createSortFunction = (orderBy) => {
   if (!orderBy) return () => 0;
-
   return (a, b) => {
     if (a[orderBy] < b[orderBy]) return -1;
     if (a[orderBy] > b[orderBy]) return 1;
@@ -67,10 +67,8 @@ const createSortFunction = (orderBy) => {
 
 const orderArray = (array, orderBy, order) => {
   if (!orderBy) return array;
-
   const direction = String(order).toLowerCase();
   if (!['desc', 'asc'].includes(direction)) return array;
-
   const sortFun = createSortFunction(orderBy);
   const sortedArray = [...array].sort(sortFun);
   return direction === 'desc' ? sortedArray.reverse() : sortedArray;
@@ -82,7 +80,7 @@ const Gallery = ({
   order = 'desc',
   targetRowHeight = 150,
   spacing = 2,
-  containerWidth = 900,
+  containerWidth = componentSizes.gallery.width,
 }) => {
   const [currentPhoto, setCurrentPhoto] = useState(null);
 
@@ -121,6 +119,11 @@ const Gallery = ({
           onClick={handlePhotoClick}
           spacing={spacing}
           padding={0}
+          containerWidth={containerWidth}
+          sizes={{
+            size: componentSizes.gallery.size,
+            sizes: componentSizes.gallery.sizes,
+          }}
           targetRowHeight={targetRowHeight}
         />
       </GalleryContainer>

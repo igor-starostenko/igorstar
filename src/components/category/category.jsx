@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
@@ -7,6 +7,7 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import Filter from 'components/filter/filter.jsx';
 import Article from 'components/article/article.jsx';
+import useIntersectionObserver from 'hooks/useIntersectionObserver';
 
 const Pagination = dynamic(
   () => import('components/pagination/pagination.jsx')
@@ -19,32 +20,23 @@ const Category = ({ title, posts, pageSize = 5 }) => {
   const [displayCount, setDisplayCount] = useState(
     pageNum ? pageNum * pageSize : pageSize
   );
+  const lastItemRef = useRef(null);
 
-  useEffect(() => {
-    const handleScrollHandler = () => {
-      const lastRecordLoaded = document.querySelector(
-        'div > article:last-child'
-      );
-      if (lastRecordLoaded) {
-        const lastRecordLoadedOffset =
-          lastRecordLoaded.offsetTop + lastRecordLoaded.clientHeight;
-        const pageOffset = window.pageYOffset + window.innerHeight;
-        if (pageOffset > lastRecordLoadedOffset) {
-          if (displayCount < posts.total) {
-            const newDisplayCount = displayCount + pageSize;
-            setDisplayCount(
-              newDisplayCount > posts.total ? posts.total : newDisplayCount
-            );
-          }
-        }
+  const handleIntersection = useCallback(
+    (entry) => {
+      if (entry.isIntersecting && displayCount < posts.total) {
+        const newDisplayCount = displayCount + pageSize;
+        setDisplayCount(
+          newDisplayCount > posts.total ? posts.total : newDisplayCount
+        );
       }
-    };
+    },
+    [displayCount, posts.total, pageSize]
+  );
 
-    window.addEventListener('scroll', handleScrollHandler);
-    return () => {
-      window.removeEventListener('scroll', handleScrollHandler);
-    };
-  }, [displayCount, posts, pageSize]);
+  useIntersectionObserver(lastItemRef, handleIntersection, {
+    rootMargin: '200px 0px 200px 0px',
+  });
 
   const startIndex = pageNum ? pageNum * pageSize - pageSize : 0;
   const displayPosts = posts.items.slice(startIndex, startIndex + displayCount);
@@ -74,6 +66,10 @@ const Category = ({ title, posts, pageSize = 5 }) => {
               linkText={post.linkText}
             />
           ))}
+          {/* Sentinel element for IntersectionObserver */}
+          {displayPosts.length < posts.total - (pageNum || 1) * pageSize && (
+            <div ref={lastItemRef} />
+          )}
         </div>
         {displayPosts.length < posts.total - (pageNum || 1) * pageSize ? (
           <Pagination pageNum={pageNum || 1} totalPages={totalPages} />

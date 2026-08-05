@@ -2,21 +2,12 @@ name: Lighthouse Audit
 
 on:
   workflow_dispatch:
-    inputs:
-      url:
-        description: 'URL to audit (default: https://igorstar.com)'
-        required: false
-        default: 'https://igorstar.com'
-      thresholds:
-        description: 'Performance threshold (0-1, default: 0.9)'
-        required: false
-        default: '0.9'
 
 jobs:
   lighthouse-audit:
-    name: Run Lighthouse Audit
+    name: Lighthouse Audit
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,7 +31,8 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y google-chrome-stable
 
-      - name: Run Lighthouse test
-        env:
-          SITE_URL: ${{ github.event.inputs.url || 'https://igorstar.com' }}
-        run: yarn test:lighthouse
+      - name: Build static site
+        run: yarn build
+
+      - name: Run Lighthouse CI
+        run: yarn lhci:audit

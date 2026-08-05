@@ -1,5 +1,14 @@
 import '@testing-library/jest-dom';
 
+// Mock IntersectionObserver for testing components that use it
+global.IntersectionObserver = vi.fn(function IntersectionObserver() {
+  return {
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  };
+});
+
 // Add DOM assertions
 expect.extend({
   toBeInTheDocument(received) {

@@ -8,6 +8,7 @@ export const GalleryContainer = styled.div`
   .react-photo-album--photo {
     position: relative !important;
   }
+
 `;
 
 export const GalleryImageWrapper = styled.div`

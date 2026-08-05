@@ -2,14 +2,20 @@ export const componentSizes = {
   article: {
     sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 778px',
   },
+  carousel: {
+    sizes: '(max-width: 768px) 100vw, 100vw',
+  },
   recommendations: {
     sizes:
       '(max-width: 768px) 100vw, (max-width: 1024px) 30vw, (max-width: 1440px) 25vw, 528px',
   },
   gallery: {
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 900px',
-    width: 1200,
-    height: 800,
+    size: "796px",
+    sizes: [
+      { viewport: "(max-width: 800px)", size: "calc(100vw - 4px)" },
+    ],
+    width: 796,
+    height: 300,
   },
   selfie: {
     sizes: '100px',
@@ -19,5 +25,5 @@ export const componentSizes = {
 };
 
 export const defaultSizes = componentSizes.article.sizes;
-export const imageQuality = 20;
+export const imageQuality = 30;
 export const imageFormat = 'webp';

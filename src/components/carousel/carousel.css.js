@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import BaseImage from 'components/image/baseImage.jsx';
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -15,7 +16,8 @@ export const ModalOverlay = styled.div`
 
 export const ModalContent = styled.div`
   max-width: 90%;
-  max-height: 90%;
+  max-height: 90vh;
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,15 +35,26 @@ export const CloseButton = styled.button`
   z-index: 101;
 `;
 
-export const ImageContainer = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const ModalImageContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
 `;
 
-export const GalleryImage = styled.img`
+export const ModalImage = styled(BaseImage)`
   max-width: 100%;
-  max-height: 90vh;
+  height: 100%;
   object-fit: contain;
+`;
+
+export const Description = styled.p`
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  max-width: 90%;
+  color: #fff;
+  font-size: 14px;
+  text-align: right;
+  line-height: 1.4;
+  z-index: 10;
 `;

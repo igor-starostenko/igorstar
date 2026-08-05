@@ -1,18 +1,21 @@
 import Category from 'components/category/category.jsx';
 
-const Index = ({ page, posts }) => <Category page={page} posts={posts} />;
+const Index = ({ title, posts }) => <Category title={title} posts={posts} />;
 
 export default Index;
 
 export const getStaticProps = async () => {
   const { getEntries, getAllEntries, parseItem } =
     await import('contentClient');
-  const { addBlurDataURLs } = await import('helpers/contentful');
+  const { filterObject, addBlurDataURLs } = await import('helpers/contentful');
 
   const pages = await getEntries({
     content_type: 'page',
     'fields.title': 'Blog',
   });
+  const page = pages.items?.[0];
+  if (!page) return { notFound: true };
+  const { title } = page;
 
   const posts = await getAllEntries({
     content_type: 'post',
@@ -20,23 +23,32 @@ export const getStaticProps = async () => {
     limit: 1000, // 1000 is the max
   });
 
-  // Parse posts and add blurDataURLs to nested thumbnail images
+  // Strip fields not needed on listing page to reduce __NEXT_DATA__ size
   const parsedPosts = {
     ...posts,
-    items: posts.items.map(({ thumbnail, images: _images, ...fields }) => ({
-      thumbnail: thumbnail ? parseItem(thumbnail) : null,
-      ...fields,
+    items: posts.items.map((post) => ({
+      ...filterObject(post, [
+        'id',
+        'title',
+        'path',
+        'date',
+        'category',
+        'tags',
+        'description',
+        'linkText',
+      ]),
+      thumbnail: post.thumbnail ? parseItem(post.thumbnail) : null,
     })),
   };
 
-  // Add blurDataURLs to thumbnail.images in posts array
+  // Add blurDataURLs for blur-up placeholders
   const postsWithBlurData = await addBlurDataURLs(parsedPosts.items, {
     path: 'thumbnail',
   });
 
   return {
     props: {
-      page: pages.items[0] || {},
+      title,
       posts: {
         ...parsedPosts,
         items: postsWithBlurData,
