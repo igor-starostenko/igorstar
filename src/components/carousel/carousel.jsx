@@ -105,7 +105,6 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             src={src}
             alt={altText}
             sizes={componentSizes.carousel.sizes}
-            style={{ objectFit: 'contain' }}
             quality={30}
             loading="eager"
           />

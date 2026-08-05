@@ -1,14 +1,7 @@
 import { imageQuality as defaultQuality } from 'constants/imageConfig.js';
 
-// Contentful image loader.
-// Image dimensions are controlled by:
-// 1. The `sizes` attribute on each NextImage component (primary mechanism)
-// 2. `deviceSizes` in next.config.js (limits max width to 3840)
-// No additional cap is needed in the loader — Next.js calculates the
-// appropriate width from `sizes` + device DPR and picks the closest
-// `deviceSize`. The `sizes` attribute ensures thumbnails only request
-// ~1556px (2x DPR of 778px display), not 3840px.
-
+// Contentful image loader. Next.js determines width from `sizes` + DPR
+// and selects the closest `deviceSize`. We pass through width and quality.
 export default function contentfulLoader({
   src,
   width,

@@ -11,10 +11,8 @@ const DateText = dynamic(() => import('components/date/date.jsx'), {
   ssr: false,
 });
 
-// Max thumbnail width — display is at most 778px, but allow extra for
-// high-DPI screens (2x DPR = 1556px requested, capped at 800 by loader)
-const MAX_THUMBNAIL_WIDTH = 800;
-
+// Display is ~778px at desktop, ~100vw on mobile.
+// The `sizes` attribute drives srcSet selection — no width cap needed.
 const Article = ({
   index,
   category,
@@ -28,15 +26,6 @@ const Article = ({
 }) => {
   const href = `/${category}/${path}`;
 
-  // Constrain dimensions to avoid oversized srcset entries
-  const constrainedWidth = image
-    ? Math.min(image.width, MAX_THUMBNAIL_WIDTH)
-    : null;
-  const constrainedHeight =
-    image && constrainedWidth
-      ? Math.round((constrainedWidth / image.width) * image.height)
-      : null;
-
   return (
     <Card>
       {image && image.src && (
@@ -46,8 +35,8 @@ const Article = ({
               src={image.src}
               backupSrc={image.backupSrc}
               alt={image.alt}
-              width={constrainedWidth}
-              height={constrainedHeight}
+              width={image.width}
+              height={image.height}
               sizes={componentSizes.article.sizes}
               loading={index === 0 ? 'eager' : 'lazy'}
               preload={index === 0}
