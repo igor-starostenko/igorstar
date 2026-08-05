@@ -106,7 +106,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             alt={altText}
             sizes={componentSizes.carousel.sizes}
             style={{ objectFit: 'contain' }}
-            quality={75}
+            quality={30}
             loading="eager"
           />
         </ModalImageContainer>
