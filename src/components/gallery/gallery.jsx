@@ -45,8 +45,7 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     const originalHeight = photo.height || componentSizes.gallery.height;
 
     const aspectRatio = originalWidth / originalHeight;
-    // Constrain max height to 450px for LCP optimization (reduces file size)
-    const constrainedHeight = Math.min(targetRowHeight, 450);
+    const constrainedHeight = targetRowHeight;
     const constrainedWidth = Math.round(constrainedHeight * aspectRatio);
 
     return {
