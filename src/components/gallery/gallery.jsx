@@ -17,6 +17,7 @@ const renderNextImage = (
     style={{
       width: `${width}px`,
       height: `${height}px`,
+      aspectRatio: `${width} / ${height}`,
     }}
   >
     <NextImage
@@ -44,12 +45,14 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     const originalHeight = photo.height || componentSizes.gallery.height;
 
     const aspectRatio = originalWidth / originalHeight;
-    const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
+    // Constrain max height to 450px for LCP optimization (reduces file size)
+    const constrainedHeight = Math.min(targetRowHeight, 450);
+    const constrainedWidth = Math.round(constrainedHeight * aspectRatio);
 
     return {
       src: photo.src,
       width: constrainedWidth,
-      height: targetRowHeight,
+      height: constrainedHeight,
       alt: photo.description || photo.alt || '',
       description: photo.description || '',
       blurDataURL: photo.blurDataURL,
