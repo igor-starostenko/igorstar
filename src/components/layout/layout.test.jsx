@@ -3,7 +3,9 @@ import { render, screen } from '@testing-library/react';
 
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }) => <div {...props}>{children}</div>,
+    div: ({ children, initial, animate, exit, transition, ...props }) => (
+      <div {...props}>{children}</div>
+    ),
   },
 }));
 

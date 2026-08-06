@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const GalleryContainer = styled.div`
   margin: ${(props) => props.$spacing}px;
   max-width: ${(props) => props.$containerWidth}px;
+  width: calc(100% - ${(props) => props.$spacing * 2}px);
 
   /* Override react-photo-album CSS to ensure valid position for Next.js Image */
   .react-photo-album--photo {

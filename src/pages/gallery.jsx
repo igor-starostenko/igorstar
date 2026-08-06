@@ -1,7 +1,7 @@
 import PaginatedGallery from 'components/paginatedGallery/paginatedGallery.jsx';
 
 const GalleryPage = (props) => (
-  <PaginatedGallery {...props} pageSize={10} targetRowHeight={300} />
+  <PaginatedGallery {...props} pageSize={8} targetRowHeight={300} />
 );
 
 export const getStaticProps = async () => {

@@ -1,11 +1,13 @@
 import { useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { componentSizes } from 'constants/imageConfig.js';
 import {
   ModalOverlay,
   ModalContent,
+  ModalImageContainer,
+  ModalImage,
   CloseButton,
-  ImageContainer,
-  GalleryImage,
+  Description,
 } from './carousel.css.js';
 
 const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
@@ -82,6 +84,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   const view = views[currentIndex];
   const src = view?.src ?? '';
   const altText = (view?.alt || view?.description) ?? '';
+  const description = view?.description ?? '';
 
   return (
     <ModalOverlay onClick={handleClick}>
@@ -96,9 +99,17 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
         <CloseButton onClick={onClose} aria-label="Close">
           &times;
         </CloseButton>
-        <ImageContainer>
-          <GalleryImage src={src} alt={altText} />
-        </ImageContainer>
+        <ModalImageContainer>
+          <ModalImage
+            fill
+            src={src}
+            alt={altText}
+            sizes={componentSizes.carousel.sizes}
+            quality={30}
+            loading="eager"
+          />
+        </ModalImageContainer>
+        {description && <Description>{description}</Description>}
         {views.length > 1 && (
           <>
             <CloseButton

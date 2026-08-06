@@ -16,6 +16,7 @@ export default defineConfig({
       { find: /^constants/, replacement: path.resolve(__dirname, 'src/constants') },
       { find: /^components/, replacement: path.resolve(__dirname, 'src/components') },
       { find: /^pages/, replacement: path.resolve(__dirname, 'src/pages') },
+      { find: /^hooks/, replacement: path.resolve(__dirname, 'src/hooks') },
       { find: /^src\//, replacement: path.resolve(__dirname, 'src/') + '/' },
       { find: /^contentClient/, replacement: path.resolve(__dirname, 'src/contentClient.js') },
       { find: /^global\.css\.js$/, replacement: path.resolve(__dirname, 'src/global.css.js') },

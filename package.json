@@ -21,7 +21,8 @@
     "test:lighthouse": "vitest run src/test/lighthouse.test.mjs",
     "test:helpers": "vitest run src/helpers/*.test.js",
     "test:components": "vitest run src/components/**/*.test.jsx",
-    "test": "vitest run --exclude src/test/lighthouse.test.mjs"
+    "test": "vitest run --exclude src/test/lighthouse.test.mjs",
+    "lhci:audit": "lhci autorun --collect.numberOfRuns=1"
   },
   "engines": {
     "node": ">=24.0.0"

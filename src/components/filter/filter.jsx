@@ -21,7 +21,7 @@ const Filter = ({ path, title, displayCount, totalCount }) => (
           <Link
             key={href}
             href={href}
-            className={path === href ? 'active' : ''}
+            className={path.replace(/\/$/, '') === href ? 'active' : ''}
           >
             {title}
           </Link>

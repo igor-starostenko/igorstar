@@ -11,8 +11,8 @@ vi.mock('next/link', () => ({
 }));
 
 vi.mock('components/image/baseImage', () => ({
-  default: ({ fill, src, alt }) => (
-    <img data-testid="mock-base-image" src={src} fill={fill} alt={alt} />
+  default: ({ src, alt }) => (
+    <img data-testid="mock-base-image" src={src} alt={alt} />
   ),
 }));
 
