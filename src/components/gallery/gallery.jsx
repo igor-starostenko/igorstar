@@ -17,6 +17,7 @@ const renderNextImage = (
     style={{
       width: `${width}px`,
       height: `${height}px`,
+      aspectRatio: `${width} / ${height}`,
     }}
   >
     <NextImage
@@ -44,12 +45,13 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
     const originalHeight = photo.height || componentSizes.gallery.height;
 
     const aspectRatio = originalWidth / originalHeight;
-    const constrainedWidth = Math.round(targetRowHeight * aspectRatio);
+    const constrainedHeight = targetRowHeight;
+    const constrainedWidth = Math.round(constrainedHeight * aspectRatio);
 
     return {
       src: photo.src,
       width: constrainedWidth,
-      height: targetRowHeight,
+      height: constrainedHeight,
       alt: photo.description || photo.alt || '',
       description: photo.description || '',
       blurDataURL: photo.blurDataURL,
@@ -120,6 +122,7 @@ const Gallery = ({
           spacing={spacing}
           padding={0}
           containerWidth={containerWidth}
+          defaultContainerWidth={containerWidth}
           sizes={{
             size: componentSizes.gallery.size,
             sizes: componentSizes.gallery.sizes,
