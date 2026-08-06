@@ -10,29 +10,35 @@ const filters = [
   { title: 'Tech', href: '/tech' },
 ];
 
-const Filter = ({ path, title, displayCount, totalCount }) => (
-  <ContentDetails>
-    <TitleHeader>
-      <Title as="h1" size="large">
-        {title}
-      </Title>
-      <Categories>
-        {filters.map(({ href, title }) => (
-          <Link
-            key={href}
-            href={href}
-            className={path === href ? 'active' : ''}
-          >
-            {title}
-          </Link>
-        ))}
-      </Categories>
-    </TitleHeader>
-    <Counter>
-      Loaded {displayCount} of {totalCount} posts
-    </Counter>
-  </ContentDetails>
-);
+const Filter = ({ path, title, displayCount, totalCount }) => {
+  // Normalize path by removing trailing slash for comparison with filter hrefs
+  // (trailingSlash: true makes router.asPath include a trailing slash, e.g., "/travel/")
+  const normalizedPath = path.replace(/\/$/, '');
+
+  return (
+    <ContentDetails>
+      <TitleHeader>
+        <Title as="h1" size="large">
+          {title}
+        </Title>
+        <Categories>
+          {filters.map(({ href, title }) => (
+            <Link
+              key={href}
+              href={href}
+              className={normalizedPath === href ? 'active' : ''}
+            >
+              {title}
+            </Link>
+          ))}
+        </Categories>
+      </TitleHeader>
+      <Counter>
+        Loaded {displayCount} of {totalCount} posts
+      </Counter>
+    </ContentDetails>
+  );
+};
 
 Filter.propTypes = {
   path: PropTypes.string.isRequired,
