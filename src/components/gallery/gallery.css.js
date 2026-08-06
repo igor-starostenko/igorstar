@@ -15,9 +15,4 @@ export const GalleryImageWrapper = styled.div`
   position: relative;
   overflow: hidden;
   box-shadow: -1px 3px 6px 1px rgba(0, 0, 0, 0.3);
-
-  img {
-    max-width: 100% !important;
-    height: auto !important;
-  }
 `;
