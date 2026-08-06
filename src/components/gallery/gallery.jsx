@@ -123,6 +123,7 @@ const Gallery = ({
           spacing={spacing}
           padding={0}
           containerWidth={containerWidth}
+          defaultContainerWidth={containerWidth}
           sizes={{
             size: componentSizes.gallery.size,
             sizes: componentSizes.gallery.sizes,
