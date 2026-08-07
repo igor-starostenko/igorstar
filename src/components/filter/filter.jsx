@@ -10,6 +10,8 @@ const filters = [
   { title: 'Tech', href: '/tech' },
 ];
 
+const normalizePath = (p) => p.replace(/\/$/, '') || '/';
+
 const Filter = ({ path, title, displayCount, totalCount }) => (
   <ContentDetails>
     <TitleHeader>
@@ -21,7 +23,9 @@ const Filter = ({ path, title, displayCount, totalCount }) => (
           <Link
             key={href}
             href={href}
-            className={path.replace(/\/$/, '') === href ? 'active' : ''}
+            className={
+              normalizePath(path) === normalizePath(href) ? 'active' : ''
+            }
           >
             {title}
           </Link>
