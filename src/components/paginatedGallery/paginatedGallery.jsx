@@ -6,11 +6,35 @@ import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import useIntersectionObserver from 'hooks/useIntersectionObserver';
+import Pagination from 'components/pagination/pagination.jsx';
 
-const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
-const Pagination = dynamic(
-  () => import('components/pagination/pagination.jsx')
+const GalleryPlaceholder = () => (
+  <div
+    style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '2px',
+      margin: '8px',
+      width: 'calc(100% - 16px)',
+    }}
+  >
+    {Array.from({ length: 12 }).map((_, i) => (
+      <div
+        key={i}
+        style={{
+          flex: '1 1 calc(33.333% - 2px)',
+          height: '260px',
+          backgroundColor: '#e0e0e0',
+          borderRadius: '4px',
+        }}
+      />
+    ))}
+  </div>
 );
+
+const Gallery = dynamic(() => import('components/gallery/gallery.jsx'), {
+  loading: () => <GalleryPlaceholder />,
+});
 
 const PaginatedGallery = ({
   title,
