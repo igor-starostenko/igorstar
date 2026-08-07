@@ -62,7 +62,7 @@ const PaginatedGallery = ({
 
   useIntersectionObserver(lastItemRef, handleIntersection, {
     threshold: 0.1,
-    rootMargin: '0px 0px 1800px 0px',
+    rootMargin: '200px 0px 200px 0px',
   });
 
   const pageNum = Math.ceil(displayCount / pageSize) || 1;

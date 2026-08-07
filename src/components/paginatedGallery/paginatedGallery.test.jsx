@@ -131,6 +131,26 @@ test('renders gallery placeholder while loading', () => {
       targetRowHeight={260}
     />
   );
-  // Gallery renders as mock-dynamic (dynamic import mock)
+  // Gallery is loaded via next/dynamic with a loading fallback
   expect(screen.getByTestId('mock-dynamic')).toBeInTheDocument();
+});
+
+test('uses correct rootMargin for infinite scroll', () => {
+  const images = Array.from({ length: 24 }, (_, i) => makeImage(i));
+  render(
+    <PaginatedGallery
+      title="Photo Feed"
+      total={24}
+      images={images}
+      pageSize={12}
+      targetRowHeight={260}
+    />
+  );
+  // The observer should be created with a 200px rootMargin (not 1800px)
+  // to ensure the sentinel exits and re-enters the intersection area
+  // after loading more items
+  expect(global.IntersectionObserver).toHaveBeenCalledWith(
+    expect.any(Function),
+    expect.objectContaining({ rootMargin: '200px 0px 200px 0px' })
+  );
 });
