@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
@@ -83,8 +83,20 @@ const Gallery = ({
   targetRowHeight = 150,
   spacing = 2,
   containerWidth = componentSizes.gallery.width,
+  onGetNextPage,
+  pageKey,
 }) => {
   const [currentPhoto, setCurrentPhoto] = useState(null);
+  const prevPageKeyRef = useRef(pageKey);
+
+  // When the page changes (e.g. carousel triggered next-page navigation),
+  // reset the current photo to the first image of the new page.
+  useLayoutEffect(() => {
+    if (pageKey !== prevPageKeyRef.current && currentPhoto !== null) {
+      setCurrentPhoto(0);
+    }
+    prevPageKeyRef.current = pageKey;
+  }, [pageKey, currentPhoto]);
 
   const sortedPhotos = useMemo(
     () => orderArray(photos, orderBy, order),
@@ -136,6 +148,7 @@ const Gallery = ({
           currentIndex={currentPhoto}
           onClose={handleCloseModal}
           onIndexChange={handleIndexChange}
+          onGetNextPage={onGetNextPage}
         />
       )}
     </>
@@ -159,6 +172,8 @@ Gallery.propTypes = {
   targetRowHeight: PropTypes.number,
   spacing: PropTypes.number,
   containerWidth: PropTypes.number,
+  onGetNextPage: PropTypes.func,
+  pageKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default Gallery;

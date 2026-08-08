@@ -10,7 +10,7 @@ import {
   Description,
 } from './carousel.css.js';
 
-const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
+const CarouselModal = ({ onClose, currentIndex, views, onIndexChange, onGetNextPage }) => {
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
@@ -20,9 +20,12 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   }, [currentIndex, views.length, onIndexChange]);
 
   const handleNext = useCallback(() => {
+    if (currentIndex === views.length - 1 && onGetNextPage) {
+      if (onGetNextPage()) return;
+    }
     const newIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
     onIndexChange(newIndex);
-  }, [currentIndex, views.length, onIndexChange]);
+  }, [currentIndex, views.length, onIndexChange, onGetNextPage]);
 
   const handleTouchStart = useCallback((e) => {
     touchStartX.current = e.touches[0].clientX;
@@ -144,6 +147,7 @@ CarouselModal.propTypes = {
     }).isRequired
   ).isRequired,
   onIndexChange: PropTypes.func.isRequired,
+  onGetNextPage: PropTypes.func,
 };
 
 export default CarouselModal;

@@ -124,3 +124,57 @@ test('calls onClose on Escape keydown', () => {
   fireEvent.keyDown(document, { key: 'Escape' });
   expect(onClose).toHaveBeenCalled();
 });
+
+test('calls onGetNextPage and does NOT loop when at last image and next page available', () => {
+  const onClose = vi.fn();
+  const onIndexChange = vi.fn();
+  const onGetNextPage = vi.fn(() => true);
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={1}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+      onGetNextPage={onGetNextPage}
+    />
+  );
+
+  fireEvent.click(screen.getByRole('button', { name: /next/i }));
+  expect(onGetNextPage).toHaveBeenCalled();
+  expect(onIndexChange).not.toHaveBeenCalled();
+});
+
+test('loops back to first image when at last image and no next page available', () => {
+  const onClose = vi.fn();
+  const onIndexChange = vi.fn();
+  const onGetNextPage = vi.fn(() => false);
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={1}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+      onGetNextPage={onGetNextPage}
+    />
+  );
+
+  fireEvent.click(screen.getByRole('button', { name: /next/i }));
+  expect(onGetNextPage).toHaveBeenCalled();
+  expect(onIndexChange).toHaveBeenCalledWith(0);
+});
+
+test('loops back to first image when at last image and onGetNextPage is not provided', () => {
+  const onClose = vi.fn();
+  const onIndexChange = vi.fn();
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={1}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+    />
+  );
+
+  fireEvent.click(screen.getByRole('button', { name: /next/i }));
+  expect(onIndexChange).toHaveBeenCalledWith(0);
+});

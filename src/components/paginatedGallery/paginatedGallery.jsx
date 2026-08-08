@@ -75,12 +75,35 @@ const PaginatedGallery = ({
   const endIndex = Math.min(startIndex + displayCount, images.length);
   const displayImages = images.slice(startIndex, endIndex);
 
+  // Callback to load the next page when carousel reaches end.
+  // Returns true if a next page was loaded, false if there are no more pages.
+  const handleGetNextPage = useCallback(() => {
+    if (page < totalPages) {
+      router.push(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, page: page + 1 },
+        },
+        undefined,
+        { shallow: true }
+      );
+      setDisplayCount(pageSize); // Reset displayCount for the new page
+      return true;
+    }
+    return false;
+  }, [page, totalPages, router, pageSize]);
+
   return (
     <Layout>
       <Head pageTitle={title} />
       <Box>
         {displayImages.length > 0 && (
-          <Gallery photos={displayImages} targetRowHeight={targetRowHeight} />
+          <Gallery
+            photos={displayImages}
+            targetRowHeight={targetRowHeight}
+            onGetNextPage={handleGetNextPage}
+            pageKey={page}
+          />
         )}
         {hasMoreItems && pageNum < totalPages ? (
           <Pagination pageNum={pageNum} totalPages={totalPages} />
