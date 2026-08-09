@@ -54,6 +54,7 @@ const mapToPhotoAlbumFormat = (photos, targetRowHeight) =>
       height: constrainedHeight,
       alt: photo.description || photo.alt || '',
       description: photo.description || '',
+      date: photo.date,
       blurDataURL: photo.blurDataURL,
     };
   });
@@ -165,6 +166,7 @@ Gallery.propTypes = {
       blurDataURL: PropTypes.string,
       description: PropTypes.string,
       alt: PropTypes.string,
+      date: PropTypes.string,
     })
   ),
   orderBy: PropTypes.string,

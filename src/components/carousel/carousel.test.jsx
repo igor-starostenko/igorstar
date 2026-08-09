@@ -9,8 +9,22 @@ vi.mock('next/image', () => ({
 import CarouselModal from './carousel.jsx';
 
 const mockViews = [
-  { id: '0', src: '/a.jpg', alt: 'A', description: 'A description', width: 100, height: 100 },
-  { id: '1', src: '/b.jpg', alt: 'B', description: 'B description', width: 200, height: 200 },
+  {
+    id: '0',
+    src: '/a.jpg',
+    alt: 'A',
+    description: 'A description',
+    width: 100,
+    height: 100,
+  },
+  {
+    id: '1',
+    src: '/b.jpg',
+    alt: 'B',
+    description: 'B description',
+    width: 200,
+    height: 200,
+  },
 ];
 
 test('renders modal overlay with close button', () => {
@@ -45,10 +59,37 @@ test('renders description when available', () => {
 test('does not render description when not available', () => {
   const onClose = vi.fn();
   render(
-    <CarouselModal onClose={onClose} currentIndex={0} views={[{ ...mockViews[0], description: '' }]} />
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={0}
+      views={[{ ...mockViews[0], description: '' }]}
+    />
   );
 
   expect(screen.queryByText('A description')).not.toBeInTheDocument();
+});
+
+test('renders date when available', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={0}
+      views={[{ ...mockViews[0], date: '2024-01-15T10:00:00Z' }]}
+    />
+  );
+
+  expect(screen.getByText('Jan 15, 2024')).toBeInTheDocument();
+});
+
+test('does not render date when not available', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={[mockViews[0]]} />
+  );
+
+  // Should not have any element with the formatted date text
+  expect(screen.queryByText(/Jan.*2024/)).not.toBeInTheDocument();
 });
 
 test('calls onClose when close button is clicked', () => {

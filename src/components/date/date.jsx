@@ -1,14 +1,6 @@
 import PropTypes from 'prop-types';
 import { DateBase, DateMain, DateMobile } from './date.css';
-
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-};
+import { formatDate } from 'helpers/date';
 
 const DateText = ({ date, isMobile, ...rest }) => {
   const domRest = rest;

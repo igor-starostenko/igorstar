@@ -27,7 +27,11 @@ afterEach(() => {
 const TestComponent = ({ onIntersect, options }) => {
   const ref = useRef(null);
   useIntersectionObserver(ref, onIntersect, options);
-  return <div ref={ref} data-testid="target">Target</div>;
+  return (
+    <div ref={ref} data-testid="target">
+      Target
+    </div>
+  );
 };
 
 test('calls onIntersect when element becomes visible', () => {
@@ -90,7 +94,9 @@ test('does not recreate observer when onIntersect callback identity changes', ()
   // Re-render with a new callback identity — observer should NOT be recreated
   rerender(<TestComponent onIntersect={callback2} />);
 
-  expect(global.IntersectionObserver.mock.calls.length).toBe(initialObserverCount);
+  expect(global.IntersectionObserver.mock.calls.length).toBe(
+    initialObserverCount
+  );
 
   // The latest callback should still be invoked
   const entry = { isIntersecting: true, target: screen.getByTestId('target') };
