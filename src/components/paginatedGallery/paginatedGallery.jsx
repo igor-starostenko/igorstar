@@ -75,23 +75,18 @@ const PaginatedGallery = ({
   const endIndex = Math.min(startIndex + displayCount, images.length);
   const displayImages = images.slice(startIndex, endIndex);
 
-  // Callback to load the next page when carousel reaches end.
-  // Returns true if a next page was loaded, false if there are no more pages.
+  // Callback to load more photos when carousel reaches end.
+  // Appends the next batch of photos (like infinite scroll) without
+  // changing the route, so the user stays on the same page.
+  // Returns true if more photos were loaded, false if at the end.
   const handleGetNextPage = useCallback(() => {
-    if (page < totalPages) {
-      router.push(
-        {
-          pathname: router.pathname,
-          query: { ...router.query, page: page + 1 },
-        },
-        undefined,
-        { shallow: true }
-      );
-      setDisplayCount(pageSize); // Reset displayCount for the new page
+    if (displayCount < total) {
+      const newDisplayCount = Math.min(displayCount + pageSize, total);
+      setDisplayCount(newDisplayCount);
       return true;
     }
     return false;
-  }, [page, totalPages, router, pageSize]);
+  }, [displayCount, total, pageSize]);
 
   return (
     <Layout>
