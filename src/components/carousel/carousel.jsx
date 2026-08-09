@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { componentSizes } from 'constants/imageConfig.js';
+import { formatDate } from 'helpers/date';
 import {
   ModalOverlay,
   ModalContent,
@@ -10,7 +11,13 @@ import {
   Description,
 } from './carousel.css.js';
 
-const CarouselModal = ({ onClose, currentIndex, views, onIndexChange, onGetNextPage }) => {
+const CarouselModal = ({
+  onClose,
+  currentIndex,
+  views,
+  onIndexChange,
+  onGetNextPage,
+}) => {
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
@@ -88,6 +95,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange, onGetNextP
   const src = view?.src ?? '';
   const altText = (view?.alt || view?.description) ?? '';
   const description = view?.description ?? '';
+  const date = view?.date ?? '';
 
   return (
     <ModalOverlay onClick={handleClick}>
@@ -112,7 +120,23 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange, onGetNextP
             loading="eager"
           />
         </ModalImageContainer>
-        {description && <Description>{description}</Description>}
+        {(date || description) && (
+          <Description>
+            {date && (
+              <span
+                style={{
+                  display: 'block',
+                  fontSize: '12px',
+                  opacity: 0.8,
+                  marginBottom: '4px',
+                }}
+              >
+                {formatDate(date)}
+              </span>
+            )}
+            {description && <span>{description}</span>}
+          </Description>
+        )}
         {views.length > 1 && (
           <>
             <CloseButton
@@ -144,6 +168,7 @@ CarouselModal.propTypes = {
       src: PropTypes.string.isRequired,
       alt: PropTypes.string,
       description: PropTypes.string,
+      date: PropTypes.string,
     }).isRequired
   ).isRequired,
   onIndexChange: PropTypes.func.isRequired,
