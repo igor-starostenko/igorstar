@@ -27,7 +27,11 @@ afterEach(() => {
 const TestComponent = ({ onIntersect, options }) => {
   const ref = useRef(null);
   useIntersectionObserver(ref, onIntersect, options);
-  return <div ref={ref} data-testid="target">Target</div>;
+  return (
+    <div ref={ref} data-testid="target">
+      Target
+    </div>
+  );
 };
 
 test('calls onIntersect when element becomes visible', () => {
@@ -77,4 +81,29 @@ test('uses default threshold and rootMargin when options not provided', () => {
     expect.any(Function),
     { threshold: 0.1, rootMargin: '200px 0px 200px 0px' }
   );
+});
+
+test('does not recreate observer when onIntersect callback identity changes', () => {
+  const callback1 = vi.fn();
+  const callback2 = vi.fn();
+
+  const { rerender } = render(<TestComponent onIntersect={callback1} />);
+  const initialObserverCount = global.IntersectionObserver.mock.calls.length;
+  expect(initialObserverCount).toBe(1);
+
+  // Re-render with a new callback identity — observer should NOT be recreated
+  rerender(<TestComponent onIntersect={callback2} />);
+
+  expect(global.IntersectionObserver.mock.calls.length).toBe(
+    initialObserverCount
+  );
+
+  // The latest callback should still be invoked
+  const entry = { isIntersecting: true, target: screen.getByTestId('target') };
+  act(() => {
+    observers[0].trigger([entry]);
+  });
+
+  expect(callback1).not.toHaveBeenCalled();
+  expect(callback2).toHaveBeenCalledWith(entry);
 });
