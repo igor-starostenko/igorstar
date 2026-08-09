@@ -8,7 +8,7 @@ import Head from 'components/head/head.jsx';
 import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import Pagination from 'components/pagination/pagination.jsx';
 
-const GalleryPlaceholder = () => (
+const GalleryPlaceholder = ({ targetRowHeight = 260 }) => (
   <div
     style={{
       display: 'flex',
@@ -23,7 +23,7 @@ const GalleryPlaceholder = () => (
         key={i}
         style={{
           flex: '1 1 calc(33.333% - 2px)',
-          height: '260px',
+          height: `${targetRowHeight}px`,
           backgroundColor: '#e0e0e0',
           borderRadius: '4px',
         }}
@@ -32,8 +32,13 @@ const GalleryPlaceholder = () => (
   </div>
 );
 
+// Module-level dynamic Gallery. The loading placeholder uses a ref to
+// read targetRowHeight so it stays in sync with the component prop
+// without recreating the dynamic component during render.
+let placeholderHeightRef = 260;
+
 const Gallery = dynamic(() => import('components/gallery/gallery.jsx'), {
-  loading: () => <GalleryPlaceholder />,
+  loading: () => <GalleryPlaceholder targetRowHeight={placeholderHeightRef} />,
 });
 
 const PaginatedGallery = ({
@@ -43,6 +48,12 @@ const PaginatedGallery = ({
   pageSize,
   targetRowHeight,
 }) => {
+  // Update the module-level ref so the loading placeholder uses the correct height.
+  // This assignment is safe because it runs before the Gallery renders,
+  // and the dynamic loading fallback reads it synchronously.
+  // eslint-disable-next-line react-hooks/globals
+  placeholderHeightRef = targetRowHeight;
+
   const router = useRouter();
   const page = parseInt(router.query.page) || 1;
   const totalPages = Math.ceil((images?.length || 0) / pageSize);

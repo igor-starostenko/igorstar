@@ -23,7 +23,7 @@ const useIntersectionObserver = (elementRef, onIntersect, options = {}) => {
   const latestCallback = useRef(onIntersect);
   useEffect(() => {
     latestCallback.current = onIntersect;
-  });
+  }, [onIntersect]);
 
   useEffect(() => {
     if (!window.IntersectionObserver) return;

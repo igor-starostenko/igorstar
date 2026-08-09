@@ -212,7 +212,7 @@ test('renders with no pagination when all posts shown', () => {
 
 test('shows pagination when not all posts are displayed (home page, no page query)', () => {
   // Simulates the home page scenario: no `page` query param, 19 total posts.
-  // With the old buggy condition `posts.total - (pageNum || 1) * pageSzie`,
+  // With the old buggy condition `posts.total - (pageNum || 1) * pageSize`,
   // the sentinel disappeared at displayCount=15 (15 < 19-5=14 was false),
   // causing posts 16-19 to never load via infinite scroll.
   mockRouter.query = {};
@@ -245,11 +245,11 @@ test('shows pagination when not all posts are displayed (home page, no page quer
 
   render(<Category {...mockProps} />);
 
-  // Initial displayCount = pageSzie = 5, so 5 articles shown
+  // Initial displayCount = pageSize = 5, so 5 articles shown
   expect(screen.getAllByTestId('mock-article').length).toBe(5);
 
   // The Pagination component is loaded via next/dynamic, so it renders as
-  // mock-dynamic. When displayPosts.length < posts.total, the Pagination
+  // mock-dynamic. When displayCount < posts.total, the Pagination
   // is rendered; when all posts are shown, it is not.
   expect(screen.getByTestId('mock-dynamic')).toBeInTheDocument();
 

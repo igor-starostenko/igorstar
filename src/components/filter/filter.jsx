@@ -10,7 +10,11 @@ const filters = [
   { title: 'Tech', href: '/tech' },
 ];
 
-const normalizePath = (p) => p.replace(/\/$/, '') || '/';
+const normalizePath = (p) => {
+  // Strip query string and hash, then remove trailing slash
+  const pathOnly = p.split('?')[0].split('#')[0];
+  return pathOnly.replace(/\/$/, '') || '/';
+};
 
 const Filter = ({ path, title, displayCount, totalCount }) => (
   <ContentDetails>

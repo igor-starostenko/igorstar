@@ -67,9 +67,9 @@ const Category = ({ title, posts, pageSize = 5 }) => {
             />
           ))}
           {/* Sentinel element for Intersection Observer */}
-          {displayPosts.length < posts.total && <div ref={lastItemRef} />}
+          {displayCount < posts.total && <div ref={lastItemRef} />}
         </div>
-        {displayPosts.length < posts.total ? (
+        {displayCount < posts.total ? (
           <Pagination pageNum={pageNum || 1} totalPages={totalPages} />
         ) : (
           ''

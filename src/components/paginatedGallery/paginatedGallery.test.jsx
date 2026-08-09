@@ -2,9 +2,11 @@ import { test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
 let observers;
+let originalIntersectionObserver;
 
 beforeEach(() => {
   observers = [];
+  originalIntersectionObserver = global.IntersectionObserver;
   global.IntersectionObserver = vi.fn(function IntersectionObserver(callback) {
     const observer = {
       observe: vi.fn(),
@@ -18,6 +20,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  global.IntersectionObserver = originalIntersectionObserver;
   observers = null;
 });
 
@@ -29,9 +32,12 @@ vi.mock('next/router', () => ({
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: () => {
+  default: (_importFunc, options = {}) => {
     const MockDynamic = ({ children }) => (
-      <div data-testid="mock-dynamic">{children}</div>
+      <div data-testid="mock-dynamic">
+        {options.loading ? options.loading() : null}
+        {children}
+      </div>
     );
     return MockDynamic;
   },
@@ -131,8 +137,18 @@ test('renders gallery placeholder while loading', () => {
       targetRowHeight={260}
     />
   );
-  // Gallery is loaded via next/dynamic with a loading fallback
+  // Gallery is loaded via next/dynamic with a loading fallback.
+  // The mock now renders options.loading(), so the placeholder tiles are visible.
   expect(screen.getByTestId('mock-dynamic')).toBeInTheDocument();
+  // Assert the placeholder renders 12 tiles with the correct height.
+  // The placeholder wrapper renders 12 tile divs, each sized to targetRowHeight.
+  const placeholderTiles = document.querySelectorAll(
+    '[data-testid="mock-dynamic"] div[style*="height"]'
+  );
+  expect(placeholderTiles.length).toBe(12);
+  placeholderTiles.forEach((tile) => {
+    expect(tile.style.height).toBe('260px');
+  });
 });
 
 test('uses correct rootMargin for infinite scroll', () => {
