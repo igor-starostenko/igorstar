@@ -7,38 +7,32 @@ import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import useIntersectionObserver from 'hooks/useIntersectionObserver';
 import Pagination from 'components/pagination/pagination.jsx';
+import {
+  PlaceholderContainer,
+  PlaceholderTile,
+} from './paginatedGallery.css.js';
 
 const GalleryPlaceholder = ({ targetRowHeight = 260 }) => (
-  <div
-    style={{
-      display: 'flex',
-      flexWrap: 'wrap',
-      gap: '2px',
-      margin: '8px',
-      width: 'calc(100% - 16px)',
-    }}
-  >
+  <PlaceholderContainer>
     {Array.from({ length: 12 }).map((_, i) => (
-      <div
+      <PlaceholderTile
         key={i}
-        style={{
-          flex: '1 1 calc(33.333% - 2px)',
-          height: `${targetRowHeight}px`,
-          backgroundColor: '#e0e0e0',
-          borderRadius: '4px',
-        }}
+        $targetRowHeight={targetRowHeight}
+        data-testid="placeholder-tile"
       />
     ))}
-  </div>
+  </PlaceholderContainer>
 );
 
-// Module-level dynamic Gallery. The loading placeholder uses a ref to
-// read targetRowHeight so it stays in sync with the component prop
+// Module-level dynamic Gallery. The loading placeholder reads from a ref
+// object so it stays in sync with the component's targetRowHeight prop
 // without recreating the dynamic component during render.
-let placeholderHeightRef = 260;
+const placeholderHeightRef = { current: 260 };
 
 const Gallery = dynamic(() => import('components/gallery/gallery.jsx'), {
-  loading: () => <GalleryPlaceholder targetRowHeight={placeholderHeightRef} />,
+  loading: () => (
+    <GalleryPlaceholder targetRowHeight={placeholderHeightRef.current} />
+  ),
 });
 
 const PaginatedGallery = ({
@@ -49,10 +43,8 @@ const PaginatedGallery = ({
   targetRowHeight,
 }) => {
   // Update the module-level ref so the loading placeholder uses the correct height.
-  // This assignment is safe because it runs before the Gallery renders,
-  // and the dynamic loading fallback reads it synchronously.
-  // eslint-disable-next-line react-hooks/globals
-  placeholderHeightRef = targetRowHeight;
+  // eslint-disable-next-line react-hooks/immutability
+  placeholderHeightRef.current = targetRowHeight;
 
   const router = useRouter();
   const page = parseInt(router.query.page) || 1;

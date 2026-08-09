@@ -9,6 +9,7 @@ import {
   ModalImage,
   CloseButton,
   Description,
+  DescriptionDate,
 } from './carousel.css.js';
 
 const CarouselModal = ({
@@ -122,18 +123,7 @@ const CarouselModal = ({
         </ModalImageContainer>
         {(date || description) && (
           <Description>
-            {date && (
-              <span
-                style={{
-                  display: 'block',
-                  fontSize: '12px',
-                  opacity: 0.8,
-                  marginBottom: '4px',
-                }}
-              >
-                {formatDate(date)}
-              </span>
-            )}
+            {date && <DescriptionDate>{formatDate(date)}</DescriptionDate>}
             {description && <span>{description}</span>}
           </Description>
         )}

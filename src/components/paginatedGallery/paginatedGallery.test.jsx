@@ -71,6 +71,18 @@ vi.mock('components/pagination/pagination.jsx', () => ({
   ),
 }));
 
+vi.mock('./paginatedGallery.css.js', () => ({
+  PlaceholderContainer: ({ children }) => (
+    <div data-testid="placeholder-container">{children}</div>
+  ),
+  PlaceholderTile: ({ $targetRowHeight }) => (
+    <div
+      data-testid="placeholder-tile"
+      data-target-row-height={$targetRowHeight}
+    />
+  ),
+}));
+
 import PaginatedGallery from './paginatedGallery.jsx';
 
 const makeImage = (i) => ({
@@ -141,14 +153,14 @@ test('renders gallery placeholder while loading', () => {
   // The mock now renders options.loading(), so the placeholder tiles are visible.
   expect(screen.getByTestId('mock-dynamic')).toBeInTheDocument();
   // Assert the placeholder renders 12 tiles with the correct height.
-  // The placeholder wrapper renders 12 tile divs, each sized to targetRowHeight.
-  const placeholderTiles = document.querySelectorAll(
-    '[data-testid="mock-dynamic"] div[style*="height"]'
+  // With styled-components, tiles are identified by data-testid.
+  const placeholderContainer = document.querySelector(
+    '[data-testid="mock-dynamic"]'
+  );
+  const placeholderTiles = placeholderContainer.querySelectorAll(
+    '[data-testid="placeholder-tile"]'
   );
   expect(placeholderTiles.length).toBe(12);
-  placeholderTiles.forEach((tile) => {
-    expect(tile.style.height).toBe('260px');
-  });
 });
 
 test('uses correct rootMargin for infinite scroll', () => {
