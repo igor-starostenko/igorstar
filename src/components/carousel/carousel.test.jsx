@@ -169,15 +169,15 @@ test('does not render blur placeholder when blurDataURL is not available', () =>
   expect(mainImg).not.toHaveAttribute('placeholder', 'blur');
 });
 
-test('preloads adjacent images for faster transitions', () => {
+test('preloads adjacent images with loader-transformed URLs for faster transitions', () => {
   const onClose = vi.fn();
   const mockImage = vi.fn();
   global.Image = mockImage;
 
   const views = [
-    { id: '0', src: '/a.jpg', alt: 'A', description: '', width: 100, height: 100 },
-    { id: '1', src: '/b.jpg', alt: 'B', description: '', width: 100, height: 100 },
-    { id: '2', src: '/c.jpg', alt: 'C', description: '', width: 100, height: 100 },
+    { id: '0', src: 'https://images.ctfassets.net/a.jpg', alt: 'A', description: '', width: 100, height: 100 },
+    { id: '1', src: 'https://images.ctfassets.net/b.jpg', alt: 'B', description: '', width: 100, height: 100 },
+    { id: '2', src: 'https://images.ctfassets.net/c.jpg', alt: 'C', description: '', width: 100, height: 100 },
   ];
 
   render(
@@ -187,8 +187,13 @@ test('preloads adjacent images for faster transitions', () => {
   // Should preload previous (index 0) and next (index 2) images
   expect(mockImage).toHaveBeenCalledTimes(2);
   const preloadedSrcs = mockImage.mock.instances.map((img) => img.src);
-  expect(preloadedSrcs).toContain('/a.jpg');
-  expect(preloadedSrcs).toContain('/c.jpg');
+  // The preloaded URL should include loader params (?w=1280&q=30&fm=webp)
+  expect(preloadedSrcs[0]).toMatch(/w=1280/);
+  expect(preloadedSrcs[0]).toMatch(/q=30/);
+  expect(preloadedSrcs[0]).toMatch(/fm=webp/);
+  expect(preloadedSrcs[1]).toMatch(/w=1280/);
+  expect(preloadedSrcs[1]).toMatch(/q=30/);
+  expect(preloadedSrcs[1]).toMatch(/fm=webp/);
 });
 
 test('positions navigation arrows at bottom aligned with description', () => {

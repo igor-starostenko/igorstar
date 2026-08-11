@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { componentSizes } from 'constants/imageConfig.js';
+import { componentSizes, imageQuality } from 'constants/imageConfig.js';
+import contentfulLoader from 'helpers/contentfulLoader.js';
 import {
   ModalOverlay,
   ModalContent,
@@ -96,8 +97,15 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
     const prevIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
     const nextIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
     [prevIndex, nextIndex].forEach((i) => {
-      const preloadSrc = views[i]?.src;
-      if (preloadSrc) {
+      const rawSrc = views[i]?.src;
+      if (rawSrc) {
+        // Use the same loader transformation as ModalImage so the preloaded
+        // URL matches exactly what Next.js Image will request.
+        const preloadSrc = contentfulLoader({
+          src: rawSrc,
+          width: 1280,
+          quality: imageQuality,
+        });
         const img = new Image();
         img.src = preloadSrc;
       }
