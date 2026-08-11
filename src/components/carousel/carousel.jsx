@@ -1,7 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { componentSizes, imageQuality } from 'constants/imageConfig.js';
-import contentfulLoader from 'helpers/contentfulLoader.js';
+import { componentSizes } from 'constants/imageConfig.js';
 import {
   ModalOverlay,
   ModalContent,
@@ -10,6 +9,7 @@ import {
   BlurPlaceholder,
   CloseButton,
   Description,
+  PreloadedImage,
   PrevButton,
   NextButton,
 } from './carousel.css.js';
@@ -91,30 +91,14 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   const description = view?.description ?? '';
   const blurDataURL = view?.blurDataURL ?? null;
 
-  // Preload previous and next images for faster transitions
-  useEffect(() => {
-    if (!views.length) return;
-    const prevIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
-    const nextIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
-    [prevIndex, nextIndex].forEach((i) => {
-      const view = views[i];
-      const rawSrc = view?.src;
-      if (rawSrc) {
-        // Use the same loader transformation as ModalImage so the preloaded
-        // URL matches exactly what Next.js Image will request. We use the
-        // image's natural width to ensure we preload at the largest size
-        // the browser would request, avoiding cache misses when the device
-        // pixel ratio scales up the requested width.
-        const preloadSrc = contentfulLoader({
-          src: rawSrc,
-          width: view?.width || 1280,
-          quality: imageQuality,
-        });
-        const img = new Image();
-        img.src = preloadSrc;
-      }
-    });
-  }, [currentIndex, views]);
+  // Preload previous and next images by rendering hidden BaseImage components.
+  // This ensures Next.js Image calculates the exact URL (with correct width
+  // based on viewport and device pixel ratio) that ModalImage will later
+  // request, so the browser cache serves it instantly.
+  const prevIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
+  const nextIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
+  const prevView = views[prevIndex];
+  const nextView = views[nextIndex];
 
   return (
     <ModalOverlay onClick={handleClick}>
@@ -146,6 +130,22 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             quality={30}
             loading="eager"
           />
+          {prevView?.src && (
+            <PreloadedImage
+              src={prevView.src}
+              alt={prevView.alt || ''}
+              sizes={componentSizes.carousel.sizes}
+              quality={30}
+            />
+          )}
+          {nextView?.src && (
+            <PreloadedImage
+              src={nextView.src}
+              alt={nextView.alt || ''}
+              sizes={componentSizes.carousel.sizes}
+              quality={30}
+            />
+          )}
         </ModalImageContainer>
         {description && (
           <Description $hasArrows={views.length > 1}>{description}</Description>

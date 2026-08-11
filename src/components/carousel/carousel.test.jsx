@@ -169,31 +169,26 @@ test('does not render blur placeholder when blurDataURL is not available', () =>
   expect(mainImg).not.toHaveAttribute('placeholder', 'blur');
 });
 
-test('preloads adjacent images with loader-transformed URLs for faster transitions', () => {
+test('renders hidden preloaded images for adjacent views', () => {
   const onClose = vi.fn();
-  const mockImage = vi.fn();
-  global.Image = mockImage;
 
   const views = [
-    { id: '0', src: 'https://images.ctfassets.net/a.jpg', alt: 'A', description: '', width: 3840, height: 2160 },
-    { id: '1', src: 'https://images.ctfassets.net/b.jpg', alt: 'B', description: '', width: 3840, height: 2160 },
-    { id: '2', src: 'https://images.ctfassets.net/c.jpg', alt: 'C', description: '', width: 3840, height: 2160 },
+    { id: '0', src: 'https://images.ctfassets.net/a.jpg', alt: 'A', description: '', width: 100, height: 100 },
+    { id: '1', src: 'https://images.ctfassets.net/b.jpg', alt: 'B', description: '', width: 100, height: 100 },
+    { id: '2', src: 'https://images.ctfassets.net/c.jpg', alt: 'C', description: '', width: 100, height: 100 },
   ];
 
   render(
     <CarouselModal onClose={onClose} currentIndex={1} views={views} />
   );
 
-  // Should preload previous (index 0) and next (index 2) images
-  expect(mockImage).toHaveBeenCalledTimes(2);
-  const preloadedSrcs = mockImage.mock.instances.map((img) => img.src);
-  // The preloaded URL should use the view's natural width and include loader params
-  expect(preloadedSrcs[0]).toMatch(/w=3840/);
-  expect(preloadedSrcs[0]).toMatch(/q=30/);
-  expect(preloadedSrcs[0]).toMatch(/fm=webp/);
-  expect(preloadedSrcs[1]).toMatch(/w=3840/);
-  expect(preloadedSrcs[1]).toMatch(/q=30/);
-  expect(preloadedSrcs[1]).toMatch(/fm=webp/);
+  // The previous (index 0) and next (index 2) images should be rendered
+  // as hidden PreloadedImage components so Next.js Image can calculate
+  // the exact URL to preload (matching what ModalImage will request).
+  const aImgs = screen.queryAllByAltText('A');
+  const cImgs = screen.queryAllByAltText('C');
+  expect(aImgs.length).toBeGreaterThanOrEqual(1);
+  expect(cImgs.length).toBeGreaterThanOrEqual(1);
 });
 
 test('positions navigation arrows at bottom aligned with description', () => {

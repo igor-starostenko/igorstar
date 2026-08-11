@@ -91,3 +91,13 @@ export const NextButton = styled(CloseButton)`
   bottom: 20px;
   transform: none;
 `;
+
+export const PreloadedImage = styled(BaseImage)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+`;
