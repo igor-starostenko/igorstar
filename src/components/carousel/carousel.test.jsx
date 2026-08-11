@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 // Mock next/image before importing components that use it
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ..._rest }) => <img src={src} alt={alt || ''} />,
+  default: ({ src, alt, ...rest }) => <img src={src} alt={alt || ''} {...rest} />,
 }));
 
 import CarouselModal from './carousel.jsx';
@@ -11,6 +11,11 @@ import CarouselModal from './carousel.jsx';
 const mockViews = [
   { id: '0', src: '/a.jpg', alt: 'A', description: 'A description', width: 100, height: 100 },
   { id: '1', src: '/b.jpg', alt: 'B', description: 'B description', width: 200, height: 200 },
+];
+
+const mockViewsWithBlur = [
+  { id: '0', src: '/a.jpg', alt: 'A', description: 'A description', width: 100, height: 100, blurDataURL: 'data:image/jpeg;base64,abc123' },
+  { id: '1', src: '/b.jpg', alt: 'B', description: 'B description', width: 200, height: 200, blurDataURL: 'data:image/jpeg;base64,def456' },
 ];
 
 test('renders modal overlay with close button', () => {
@@ -123,4 +128,25 @@ test('calls onClose on Escape keydown', () => {
   // Keyboard handler is attached to document
   fireEvent.keyDown(document, { key: 'Escape' });
   expect(onClose).toHaveBeenCalled();
+});
+
+test('passes blurDataURL to image when available', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViewsWithBlur} />
+  );
+
+  const img = screen.getByAltText('A');
+  expect(img).toHaveAttribute('placeholder', 'blur');
+  expect(img).toHaveAttribute('blurDataURL', 'data:image/jpeg;base64,abc123');
+});
+
+test('does not pass placeholder when blurDataURL is not available', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
+  );
+
+  const img = screen.getByAltText('A');
+  expect(img).not.toHaveAttribute('placeholder', 'blur');
 });

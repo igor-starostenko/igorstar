@@ -85,6 +85,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   const src = view?.src ?? '';
   const altText = (view?.alt || view?.description) ?? '';
   const description = view?.description ?? '';
+  const blurDataURL = view?.blurDataURL ?? null;
 
   return (
     <ModalOverlay onClick={handleClick}>
@@ -99,7 +100,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
         <CloseButton onClick={onClose} aria-label="Close">
           &times;
         </CloseButton>
-        <ModalImageContainer>
+        <ModalImageContainer $blurDataURL={blurDataURL}>
           <ModalImage
             fill
             src={src}
@@ -107,6 +108,8 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             sizes={componentSizes.carousel.sizes}
             quality={30}
             loading="eager"
+            placeholder={blurDataURL ? 'blur' : undefined}
+            blurDataURL={blurDataURL || undefined}
           />
         </ModalImageContainer>
         {description && <Description>{description}</Description>}
@@ -141,6 +144,7 @@ CarouselModal.propTypes = {
       src: PropTypes.string.isRequired,
       alt: PropTypes.string,
       description: PropTypes.string,
+      blurDataURL: PropTypes.string,
     }).isRequired
   ).isRequired,
   onIndexChange: PropTypes.func.isRequired,
