@@ -132,6 +132,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
           />
           {prevView?.src && (
             <PreloadedImage
+              fill
               src={prevView.src}
               alt={prevView.alt || ''}
               sizes={componentSizes.carousel.sizes}
@@ -140,6 +141,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
           )}
           {nextView?.src && (
             <PreloadedImage
+              fill
               src={nextView.src}
               alt={nextView.alt || ''}
               sizes={componentSizes.carousel.sizes}
