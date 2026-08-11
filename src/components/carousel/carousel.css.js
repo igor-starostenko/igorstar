@@ -41,7 +41,7 @@ export const ModalImageContainer = styled.div`
   height: 100%;
   overflow: hidden;
   background-image: url(${({ $blurDataURL }) => $blurDataURL || 'none'});
-  background-size: cover;
+  background-size: contain;
   background-position: 50% 50%;
   background-repeat: no-repeat;
 `;
