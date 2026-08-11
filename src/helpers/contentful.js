@@ -15,6 +15,7 @@ export const filterObject = (object, props) => {
 };
 
 const blurDataURLCache = new Map();
+const blurBatchCache = new Map();
 
 const fetchWithTimeout = async (
   url,
@@ -73,6 +74,12 @@ export async function makeBlurDataURL(src) {
 }
 
 export async function addBlurDataURLs(images = [], { path } = {}) {
+  // Check batch-level cache first to avoid iterating through all images
+  const cacheKey = images.map((img) => img?.src).join('|');
+  if (blurBatchCache.has(cacheKey)) {
+    return blurBatchCache.get(cacheKey);
+  }
+
   const results = new Array(images.length);
 
   for (let i = 0; i < images.length; i += BLUR_CONCURRENCY) {
@@ -113,9 +120,12 @@ export async function addBlurDataURLs(images = [], { path } = {}) {
     }
   }
 
+  // Store in batch cache for subsequent calls with same images
+  blurBatchCache.set(cacheKey, results);
   return results;
 }
 
 export function clearBlurDataURLCache() {
   blurDataURLCache.clear();
+  blurBatchCache.clear();
 }
