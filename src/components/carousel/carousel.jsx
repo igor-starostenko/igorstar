@@ -9,6 +9,8 @@ import {
   BlurPlaceholder,
   CloseButton,
   Description,
+  PrevButton,
+  NextButton,
 } from './carousel.css.js';
 
 const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
@@ -133,23 +135,23 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             loading="eager"
           />
         </ModalImageContainer>
-        {description && <Description>{description}</Description>}
+        {description && (
+          <Description $hasArrows={views.length > 1}>{description}</Description>
+        )}
         {views.length > 1 && (
           <>
-            <CloseButton
-              style={{ left: '20px', right: 'auto' }}
+            <PrevButton
               onClick={handlePrev}
               aria-label="Previous image"
             >
               &#8249;
-            </CloseButton>
-            <CloseButton
-              style={{ right: '60px' }}
+            </PrevButton>
+            <NextButton
               onClick={handleNext}
               aria-label="Next image"
             >
               &#8250;
-            </CloseButton>
+            </NextButton>
           </>
         )}
       </ModalContent>

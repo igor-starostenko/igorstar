@@ -170,6 +170,7 @@ test('does not render blur placeholder when blurDataURL is not available', () =>
 });
 
 test('preloads adjacent images for faster transitions', () => {
+  const onClose = vi.fn();
   const mockImage = vi.fn();
   global.Image = mockImage;
 
@@ -180,7 +181,7 @@ test('preloads adjacent images for faster transitions', () => {
   ];
 
   render(
-    <CarouselModal onClose={vi.fn()} currentIndex={1} views={views} />
+    <CarouselModal onClose={onClose} currentIndex={1} views={views} />
   );
 
   // Should preload previous (index 0) and next (index 2) images
@@ -188,4 +189,26 @@ test('preloads adjacent images for faster transitions', () => {
   const preloadedSrcs = mockImage.mock.instances.map((img) => img.src);
   expect(preloadedSrcs).toContain('/a.jpg');
   expect(preloadedSrcs).toContain('/c.jpg');
+});
+
+test('positions navigation arrows at bottom aligned with description', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViewsWithBlur} />
+  );
+
+  const prevButton = screen.getByRole('button', { name: /previous/i });
+  const nextButton = screen.getByRole('button', { name: /next/i });
+  const description = screen.getByText('A description');
+
+  // Arrows should be positioned at the bottom (not at top)
+  const prevStyle = window.getComputedStyle(prevButton);
+  const nextStyle = window.getComputedStyle(nextButton);
+  const descStyle = window.getComputedStyle(description);
+
+  expect(prevStyle.bottom).toBe('20px');
+  expect(nextStyle.bottom).toBe('20px');
+  expect(descStyle.bottom).toBe('20px');
+  // Description should be to the left of the next arrow
+  expect(descStyle.right).toBe('60px');
 });

@@ -64,12 +64,30 @@ export const BlurPlaceholder = styled.img`
 
 export const Description = styled.p`
   position: absolute;
-  right: 20px;
   bottom: 20px;
-  max-width: 90%;
+  left: 60px;
+  right: 60px;
   color: #fff;
   font-size: 14px;
-  text-align: right;
+  text-align: left;
   line-height: 1.4;
   z-index: 10;
+  ${({ $hasArrows }) => $hasArrows && `
+    max-width: calc(100% - 120px);
+  `}
+`;
+
+export const PrevButton = styled(CloseButton)`
+  left: 20px;
+  right: auto;
+  top: auto;
+  bottom: 20px;
+  transform: none;
+`;
+
+export const NextButton = styled(CloseButton)`
+  right: 20px;
+  top: auto;
+  bottom: 20px;
+  transform: none;
 `;
