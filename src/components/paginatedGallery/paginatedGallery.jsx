@@ -56,7 +56,11 @@ const PaginatedGallery = ({
       <Head pageTitle={title} />
       <Box>
         {displayImages.length > 0 && (
-          <Gallery photos={displayImages} targetRowHeight={targetRowHeight} />
+          <Gallery
+            photos={displayImages}
+            allPhotos={images}
+            targetRowHeight={targetRowHeight}
+          />
         )}
         {hasMoreItems && pageNum < totalPages ? (
           <Pagination pageNum={pageNum} totalPages={totalPages} />

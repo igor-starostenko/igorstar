@@ -76,6 +76,7 @@ const orderArray = (array, orderBy, order) => {
 
 const Gallery = ({
   photos,
+  allPhotos,
   orderBy,
   order = 'desc',
   targetRowHeight = 150,
@@ -94,12 +95,26 @@ const Gallery = ({
     [sortedPhotos, targetRowHeight]
   );
 
+  // Map ALL photos (not just the paginated subset) for the carousel
+  const carouselPhotos = allPhotos || photos;
+  const allMappedPhotos = useMemo(
+    () => mapToPhotoAlbumFormat(orderArray(carouselPhotos, orderBy, order), targetRowHeight),
+    [carouselPhotos, orderBy, order, targetRowHeight]
+  );
+
   const handlePhotoClick = (event, arg) => {
     const idx =
       event.index ??
       (typeof arg === 'number' ? arg : undefined) ??
       (arg && typeof arg.index === 'number' ? arg.index : -1);
-    if (idx >= 0) setCurrentPhoto(idx);
+    if (idx >= 0) {
+      // Find the corresponding index in allMappedPhotos by matching src
+      const clickedSrc = mappedPhotos[idx]?.src;
+      const allIndex = allMappedPhotos.findIndex(
+        (photo) => photo.src === clickedSrc
+      );
+      setCurrentPhoto(allIndex >= 0 ? allIndex : idx);
+    }
   };
 
   const handleCloseModal = () => {
@@ -129,7 +144,7 @@ const Gallery = ({
       </GalleryContainer>
       {currentPhoto !== null && currentPhoto >= 0 && (
         <Carousel
-          views={mappedPhotos}
+          views={allMappedPhotos}
           currentIndex={currentPhoto}
           onClose={handleCloseModal}
           onIndexChange={handleIndexChange}
@@ -141,6 +156,17 @@ const Gallery = ({
 
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string,
+      url: PropTypes.string,
+      width: PropTypes.number,
+      height: PropTypes.number,
+      blurDataURL: PropTypes.string,
+      description: PropTypes.string,
+      alt: PropTypes.string,
+    })
+  ),
+  allPhotos: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string,
       url: PropTypes.string,

@@ -9,8 +9,10 @@ vi.mock('next/dynamic', () => ({
 
     if (modulePath.includes('carousel.jsx')) {
       // Carousel component - returns a simple wrapper
-      const CarouselMock = ({ children }) => (
-        <div data-testid="mock-carousel">{children}</div>
+      const CarouselMock = ({ children, views = [] }) => (
+        <div data-testid="mock-carousel" data-view-count={views.length}>
+          {children}
+        </div>
       );
       CarouselMock.displayName = 'CarouselMock';
       return CarouselMock;
@@ -354,4 +356,25 @@ test('resets gallery state when photos prop changes (key behavior)', async () =>
 
   // Gallery should be closed after photos change
   expect(screen.queryByTestId('mock-carousel')).not.toBeInTheDocument();
+});
+
+test('passes all photos to carousel via allPhotos prop', async () => {
+  const displayPhotos = [
+    { id: '1', src: '/a.jpg', alt: 'A image', width: 100, height: 200 },
+  ];
+  const allPhotos = [
+    { id: '1', src: '/a.jpg', alt: 'A image', width: 100, height: 200 },
+    { id: '2', src: '/b.jpg', alt: 'B image', width: 200, height: 100 },
+    { id: '3', src: '/c.jpg', alt: 'C image', width: 150, height: 150 },
+  ];
+
+  await act(async () => {
+    render(<Gallery photos={displayPhotos} allPhotos={allPhotos} />);
+  });
+
+  const images = getGalleryImages();
+  fireEvent.click(images[0]);
+
+  const carousel = screen.getByTestId('mock-carousel');
+  expect(carousel).toHaveAttribute('data-view-count', '3');
 });
