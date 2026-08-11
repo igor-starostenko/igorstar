@@ -31,6 +31,10 @@ public/robots.txt
 .yarn/install-state.gz
 /graphify-out/
 
+# Lighthouse
+.lighthouseci/
+lhci-reports/
+
 # LLM harness
 .claude
 .hermes
