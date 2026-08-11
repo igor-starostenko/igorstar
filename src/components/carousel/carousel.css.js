@@ -58,3 +58,10 @@ export const Description = styled.p`
   line-height: 1.4;
   z-index: 10;
 `;
+
+export const DescriptionDate = styled.span`
+  display: block;
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+`;
