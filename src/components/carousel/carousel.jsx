@@ -6,6 +6,7 @@ import {
   ModalContent,
   ModalImageContainer,
   ModalImage,
+  BlurPlaceholder,
   CloseButton,
   Description,
 } from './carousel.css.js';
@@ -101,6 +102,14 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
           &times;
         </CloseButton>
         <ModalImageContainer $blurDataURL={blurDataURL}>
+          {blurDataURL && (
+            <BlurPlaceholder
+              src={blurDataURL}
+              alt={altText}
+              aria-hidden="true"
+              loading="eager"
+            />
+          )}
           <ModalImage
             fill
             src={src}
@@ -108,7 +117,11 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             sizes={componentSizes.carousel.sizes}
             quality={30}
             loading="eager"
-            placeholder={blurDataURL ? 'blur' : undefined}
+            placeholder={
+              blurDataURL && typeof blurDataURL === 'string'
+                ? 'blur'
+                : undefined
+            }
             blurDataURL={blurDataURL || undefined}
           />
         </ModalImageContainer>

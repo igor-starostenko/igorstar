@@ -136,17 +136,35 @@ test('passes blurDataURL to image when available', () => {
     <CarouselModal onClose={onClose} currentIndex={0} views={mockViewsWithBlur} />
   );
 
-  const img = screen.getByAltText('A');
-  expect(img).toHaveAttribute('placeholder', 'blur');
-  expect(img).toHaveAttribute('blurDataURL', 'data:image/jpeg;base64,abc123');
+  // ModalImage is the one with blurDataURL attribute; BlurPlaceholder has aria-hidden
+  const imgs = screen.getAllByAltText('A');
+  const mainImg = imgs.find((img) => !img.getAttribute('aria-hidden'));
+  expect(mainImg).toHaveAttribute('placeholder', 'blur');
+  expect(mainImg).toHaveAttribute('blurDataURL', 'data:image/jpeg;base64,abc123');
 });
 
-test('does not pass placeholder when blurDataURL is not available', () => {
+test('renders blur placeholder img when blurDataURL is available', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={mockViewsWithBlur} />
+  );
+
+  // BlurPlaceholder should be rendered with the blur data URL as src
+  const imgs = screen.getAllByAltText('A');
+  const blurPlaceholder = imgs.find((img) => img.getAttribute('aria-hidden') === 'true');
+  expect(blurPlaceholder).toBeInTheDocument();
+  expect(blurPlaceholder).toHaveAttribute('src', 'data:image/jpeg;base64,abc123');
+});
+
+test('does not render blur placeholder when blurDataURL is not available', () => {
   const onClose = vi.fn();
   render(
     <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
   );
 
-  const img = screen.getByAltText('A');
-  expect(img).not.toHaveAttribute('placeholder', 'blur');
+  // Only the main image should be rendered (no blur placeholder)
+  const imgs = screen.queryAllByAltText('A');
+  expect(imgs).toHaveLength(1);
+  const mainImg = imgs[0];
+  expect(mainImg).not.toHaveAttribute('placeholder', 'blur');
 });

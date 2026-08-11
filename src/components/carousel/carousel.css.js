@@ -50,6 +50,20 @@ export const ModalImage = styled(BaseImage)`
   max-width: 100%;
   height: 100%;
   object-fit: contain;
+  position: relative;
+  z-index: 2;
+`;
+
+export const BlurPlaceholder = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: blur(20px);
+  transform: scale(1.1);
+  z-index: 1;
 `;
 
 export const Description = styled.p`
