@@ -97,13 +97,17 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
     const prevIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
     const nextIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
     [prevIndex, nextIndex].forEach((i) => {
-      const rawSrc = views[i]?.src;
+      const view = views[i];
+      const rawSrc = view?.src;
       if (rawSrc) {
         // Use the same loader transformation as ModalImage so the preloaded
-        // URL matches exactly what Next.js Image will request.
+        // URL matches exactly what Next.js Image will request. We use the
+        // image's natural width to ensure we preload at the largest size
+        // the browser would request, avoiding cache misses when the device
+        // pixel ratio scales up the requested width.
         const preloadSrc = contentfulLoader({
           src: rawSrc,
-          width: 1280,
+          width: view?.width || 1280,
           quality: imageQuality,
         });
         const img = new Image();
