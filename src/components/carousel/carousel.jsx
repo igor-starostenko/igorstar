@@ -88,6 +88,20 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
   const description = view?.description ?? '';
   const blurDataURL = view?.blurDataURL ?? null;
 
+  // Preload previous and next images for faster transitions
+  useEffect(() => {
+    if (!views.length) return;
+    const prevIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
+    const nextIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
+    [prevIndex, nextIndex].forEach((i) => {
+      const preloadSrc = views[i]?.src;
+      if (preloadSrc) {
+        const img = new Image();
+        img.src = preloadSrc;
+      }
+    });
+  }, [currentIndex, views]);
+
   return (
     <ModalOverlay onClick={handleClick}>
       <ModalContent

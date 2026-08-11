@@ -168,3 +168,24 @@ test('does not render blur placeholder when blurDataURL is not available', () =>
   const mainImg = imgs[0];
   expect(mainImg).not.toHaveAttribute('placeholder', 'blur');
 });
+
+test('preloads adjacent images for faster transitions', () => {
+  const mockImage = vi.fn();
+  global.Image = mockImage;
+
+  const views = [
+    { id: '0', src: '/a.jpg', alt: 'A', description: '', width: 100, height: 100 },
+    { id: '1', src: '/b.jpg', alt: 'B', description: '', width: 100, height: 100 },
+    { id: '2', src: '/c.jpg', alt: 'C', description: '', width: 100, height: 100 },
+  ];
+
+  render(
+    <CarouselModal onClose={vi.fn()} currentIndex={1} views={views} />
+  );
+
+  // Should preload previous (index 0) and next (index 2) images
+  expect(mockImage).toHaveBeenCalledTimes(2);
+  const preloadedSrcs = mockImage.mock.instances.map((img) => img.src);
+  expect(preloadedSrcs).toContain('/a.jpg');
+  expect(preloadedSrcs).toContain('/c.jpg');
+});
