@@ -130,17 +130,17 @@ test('calls onClose on Escape keydown', () => {
   expect(onClose).toHaveBeenCalled();
 });
 
-test('passes blurDataURL to image when available', () => {
+test('does not pass blurDataURL to main image (only to placeholder)', () => {
   const onClose = vi.fn();
   render(
     <CarouselModal onClose={onClose} currentIndex={0} views={mockViewsWithBlur} />
   );
 
-  // ModalImage is the one with blurDataURL attribute; BlurPlaceholder has aria-hidden
+  // Main image (ModalImage) should NOT have placeholder or blurDataURL
   const imgs = screen.getAllByAltText('A');
   const mainImg = imgs.find((img) => !img.getAttribute('aria-hidden'));
-  expect(mainImg).toHaveAttribute('placeholder', 'blur');
-  expect(mainImg).toHaveAttribute('blurDataURL', 'data:image/jpeg;base64,abc123');
+  expect(mainImg).not.toHaveAttribute('placeholder');
+  expect(mainImg).not.toHaveAttribute('blurDataURL');
 });
 
 test('renders blur placeholder img when blurDataURL is available', () => {

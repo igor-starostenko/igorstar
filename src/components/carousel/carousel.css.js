@@ -40,10 +40,6 @@ export const ModalImageContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-image: url(${({ $blurDataURL }) => $blurDataURL || 'none'});
-  background-size: contain;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
 `;
 
 export const ModalImage = styled(BaseImage)`

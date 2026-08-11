@@ -101,7 +101,7 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
         <CloseButton onClick={onClose} aria-label="Close">
           &times;
         </CloseButton>
-        <ModalImageContainer $blurDataURL={blurDataURL}>
+        <ModalImageContainer>
           {blurDataURL && (
             <BlurPlaceholder
               src={blurDataURL}
@@ -117,12 +117,6 @@ const CarouselModal = ({ onClose, currentIndex, views, onIndexChange }) => {
             sizes={componentSizes.carousel.sizes}
             quality={30}
             loading="eager"
-            placeholder={
-              blurDataURL && typeof blurDataURL === 'string'
-                ? 'blur'
-                : undefined
-            }
-            blurDataURL={blurDataURL || undefined}
           />
         </ModalImageContainer>
         {description && <Description>{description}</Description>}
