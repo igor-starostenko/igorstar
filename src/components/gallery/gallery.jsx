@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
@@ -76,7 +76,7 @@ const orderArray = (array, orderBy, order) => {
 
 const Gallery = ({
   photos,
-  allPhotos,
+  loadMoreImages,
   orderBy,
   order = 'desc',
   targetRowHeight = 150,
@@ -84,6 +84,11 @@ const Gallery = ({
   containerWidth = componentSizes.gallery.width,
 }) => {
   const [currentPhoto, setCurrentPhoto] = useState(null);
+  const [carouselViews, setCarouselViews] = useState(() => {
+    const sorted = orderArray(photos, orderBy, order);
+    return mapToPhotoAlbumFormat(sorted, targetRowHeight);
+  });
+  const [hasMoreImages, setHasMoreImages] = useState(true);
 
   const sortedPhotos = useMemo(
     () => orderArray(photos, orderBy, order),
@@ -95,12 +100,17 @@ const Gallery = ({
     [sortedPhotos, targetRowHeight]
   );
 
-  // Map ALL photos (not just the paginated subset) for the carousel
-  const carouselPhotos = allPhotos || photos;
-  const allMappedPhotos = useMemo(
-    () => mapToPhotoAlbumFormat(orderArray(carouselPhotos, orderBy, order), targetRowHeight),
-    [carouselPhotos, orderBy, order, targetRowHeight]
-  );
+  const handleLoadMore = useCallback(() => {
+    if (!loadMoreImages || !hasMoreImages) return;
+    const morePhotos = loadMoreImages();
+    if (morePhotos && morePhotos.length > 0) {
+      const sortedMore = orderArray(morePhotos, orderBy, order);
+      const mappedMore = mapToPhotoAlbumFormat(sortedMore, targetRowHeight);
+      setCarouselViews((prev) => [...prev, ...mappedMore]);
+    } else {
+      setHasMoreImages(false);
+    }
+  }, [loadMoreImages, hasMoreImages, order, orderBy, targetRowHeight]);
 
   const handlePhotoClick = (event, arg) => {
     const idx =
@@ -108,12 +118,12 @@ const Gallery = ({
       (typeof arg === 'number' ? arg : undefined) ??
       (arg && typeof arg.index === 'number' ? arg.index : -1);
     if (idx >= 0) {
-      // Find the corresponding index in allMappedPhotos by matching src
+      // Find the corresponding index in carouselViews by matching src
       const clickedSrc = mappedPhotos[idx]?.src;
-      const allIndex = allMappedPhotos.findIndex(
+      const viewIndex = carouselViews.findIndex(
         (photo) => photo.src === clickedSrc
       );
-      setCurrentPhoto(allIndex >= 0 ? allIndex : idx);
+      setCurrentPhoto(viewIndex >= 0 ? viewIndex : idx);
     }
   };
 
@@ -123,6 +133,14 @@ const Gallery = ({
 
   const handleIndexChange = (newIndex) => {
     setCurrentPhoto(newIndex);
+    // Load more images when navigating near the end
+    if (
+      hasMoreImages &&
+      loadMoreImages &&
+      newIndex >= carouselViews.length - 2
+    ) {
+      handleLoadMore();
+    }
   };
 
   return (
@@ -144,7 +162,7 @@ const Gallery = ({
       </GalleryContainer>
       {currentPhoto !== null && currentPhoto >= 0 && (
         <Carousel
-          views={allMappedPhotos}
+          views={carouselViews}
           currentIndex={currentPhoto}
           onClose={handleCloseModal}
           onIndexChange={handleIndexChange}
@@ -166,18 +184,7 @@ Gallery.propTypes = {
       alt: PropTypes.string,
     })
   ),
-  allPhotos: PropTypes.arrayOf(
-    PropTypes.shape({
-      src: PropTypes.string,
-      url: PropTypes.string,
-      width: PropTypes.number,
-      height: PropTypes.number,
-      blurDataURL: PropTypes.string,
-      description: PropTypes.string,
-      alt: PropTypes.string,
-    })
-  ),
-  orderBy: PropTypes.string,
+  loadMoreImages: PropTypes.func,
   order: PropTypes.oneOf(['asc', 'desc']),
   targetRowHeight: PropTypes.number,
   spacing: PropTypes.number,
