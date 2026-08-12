@@ -51,6 +51,16 @@ const PaginatedGallery = ({
   const endIndex = Math.min(startIndex + displayCount, images.length);
   const displayImages = images.slice(startIndex, endIndex);
 
+  // Provide a loadMoreImages callback that returns the next batch of
+  // images from the full set, starting after the current displayImages.
+  // This allows the carousel to request more images on demand without
+  // receiving all images upfront via an allPhotos prop.
+  const loadMoreImages = useCallback(() => {
+    const startIdx = startIndex + displayImages.length;
+    if (startIdx >= images.length) return [];
+    return images.slice(startIdx, startIdx + pageSize);
+  }, [startIndex, displayImages.length, images, pageSize]);
+
   return (
     <Layout>
       <Head pageTitle={title} />
@@ -58,7 +68,7 @@ const PaginatedGallery = ({
         {displayImages.length > 0 && (
           <Gallery
             photos={displayImages}
-            allPhotos={images}
+            loadMoreImages={loadMoreImages}
             targetRowHeight={targetRowHeight}
           />
         )}
