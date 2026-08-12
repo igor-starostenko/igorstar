@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
@@ -16,11 +16,12 @@ const PaginatedGallery = ({
   title,
   total,
   images,
+  page,
   pageSize,
   targetRowHeight,
 }) => {
   const router = useRouter();
-  const page = parseInt(router.query.page) || 1;
+  const currentPage = parseInt(router.query.page) || page || 1;
   const totalPages = Math.ceil((images?.length || 0) / pageSize);
 
   const [displayCount, setDisplayCount] = useState(pageSize);
@@ -46,20 +47,31 @@ const PaginatedGallery = ({
   // Don't show pagination if we've loaded all items (reached the end)
   const hasMoreItems = displayCount < total;
 
-  const startIdx = page > 1 ? (page - 1) * pageSize : 0;
-  // Show images from startIdx, up to displayCount items
-  const endIdx = Math.min(startIdx + displayCount, images.length);
-  const displayImages = images.slice(startIdx, endIdx);
+  const startIndex = currentPage > 1 ? (currentPage - 1) * pageSize : 0;
+  // Show images from startIndex, up to displayCount items
+  const endIndex = Math.min(startIndex + displayCount, images.length);
+  const displayImages = images.slice(startIndex, endIndex);
+
+  // Track how many images have been returned to the carousel via loadMoreImages.
+  // This ref persists across renders so each call returns the next batch.
+  const loadedCountRef = useRef(0);
 
   // Provide a loadMoreImages callback that returns the next batch of
-  // images from the full set, starting after the current displayImages.
+  // images from the full set, starting after the initial displayImages.
   // This allows the carousel to request more images on demand without
   // receiving all images upfront via an allPhotos prop.
   const loadMoreImages = useCallback(() => {
-    const nextStartIdx = startIdx + displayImages.length;
-    if (nextStartIdx >= images.length) return [];
-    return images.slice(nextStartIdx, nextStartIdx + pageSize);
-  }, [startIdx, displayImages.length, images, pageSize]);
+    const startIdx = startIndex + displayImages.length + loadedCountRef.current;
+    if (startIdx >= images.length) return [];
+    const nextBatch = images.slice(startIdx, startIdx + pageSize);
+    loadedCountRef.current += nextBatch.length;
+    return nextBatch;
+  }, [startIndex, displayImages.length, images, pageSize]);
+
+  // Reset loadedCountRef when the page changes
+  useEffect(() => {
+    loadedCountRef.current = 0;
+  }, [currentPage]);
 
   return (
     <Layout>
@@ -88,6 +100,7 @@ PaginatedGallery.propTypes = {
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
+  page: PropTypes.number,
   pageSize: PropTypes.number.isRequired,
   targetRowHeight: PropTypes.number.isRequired,
 };
