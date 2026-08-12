@@ -89,39 +89,39 @@ const Gallery = ({
 }) => {
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const prevPageKeyRef = useRef(pageKey);
-const [hasMoreImages, setHasMoreImages] = useState(true);
+  const [hasMoreImages, setHasMoreImages] = useState(true);
 
-// When the page changes (e.g. carousel triggered next-page navigation),
-// reset the current photo to the first image of the new page.
-useLayoutEffect(() => {
+  // When the page changes (e.g. carousel triggered next-page navigation),
+  // reset the current photo to the first image of the new page.
+  useLayoutEffect(() => {
   if (pageKey !== prevPageKeyRef.current && currentPhoto !== null) {
     setCurrentPhoto(0);
   }
   prevPageKeyRef.current = pageKey;
-}, [pageKey, currentPhoto]);
+  }, [pageKey, currentPhoto]);
 
-const sortedPhotos = useMemo(
+  const sortedPhotos = useMemo(
   () => orderArray(photos, orderBy, order),
   [photos, order, orderBy]
-);
+  );
 
-const mappedPhotos = useMemo(
+  const mappedPhotos = useMemo(
   () => mapToPhotoAlbumFormat(sortedPhotos, targetRowHeight),
   [sortedPhotos, targetRowHeight]
-);
+  );
 
-// carouselViews derives from mappedPhotos so it stays in sync when
-// onGetNextPage expands the photos prop (via increased displayCount).
-const carouselViews = mappedPhotos;
+  // carouselViews derives from mappedPhotos so it stays in sync when
+  // onGetNextPage expands the photos prop (via increased displayCount).
+  const carouselViews = mappedPhotos;
 
   const handleLoadMore = useCallback(() => {
-if (!onGetNextPage || !hasMoreImages) return false;
-const result = onGetNextPage();
-if (result === false) {
+  if (!onGetNextPage || !hasMoreImages) return false;
+  const result = onGetNextPage();
+  if (result === false) {
   setHasMoreImages(false);
   return false;
-}
-return true;
+  }
+  return true;
   }, [onGetNextPage, hasMoreImages]);
 
   const handlePhotoClick = (event, arg) => {
@@ -146,7 +146,7 @@ return true;
       handleLoadMore();
     }
   }
-};
+  };
 
   const handleCloseModal = () => {
     setCurrentPhoto(null);
