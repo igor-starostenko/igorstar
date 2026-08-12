@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
@@ -46,20 +46,20 @@ const PaginatedGallery = ({
   // Don't show pagination if we've loaded all items (reached the end)
   const hasMoreItems = displayCount < total;
 
-  const startIndex = page > 1 ? (page - 1) * pageSize : 0;
-  // Show images from startIndex, up to displayCount items
-  const endIndex = Math.min(startIndex + displayCount, images.length);
-  const displayImages = images.slice(startIndex, endIndex);
+  const startIdx = page > 1 ? (page - 1) * pageSize : 0;
+  // Show images from startIdx, up to displayCount items
+  const endIdx = Math.min(startIdx + displayCount, images.length);
+  const displayImages = images.slice(startIdx, endIdx);
 
   // Provide a loadMoreImages callback that returns the next batch of
   // images from the full set, starting after the current displayImages.
   // This allows the carousel to request more images on demand without
   // receiving all images upfront via an allPhotos prop.
   const loadMoreImages = useCallback(() => {
-    const startIdx = startIndex + displayImages.length;
-    if (startIdx >= images.length) return [];
-    return images.slice(startIdx, startIdx + pageSize);
-  }, [startIndex, displayImages.length, images, pageSize]);
+    const nextStartIdx = startIdx + displayImages.length;
+    if (nextStartIdx >= images.length) return [];
+    return images.slice(nextStartIdx, nextStartIdx + pageSize);
+  }, [startIdx, displayImages.length, images, pageSize]);
 
   return (
     <Layout>
@@ -77,7 +77,7 @@ const PaginatedGallery = ({
         ) : (
           ''
         )}
-        {/* Sentinel element for IntersectionObserver */}
+        {/* Sentinel element for Intersection Observer */}
         {hasMoreItems && <div ref={lastItemRef} />}
       </Box>
     </Layout>
