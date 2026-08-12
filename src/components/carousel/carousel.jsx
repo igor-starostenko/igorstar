@@ -157,7 +157,8 @@ const CarouselModal = ({
             <PreloadedImage
               fill
               src={prevView.src}
-              alt={prevView.alt || ''}
+              alt=""
+              aria-hidden="true"
               sizes={componentSizes.carousel.sizes}
               quality={30}
             />
@@ -166,7 +167,8 @@ const CarouselModal = ({
             <PreloadedImage
               fill
               src={nextView.src}
-              alt={nextView.alt || ''}
+              alt=""
+              aria-hidden="true"
               sizes={componentSizes.carousel.sizes}
               quality={30}
             />

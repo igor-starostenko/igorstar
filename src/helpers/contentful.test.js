@@ -320,4 +320,31 @@ describe('addBlurDataURLs', () => {
     await addBlurDataURLs(images2);
     expect(fetchCount).toBe(2);
   });
+
+  it('does not collide batch cache between same srcs with different paths', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({
+      ok: true,
+      arrayBuffer: vi.fn().mockResolvedValue(Buffer.from('blur')),
+      headers: { get: () => 'image/jpeg' },
+    })
+  );
+
+  // Same srcs but different paths should not share batch cache
+  const imagesA = [
+    { thumbnail: { src: 'https://images.ctfassets.net/1/image.jpg' } },
+  ];
+  const imagesB = [
+    { hero: { src: 'https://images.ctfassets.net/1/image.jpg' } },
+  ];
+
+  // First call with path 'thumbnail' — populates batch cache
+  const resultA = await addBlurDataURLs(imagesA, { path: 'thumbnail' });
+  expect(resultA[0].thumbnail.blurDataURL).toMatch(/^data:image\/jpeg;base64,/);
+
+  // Second call with path 'hero' — different batch cache key, should process independently
+  const resultB = await addBlurDataURLs(imagesB, { path: 'hero' });
+  expect(resultB[0].hero.blurDataURL).toMatch(/^data:image\/jpeg;base64,/);
+});
 });

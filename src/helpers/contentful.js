@@ -74,8 +74,10 @@ export async function makeBlurDataURL(src) {
 }
 
 export async function addBlurDataURLs(images = [], { path } = {}) {
-  // Check batch-level cache first to avoid iterating through all images
-  const cacheKey = images.map((img) => img?.src).join('|');
+  // Check batch-level cache first to avoid iterating through all images.
+  // Include path in the cache key to prevent collisions between
+  // calls with different paths but the same set of srcs.
+  const cacheKey = `${path ?? ''}|${images.map((img) => img?.src).join('|')}`;
   if (blurBatchCache.has(cacheKey)) {
     return blurBatchCache.get(cacheKey);
   }

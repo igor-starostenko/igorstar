@@ -8,6 +8,7 @@ let lhrData;
 let chromeAvailable = false;
 
 const targetUrl = process.env.SITE_URL || siteConfig.siteUrl;
+const isCI = process.env.CI === 'true';
 
 const launchChromeAndRunLighthouse = (
   url,
@@ -47,6 +48,9 @@ describe('Lighthouse Scores', () => {
       };
       chromeAvailable = true;
     } catch (_e) {
+      if (isCI) {
+        throw new Error('Chrome/Lighthouse not available in CI environment');
+      }
       console.log('Lighthouse test skipped - Chrome not available');
     }
   });

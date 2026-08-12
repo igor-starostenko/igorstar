@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
@@ -89,69 +89,64 @@ const Gallery = ({
 }) => {
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const prevPageKeyRef = useRef(pageKey);
-  const [carouselViews, setCarouselViews] = useState(() =>
-    mapToPhotoAlbumFormat(orderArray(photos, orderBy, order), targetRowHeight)
-  );
-  const [hasMoreImages, setHasMoreImages] = useState(true);
+const [hasMoreImages, setHasMoreImages] = useState(true);
 
-  // When the page changes (e.g. carousel triggered next-page navigation),
-  // reset the current photo to the first image of the new page.
-  useLayoutEffect(() => {
-    if (pageKey !== prevPageKeyRef.current && currentPhoto !== null) {
-      setCurrentPhoto(0);
-    }
-    prevPageKeyRef.current = pageKey;
-  }, [pageKey, currentPhoto]);
+// When the page changes (e.g. carousel triggered next-page navigation),
+// reset the current photo to the first image of the new page.
+useLayoutEffect(() => {
+  if (pageKey !== prevPageKeyRef.current && currentPhoto !== null) {
+    setCurrentPhoto(0);
+  }
+  prevPageKeyRef.current = pageKey;
+}, [pageKey, currentPhoto]);
 
-  const sortedPhotos = useMemo(
-    () => orderArray(photos, orderBy, order),
-    [photos, orderBy, order]
-  );
+const sortedPhotos = useMemo(
+  () => orderArray(photos, orderBy, order),
+  [photos, order, orderBy]
+);
 
-  const mappedPhotos = useMemo(
-    () => mapToPhotoAlbumFormat(sortedPhotos, targetRowHeight),
-    [sortedPhotos, targetRowHeight]
-  );
+const mappedPhotos = useMemo(
+  () => mapToPhotoAlbumFormat(sortedPhotos, targetRowHeight),
+  [sortedPhotos, targetRowHeight]
+);
 
-  // When the underlying photos change (e.g. new page loaded from server),
-  // update carouselViews to include the new images.
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCarouselViews((prev) => {
-      const newViews = mapToPhotoAlbumFormat(
-        orderArray(photos, orderBy, order),
-        targetRowHeight
-      );
-      // Merge: keep existing views, add any new ones not already present
-      const existingSrcs = new Set(prev.map((v) => v.src));
-      const additional = newViews.filter((v) => !existingSrcs.has(v.src));
-      return [...prev, ...additional];
-    });
-  }, [photos, orderBy, order, targetRowHeight]);
+// carouselViews derives from mappedPhotos so it stays in sync when
+// onGetNextPage expands the photos prop (via increased displayCount).
+const carouselViews = mappedPhotos;
 
   const handleLoadMore = useCallback(() => {
-    if (!onGetNextPage || !hasMoreImages) return false;
-    const result = onGetNextPage();
-    if (result === false) {
-      setHasMoreImages(false);
-      return false;
-    }
-    return true;
+if (!onGetNextPage || !hasMoreImages) return false;
+const result = onGetNextPage();
+if (result === false) {
+  setHasMoreImages(false);
+  return false;
+}
+return true;
   }, [onGetNextPage, hasMoreImages]);
 
   const handlePhotoClick = (event, arg) => {
-    const idx =
-      event.index ??
-      (typeof arg === 'number' ? arg : undefined) ??
-      (arg && typeof arg.index === 'number' ? arg.index : -1);
-    if (idx >= 0) {
-      const clickedSrc = mappedPhotos[idx]?.src;
-      const viewIndex = carouselViews.findIndex(
-        (photo) => photo.src === clickedSrc
-      );
-      setCurrentPhoto(viewIndex >= 0 ? viewIndex : idx);
+  const idx =
+    event?.index ??
+    (typeof arg === 'number' ? arg : undefined) ??
+    (arg && typeof arg.index === 'number' ? arg.index : -1);
+  if (idx >= 0) {
+    const clickedSrc = mappedPhotos[idx]?.src;
+    // Find the photo in carouselViews (which includes all loaded photos)
+    const viewIndex = carouselViews.findIndex(
+      (photo) => photo.src === clickedSrc
+    );
+    const targetIndex = viewIndex >= 0 ? viewIndex : idx;
+    setCurrentPhoto(targetIndex);
+    // If the clicked photo is near the end of current views, load more
+    if (
+      hasMoreImages &&
+      onGetNextPage &&
+      targetIndex >= carouselViews.length - 2
+    ) {
+      handleLoadMore();
     }
-  };
+  }
+};
 
   const handleCloseModal = () => {
     setCurrentPhoto(null);
