@@ -1,15 +1,18 @@
 import { test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
+// Mutable router mock so tests can simulate different URL query states
+const mockRouter = {
+  query: { page: '1' },
+  asPath: '/test',
+};
+
 vi.mock('next/router', () => ({
-  useRouter: () => ({
-    query: { page: '1' },
-    asPath: '/test',
-  }),
+  useRouter: () => mockRouter,
 }));
 
 vi.mock('next/dynamic', () => ({
-  default: (_loader) => {
+  default: () => {
     const MockDynamic = ({ children }) => (
       <div data-testid="mock-dynamic">{children}</div>
     );
@@ -205,4 +208,92 @@ test('renders with no pagination when all posts shown', () => {
   render(<Category {...mockProps} />);
 
   expect(screen.queryByTestId('mock-pagination')).not.toBeInTheDocument();
+});
+
+test('shows pagination when not all posts are displayed (home page, no page query)', () => {
+  // Simulates the home page scenario: no `page` query param, 19 total posts.
+  // With the old buggy condition `posts.total - (pageNum || 1) * pageSize`,
+  // the sentinel disappeared at displayCount=15 (15 < 19-5=14 was false),
+  // causing posts 16-19 to never load via infinite scroll.
+  mockRouter.query = {};
+  mockRouter.asPath = '/';
+
+  const mockProps = {
+    title: 'Blog',
+    posts: {
+      total: 19,
+      items: Array.from({ length: 19 }).map((_, i) => ({
+        id: `post-${i}`,
+        title: `Post ${i}`,
+        path: `post-${i}`,
+        date: '2026-05-01',
+        layout: 'default',
+        draft: false,
+        category: 'tech',
+        description: `Description ${i}`,
+        tags: ['tag1'],
+        linkText: 'Read more',
+        thumbnail: {
+          src: `/thumb${i}.jpg`,
+          alt: `Post ${i}`,
+          width: 300,
+          height: 200,
+        },
+      })),
+    },
+  };
+
+  render(<Category {...mockProps} />);
+
+  // Initial displayCount = pageSize = 5, so 5 articles shown
+  expect(screen.getAllByTestId('mock-article').length).toBe(5);
+
+  // The Pagination component is loaded via next/dynamic, so it renders as
+  // mock-dynamic. When displayCount < posts.total, the Pagination
+  // is rendered; when all posts are shown, it is not.
+  expect(screen.getByTestId('mock-dynamic')).toBeInTheDocument();
+
+  // Reset router mock for subsequent tests
+  mockRouter.query = { page: '1' };
+  mockRouter.asPath = '/test';
+});
+
+test('hides pagination when all posts are displayed (home page, no page query)', () => {
+  mockRouter.query = {};
+  mockRouter.asPath = '/';
+
+  const mockProps = {
+    title: 'Blog',
+    posts: {
+      total: 5,
+      items: Array.from({ length: 5 }).map((_, i) => ({
+        id: `post-${i}`,
+        title: `Post ${i}`,
+        path: `post-${i}`,
+        date: '2026-05-01',
+        layout: 'default',
+        draft: false,
+        category: 'tech',
+        description: `Description ${i}`,
+        tags: ['tag1'],
+        linkText: 'Read more',
+        thumbnail: {
+          src: `/thumb${i}.jpg`,
+          alt: `Post ${i}`,
+          width: 300,
+          height: 200,
+        },
+      })),
+    },
+  };
+
+  render(<Category {...mockProps} />);
+
+  // All 5 posts shown, no pagination needed
+  expect(screen.getAllByTestId('mock-article').length).toBe(5);
+  expect(screen.queryByTestId('mock-dynamic')).not.toBeInTheDocument();
+
+  // Reset router mock for subsequent tests
+  mockRouter.query = { page: '1' };
+  mockRouter.asPath = '/test';
 });

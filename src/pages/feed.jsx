@@ -21,7 +21,12 @@ export const getStaticProps = async () => {
     order: '-fields.date',
   });
 
-  const parsedImages = items ? items.map((item) => parseItem(item.image)) : [];
+  const parsedImages = items
+    ? items.map((item) => {
+        const parsed = parseItem(item.image);
+        return parsed ? { ...parsed, date: item.date } : parsed;
+      })
+    : [];
   const imagesWithBlurData = await addBlurDataURLs(parsedImages);
 
   return {

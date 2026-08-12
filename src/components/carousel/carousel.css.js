@@ -101,3 +101,10 @@ export const PreloadedImage = styled(BaseImage)`
   opacity: 0;
   pointer-events: none;
 `;
+
+export const DescriptionDate = styled.span`
+  display: block;
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+`;

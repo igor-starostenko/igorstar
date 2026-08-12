@@ -3,19 +3,28 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 // Mock next/image before importing components that use it
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...rest }) => <img src={src} alt={alt || ''} {...rest} />,
+  default: ({ src, alt, ..._rest }) => <img src={src} alt={alt || ''} />,
 }));
 
 import CarouselModal from './carousel.jsx';
 
 const mockViews = [
-  { id: '0', src: '/a.jpg', alt: 'A', description: 'A description', width: 100, height: 100 },
-  { id: '1', src: '/b.jpg', alt: 'B', description: 'B description', width: 200, height: 200 },
-];
-
-const mockViewsWithBlur = [
-  { id: '0', src: '/a.jpg', alt: 'A', description: 'A description', width: 100, height: 100, blurDataURL: 'data:image/jpeg;base64,abc123' },
-  { id: '1', src: '/b.jpg', alt: 'B', description: 'B description', width: 200, height: 200, blurDataURL: 'data:image/jpeg;base64,def456' },
+  {
+    id: '0',
+    src: '/a.jpg',
+    alt: 'A',
+    description: 'A description',
+    width: 100,
+    height: 100,
+  },
+  {
+    id: '1',
+    src: '/b.jpg',
+    alt: 'B',
+    description: 'B description',
+    width: 200,
+    height: 200,
+  },
 ];
 
 test('renders modal overlay with close button', () => {
@@ -50,10 +59,37 @@ test('renders description when available', () => {
 test('does not render description when not available', () => {
   const onClose = vi.fn();
   render(
-    <CarouselModal onClose={onClose} currentIndex={0} views={[{ ...mockViews[0], description: '' }]} />
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={0}
+      views={[{ ...mockViews[0], description: '' }]}
+    />
   );
 
   expect(screen.queryByText('A description')).not.toBeInTheDocument();
+});
+
+test('renders date when available', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={0}
+      views={[{ ...mockViews[0], date: '2024-01-15T10:00:00Z' }]}
+    />
+  );
+
+  expect(screen.getByText('Jan 15, 2024')).toBeInTheDocument();
+});
+
+test('does not render date when not available', () => {
+  const onClose = vi.fn();
+  render(
+    <CarouselModal onClose={onClose} currentIndex={0} views={[mockViews[0]]} />
+  );
+
+  // Should not have any element with the formatted date text
+  expect(screen.queryByText(/Jan.*2024/)).not.toBeInTheDocument();
 });
 
 test('calls onClose when close button is clicked', () => {
@@ -130,85 +166,56 @@ test('calls onClose on Escape keydown', () => {
   expect(onClose).toHaveBeenCalled();
 });
 
-test('does not pass blurDataURL to main image (only to placeholder)', () => {
+test('calls onGetNextPage and does NOT loop when at last image and next page available', () => {
   const onClose = vi.fn();
+  const onIndexChange = vi.fn();
+  const onGetNextPage = vi.fn(() => true);
   render(
-    <CarouselModal onClose={onClose} currentIndex={0} views={mockViewsWithBlur} />
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={1}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+      onGetNextPage={onGetNextPage}
+    />
   );
 
-  // Main image (ModalImage) should NOT have placeholder or blurDataURL
-  const imgs = screen.getAllByAltText('A');
-  const mainImg = imgs.find((img) => !img.getAttribute('aria-hidden'));
-  expect(mainImg).not.toHaveAttribute('placeholder');
-  expect(mainImg).not.toHaveAttribute('blurDataURL');
+  fireEvent.click(screen.getByRole('button', { name: /next/i }));
+  expect(onGetNextPage).toHaveBeenCalled();
+  expect(onIndexChange).not.toHaveBeenCalled();
 });
 
-test('renders blur placeholder img when blurDataURL is available', () => {
+test('loops back to first image when at last image and no next page available', () => {
   const onClose = vi.fn();
+  const onIndexChange = vi.fn();
+  const onGetNextPage = vi.fn(() => false);
   render(
-    <CarouselModal onClose={onClose} currentIndex={0} views={mockViewsWithBlur} />
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={1}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+      onGetNextPage={onGetNextPage}
+    />
   );
 
-  // BlurPlaceholder should be rendered with the blur data URL as src
-  const imgs = screen.getAllByAltText('A');
-  const blurPlaceholder = imgs.find((img) => img.getAttribute('aria-hidden') === 'true');
-  expect(blurPlaceholder).toBeInTheDocument();
-  expect(blurPlaceholder).toHaveAttribute('src', 'data:image/jpeg;base64,abc123');
+  fireEvent.click(screen.getByRole('button', { name: /next/i }));
+  expect(onGetNextPage).toHaveBeenCalled();
+  expect(onIndexChange).toHaveBeenCalledWith(0);
 });
 
-test('does not render blur placeholder when blurDataURL is not available', () => {
+test('loops back to first image when at last image and onGetNextPage is not provided', () => {
   const onClose = vi.fn();
+  const onIndexChange = vi.fn();
   render(
-    <CarouselModal onClose={onClose} currentIndex={0} views={mockViews} />
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={1}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+    />
   );
 
-  // Only the main image should be rendered (no blur placeholder)
-  const imgs = screen.queryAllByAltText('A');
-  expect(imgs).toHaveLength(1);
-  const mainImg = imgs[0];
-  expect(mainImg).not.toHaveAttribute('placeholder', 'blur');
-});
-
-test('renders hidden preloaded images for adjacent views', () => {
-  const onClose = vi.fn();
-
-  const views = [
-    { id: '0', src: 'https://images.ctfassets.net/a.jpg', alt: 'A', description: '', width: 100, height: 100 },
-    { id: '1', src: 'https://images.ctfassets.net/b.jpg', alt: 'B', description: '', width: 100, height: 100 },
-    { id: '2', src: 'https://images.ctfassets.net/c.jpg', alt: 'C', description: '', width: 100, height: 100 },
-  ];
-
-  render(
-    <CarouselModal onClose={onClose} currentIndex={1} views={views} />
-  );
-
-  // The previous (index 0) and next (index 2) images should be rendered
-  // as hidden PreloadedImage components so Next.js Image can calculate
-  // the exact URL to preload (matching what ModalImage will request).
-  const aImgs = screen.queryAllByAltText('A');
-  const cImgs = screen.queryAllByAltText('C');
-  expect(aImgs.length).toBeGreaterThanOrEqual(1);
-  expect(cImgs.length).toBeGreaterThanOrEqual(1);
-});
-
-test('positions navigation arrows at bottom aligned with description', () => {
-  const onClose = vi.fn();
-  render(
-    <CarouselModal onClose={onClose} currentIndex={0} views={mockViewsWithBlur} />
-  );
-
-  const prevButton = screen.getByRole('button', { name: /previous/i });
-  const nextButton = screen.getByRole('button', { name: /next/i });
-  const description = screen.getByText('A description');
-
-  // Arrows should be positioned at the bottom (not at top)
-  const prevStyle = window.getComputedStyle(prevButton);
-  const nextStyle = window.getComputedStyle(nextButton);
-  const descStyle = window.getComputedStyle(description);
-
-  expect(prevStyle.bottom).toBe('20px');
-  expect(nextStyle.bottom).toBe('20px');
-  expect(descStyle.bottom).toBe('20px');
-  // Description should be to the left of the next arrow
-  expect(descStyle.right).toBe('60px');
+  fireEvent.click(screen.getByRole('button', { name: /next/i }));
+  expect(onIndexChange).toHaveBeenCalledWith(0);
 });

@@ -362,14 +362,16 @@ test('passes initial photos to carousel and loads more on demand', async () => {
   const displayPhotos = [
     { id: '1', src: '/a.jpg', alt: 'A image', width: 100, height: 200 },
   ];
-  const morePhotos = [
-    { id: '2', src: '/b.jpg', alt: 'B image', width: 200, height: 100 },
-    { id: '3', src: '/c.jpg', alt: 'C image', width: 150, height: 150 },
-  ];
-  const loadMoreImages = vi.fn(() => morePhotos);
+  const onGetNextPage = vi.fn(() => true);
 
   await act(async () => {
-    render(<Gallery photos={displayPhotos} loadMoreImages={loadMoreImages} />);
+    render(
+      <Gallery
+        photos={displayPhotos}
+        onGetNextPage={onGetNextPage}
+        pageKey={1}
+      />
+    );
   });
 
   const images = getGalleryImages();
@@ -377,5 +379,5 @@ test('passes initial photos to carousel and loads more on demand', async () => {
 
   const carousel = screen.getByTestId('mock-carousel');
   expect(carousel).toHaveAttribute('data-view-count', '1');
-  expect(loadMoreImages).not.toHaveBeenCalled();
+  expect(onGetNextPage).not.toHaveBeenCalled();
 });

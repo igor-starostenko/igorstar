@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
@@ -6,22 +6,48 @@ import Layout from 'components/layout/layout.jsx';
 import Box from 'components/box/box.jsx';
 import Head from 'components/head/head.jsx';
 import useIntersectionObserver from 'hooks/useIntersectionObserver';
+import Pagination from 'components/pagination/pagination.jsx';
+import {
+  PlaceholderContainer,
+  PlaceholderTile,
+} from './paginatedGallery.css.js';
 
-const Gallery = dynamic(() => import('components/gallery/gallery.jsx'));
-const Pagination = dynamic(
-  () => import('components/pagination/pagination.jsx')
+const GalleryPlaceholder = ({ targetRowHeight = 260 }) => (
+  <PlaceholderContainer>
+    {Array.from({ length: 12 }).map((_, i) => (
+      <PlaceholderTile
+        key={i}
+        $targetRowHeight={targetRowHeight}
+        data-testid="placeholder-tile"
+      />
+    ))}
+  </PlaceholderContainer>
 );
+
+// Module-level dynamic Gallery. The loading placeholder reads from a ref
+// object so it stays in sync with the component's targetRowHeight prop
+// without recreating the dynamic component during render.
+const placeholderHeightRef = { current: 260 };
+
+const Gallery = dynamic(() => import('components/gallery/gallery.jsx'), {
+  loading: () => (
+    <GalleryPlaceholder targetRowHeight={placeholderHeightRef.current} />
+  ),
+});
 
 const PaginatedGallery = ({
   title,
   total,
   images,
-  page,
   pageSize,
   targetRowHeight,
 }) => {
+  // Update the module-level ref so the loading placeholder uses the correct height.
+  // eslint-disable-next-line react-hooks/immutability
+  placeholderHeightRef.current = targetRowHeight;
+
   const router = useRouter();
-  const currentPage = parseInt(router.query.page) || page || 1;
+  const page = parseInt(router.query.page) || 1;
   const totalPages = Math.ceil((images?.length || 0) / pageSize);
 
   const [displayCount, setDisplayCount] = useState(pageSize);
@@ -39,7 +65,7 @@ const PaginatedGallery = ({
 
   useIntersectionObserver(lastItemRef, handleIntersection, {
     threshold: 0.1,
-    rootMargin: '0px 0px 1800px 0px',
+    rootMargin: '200px 0px 200px 0px',
   });
 
   const pageNum = Math.ceil(displayCount / pageSize) || 1;
@@ -47,31 +73,23 @@ const PaginatedGallery = ({
   // Don't show pagination if we've loaded all items (reached the end)
   const hasMoreItems = displayCount < total;
 
-  const startIndex = currentPage > 1 ? (currentPage - 1) * pageSize : 0;
+  const startIndex = page > 1 ? (page - 1) * pageSize : 0;
   // Show images from startIndex, up to displayCount items
   const endIndex = Math.min(startIndex + displayCount, images.length);
   const displayImages = images.slice(startIndex, endIndex);
 
-  // Track how many images have been returned to the carousel via loadMoreImages.
-  // This ref persists across renders so each call returns the next batch.
-  const loadedCountRef = useRef(0);
-
-  // Provide a loadMoreImages callback that returns the next batch of
-  // images from the full set, starting after the initial displayImages.
-  // This allows the carousel to request more images on demand without
-  // receiving all images upfront via an allPhotos prop.
-  const loadMoreImages = useCallback(() => {
-    const startIdx = startIndex + displayImages.length + loadedCountRef.current;
-    if (startIdx >= images.length) return [];
-    const nextBatch = images.slice(startIdx, startIdx + pageSize);
-    loadedCountRef.current += nextBatch.length;
-    return nextBatch;
-  }, [startIndex, displayImages.length, images, pageSize]);
-
-  // Reset loadedCountRef when the page changes
-  useEffect(() => {
-    loadedCountRef.current = 0;
-  }, [currentPage]);
+  // Callback to load more photos when carousel reaches end.
+  // Appends the next batch of photos (like infinite scroll) without
+  // changing the route, so the user stays on the same page.
+  // Returns true if more photos were loaded, false if at the end.
+  const handleGetNextPage = useCallback(() => {
+    if (displayCount < total) {
+      const newDisplayCount = Math.min(displayCount + pageSize, total);
+      setDisplayCount(newDisplayCount);
+      return true;
+    }
+    return false;
+  }, [displayCount, total, pageSize]);
 
   return (
     <Layout>
@@ -80,8 +98,9 @@ const PaginatedGallery = ({
         {displayImages.length > 0 && (
           <Gallery
             photos={displayImages}
-            loadMoreImages={loadMoreImages}
             targetRowHeight={targetRowHeight}
+            onGetNextPage={handleGetNextPage}
+            pageKey={page}
           />
         )}
         {hasMoreItems && pageNum < totalPages ? (
@@ -89,7 +108,7 @@ const PaginatedGallery = ({
         ) : (
           ''
         )}
-        {/* Sentinel element for Intersection Observer */}
+        {/* Sentinel element for IntersectionObserver */}
         {hasMoreItems && <div ref={lastItemRef} />}
       </Box>
     </Layout>
@@ -100,7 +119,6 @@ PaginatedGallery.propTypes = {
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  page: PropTypes.number,
   pageSize: PropTypes.number.isRequired,
   targetRowHeight: PropTypes.number.isRequired,
 };
