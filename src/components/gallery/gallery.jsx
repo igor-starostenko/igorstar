@@ -91,23 +91,22 @@ const Gallery = ({
   const prevPageKeyRef = useRef(pageKey);
   const [hasMoreImages, setHasMoreImages] = useState(true);
 
-  // When the page changes (e.g. carousel triggered next-page navigation),
-  // reset the current photo to the first image of the new page.
+  // Reset current photo when page changes (e.g. carousel triggered next-page nav)
   useLayoutEffect(() => {
-  if (pageKey !== prevPageKeyRef.current && currentPhoto !== null) {
-    setCurrentPhoto(0);
-  }
-  prevPageKeyRef.current = pageKey;
+    if (pageKey !== prevPageKeyRef.current && currentPhoto !== null) {
+      setCurrentPhoto(0);
+    }
+    prevPageKeyRef.current = pageKey;
   }, [pageKey, currentPhoto]);
 
   const sortedPhotos = useMemo(
-  () => orderArray(photos, orderBy, order),
-  [photos, order, orderBy]
+    () => orderArray(photos, orderBy, order),
+    [photos, order, orderBy]
   );
 
   const mappedPhotos = useMemo(
-  () => mapToPhotoAlbumFormat(sortedPhotos, targetRowHeight),
-  [sortedPhotos, targetRowHeight]
+    () => mapToPhotoAlbumFormat(sortedPhotos, targetRowHeight),
+    [sortedPhotos, targetRowHeight]
   );
 
   // carouselViews derives from mappedPhotos so it stays in sync when
@@ -115,37 +114,36 @@ const Gallery = ({
   const carouselViews = mappedPhotos;
 
   const handleLoadMore = useCallback(() => {
-  if (!onGetNextPage || !hasMoreImages) return false;
-  const result = onGetNextPage();
-  if (result === false) {
-  setHasMoreImages(false);
-  return false;
-  }
-  return true;
+    if (!onGetNextPage || !hasMoreImages) return false;
+    const result = onGetNextPage();
+    if (result === false) {
+      setHasMoreImages(false);
+      return false;
+    }
+    return true;
   }, [onGetNextPage, hasMoreImages]);
 
   const handlePhotoClick = (event, arg) => {
-  const idx =
-    event?.index ??
-    (typeof arg === 'number' ? arg : undefined) ??
-    (arg && typeof arg.index === 'number' ? arg.index : -1);
-  if (idx >= 0) {
-    const clickedSrc = mappedPhotos[idx]?.src;
-    // Find the photo in carouselViews (which includes all loaded photos)
-    const viewIndex = carouselViews.findIndex(
-      (photo) => photo.src === clickedSrc
-    );
-    const targetIndex = viewIndex >= 0 ? viewIndex : idx;
-    setCurrentPhoto(targetIndex);
-    // If the clicked photo is near the end of current views, load more
-    if (
-      hasMoreImages &&
-      onGetNextPage &&
-      targetIndex >= carouselViews.length - 2
-    ) {
-      handleLoadMore();
+    const idx =
+      event?.index ??
+      (typeof arg === 'number' ? arg : undefined) ??
+      (arg && typeof arg.index === 'number' ? arg.index : -1);
+    if (idx >= 0) {
+      const clickedSrc = mappedPhotos[idx]?.src;
+      const viewIndex = carouselViews.findIndex(
+        (photo) => photo.src === clickedSrc
+      );
+      const targetIndex = viewIndex >= 0 ? viewIndex : idx;
+      setCurrentPhoto(targetIndex);
+      // Load more images when clicking a photo near the end
+      if (
+        hasMoreImages &&
+        onGetNextPage &&
+        targetIndex >= carouselViews.length - 2
+      ) {
+        handleLoadMore();
+      }
     }
-  }
   };
 
   const handleCloseModal = () => {
@@ -215,7 +213,7 @@ Gallery.propTypes = {
   spacing: PropTypes.number,
   containerWidth: PropTypes.number,
   onGetNextPage: PropTypes.func,
-  pageKey: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
+  pageKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default Gallery;
