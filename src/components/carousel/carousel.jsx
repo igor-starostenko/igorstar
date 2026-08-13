@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect, useCallbacks, useRef } from 'react';
+import { useLayoutEffect, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { componentSizes } from 'constants/imageConfig.js';
 import { formatDate } from 'helpers/date';
@@ -199,20 +199,20 @@ const CarouselModal = ({
 };
 
 CarouselModal.propTypes = {
-  onClose: PropType.func.isRequired,
-  currentIndex: PropType.number.isRequired,
-  views: PropType.arrayOf(
-    PropType.shape({
-      src: PropType.string.isRequired,
-      alt: PropType.string,
-      description: PropType.string,
-      blurDataURL: PropType.string,
-      date: PropType.string,
+  onClose: PropTypes.func.isRequired,
+  currentIndex: PropTypes.number.isRequired,
+  views: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string.isRequired,
+      alt: PropTypes.string,
+      description: PropTypes.string,
+      blurDataURL: PropTypes.string,
+      date: PropTypes.string,
     }).isRequired
   ).isRequired,
-  onIndexChange: PropType.func.isRequired,
-  onGetNextPage: PropType.func,
-  pageKey: PropType.oneOf([PropType.number, PropType.string]),
+  onIndexChange: PropTypes.func.isRequired,
+  onGetNextPage: PropTypes.func,
+  pageKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default CarouselModal;
