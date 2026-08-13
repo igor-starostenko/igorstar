@@ -9,8 +9,10 @@ vi.mock('next/dynamic', () => ({
 
     if (modulePath.includes('carousel.jsx')) {
       // Carousel component - returns a simple wrapper
-      const CarouselMock = ({ children }) => (
-        <div data-testid="mock-carousel">{children}</div>
+      const CarouselMock = ({ children, views = [] }) => (
+        <div data-testid="mock-carousel" data-view-count={views.length}>
+          {children}
+        </div>
       );
       CarouselMock.displayName = 'CarouselMock';
       return CarouselMock;
@@ -60,7 +62,7 @@ vi.mock('next/dynamic', () => ({
     }
 
     if (modulePath.includes('carousel.jsx')) {
-      const CarouselMock = ({ onClose, views, _currentIndex }) => (
+      const CarouselMock = ({ onClose, views = [], onIndexChange: _onIndexChange }) => (
         <div data-testid="mock-carousel" onClick={onClose}>
           {views.map((_v, i) => (
             <div key={i} data-testid="carousel-view" />
@@ -354,4 +356,60 @@ test('resets gallery state when photos prop changes (key behavior)', async () =>
 
   // Gallery should be closed after photos change
   expect(screen.queryByTestId('mock-carousel')).not.toBeInTheDocument();
+});
+
+test('passes initial photos to carousel and loads more on demand', async () => {
+  const displayPhotos = [
+    { id: '1', src: '/a.jpg', alt: 'A image', width: 100, height: 200 },
+    { id: '2', src: '/b.jpg', alt: 'B image', width: 200, height: 100 },
+    { id: '3', src: '/c.jpg', alt: 'C image', width: 150, height: 150 },
+  ];
+  const onGetNextPage = vi.fn(() => true);
+
+  await act(async () => {
+    render(
+      <Gallery
+        photos={displayPhotos}
+        onGetNextPage={onGetNextPage}
+        pageKey={1}
+      />
+    );
+  });
+
+  const images = getGalleryImages();
+  // Click the first photo (index 0), which is NOT near the end (3 photos)
+  fireEvent.click(images[0]);
+
+  const carousel = screen.getByTestId('mock-carousel');
+  expect(carousel).toHaveAttribute('data-view-count', '3');
+  // onGetNextPage should not be called when clicking a photo that's not near the end
+  expect(onGetNextPage).not.toHaveBeenCalled();
+});
+
+test('loads more images when clicking the last photo in the gallery', async () => {
+  const displayPhotos = [
+    { id: '1', src: '/a.jpg', alt: 'A image', width: 100, height: 200 },
+    { id: '2', src: '/b.jpg', alt: 'B image', width: 200, height: 100 },
+    { id: '3', src: '/c.jpg', alt: 'C image', width: 150, height: 150 },
+  ];
+  const onGetNextPage = vi.fn(() => true);
+
+  await act(async () => {
+    render(
+      <Gallery
+        photos={displayPhotos}
+        onGetNextPage={onGetNextPage}
+        pageKey={1}
+      />
+    );
+  });
+
+  const images = getGalleryImages();
+  // Click the last photo (index 2), which IS near the end (3 photos, last index)
+  fireEvent.click(images[2]);
+
+  const carousel = screen.getByTestId('mock-carousel');
+  expect(carousel).toHaveAttribute('data-view-count', '3');
+  // onGetNextPage should be called when clicking a photo near the end
+  expect(onGetNextPage).toHaveBeenCalled();
 });

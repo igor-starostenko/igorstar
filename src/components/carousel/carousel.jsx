@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useLayoutEffect, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { componentSizes } from 'constants/imageConfig.js';
 import { formatDate } from 'helpers/date';
@@ -7,8 +7,12 @@ import {
   ModalContent,
   ModalImageContainer,
   ModalImage,
+  BlurPlaceholder,
   CloseButton,
   Description,
+  PreloadedImage,
+  PrevButton,
+  NextButton,
   DescriptionDate,
 } from './carousel.css.js';
 
@@ -18,9 +22,20 @@ const CarouselModal = ({
   views,
   onIndexChange,
   onGetNextPage,
+  pageKey,
 }) => {
   const touchStartX = useRef(null);
   const touchEndX = useRef(null);
+  const prevPageKeyRef = useRef(pageKey);
+
+  // When the page changes (e.g. carousel triggered next-page navigation),
+  // reset the current photo to the first image of the new page.
+  useLayoutEffect(() => {
+    if (pageKey !== prevPageKeyRef.current && currentIndex !== null) {
+      onIndexChange(0);
+    }
+    prevPageKeyRef.current = pageKey;
+  }, [pageKey, currentIndex, onIndexChange]);
 
   const handlePrev = useCallback(() => {
     const newIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
@@ -82,21 +97,28 @@ const CarouselModal = ({
   }, []);
 
   useEffect(() => {
-    const handleKeyDownHandler = (e) => {
+    const handleKeydownHandler = (e) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft') handlePrev();
       if (e.key === 'ArrowRight') handleNext();
     };
 
-    document.addEventListener('keydown', handleKeyDownHandler);
-    return () => document.removeEventListener('keydown', handleKeyDownHandler);
+    document.addEventListener('keydown', handleKeydownHandler);
+    return () => document.removeEventListener('keydown', handleKeydownHandler);
   }, [onClose, handlePrev, handleNext]);
 
   const view = views[currentIndex];
   const src = view?.src ?? '';
   const altText = (view?.alt || view?.description) ?? '';
   const description = view?.description ?? '';
+  const blurDataURL = view?.blurDataURL ?? null;
   const date = view?.date ?? '';
+
+  // Preload adjacent images via hidden BaseImage so browser cache serves them instantly.
+  const prevIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
+  const nextIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
+  const prevView = views[prevIndex];
+  const nextView = views[nextIndex];
 
   return (
     <ModalOverlay onClick={handleClick}>
@@ -112,6 +134,14 @@ const CarouselModal = ({
           &times;
         </CloseButton>
         <ModalImageContainer>
+          {blurDataURL && (
+            <BlurPlaceholder
+              src={blurDataURL}
+              alt={altText}
+              aria-hidden="true"
+              loading="eager"
+            />
+          )}
           <ModalImage
             fill
             src={src}
@@ -120,29 +150,47 @@ const CarouselModal = ({
             quality={30}
             loading="eager"
           />
+          {prevView?.src && (
+            <PreloadedImage
+              fill
+              src={prevView.src}
+              alt=""
+              aria-hidden="true"
+              sizes={componentSizes.carousel.sizes}
+              quality={30}
+            />
+          )}
+          {nextView?.src && (
+            <PreloadedImage
+              fill
+              src={nextView.src}
+              alt=""
+              aria-hidden="true"
+              sizes={componentSizes.carousel.sizes}
+              quality={30}
+            />
+          )}
         </ModalImageContainer>
         {(date || description) && (
-          <Description>
+          <Description $hasArrows={views.length > 1}>
             {date && <DescriptionDate>{formatDate(date)}</DescriptionDate>}
             {description && <span>{description}</span>}
           </Description>
         )}
         {views.length > 1 && (
           <>
-            <CloseButton
-              style={{ left: '20px', right: 'auto' }}
+            <PrevButton
               onClick={handlePrev}
               aria-label="Previous image"
             >
               &#8249;
-            </CloseButton>
-            <CloseButton
-              style={{ right: '60px' }}
+            </PrevButton>
+            <NextButton
               onClick={handleNext}
               aria-label="Next image"
             >
               &#8250;
-            </CloseButton>
+            </NextButton>
           </>
         )}
       </ModalContent>
@@ -158,11 +206,13 @@ CarouselModal.propTypes = {
       src: PropTypes.string.isRequired,
       alt: PropTypes.string,
       description: PropTypes.string,
+      blurDataURL: PropTypes.string,
       date: PropTypes.string,
     }).isRequired
   ).isRequired,
   onIndexChange: PropTypes.func.isRequired,
   onGetNextPage: PropTypes.func,
+  pageKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default CarouselModal;

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import dynamic from 'next/dynamic';
 import { RowsPhotoAlbum } from 'react-photo-album';
@@ -89,9 +89,9 @@ const Gallery = ({
 }) => {
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const prevPageKeyRef = useRef(pageKey);
+  const [hasMoreImages, setHasMoreImages] = useState(true);
 
-  // When the page changes (e.g. carousel triggered next-page navigation),
-  // reset the current photo to the first image of the new page.
+  // Reset current photo when page changes (e.g. carousel triggered next-page nav)
   useLayoutEffect(() => {
     if (pageKey !== prevPageKeyRef.current && currentPhoto !== null) {
       setCurrentPhoto(0);
@@ -101,7 +101,7 @@ const Gallery = ({
 
   const sortedPhotos = useMemo(
     () => orderArray(photos, orderBy, order),
-    [photos, orderBy, order]
+    [photos, order, orderBy]
   );
 
   const mappedPhotos = useMemo(
@@ -109,12 +109,41 @@ const Gallery = ({
     [sortedPhotos, targetRowHeight]
   );
 
+  // carouselViews derives from mappedPhotos so it stays in sync when
+  // onGetNextPage expands the photos prop (via increased displayCount).
+  const carouselViews = mappedPhotos;
+
+  const handleLoadMore = useCallback(() => {
+    if (!onGetNextPage || !hasMoreImages) return false;
+    const result = onGetNextPage();
+    if (result === false) {
+      setHasMoreImages(false);
+      return false;
+    }
+    return true;
+  }, [onGetNextPage, hasMoreImages]);
+
   const handlePhotoClick = (event, arg) => {
     const idx =
-      event.index ??
+      event?.index ??
       (typeof arg === 'number' ? arg : undefined) ??
       (arg && typeof arg.index === 'number' ? arg.index : -1);
-    if (idx >= 0) setCurrentPhoto(idx);
+    if (idx >= 0) {
+      const clickedSrc = mappedPhotos[idx]?.src;
+      const viewIndex = carouselViews.findIndex(
+        (photo) => photo.src === clickedSrc
+      );
+      const targetIndex = viewIndex >= 0 ? viewIndex : idx;
+      setCurrentPhoto(targetIndex);
+      // Load more images when clicking a photo near the end
+      if (
+        hasMoreImages &&
+        onGetNextPage &&
+        targetIndex >= carouselViews.length - 2
+      ) {
+        handleLoadMore();
+      }
+    }
   };
 
   const handleCloseModal = () => {
@@ -123,6 +152,14 @@ const Gallery = ({
 
   const handleIndexChange = (newIndex) => {
     setCurrentPhoto(newIndex);
+    // Load more images when navigating near the end
+    if (
+      hasMoreImages &&
+      onGetNextPage &&
+      newIndex >= carouselViews.length - 2
+    ) {
+      handleLoadMore();
+    }
   };
 
   return (
@@ -145,11 +182,12 @@ const Gallery = ({
       </GalleryContainer>
       {currentPhoto !== null && currentPhoto >= 0 && (
         <Carousel
-          views={mappedPhotos}
+          views={carouselViews}
           currentIndex={currentPhoto}
           onClose={handleCloseModal}
           onIndexChange={handleIndexChange}
-          onGetNextPage={onGetNextPage}
+          onGetNextPage={handleLoadMore}
+          pageKey={pageKey}
         />
       )}
     </>

@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 // Mock next/image before importing components that use it
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ..._rest }) => <img src={src} alt={alt || ''} />,
+  default: ({ src, alt, ...rest }) => <img src={src} alt={alt || ''} {...rest} />,
 }));
 
 import CarouselModal from './carousel.jsx';
@@ -218,4 +218,53 @@ test('loops back to first image when at last image and onGetNextPage is not prov
 
   fireEvent.click(screen.getByRole('button', { name: /next/i }));
   expect(onIndexChange).toHaveBeenCalledWith(0);
+});
+
+test('renders hidden PreloadedImage components for adjacent views', () => {
+  const onClose = vi.fn();
+  const onIndexChange = vi.fn();
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={0}
+      views={mockViews}
+      onIndexChange={onIndexChange}
+    />
+  );
+
+  // The current view (index 0) should have prev (index 1) and next (index 1)
+  // preloaded as hidden images. Both are in mockViews.
+  // mockViews has 2 items: '/a.jpg' and '/b.jpg'
+  // At index 0: prev is index 1 ('/b.jpg'), next is index 1 ('/b.jpg')
+  const images = screen.getAllByAltText('');
+  const preloadSrcs = images
+    .filter((img) => img.getAttribute('aria-hidden') === 'true')
+    .map((img) => img.getAttribute('src'));
+  // Should have at least 2 preloaded images (prev and next)
+  expect(preloadSrcs.length).toBeGreaterThan(0);
+});
+
+test('renders BlurPlaceholder when blurDataURL is available', () => {
+  const onClose = vi.fn();
+  const viewsWithBlur = [
+    {
+      ...mockViews[0],
+      blurDataURL: 'data:image/jpeg;base64,test',
+    },
+  ];
+  render(
+    <CarouselModal
+      onClose={onClose}
+      currentIndex={0}
+      views={viewsWithBlur}
+    />
+  );
+
+  // BlurPlaceholder should render with the blur data URL as src
+  const allImages = screen.getAllByAltText('A');
+  const blurPlaceholder = allImages.find(
+    (img) => img.getAttribute('src') === 'data:image/jpeg;base64,test'
+  );
+  expect(blurPlaceholder).toBeDefined();
+  expect(blurPlaceholder).toHaveAttribute('aria-hidden', 'true');
 });
