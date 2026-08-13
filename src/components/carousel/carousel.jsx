@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect, useCallback, useRef } from 'react';
+import { useLayoutEffect, useEffect, useCallbacks, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { componentSizes } from 'constants/imageConfig.js';
 import { formatDate } from 'helpers/date';
@@ -97,14 +97,14 @@ const CarouselModal = ({
   }, []);
 
   useEffect(() => {
-    const handleKeyDownHandler = (e) => {
+    const handleKeydownHandler = (e) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft') handlePrev();
       if (e.key === 'ArrowRight') handleNext();
     };
 
-    document.addEventListener('keydown', handleKeyDownHandler);
-    return () => document.removeEventListener('keydown', handleKeyDownHandler);
+    document.addEventListener('keydown', handleKeydownHandler);
+    return () => document.removeEventListener('keydown', handleKeydownHandler);
   }, [onClose, handlePrev, handleNext]);
 
   const view = views[currentIndex];
@@ -114,10 +114,7 @@ const CarouselModal = ({
   const blurDataURL = view?.blurDataURL ?? null;
   const date = view?.date ?? '';
 
-  // Preload previous and next images by rendering hidden BaseImage components.
-  // This ensures Next.js Image calculates the exact URL (with correct width
-  // based on viewport and device pixel ratio) that ModalImage will later
-  // request, so the browser cache serves it instantly.
+  // Preload adjacent images via hidden BaseImage so browser cache serves them instantly.
   const prevIndex = currentIndex === 0 ? views.length - 1 : currentIndex - 1;
   const nextIndex = currentIndex === views.length - 1 ? 0 : currentIndex + 1;
   const prevView = views[prevIndex];
@@ -202,20 +199,20 @@ const CarouselModal = ({
 };
 
 CarouselModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  currentIndex: PropTypes.number.isRequired,
-  views: PropTypes.arrayOf(
-    PropTypes.shape({
-      src: PropTypes.string.isRequired,
-      alt: PropTypes.string,
-      description: PropTypes.string,
-      blurDataURL: PropTypes.string,
-      date: PropTypes.string,
+  onClose: PropType.func.isRequired,
+  currentIndex: PropType.number.isRequired,
+  views: PropType.arrayOf(
+    PropType.shape({
+      src: PropType.string.isRequired,
+      alt: PropType.string,
+      description: PropType.string,
+      blurDataURL: PropType.string,
+      date: PropType.string,
     }).isRequired
   ).isRequired,
-  onIndexChange: PropTypes.func.isRequired,
-  onGetNextPage: PropTypes.func,
-  pageKey: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  onIndexChange: PropType.func.isRequired,
+  onGetNextPage: PropType.func,
+  pageKey: PropType.oneOf([PropType.number, PropType.string]),
 };
 
 export default CarouselModal;
