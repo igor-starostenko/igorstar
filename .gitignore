@@ -44,3 +44,6 @@ lhci-reports/
 .claude
 .hermes
 
+
+# browser debugging scratch (headless chromium runs + screenshots)
+.browser-debug/
