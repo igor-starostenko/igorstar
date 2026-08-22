@@ -1,6 +1,6 @@
 import { imageFormat } from '../constants/imageConfig.js';
 
-const BLUR_CONCURRENCY = Number(process.env.BLUR_CONCURRENCY ?? 1);
+const BLUR_CONCURRENCY = Number(process.env.BLUR_CONCURRENCY ?? 8);
 const CONTENTFUL_TIMEOUT = 15000;
 
 export const filterObject = (object, props) => {
