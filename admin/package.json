@@ -1,0 +1,24 @@
+{
+  "name": "igorstar-admin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Localhost-only admin portal for igorstar.com Contentful data (v2.5.9)",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "contentful": "^11.12.2",
+    "contentful-management": "^12.10.0",
+    "next": "^16.2.11",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "sharp": "^0.35.3"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.10"
+  }
+}
