@@ -10,6 +10,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import EasyCrop from 'react-easy-crop';
 import { fieldsFor, addableFields } from '@/lib/models';
 
 // --- RichText <-> plain text (MVP: paragraphs only) -----------------------
@@ -109,13 +110,29 @@ function AssetUpload({ field, value, onChange, type }) {
   const isMultiple = field.type === 'assetArray';
   const current = isMultiple ? value || [] : [value].filter(Boolean);
 
-  const upload = async (file) => {
+  // --- square crop step (feed only) --------------------------------------
+  // A feed main file becomes a 1024x1024 WebP of the user-selected square
+  // region: pick file -> drag/zoom the 1:1 frame -> "Crop & upload" sends
+  // the file plus the crop region (POST /api/assets `crop` field).
+  // Other content types upload straight through, unchanged.
+  const canCrop = type === 'feed' && !isMultiple;
+  const [cropFile, setCropFile] = useState(null);
+  const [cropUrl, setCropUrl] = useState(null);
+  const [pixelCrop, setPixelCrop] = useState(null);
+  // react-easy-crop v6 is fully controlled: `crop` is a Point {x, y} of
+  // pixel offsets (0,0 = image centered, i.e. the crop frame starts on the
+  // middle of the photo), `zoom` is separate, and onCropChange is required.
+  const [cropPoint, setCropPoint] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+
+  const upload = async (file, crop) => {
     setBusy(true);
     setErr(null);
     try {
       const form = new FormData();
       form.append('file', file);
       form.append('target', type);
+      if (crop) form.append('crop', JSON.stringify(crop));
       form.append('confirm', 'true');
       const res = await fetch('/api/assets', { method: 'POST', body: form });
       const json = await res.json();
@@ -123,11 +140,50 @@ function AssetUpload({ field, value, onChange, type }) {
         throw new Error(json.error || `HTTP ${res.status}`);
       const link = json.asset.link;
       onChange(isMultiple ? [...(value || []), link] : link);
+      return true;
     } catch (e) {
       setErr(e.message);
+      return false;
     } finally {
       setBusy(false);
     }
+  };
+
+  const pickFile = (file) => {
+    if (!file) return;
+    if (canCrop) {
+      setErr(null);
+      setPixelCrop(null);
+      setCropPoint({ x: 0, y: 0 });
+      setZoom(1);
+      setCropFile(file);
+      setCropUrl((old) => {
+        if (old) URL.revokeObjectURL(old);
+        return URL.createObjectURL(file);
+      });
+    } else {
+      upload(file);
+    }
+  };
+
+  const cancelCrop = () => {
+    setCropFile(null);
+    setPixelCrop(null);
+    setCropUrl((old) => {
+      if (old) URL.revokeObjectURL(old);
+      return null;
+    });
+  };
+
+  const confirmCrop = async () => {
+    if (!cropFile || !pixelCrop) return;
+    const ok = await upload(cropFile, {
+      left: pixelCrop.x,
+      top: pixelCrop.y,
+      width: pixelCrop.width,
+      height: pixelCrop.height,
+    });
+    if (ok) cancelCrop(); // keep the frame open on failure so the user can retry
   };
 
   return (
@@ -136,8 +192,62 @@ function AssetUpload({ field, value, onChange, type }) {
         type="file"
         accept="image/*"
         disabled={busy}
-        onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])}
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          e.target.value = '';
+          pickFile(f);
+        }}
       />
+      {canCrop && cropFile && cropUrl && (
+        <div style={{ maxWidth: 320, marginTop: 8 }}>
+          <div className="hint" style={{ marginBottom: 4 }}>
+            Pick the square region — it becomes a 1024×1024 WebP. Drag to
+            move, wheel or slider to zoom.
+          </div>
+          <div
+            style={{
+              position: 'relative',
+              height: 280,
+              borderRadius: 8,
+              overflow: 'hidden',
+            }}
+          >
+            <EasyCrop
+              image={cropUrl}
+              crop={cropPoint}
+              onCropChange={setCropPoint}
+              zoom={zoom}
+              onZoomChange={setZoom}
+              aspect={1}
+              minZoom={1}
+              maxZoom={3}
+              onCropComplete={(_, pixels) => setPixelCrop(pixels)}
+            />
+          </div>
+          <input
+            type="range"
+            min="1"
+            max="3"
+            step="0.01"
+            value={zoom}
+            onChange={(e) => setZoom(Number(e.target.value))}
+            style={{ width: '100%' }}
+          />
+          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+            <button
+              type="button"
+              className="btn primary"
+              disabled={!pixelCrop || busy}
+              onClick={confirmCrop}
+            >
+              {busy ? 'processing…' : 'Crop & upload'}
+            </button>
+            <button type="button" className="btn" disabled={busy} onClick={cancelCrop}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
       {current.map((a, i) => (
         <div key={i} className="hint">
           #{a.sys.id}
@@ -154,7 +264,7 @@ function AssetUpload({ field, value, onChange, type }) {
         </div>
       ))}
       {err && <div className="err">{err}</div>}
-      {busy && <div className="hint">processing &amp; uploading…</div>}
+      {busy && !cropFile && <div className="hint">processing &amp; uploading…</div>}
     </div>
   );
 }
