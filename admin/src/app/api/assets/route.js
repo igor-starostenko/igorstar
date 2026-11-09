@@ -6,6 +6,9 @@
 // Body: multipart/form-data
 //   file        -> the image (required)
 //   target      -> 'gallery' | 'feed' | 'post' (required; drives sizing)
+//   crop        -> feed only. JSON square region in source pixel space,
+//                  { left, top, width, height }. Makes the main file a
+//                  1024x1024 WebP of that region (see lib/images.js).
 //   confirm     -> 'true' to actually upload; default is preflight
 //
 // Preflight (confirm != true): processes locally, returns the processed
@@ -23,6 +26,19 @@ export async function POST(req) {
     const file = form.get('file');
     const target = String(form.get('target') || '');
     const confirm = form.get('confirm') === 'true';
+    // Optional feed crop region (JSON string from the crop UI).
+    let crop = null;
+    const cropRaw = form.get('crop');
+    if (cropRaw) {
+      try {
+        crop = JSON.parse(String(cropRaw));
+      } catch {
+        return NextResponse.json(
+          { ok: false, error: 'crop must be a JSON object' },
+          { status: 400 }
+        );
+      }
+    }
     if (!file || typeof file === 'string') {
       return NextResponse.json(
         { ok: false, error: 'Missing file field' },
@@ -38,7 +54,13 @@ export async function POST(req) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = file.name || `upload-${Date.now()}`;
 
-    const processed = await processUpload(buffer, filename, target);
+    let processed;
+    try {
+      processed = await processUpload(buffer, filename, target, crop);
+    } catch (e) {
+      // Crop rejection is a client-input error, not a server fault.
+      return NextResponse.json({ ok: false, error: e.message }, { status: 400 });
+    }
 
     if (!confirm) {
       // Preflight: processed locally, nothing written to Contentful.
