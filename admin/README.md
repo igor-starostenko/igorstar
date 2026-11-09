@@ -6,23 +6,27 @@ Design details live in [`docs/admin-portal-spec.md`](../docs/admin-portal-spec.m
 
 ## First run
 
-Prereqs: **Node 24** (see root `.nvmrc`) and a Contentful **delivery token** (the same one the main site uses — it's in the root `.env`).
+Prereqs: **Node 24** (see root `.nvmrc`) and the root `.env` (it must exist — the portal inherits its Contentful credentials from it).
 
 ```bash
 cd admin
-yarn install                     # installs next, contentful, contentful-management, sharp, vitest
+yarn install                     # installs next, contentful, contentful-management, sharp, vitest, dotenv
 cp .env.example .env             # .env is gitignored — never commit tokens
 yarn dev                         # → http://localhost:3001
 ```
 
 ### Fill in `admin/.env`
 
-| Variable | Required? | Where to get it |
+The delivery token and space ID come **for free from the root `.env`** — `next.config.js` loads it as a fallback layer for `CONTENTFUL_*` keys. In `admin/.env` you only need to add the management PAT:
+
+| Variable | Required? | Where it comes from |
 |---|---|---|
-| `CONTENTFUL_SPACE_ID` | yes | pre-filled (same as the main site) |
-| `CONTENTFUL_ACCESS_TOKEN` | yes | delivery token — copy from the root `.env` (read-only; powers all reads) |
-| `CONTENTFUL_PAT` | for writes only | a **management** Personal Access Token with entries + assets read/write on the target environment. The delivery token will **not** work for writes (401). |
+| `CONTENTFUL_SPACE_ID` | inherited | root `.env` (set here only to override) |
+| `CONTENTFUL_ACCESS_TOKEN` | inherited | root `.env` — the site's delivery token (set here only to override) |
+| `CONTENTFUL_PAT` | for writes only | you must add this: a **management** Personal Access Token with entries + assets read/write on the target environment. The delivery token will **not** work for writes (401). |
 | `CONTENTFUL_ENV` | no (default `master`) | `master` or `develop` — anything else is rejected at boot |
+
+Precedence when the same key exists in more than one place: **real environment variables > `admin/.env` > root `.env`**. Only `CONTENTFUL_*` keys are inherited, so unrelated root variables never reach the admin process.
 
 **Without a PAT the portal is read-only on purpose**: list and detail pages work fully; every write endpoint returns a clear structured error instead of failing mysteriously.
 
