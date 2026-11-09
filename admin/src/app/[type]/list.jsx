@@ -1,6 +1,6 @@
 'use client';
 // Entry list for one content type. Fetches /api/entries/:type on mount.
-// New entry -> /:type/new (edit form). Row click -> /:type/:id (edit form).
+// New entry -> /:type/new (edit form). Row "edit" link -> /:type/:id.
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -118,6 +118,9 @@ export default function ListPage() {
                 {e.updatedAt ? new Date(e.updatedAt).toLocaleDateString() : '—'}
               </td>
               <td>
+                <Link className="btn" href={`/${type}/${e.id}`}>
+                  edit
+                </Link>{' '}
                 <button
                   className="btn danger"
                   onClick={async () => {
