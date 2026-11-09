@@ -1046,6 +1046,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv@npm:^18.0.10":
+  version: 18.0.10
+  resolution: "dotenv@npm:18.0.10"
+  bin:
+    dotenv: dist/cli.cjs
+  checksum: 10c0/f07945aeb35f78fe54495025fb10c155cbefa15bdd04a4063aba8519d2756c647ce43f3e0cacbab1e5a7200376f740cbe3e4e7432571ecf4d99eeade7c1dd3a7
+  languageName: node
+  linkType: hard
+
 "dunder-proto@npm:^1.0.1":
   version: 1.0.1
   resolution: "dunder-proto@npm:1.0.1"
@@ -1329,6 +1338,7 @@ __metadata:
     "@testing-library/react": "npm:^16.3.2"
     contentful: "npm:^11.12.2"
     contentful-management: "npm:^12.10.0"
+    dotenv: "npm:^18.0.10"
     jsdom: "npm:^29.1.1"
     next: "npm:^16.2.11"
     react: "npm:^19.2.6"
