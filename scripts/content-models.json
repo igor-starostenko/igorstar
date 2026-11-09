@@ -1,0 +1,178 @@
+{
+  "types": [
+    {
+      "id": "post",
+      "name": "Post",
+      "fields": [
+        {
+          "id": "title",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "path",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "date",
+          "type": "Date",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "layout",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "draft",
+          "type": "Boolean",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "category",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "recommendations",
+          "type": "Array",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "tags",
+          "type": "Array",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "description",
+          "type": "Text",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "content",
+          "type": "RichText",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "thumbnail",
+          "type": "Link",
+          "required": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "images",
+          "type": "Array",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "linkText",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        }
+      ]
+    },
+    {
+      "id": "page",
+      "name": "Page",
+      "fields": [
+        {
+          "id": "title",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "content",
+          "type": "RichText",
+          "required": false,
+          "linkType": null
+        }
+      ]
+    },
+    {
+      "id": "feed",
+      "name": "Feed",
+      "fields": [
+        {
+          "id": "id",
+          "type": "Integer",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "date",
+          "type": "Date",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "image",
+          "type": "Link",
+          "required": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "location",
+          "type": "Location",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "locationText",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "description",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        }
+      ]
+    },
+    {
+      "id": "gallery",
+      "name": "Gallery",
+      "fields": [
+        {
+          "id": "id",
+          "type": "Integer",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "image",
+          "type": "Link",
+          "required": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "location",
+          "type": "Location",
+          "required": false,
+          "linkType": null
+        },
+        {
+          "id": "description",
+          "type": "Symbol",
+          "required": false,
+          "linkType": null
+        }
+      ]
+    }
+  ]
+}

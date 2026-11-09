@@ -27,6 +27,14 @@ export default defineConfig([
       "@next/next/no-img-element": "off"
     },
   },
+  {
+    // Localhost-only admin portal: standard rules, but allow the
+    // legitimate data-fetch-in-effect pattern (warn, not error).
+    files: ["admin/**/*.{js,jsx}"],
+    rules: {
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
   prettier,
   globalIgnores([
     ".next/**",
@@ -37,5 +45,7 @@ export default defineConfig([
     "coverage/**",
     "scripts/contentful_*.js",
     "yarn.lock",
+    "admin/.next/**",
+    "admin/.snapshots/**",
   ])
 ]);

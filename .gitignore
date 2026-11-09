@@ -1,6 +1,12 @@
 .DS_Store
 node_modules/
 .env
+# admin portal (localhost-only, never deployed)
+admin/.env
+admin/.snapshots/
+admin/node_modules/
+admin/.next/
+admin/.yarn/install-state.gz
 coverage/
 analyze/
 
@@ -39,3 +45,6 @@ lhci-reports/
 .claude
 .hermes
 
+
+# browser debugging scratch (headless chromium runs + screenshots)
+.browser-debug/
